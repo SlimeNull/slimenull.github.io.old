@@ -3,7 +3,7 @@ title: '[C#/C/C++] GetShortPathName详解, 长路径转换为短路径'
 slug: '[CSharp,C,CPP]GetShortPathName详解,长路径转换为短路径'
 date: 2021-02-09 08:05:35
 tags:
-  - C#
+  - csharp
   - .net
   - c++
   - win32
@@ -30,7 +30,7 @@ using System.Runtime.InteropServices;
 
 ## 关键代码:
 
-- C#
+- csharp
 
 ```csharp
 [DllImport("kernel32.dll", EntryPoint = "GetShortPathNameW", CharSet = CharSet.Unicode)]

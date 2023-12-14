@@ -4,7 +4,7 @@ slug: '[CSharp]TOCTiny-基于TCP套接字简易网络聊天室'
 date: 2020-12-31 01:08:08
 tags:
   - .net
-  - c#
+  - csharp
 categories:
   - 桌面程序
   - 控制台

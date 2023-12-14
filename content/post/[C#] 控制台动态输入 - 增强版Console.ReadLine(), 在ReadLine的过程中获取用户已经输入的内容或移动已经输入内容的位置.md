@@ -4,7 +4,7 @@ slug: '[CSharp]控制台动态输入-增强版Console.ReadLine(),在ReadLine的�
 date: 2020-12-30 22:33:07
 tags:
   - .net
-  - c#
+  - csharp
 categories:
   - .NET
   - 类库

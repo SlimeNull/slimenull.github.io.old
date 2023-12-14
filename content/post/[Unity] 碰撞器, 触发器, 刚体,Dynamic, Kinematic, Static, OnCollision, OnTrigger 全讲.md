@@ -4,7 +4,7 @@ slug: '[Unity]碰撞器,触发器,刚体,Dynamic,Kinematic,Static,OnCollision,On
 date: 2022-09-27 14:51:27
 tags:
   - unity
-  - c#
+  - csharp
   - 游戏引擎
 categories:
   - .NET

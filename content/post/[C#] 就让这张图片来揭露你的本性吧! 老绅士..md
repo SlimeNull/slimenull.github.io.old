@@ -5,7 +5,7 @@ date: 2021-02-21 23:08:37
 tags:
   - .net
   - csharp
-  - c#
+  - csharp
   - graphics
   - gdi/gdi+
 categories:

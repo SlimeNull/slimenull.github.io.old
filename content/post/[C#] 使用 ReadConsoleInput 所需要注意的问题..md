@@ -3,7 +3,7 @@ title: '[C#] 使用 ReadConsoleInput 所需要注意的问题.'
 slug: '[CSharp]使用ReadConsoleInput所需要注意的问题.'
 date: 2023-06-27 20:52:43
 tags:
-  - c#
+  - csharp
 categories:
   - .NET
   - 控制台

@@ -4,7 +4,7 @@ slug: '[Unity]Awake与Start的使用,为什么将GetComponent逻辑放到Awake�
 date: 2022-09-27 14:16:18
 tags:
   - unity
-  - c#
+  - csharp
   - 游戏引擎
 categories:
   - .NET

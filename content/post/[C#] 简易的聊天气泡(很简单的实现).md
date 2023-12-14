@@ -4,7 +4,7 @@ slug: '[CSharp]简易的聊天气泡(很简单的实现)'
 date: 2020-04-22 08:10:50
 tags:
   - .net
-  - c#
+  - csharp
   - windows
   - winform
 categories:

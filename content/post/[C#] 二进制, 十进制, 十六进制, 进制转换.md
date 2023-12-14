@@ -3,7 +3,7 @@ title: '[C#] 二进制, 十进制, 十六进制, 进制转换'
 slug: '[CSharp]二进制,十进制,十六进制,进制转换'
 date: 2021-04-06 22:37:59
 tags:
-  - c#
+  - csharp
   - 字符串
   - 进制
 categories:

@@ -3,7 +3,7 @@ title: '[C#] 基于 yield 语句的迭代器逻辑懒执行'
 slug: '[CSharp]基于yield语句的迭代器逻辑懒执行'
 date: 2023-12-08 19:22:09
 tags:
-  - c#
+  - csharp
   - .net
 categories:
   - .NET

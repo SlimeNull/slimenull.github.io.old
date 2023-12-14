@@ -3,7 +3,7 @@ title: '[C#] C# 与 Java 的一些差异'
 slug: '[CSharp]CSharp与Java的一些差异'
 date: 2021-04-18 11:07:46
 tags:
-  - c#
+  - csharp
   - java
   - 编程语言
 categories:

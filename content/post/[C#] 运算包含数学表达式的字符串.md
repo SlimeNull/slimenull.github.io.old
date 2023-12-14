@@ -5,7 +5,7 @@ date: 2020-10-29 11:41:22
 tags:
   - 算法
   - .net
-  - c#
+  - csharp
 categories:
   - 算法
   - .NET

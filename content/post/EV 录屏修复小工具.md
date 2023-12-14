@@ -4,7 +4,7 @@ slug: 'EV录屏修复小工具'
 date: 2023-08-15 15:37:35
 tags:
   - .net
-  - c#
+  - csharp
 categories:
   - 灌水
   - 控制台

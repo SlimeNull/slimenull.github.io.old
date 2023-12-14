@@ -3,7 +3,7 @@ title: '[C#] 简单的俄罗斯方块实现'
 slug: '[CSharp]简单的俄罗斯方块实现'
 date: 2023-08-09 09:36:33
 tags:
-  - c#
+  - csharp
   - 开发语言
   - 玩游戏
 categories:

@@ -3,7 +3,7 @@ title: 'C# 动态输入'
 slug: 'CSharp动态输入'
 date: 2020-04-06 03:48:49
 tags:
-  - c#
+  - csharp
 categories:
   - 控制台
   - 成长记录

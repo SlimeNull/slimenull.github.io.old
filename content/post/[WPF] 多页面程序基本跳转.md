@@ -5,7 +5,7 @@ date: 2023-04-01 21:00:13
 tags:
   - wpf
   - ui
-  - c#
+  - csharp
   - .net
 categories:
   - .NET

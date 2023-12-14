@@ -4,7 +4,7 @@ slug: '[CSharp]WPFTextBox在PreviewDragEnter中指定Effect且指定Handled为tr
 date: 2021-03-19 19:44:01
 tags:
   - .net
-  - c#
+  - csharp
   - wpf
 categories:
   - 灌水

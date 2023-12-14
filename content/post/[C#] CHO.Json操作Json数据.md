@@ -3,7 +3,7 @@ title: '[C#] CHO.Json操作Json数据'
 slug: '[CSharp]CHO.Json操作Json数据'
 date: 2020-10-28 23:52:44
 tags:
-  - c#
+  - csharp
   - json
   - .net
 categories:

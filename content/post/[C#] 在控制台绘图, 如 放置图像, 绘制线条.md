@@ -3,7 +3,7 @@ title: '[C#] 在控制台绘图, 如:放置图像, 绘制线条'
 slug: '[CSharp]在控制台绘图,如 放置图像,绘制线条'
 date: 2020-11-15 21:59:01
 tags:
-  - c#
+  - csharp
   - .net
 categories:
   - .NET

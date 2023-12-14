@@ -4,7 +4,7 @@ slug: '[CSharp]Image的Image.GetThumbnailImage(获取缩略图)方法实际是�
 date: 2020-05-26 05:10:54
 tags:
   - .net
-  - c#
+  - csharp
 categories:
   - 桌面程序
   - 图片处理

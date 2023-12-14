@@ -3,7 +3,7 @@ title: '[C#] 无需实体类, 解析读写Json, 简单操作。'
 slug: '[CSharp]无需实体类,解析读写Json,简单操作。'
 date: 2020-07-02 23:24:19
 tags:
-  - c#
+  - csharp
   - json
 categories:
   - 类库

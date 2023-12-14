@@ -3,7 +3,7 @@ title: '[C#, 笔记] 启用虚拟终端处理 (使用 ANSI 转义序列前需启
 slug: '[CSharp,笔记]启用虚拟终端处理(使用ANSI转义序列前需启用)'
 date: 2022-11-07 06:00:11
 tags:
-  - c#
+  - csharp
   - 开发语言
 categories:
   - .NET
