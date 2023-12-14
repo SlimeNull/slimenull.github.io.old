@@ -16,7 +16,8 @@ links:
     
 menu:
     main: 
-        weight: 4
+        name: 链接
+        weight: 6
         params:
             icon: link
 

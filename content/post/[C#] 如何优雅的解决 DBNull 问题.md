@@ -1,5 +1,6 @@
 ---
 title: '[C#] 如何优雅的解决 DBNull 问题'
+slug: '[CSharp]如何优雅的解决DBNull问题'
 date: 2021-07-14 23:38:02
 tags:
   - 数据库

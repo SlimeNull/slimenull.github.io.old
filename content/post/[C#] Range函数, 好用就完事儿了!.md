@@ -1,5 +1,6 @@
 ---
 title: '[C#] Range函数, 好用就完事儿了!'
+slug: '[CSharp]Range函数,好用就完事儿了,'
 date: 2021-02-19 07:07:41
 tags:
   - c#

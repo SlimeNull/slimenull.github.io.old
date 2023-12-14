@@ -1,5 +1,6 @@
 ---
 title: 'Kali Linux 新手引导 - 配置中文输入法'
+slug: 'KaliLinux新手引导-配置中文输入法'
 date: 2020-12-07 20:35:24
 tags:
   - kali linux

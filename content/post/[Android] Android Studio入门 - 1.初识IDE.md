@@ -1,5 +1,6 @@
 ---
 title: '[Android] Android Studio入门 - 1.初识IDE'
+slug: '[Android]AndroidStudio入门-1.初识IDE'
 date: 2021-01-20 04:52:13
 tags:
   - android

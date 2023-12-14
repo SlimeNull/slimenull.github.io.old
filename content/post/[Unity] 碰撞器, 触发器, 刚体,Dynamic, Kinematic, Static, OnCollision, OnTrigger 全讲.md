@@ -1,5 +1,6 @@
 ---
 title: '[Unity] 碰撞器, 触发器, 刚体,Dynamic, Kinematic, Static, OnCollision, OnTrigger 全讲'
+slug: '[Unity]碰撞器,触发器,刚体,Dynamic,Kinematic,Static,OnCollision,OnTrigger全讲'
 date: 2022-09-27 14:51:27
 tags:
   - unity

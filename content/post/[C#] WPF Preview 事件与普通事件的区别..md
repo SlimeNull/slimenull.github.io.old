@@ -1,5 +1,6 @@
 ---
 title: '[C#] WPF Preview 事件与普通事件的区别.'
+slug: '[CSharp]WPFPreview事件与普通事件的区别.'
 date: 2021-03-19 19:30:01
 description: '很多文章都提到了冒泡事件和隧穿事件, 我是没有去测试过这两个的, 但是有一个非常非常重要的点很多人都忽略了.已预处理事件的控件在 WPF 中, 部分控件已经对某些事件进行了处理, 例如一个 Button, 它提供了 Click 事件, 而 Click 的本质是 MouseDown 和 MouseUp, 因而, Button 的 MouseDown 和 MouseUp 事件是没办法正常使用的…如果需要使用它们, 你得使用 PreviewMouseDown 和 PreviewMouseUp.同样, 有很'
 ---

@@ -43,13 +43,13 @@ limit = 5
 type = "categories"
 
 [widgets.homepage.params]
-limit = 10
+limit = 15
 
 [[widgets.homepage]]
 type = "tag-cloud"
 
 [widgets.homepage.params]
-limit = 10
+limit = 30
 
 [[widgets.page]]
 type = "toc"
@@ -76,7 +76,7 @@ enabled = true
 ## Comments
 [comments]
 enabled = true
-provider = "gitalk"
+provider = "utterances"
 
 [comments.disqusjs]
 shortname = ""
@@ -86,9 +86,9 @@ admin = ""
 adminLabel = ""
 
 [comments.utterances]
-repo = ""
+repo = "SlimeNull/slimenull.github.io"
 issueTerm = "pathname"
-label = ""
+label = "BlogComment"
 
 [comments.remark42]
 host = ""

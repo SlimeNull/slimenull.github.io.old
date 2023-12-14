@@ -1,5 +1,6 @@
 ---
 title: '2022年QQ微信内置浏览器 UA 标识, Header 获取'
+slug: '2022年QQ微信内置浏览器UA标识,Header获取'
 date: 2022-03-01 17:43:03
 tags:
   - 微信

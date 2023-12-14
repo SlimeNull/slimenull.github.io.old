@@ -1,5 +1,6 @@
 ---
 title: 'Google Chrome 插件开发: 无法建立连接, 接收端不存在. Could not establish connection. Receiving end does not exist'
+slug: 'GoogleChrome插件开发 无法建立连接,接收端不存在.Couldnotestablishconnection.Receivingenddoesnotexist'
 date: 2022-10-14 10:00:19
 tags:
   - chrome

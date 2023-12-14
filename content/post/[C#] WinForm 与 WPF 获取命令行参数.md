@@ -1,5 +1,6 @@
 ---
 title: '[C#] WinForm 与 WPF 获取命令行参数'
+slug: '[CSharp]WinForm与WPF获取命令行参数'
 date: 2021-02-09 03:04:19
 tags:
   - C#

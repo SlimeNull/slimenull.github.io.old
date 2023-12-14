@@ -1,5 +1,6 @@
 ---
 title: '[Unity] 个人编码规范与命名准则参考'
+slug: '[Unity]个人编码规范与命名准则参考'
 date: 2023-10-31 08:15:56
 tags:
   - unity

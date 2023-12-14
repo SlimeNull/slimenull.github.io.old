@@ -1,5 +1,6 @@
 ---
 title: 'Kali Linux 新手引导 - 区域与语言配置'
+slug: 'KaliLinux新手引导-区域与语言配置'
 date: 2020-12-07 16:50:05
 tags:
   - linux

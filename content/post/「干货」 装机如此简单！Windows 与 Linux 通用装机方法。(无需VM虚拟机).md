@@ -1,5 +1,6 @@
 ---
 title: '「干货」 装机如此简单！Windows 与 Linux 通用装机方法。(无需VM虚拟机)'
+slug: '「干货」装机如此简单！Windows与Linux通用装机方法。(无需VM虚拟机)'
 date: 2020-12-13 00:11:56
 tags:
   - 运维

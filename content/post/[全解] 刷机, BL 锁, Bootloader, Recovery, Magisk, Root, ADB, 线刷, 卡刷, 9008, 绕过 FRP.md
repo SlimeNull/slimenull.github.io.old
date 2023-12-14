@@ -1,5 +1,6 @@
 ---
 title: '[全解] 刷机, BL 锁, Bootloader, Recovery, Magisk, Root, ADB, 线刷, 卡刷, 9008, 绕过 FRP'
+slug: '[全解]刷机,BL锁,Bootloader,Recovery,Magisk,Root,ADB,线刷,卡刷,9008,绕过FRP'
 date: 2022-10-22 10:43:02
 tags:
   - adb

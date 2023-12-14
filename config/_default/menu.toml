@@ -9,16 +9,18 @@
 
 [[social]]
 identifier = "github"
+weight = 1
 name = "GitHub"
 url = "https://github.com/SlimeNull"
 
 [social.params]
-icon = "brand-github"
+icon = "social-github"
 
-# [[social]]
-# identifier = "bilibili"
-# name = "Bilibili"
-# url = "https://space.bilibili.com/441842015"
+[[social]]
+identifier = "bilibili"
+weight = 2
+name = "Bilibili"
+url = "https://space.bilibili.com/441842015"
 
-# [social.params]
-# icon = "brand-bilibili"
+[social.params]
+icon = "social-bilibili"

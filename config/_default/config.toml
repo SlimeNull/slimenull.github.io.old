@@ -1,7 +1,7 @@
 # Change baseurl before deploy
 baseurl = "https://slimenull.top"
 languageCode = "zh-CN"
-paginate = 5
+paginate = 10
 title = "SlimeNull Blogs"
 
 # Theme i18n support
@@ -14,3 +14,5 @@ hasCJKLanguage = true
 
 # Change it to your Disqus shortname before using
 disqusShortname = "slimenull"
+
+theme = "hugo-theme-stack"

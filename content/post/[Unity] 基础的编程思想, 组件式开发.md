@@ -1,5 +1,6 @@
 ---
 title: '[Unity] 基础的编程思想, 组件式开发'
+slug: '[Unity]基础的编程思想,组件式开发'
 date: 2023-08-18 16:55:42
 tags:
   - unity

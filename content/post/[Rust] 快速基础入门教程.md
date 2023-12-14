@@ -1,5 +1,6 @@
 ---
 title: '[Rust] 快速基础入门教程'
+slug: '[Rust]快速基础入门教程'
 date: 2023-11-30 14:19:12
 tags:
   - rust

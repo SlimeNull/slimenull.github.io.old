@@ -1,5 +1,6 @@
 ---
 title: '[C#] 单文件编译 - 编译时嵌入dll'
+slug: '[CSharp]单文件编译-编译时嵌入dll'
 date: 2021-02-03 06:56:00
 tags:
   - visual studio

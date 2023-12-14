@@ -1,5 +1,6 @@
 ---
 title: 'C# 循环所有可能的字符'
+slug: 'CSharp循环所有可能的字符'
 date: 2020-10-26 15:59:44
 categories:
   - 灌水

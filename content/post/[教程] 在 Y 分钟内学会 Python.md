@@ -1,5 +1,6 @@
 ---
 title: '[教程] 在 Y 分钟内学会 Python'
+slug: '[教程]在Y分钟内学会Python'
 date: 2021-05-05 18:44:21
 tags:
   - python

@@ -1,5 +1,6 @@
 ---
 title: '[Web] 浅谈 Get 与 Post 请求'
+slug: '[Web]浅谈Get与Post请求'
 date: 2021-01-05 17:32:52
 tags:
   - html5

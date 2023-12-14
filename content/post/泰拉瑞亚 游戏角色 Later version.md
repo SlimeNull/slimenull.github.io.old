@@ -1,5 +1,6 @@
 ---
 title: '泰拉瑞亚 游戏角色 Later version'
+slug: '泰拉瑞亚游戏角色Laterversion'
 date: 2022-10-12 16:00:55
 tags:
   - 游戏

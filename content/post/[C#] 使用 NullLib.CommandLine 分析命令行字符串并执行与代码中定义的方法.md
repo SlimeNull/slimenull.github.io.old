@@ -1,5 +1,6 @@
 ---
 title: '[C#] 使用 NullLib.CommandLine 分析命令行字符串并执行与代码中定义的方法'
+slug: '[CSharp]使用NullLib.CommandLine分析命令行字符串并执行与代码中定义的方法'
 date: 2021-06-29 21:54:51
 tags:
   - c#

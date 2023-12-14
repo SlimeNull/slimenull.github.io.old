@@ -1,5 +1,6 @@
 ---
 title: '[C#,笔记] NAudio 傅里叶变换的 forward 参数与 m 参数'
+slug: '[CSharp,笔记]NAudio傅里叶变换的forward参数与m参数'
 date: 2022-10-25 07:48:33
 tags:
   - 开发语言

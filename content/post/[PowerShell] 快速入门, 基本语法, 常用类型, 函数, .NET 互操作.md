@@ -1,5 +1,6 @@
 ---
 title: '[PowerShell] 快速入门, 基本语法, 常用类型, 函数, .NET 互操作'
+slug: '[PowerShell]快速入门,基本语法,常用类型,函数,.NET互操作'
 date: 2021-03-24 15:42:12
 tags:
   - powershell
