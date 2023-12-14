@@ -3,10 +3,10 @@ title: '[C#] 关于 Linq 拓展函数对迭代对象进行更改不生效的问�
 slug: '[CSharp]关于Linq拓展函数对迭代对象进行更改不生效的问题'
 date: 2021-04-09 10:09:35
 tags:
-  - .net
+  - dotnet
   - csharp
 categories:
-  - .NET
+  - dotnet
   - 笔记
   - 灌水
 description: '偶然发现, 在使用 Linq 的 Select 方法时, 如果对被迭代对象进行更改, 那么这个更改是不会生效的'

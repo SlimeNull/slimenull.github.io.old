@@ -5,7 +5,7 @@ date: 2021-02-03 03:02:37
 tags:
   - csharp
 categories:
-  - .NET
+  - dotnet
   - 类库
   - 笔记
 description: '[C#] Stream 支持写入读取触发事件的类库实现了 :你可以将这个流类的实例提供给某些东西, 在它操作这个流时, 你可以通过事件来接收到消息, 并加以处理, 例如拒绝写入, 或在写入前判断写入的内容. 你可以稍微改动一下这个类以适应你的需求.应用场景: 例如你使用了 IronPython 库, 并使用它执行了一些操作, 你希望 IronPython 每次 print 时, 你都能获取到内容, 则, 你可以使用这个触发流(TriggerStream)类, 将 IronPython 引擎的标准输出'

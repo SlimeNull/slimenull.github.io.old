@@ -4,10 +4,10 @@ slug: '[CSharp,VB.NET]CSharp与VB.NET的类库跨语言引用.'
 date: 2021-02-15 01:57:02
 tags:
   - csharp
-  - .net
+  - dotnet
   - vb.net
 categories:
-  - .NET
+  - dotnet
   - 类库
 description: '例如你有一个程序, 是 VB.NET 写的, 你希望在里面引用 C# 的代码, 那么, 该如何操作呢?准备材料:一个 C# 或 VB.NET 项目, 我们以一个测试项目(WinForm)开始与该项目语言不同的, 但是是基于 .NET 的类代码片. 代码地址: 一个类实现控件拖拽移动分布演示:1. > 创建类库项目:创建一个与我们准备的类库语言相同的类库, 并将代码拷贝到其中:2. > 添加项目引用:在刚刚准备好的 WinForm 项目中, 添加对类库项目的引用.'
 ---

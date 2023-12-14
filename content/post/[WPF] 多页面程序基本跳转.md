@@ -6,9 +6,9 @@ tags:
   - wpf
   - ui
   - csharp
-  - .net
+  - dotnet
 categories:
-  - .NET
+  - dotnet
   - 桌面程序
 description: '使用 WPF 实现较为便捷的多页面跳转.'
 ---

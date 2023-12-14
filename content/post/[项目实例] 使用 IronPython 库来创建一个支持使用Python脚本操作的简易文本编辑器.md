@@ -4,11 +4,11 @@ slug: '[项目实例]使用IronPython库来创建一个支持使用Python脚本�
 date: 2021-02-03 06:43:09
 tags:
   - csharp
-  - .net
+  - dotnet
   - python
 categories:
   - 桌面程序
-  - .NET
+  - dotnet
   - 成长记录
 description: '步骤 :打开 nuget 包管理器, 工具 -> NuGet 包管理器 -> 管理解决方案的 NuGet 程序包.在 nuget 包管理器中找到 IronPython, 安装到你的项目.using 所需的命名空间, Microsoft.Scripting, Microsoft.Scripting.Hosting, Microsoft.Win32, IronPython.Hosting.创建 Python 引擎:ScriptEngine engine = Python'
 ---

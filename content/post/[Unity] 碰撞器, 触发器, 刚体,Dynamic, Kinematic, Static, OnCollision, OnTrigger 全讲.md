@@ -7,7 +7,7 @@ tags:
   - csharp
   - 游戏引擎
 categories:
-  - .NET
+  - dotnet
   - Unity
 description: 'Unity 碰撞相关的几乎所有基础知识都在这里了, 高度整合以及精心标注!'
 ---

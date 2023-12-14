@@ -4,13 +4,13 @@ slug: '[CSharp,C,CPP]GetShortPathName详解,长路径转换为短路径'
 date: 2021-02-09 08:05:35
 tags:
   - csharp
-  - .net
+  - dotnet
   - c++
   - win32
   - winapi
 categories:
   - C++
-  - .NET
+  - dotnet
   - 笔记
 description: '说点骚话:转换需要用到 Windows API (废话)官方文档: GetShortPathNameW function (fineapi.h) - Win32 apps | Microsoft docs  (纯英文, 没有中文版本.)引用命名空间:using System.Runtime.InteropServices;关键代码:C#[DllImport("kernel32.dll", EntryPoint = "GetShortPathNameW", CharSet = CharSe'
 ---

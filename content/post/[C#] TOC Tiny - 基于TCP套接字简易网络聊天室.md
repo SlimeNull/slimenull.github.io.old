@@ -3,12 +3,12 @@ title: '[C#] TOC Tiny - 基于TCP套接字简易网络聊天室'
 slug: '[CSharp]TOCTiny-基于TCP套接字简易网络聊天室'
 date: 2020-12-31 01:08:08
 tags:
-  - .net
+  - dotnet
   - csharp
 categories:
   - 桌面程序
   - 控制台
-  - .NET
+  - dotnet
 description: '简介:之前开了一个大坑, 额, 其实就是带有注册登录, 然后完美解决粘包, 心跳包, 还有并发量等问题的坑, 但是太难填了(我太菜了), 于是我就开了一个新项目, 砍掉登陆注册功能, 直接作为聊天室开放…程序美照:难题是如何解决的:首先是传输协议, 我这里的数据传输, 无论是什么数据, 都是一个TransPackage实例, 里面有基本的结构, 就是Name, Content, ClientGuid, PackageType这四个字段(除此之外就没了). 然后把它们弄成字符串, 然后弄'
 ---
 

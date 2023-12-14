@@ -7,7 +7,7 @@ tags:
   - 设计模式
 categories:
   - Unity
-  - .NET
+  - dotnet
   - 笔记
 description: 'Unity 单例模板类'
 ---

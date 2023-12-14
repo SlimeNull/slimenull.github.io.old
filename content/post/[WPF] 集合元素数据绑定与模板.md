@@ -7,7 +7,7 @@ tags:
   - xaml
   - csharp
 categories:
-  - .NET
+  - dotnet
   - 桌面程序
 description: '在 WPF 中使用 ItemsControl 进行集合数据的绑定'
 ---

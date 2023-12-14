@@ -3,7 +3,7 @@ title: '[C#] MCI 详解与封装类, MCI 播放音乐, 获取播放状态, 获�
 slug: '[CSharp]MCI详解与封装类,MCI播放音乐,获取播放状态,获取音频长度,进度调整,'
 date: 2021-02-11 10:21:11
 tags:
-  - .net
+  - dotnet
   - mci
   - win32
   - windows

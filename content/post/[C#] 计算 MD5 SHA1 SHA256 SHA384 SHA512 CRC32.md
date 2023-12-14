@@ -4,11 +4,11 @@ slug: '[CSharp]计算MD5SHA1SHA256SHA384SHA512CRC32'
 date: 2021-04-18 02:38:55
 tags:
   - csharp
-  - .net
+  - dotnet
   - 字符串
 categories:
   - 类库
-  - .NET
+  - dotnet
   - 灌水
 description: '直接贴代码了, 复制即可用, 源码部分来自网络.如果要计算字符串的 MD5 值, 直接 Encoding.UTF8.GetBytes() 然后就可以了using System;using System.IO;using System.Linq;namespace NullLib.HashCalc{    public class HashHelper    {        public static string CalcMd5x32(byte[] bytValue)        '
 ---

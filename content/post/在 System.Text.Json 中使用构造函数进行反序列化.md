@@ -5,7 +5,7 @@ date: 2022-09-14 13:11:37
 tags:
   - csharp
   - json
-  - .net
+  - dotnet
 categories:
   - 灌水
 description: '使用 System.Text.Json 时, 不可变类型的反序列化'

@@ -8,7 +8,7 @@ tags:
   - csharp
 categories:
   - 桌面程序
-  - .NET
+  - dotnet
 description: '资源, 静态与动态资源, 基于资源实现语言国际化及配色切换'
 ---
 

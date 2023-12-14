@@ -7,7 +7,7 @@ tags:
   - 开发语言
   - 玩游戏
 categories:
-  - .NET
+  - dotnet
   - 控制台
   - 灌水
 description: '简单控制台俄罗斯方块实现'

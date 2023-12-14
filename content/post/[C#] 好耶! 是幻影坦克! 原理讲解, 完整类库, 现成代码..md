@@ -5,7 +5,7 @@ date: 2021-03-03 16:44:09
 tags:
   - csharp
   - csharp
-  - .net
+  - dotnet
   - 图像处理
   - 幻影坦克
 categories:

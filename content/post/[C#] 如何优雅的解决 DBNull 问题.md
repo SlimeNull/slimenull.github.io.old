@@ -4,10 +4,10 @@ slug: '[CSharp]如何优雅的解决DBNull问题'
 date: 2021-07-14 23:38:02
 tags:
   - 数据库
-  - .net
+  - dotnet
   - csharp
 categories:
-  - .NET
+  - dotnet
 description: '什么是 DBNull 问题指从数据库取出数据时, 数据为空, 表现为 DBNull 无法转换为其他类型异常示例:// reader 为 DbDataReaderDateTime value = reader.GetDateTime(0);  // 在这里如果数据为空, 则会抛出异常普通的解决方式:DateTime value = reader.IsDBNull(0) ? default(DateTime) : reader.GetDateTime(0);优雅而又牛啤的解决方式:// 新建.'
 ---
 

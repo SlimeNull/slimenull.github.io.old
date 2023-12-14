@@ -5,10 +5,10 @@ date: 2020-10-28 23:52:44
 tags:
   - csharp
   - json
-  - .net
+  - dotnet
 categories:
   - 算法
-  - .NET
+  - dotnet
   - 类库
 description: '这是一个类似于Newtonsoft.Json的项目, 但与其有些出入。这是它与Newtonsoft.Json的差别:CHO.Json支持你像Python那样不需要实体类而简便的操作小型数据, 也支持将类的实例序列化为Json文本与将分析完毕的Json数据反序列化为特定类的实例CHO.Json少了许多冗余的功能, 例如将图片序列化为字符串, 因此CHO.Json可能要比Newtonsoft.Json轻量许多。CHO.Json的源代码比Newtonsoft.Json更适合初学者阅读, 在看懂它的代.'
 ---

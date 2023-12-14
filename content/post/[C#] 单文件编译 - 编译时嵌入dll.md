@@ -5,11 +5,11 @@ date: 2021-02-03 06:56:00
 tags:
   - visual studio
   - csharp
-  - .net
+  - dotnet
 categories:
   - 灌水
   - 成长记录
-  - .NET
+  - dotnet
 description: '1.打开 NuGet 包管理器位于 工具 -> NuGet 包管理器 -> 管理解决方案的 NuGet 程序包2. 安装搜索 Costura.Fody 并将其安装到你的项目3. 起飞然后, 进行编译, 你就会发现! 所有的dll全部被打包进exe中啦~~~...'
 ---
 

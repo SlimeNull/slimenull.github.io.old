@@ -7,7 +7,7 @@ tags:
   - 字符串
   - cmd
 categories:
-  - .NET
+  - dotnet
   - 类库
 description: '摘要介绍通过命令行字符串来方便快捷的调用 C# 中定义的方法准备添加 nuget 包: NullLib.CommandLine使用方式首先, 在 NullLib.CommandLine 中用于调用方法的最基本类型是 CommandObject, 它包含了方法的各种信息, 例如 MethodInfo, ParameterInfo, 以及属性.然后, 你需要定义一个包含要调用方法的类, 在这个类中, 每一个将被调用的方法都应该有一个 Command 属性, 之后我们将用这个类型实例化一个 Com'
 ---

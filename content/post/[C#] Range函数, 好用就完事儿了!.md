@@ -4,11 +4,11 @@ slug: '[CSharp]Range函数,好用就完事儿了,'
 date: 2021-02-19 07:07:41
 tags:
   - csharp
-  - .net
+  - dotnet
   - csharp
 categories:
   - 类库
-  - .NET
+  - dotnet
   - 笔记
 description: '这么多重载, 完全够用了~, 返回值是 IEnumerable<T>using System;using System.Collections;using System.Collections.Generic;namespace Null.Library{    public static partial class Lib    {        public static IEnumerable<int> Range(int stop)        {  '
 ---

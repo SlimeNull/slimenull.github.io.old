@@ -7,7 +7,7 @@ tags:
   - c++
   - 开发语言
 categories:
-  - .NET
+  - dotnet
   - 桌面程序
   - C++
 description: 'Win32 暗色模式适配, C++, WinForm, WPF 判断当前颜色模式, 响应颜色变更消息, 设置标题栏暗色'

@@ -3,12 +3,12 @@ title: 'EV 录屏修复小工具'
 slug: 'EV录屏修复小工具'
 date: 2023-08-15 15:37:35
 tags:
-  - .net
+  - dotnet
   - csharp
 categories:
   - 灌水
   - 控制台
-  - .NET
+  - dotnet
 description: '我用 C# 写了一个 EV 录屏修复小工具.'
 ---
 

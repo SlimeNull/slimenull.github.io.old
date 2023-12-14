@@ -6,7 +6,7 @@ tags:
   - csharp
   - 开发语言
 categories:
-  - .NET
+  - dotnet
   - 笔记
   - 控制台
 description: '无法使用 ANSI 转义序列, 无法通过 \e \1b 逃逸字符打印彩色或格式化内容, 通过调用 WinAPI 启用虚拟终端处理来解决问题'

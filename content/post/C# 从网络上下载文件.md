@@ -5,7 +5,7 @@ date: 2020-04-16 03:23:54
 tags:
   - 网络
   - csharp
-  - .net
+  - dotnet
 categories:
   - 网络
 description: '之前一直不理解如何是从网络上下载文件的…自己试了试懂了FileStream file = File.CreatWrite(filePath);                          // 创建文件WebRequest.Creat(url).GetResponse().GetResponseStream().CopyTo(file); // 创建WebRequest对象,获取响应,...'

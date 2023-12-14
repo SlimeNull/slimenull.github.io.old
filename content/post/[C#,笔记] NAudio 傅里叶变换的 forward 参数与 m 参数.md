@@ -6,7 +6,7 @@ tags:
   - 开发语言
   - 音频
 categories:
-  - .NET
+  - dotnet
   - 笔记
 description: 'NAudio FourierTransform.FFT 的参数值'
 ---

@@ -3,13 +3,13 @@ title: '[C#] 就让这张图片来揭露你的本性吧! 老绅士.'
 slug: '[CSharp]就让这张图片来揭露你的本性吧,老绅士.'
 date: 2021-02-21 23:08:37
 tags:
-  - .net
+  - dotnet
   - csharp
   - csharp
   - graphics
   - gdi/gdi+
 categories:
-  - .NET
+  - dotnet
   - 控制台
   - Windows
 description: '淦!看到上面那幅图了吗? 放大, 放大, 看到了吗? 说的就是你 (滑稽 '

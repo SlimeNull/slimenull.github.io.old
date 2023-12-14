@@ -5,9 +5,9 @@ date: 2021-03-24 15:42:12
 tags:
   - powershell
   - 脚本语言
-  - .net
+  - dotnet
 categories:
-  - .NET
+  - dotnet
   - 笔记
 description: 'PowerShell 快速入门开始之前, 我们认定你已经有一定的编程基础, 熟悉 .NET 中的类型与对象.此文章对于 .NET 开发者来说更简单哦!在 PowerShell 中, 几乎一切都是对象. 与 CMD 有很大不同. PowerShell 是强类型的, 它基于 .NET, 故, PowerShell 可以近乎完美的调用 .NET 的标准库.0. 官方文档既然要学新东西, 肯定要会查阅官方文档才彳亍呀! 本文章参阅官方文档, 并使用更简单的语言讲述给读者, 在每一部分都会有推荐的官方文'
 ---

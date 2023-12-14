@@ -3,7 +3,7 @@ title: '[C#] 音乐播放 3 种方式 Demo 与 MCI 音乐播放器封装类.'
 slug: '[CSharp]音乐播放3种方式Demo与MCI音乐播放器封装类.'
 date: 2021-02-11 10:42:39
 tags:
-  - .net
+  - dotnet
   - csharp
   - win32
   - winapi
@@ -11,7 +11,7 @@ tags:
 categories:
   - 类库
   - Windows
-  - .NET
+  - dotnet
 description: '淦!首先代码是不完整的, 我还是没能成功设置音量, 除此之外, 别的倒是挺顺利的, 当前实现的功能如下:播放 暂停 还原 停止 获取进度 获取长度 设置进度 获取播放状态内容:本项目的仓库在: SlimeNull/AudioTest, 在这里下载哦, 别忘了还原 nuget 包, 因为用了 NAudio 库.> 音乐播放 Demo:先放图吧:首先左上角是打开文件的, 然后 PlayType 是播放方式, 我现在让它支持 3 种, 一种是SoundPlayer, 然后是 M'
 ---
 

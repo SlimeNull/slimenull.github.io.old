@@ -7,7 +7,7 @@ tags:
   - 游戏引擎
   - csharp
 categories:
-  - .NET
+  - dotnet
   - Unity
   - 笔记
 description: '熟悉 C# 开发的朋友, 在刚进入 Unity 开发时, 不可避免的会有一些迷惑, 例如不清楚 Unity 自己的思想, 如何设计与架构一个应用程序之类的. 本篇文章简要的介绍一下 Unity 的基础编程思想.'

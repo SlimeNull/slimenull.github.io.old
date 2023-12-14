@@ -5,7 +5,7 @@ date: 2021-02-06 01:24:02
 tags:
   - 反编译
   - csharp
-  - .net
+  - dotnet
 categories:
   - 灌水
   - 成长记录

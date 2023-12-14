@@ -7,7 +7,7 @@ tags:
   - 计算机图形学
   - WPF
 categories:
-  - .NET
+  - dotnet
   - 成长记录
   - 笔记
 description: '关于向量:1. 向量的基在计算机科学中, 向量, Vector, 通常这么表示:[xy]\left[\begin{array}{cc}x\\y\end{array}\right][xy​]向量有两个 “基”, i‾\overline{i}i, 即 1,0→\overrightarrow{1, 0}1,0​, j‾\overline{j}j​, 即 0,1→\overrightarrow{0, 1}0,1​向量可以看作一组数乘以这些基的结果, 即: v‾=a×i‾+b×j‾\ov'

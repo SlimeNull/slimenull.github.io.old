@@ -5,7 +5,7 @@ date: 2023-06-27 20:52:43
 tags:
   - csharp
 categories:
-  - .NET
+  - dotnet
   - 控制台
   - 笔记
 description: '使用 ReadConsoleInput, 需要手动启用鼠标输入, 关闭快速编辑模式, 并删去任何读取标准输入的逻辑, 只使用 ReadConsoleInput'

@@ -7,7 +7,7 @@ tags:
   - 字符串
   - 进制
 categories:
-  - .NET
+  - dotnet
   - 笔记
   - 成长记录
 description: '在源码中:C# 中允许在代码中使用 0x 开头的十六进制数字, 以及 0b 开头的二进制数字来表示一个整数. 下面的语法是合理的.int a = 123;int b = 0xFF;int c = 0b10010;数字转换将一个数字转换为某进制的字符串, 有两种方式:// 第一种: 使用 Convert 类. 可转换为 二进制 八进制 十进制 十六进制Convert.ToString(10, 2);    // 二进制, 返回 "1010"Convert.ToString(10, 8); '
