@@ -1,3 +1,21 @@
 /*
     You can add your own custom styles here.
 */
+
+:root {
+    --code-font-family: CascadiaCode, Menlo, Monaco, Consolas, "Courier New", var(--zh-font-family), monospace;
+}
+
+.article-content p code,
+.article-content div.highlight {
+    font-size: .9em;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: .3em;
+}
+
+@font-face {
+    font-family: CascadiaCode;
+    src: url('/fonts/CascadiaCode.woff2');
+}
