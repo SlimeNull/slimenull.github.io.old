@@ -5,7 +5,7 @@ date: 2021-05-05 18:44:21
 tags:
   - python
 categories:
-  - 笔记
+  - note
   - 成长记录
   - 灌水
 description: '在 Y 分钟内学会 Python这是翻译, 原文地址: Learn Python in Y Minutes在 90 年代初, Python 由 Guido van Rossum 创造, 现在, 它是最受欢迎的编程语言之一. 因其简明的语法, 我爱上了它. 语法基本上是可以执行的伪代码.提示: 这篇文章适用于 Python 3, 如果你想要学习旧版 Python 2.7, 单击这里# 单行注释以 '#' 作为开头"""多行注释可以使用三个双引号   并且经常用与书写文档"""#####'

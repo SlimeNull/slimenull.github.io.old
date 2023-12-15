@@ -8,7 +8,7 @@ tags:
   - css3
   - html5
 categories:
-  - 笔记
+  - note
   - 成长记录
 description: '首先演示下:.box1{    width: 300px;    height: 300px;}.box2{    width: 200px;    height: 200px;}.box3{    width: 100px;    height: 100px;}.border-with{    border: solid 1px pink;}.padding-with{    padding: 1px;}.style-pink{    background-colo'
 ---

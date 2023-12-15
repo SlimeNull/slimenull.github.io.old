@@ -7,7 +7,7 @@ tags:
   - 开发语言
 categories:
   - Rust
-  - 笔记
+  - note
 description: '1. 对于一次性使用的类型, 可以直接对其实现迭代器 trait.2. 对于容器, 不应该对容器本身直接实现迭代器, 而是应该单独创建迭代器类型, 然后对其本身实现 `IntoIterator`'
 ---
 

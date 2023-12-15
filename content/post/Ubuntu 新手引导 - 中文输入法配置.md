@@ -8,7 +8,7 @@ tags:
 categories:
   - Debian
   - 成长记录
-  - 笔记
+  - note
 description: '选择输入法框架：Linux中，有多个输入法框架可供使用，在 Ubuntu 中，默认预装了 ibus 这款输入法引擎，常用的中文输入法引擎有两种，ibus 与 fcitx。两者都还彳亍，懒得下载的话，就直接用ibus吧。配置使用的输入法框架：打开终端，执行 ‘im-config’，在弹出的窗口中，选择ok，yes，然后选择 ibus，于是，你就成功使用了ibus框架。同理，选择 fcitx 则是使用 fcitx 框架，至于安装 fcitx，见文章末。选择输入法引擎：关键的时刻到咯，那么对于ibu'
 ---
 

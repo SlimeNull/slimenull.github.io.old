@@ -7,7 +7,7 @@ tags:
   - dotnet
 categories:
   - dotnet
-  - 笔记
+  - note
 description: '众所周知, C# 可以通过yield语句来快速向或者类型的方法返回值返回一个元素. 但它还有另外一个特性, 就是其内部逻辑的懒执行. 每两个yield语句之间的逻辑都是一个状态, 只有在调用迭代器的MoveNext方法后, 才会执行下一个状态的逻辑.'
 ---
 

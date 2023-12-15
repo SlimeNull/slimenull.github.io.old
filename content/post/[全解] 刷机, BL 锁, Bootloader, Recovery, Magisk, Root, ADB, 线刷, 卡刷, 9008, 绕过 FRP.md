@@ -6,7 +6,7 @@ tags:
   - adb
   - android
 categories:
-  - 笔记
+  - note
 description: '刷机, BL 锁, Bootloader, Recovery, Magisk, Root, ADB, 线刷, 卡刷, 9008, 绕过 FRP 全解'
 ---
 

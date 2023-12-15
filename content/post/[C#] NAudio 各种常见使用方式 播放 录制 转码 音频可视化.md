@@ -7,7 +7,7 @@ tags:
   - 音频编码解码
   - csharp
 categories:
-  - 笔记
+  - note
 description: '概述在 NAudio 中, 常用类型有 WaveIn, WaveOut, WaveStream, WaveFileWriter, WaveFileReader, AudioFileReader 以及接口: IWaveProvider, ISampleProvider, IWaveIn, IWavePlayerWaveIn 表示波形输入, 继承了 IWaveIn, 例如麦克风输入, 或者计算机正在播放的音频流.WaveOut 表示波形输出, 继承了 IWavePlayer, 用来播放波形音乐, 以 I'
 ---
 

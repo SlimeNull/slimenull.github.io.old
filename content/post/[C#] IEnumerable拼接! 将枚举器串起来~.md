@@ -7,7 +7,7 @@ tags:
   - csharp
   - dotnet
 categories:
-  - 笔记
+  - note
   - dotnet
   - 类库
 description: '本来以为 IEnumerable 不能拼接, 就自己实现了一个, 结果发现 Linq 是提供了一个 Concat 函数的, 不过似乎是通过生成List的方式来实现? 反正我那个是异步的.用来做参考还是非常不辍滴, 速度的话, 4个10000拼接, 然后重复迭代10000次, 我写的是3590ms, Linq 的是2931ms, 不过两个其实都没有直接 ToList() 然后迭代要快, ToList(), 然后AddRange, 其实耗时只有九百多毫秒, 足足差了3倍左右.static void Coll'

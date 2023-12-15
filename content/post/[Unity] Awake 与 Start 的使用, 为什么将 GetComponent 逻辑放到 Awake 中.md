@@ -9,7 +9,7 @@ tags:
 categories:
   - dotnet
   - Unity
-  - 笔记
+  - note
 description: '震惊, 在 Start 中初始化变量竟然会引发如此严重的问题! 性能下降, 逻辑异常, 到底是人性的扭曲还是道德的沦丧?'
 ---
 

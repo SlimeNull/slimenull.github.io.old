@@ -8,7 +8,7 @@ tags:
   - javascript
 categories:
   - Web
-  - 笔记
+  - note
 description: '使用少量 JS 和 CSS 实现的瀑布流布局'
 ---
 

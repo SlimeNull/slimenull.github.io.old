@@ -9,7 +9,7 @@ tags:
   - asp.net
 categories:
   - 成长记录
-  - 笔记
+  - note
   - dotnet
 description: '问题是出在这里的:SoftwareInfo result = new SoftwareInfo(reader.GetString(1),              // reader 是 MySqlDataReader 实例reader.GetString(7)){    ID = reader.GetInt32(0),    Label = reader.GetString(2),    Coder = reader.GetString(3),    DownloadCount = rea'
 ---

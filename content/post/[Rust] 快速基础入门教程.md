@@ -7,7 +7,7 @@ tags:
   - 开发语言
 categories:
   - Rust
-  - 笔记
+  - note
 description: 'Rust 是一个无运行时的强类型语言, 包含很多高级特性, 例如泛型, lambda 等. 又因为其独有的所有权机制, 所以 Rust 的内存安全要比 C++ 完善许多.'
 ---
 

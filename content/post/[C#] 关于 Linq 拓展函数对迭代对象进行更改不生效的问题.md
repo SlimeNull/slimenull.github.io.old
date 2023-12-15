@@ -7,7 +7,7 @@ tags:
   - csharp
 categories:
   - dotnet
-  - 笔记
+  - note
   - 灌水
 description: '偶然发现, 在使用 Linq 的 Select 方法时, 如果对被迭代对象进行更改, 那么这个更改是不会生效的'
 ---

@@ -6,7 +6,7 @@ tags:
   - csharp
   - unity
 categories:
-  - 笔记
+  - note
   - Unity
 description: '给结构体添加 System.Serializable 特性就可以让结构体显示在 Inspector 中了'
 ---

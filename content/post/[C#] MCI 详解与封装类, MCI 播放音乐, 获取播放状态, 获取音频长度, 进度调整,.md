@@ -9,7 +9,7 @@ tags:
   - windows
   - winapi
 categories:
-  - 笔记
+  - note
   - Windows
   - 成长记录
 description: '淦!琢磨了一晚上啊, 总算有些眉目了.首先, MCI的全称是Multimedia Control Interface, 即多媒体控制接口, 通过它, 我们可以做到播放音频视频, 甚至录制音频, 虽然古老, 但是真的强大.注意, 文章较官方文档有不少删减, 如果看标准内容, 还是看官方文档比较好.MCI Command Strings 官方文档: Microsoft Command Strings - Win32 app | Microsoft Docs哦对了, 文档是纯英文哦~理论基础:'

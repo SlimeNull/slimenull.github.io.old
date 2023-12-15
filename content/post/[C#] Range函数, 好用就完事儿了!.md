@@ -9,7 +9,7 @@ tags:
 categories:
   - 类库
   - dotnet
-  - 笔记
+  - note
 description: '这么多重载, 完全够用了~, 返回值是 IEnumerable<T>using System;using System.Collections;using System.Collections.Generic;namespace Null.Library{    public static partial class Lib    {        public static IEnumerable<int> Range(int stop)        {  '
 ---
 

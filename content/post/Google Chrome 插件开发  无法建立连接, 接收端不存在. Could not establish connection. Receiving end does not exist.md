@@ -7,7 +7,7 @@ tags:
   - 前端
   - javascript
 categories:
-  - 笔记
+  - note
   - 成长记录
 description: 'Google Chrome 插件开发: 无法建立连接, 接收端不存在. Could not establish connection. Receiving end does not exist'
 ---

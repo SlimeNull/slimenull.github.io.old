@@ -8,7 +8,7 @@ tags:
   - kali linux
   - xfce
 categories:
-  - 笔记
+  - note
   - 成长记录
 description: '关于我的Kali系统：操作系统：Linux NullKali 5.9.0-kali2-amd64 #1 SMP Debian 5.9.6-1kali1 (2020-11-11) x86_64 GNU/Linux桌面环境：Xfce Desktop Environment Version 4.14, destributed by Debian配置区域tzselect# 在Shell中执行即可， 内容来自网络配置语言sudo dpkg-reconfigure locales# 配置完后记得重'
 ---

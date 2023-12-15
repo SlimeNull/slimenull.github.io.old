@@ -7,7 +7,7 @@ tags:
   - dotnet
   - csharp
 categories:
-  - 笔记
+  - note
   - dotnet
   - 桌面程序
 description: '预览:捕捉声卡输出:实现音频可视化, 第一步就是获得音频采样, 这里我们选择使用计算机正在播放的音频作为采样源进行处理:NAudio 中, 可以借助 WasapiLoopbackCapture 来进行捕捉:WasapiLoopbackCapture cap = new WasapiLoopbackCapture();cap.DataAvailable += (sender, e) =>      // 录制数据可用时触发此事件, 参数中包含音频数据{    float[] allSam'

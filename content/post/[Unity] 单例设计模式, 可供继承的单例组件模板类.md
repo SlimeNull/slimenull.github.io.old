@@ -8,7 +8,7 @@ tags:
 categories:
   - Unity
   - dotnet
-  - 笔记
+  - note
 description: 'Unity 单例模板类'
 ---
 

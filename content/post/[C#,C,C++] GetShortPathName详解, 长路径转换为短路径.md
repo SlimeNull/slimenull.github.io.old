@@ -11,7 +11,7 @@ tags:
 categories:
   - C++
   - dotnet
-  - 笔记
+  - note
 description: '说点骚话:转换需要用到 Windows API (废话)官方文档: GetShortPathNameW function (fineapi.h) - Win32 apps | Microsoft docs  (纯英文, 没有中文版本.)引用命名空间:using System.Runtime.InteropServices;关键代码:C#[DllImport("kernel32.dll", EntryPoint = "GetShortPathNameW", CharSet = CharSe'
 ---
 

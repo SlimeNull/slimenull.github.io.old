@@ -8,7 +8,7 @@ tags:
 categories:
   - dotnet
   - Unity
-  - 笔记
+  - note
 description: 'Unity 协程的本质无非就是在合适的实际执行迭代器的MoveNext方法. 对当前正在等待的对象进行条件判断, 如果满足条件, 则MoveNext, 否则就不执行.'
 ---
 

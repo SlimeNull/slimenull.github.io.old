@@ -5,7 +5,7 @@ date: 2022-10-12 16:00:55
 tags:
   - 游戏
 categories:
-  - 笔记
+  - note
 description: '泰拉瑞亚游戏角色显示 Later version. 是因为游戏角色在新版本的游戏中运行过, 所以旧版本会显示这个'
 ---
 

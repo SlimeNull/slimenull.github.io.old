@@ -7,7 +7,7 @@ tags:
   - wpf
 categories:
   - dotnet
-  - 笔记
+  - note
 description: 'WPF TextBox GetRectFromCharacterIndex 返回 Width 为 0, 获取指定字符的位置与宽高'
 ---
 

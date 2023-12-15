@@ -8,7 +8,7 @@ tags:
   - python
 categories:
   - 网络
-  - 笔记
+  - note
   - 成长记录
 description: 'Get 与 Post 请求HTTP请求:前端与后端的数据传递是通过 HTTP 请求实现的, 浏览器(前端)向服务器(后端)发送一个 HTTP 请求, 后端对请求进行处理, 然后再给浏览器发一个响应, 这就是 HTTP 的基本概念.get 和 post 是HTTP请求的两种方式, 最明显的区别是传递参数.如果你不大了解 HTTP 请求, 可以先查看文章末对 HTTP 的简述.Get:关于 Get 请求get 一般用来获取数据, 因为其本意就是获取. 浏览器访问一个页面时, 发送的第一'
 ---

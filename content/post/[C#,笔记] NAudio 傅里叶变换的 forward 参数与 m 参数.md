@@ -7,7 +7,7 @@ tags:
   - 音频
 categories:
   - dotnet
-  - 笔记
+  - note
 description: 'NAudio FourierTransform.FFT 的参数值'
 ---
 

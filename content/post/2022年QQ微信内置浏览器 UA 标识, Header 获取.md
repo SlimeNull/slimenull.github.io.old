@@ -9,7 +9,7 @@ tags:
   - golang
 categories:
   - 灌水
-  - 笔记
+  - note
 description: 'UA 标识QQ:Mozilla/5.0 (Linux; Android 11; Redmi Note 8 Pro Build/RP1A.200720.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/89.0.4389.72 MQQBrowser/6.2 TBS/045913 Mobile Safari/537.36 V1_AND_SQ_8.8.68_2538_YYB_D A_8086800 QQ/8.8.68.726'
 ---
 

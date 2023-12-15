@@ -8,7 +8,7 @@ tags:
 categories:
   - dotnet
   - Unity
-  - 笔记
+  - note
 description: 'Unity C# 在写的过程中, 和纯 C# 是有很大出入的. 甚至说, Unity C# 就是邪教. 例如它的命名规范与 C# 是不一致的, 而且由于游戏引擎的介入, 编写时的习惯相较于 C# 来讲, 也需要有所改变.'
 ---
 

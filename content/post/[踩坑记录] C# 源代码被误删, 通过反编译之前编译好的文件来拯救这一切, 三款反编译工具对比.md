@@ -9,7 +9,7 @@ tags:
 categories:
   - 灌水
   - 成长记录
-  - 笔记
+  - note
 description: '事件:首先, 语言是C#, 然后我把代码给删了… 但是在删之前, 我编译过一次, 所以… 我就想着使用反编译工具来搞了.我知道的有两个反编译工具, dnSply 和 ILSpydnSpy是ILSpy的一个分支(dnSpy is a .NET assembly editor, decompiler, and debugger forked from ILSpy)开始吧:> 首先, 是 dnSpy 上场:乍一看, 没啥问题, 但是, 会有很多毛病哦~ 一一道来吧:dnSpy 的反编译结果'
 ---
 
