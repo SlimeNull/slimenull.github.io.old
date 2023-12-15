@@ -19,7 +19,7 @@ subtitle = "为了更好的开源世界~"
 [sidebar.avatar]
 enabled = true
 local = true
-src = "img/avatar.png"
+src = "img/avatar.jpg"
 
 [article]
 math = false

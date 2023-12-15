@@ -1,7 +1,7 @@
 ---
 title: Rust
 description: 'Rust 是由 Mozilla 主导开发的通用、编译型编程语言'
-image:
+image: cover.jpeg
 
 # Badge style
 style:

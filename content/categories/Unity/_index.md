@@ -1,7 +1,7 @@
 ---
 title: Unity
 description: 'Unity 是一款跨平台的 2D 和 3D 游戏引擎，由 Unity Technologies 研发'
-image:
+image: cover.jpg
 
 # Badge style
 style:
