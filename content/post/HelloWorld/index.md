@@ -1,6 +1,6 @@
 ---
 title: '欢迎来到诺尔的博客站!'
-slug: '欢迎来到诺尔的博客站,'
+slug: 'welcome'
 image: cover.jpg
 weight: 1
 # description: '欢迎来到诺尔的博客站!'
