@@ -1,7 +1,7 @@
 ---
 title: '[C#] 计算 MD5 SHA1 SHA256 SHA384 SHA512 CRC32'
 slug: '[CSharp]计算MD5SHA1SHA256SHA384SHA512CRC32'
-date: 2021-04-18 02:38:55
+date: 2021-04-18T02:38:55+08:00
 tags:
   - csharp
   - dotnet

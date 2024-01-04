@@ -1,7 +1,7 @@
 ---
 title: '[C#/C/C++] GetShortPathName详解, 长路径转换为短路径'
 slug: '[CSharp,C,CPP]GetShortPathName详解,长路径转换为短路径'
-date: 2021-02-09 08:05:35
+date: 2021-02-09T08:05:35+08:00
 tags:
   - csharp
   - dotnet

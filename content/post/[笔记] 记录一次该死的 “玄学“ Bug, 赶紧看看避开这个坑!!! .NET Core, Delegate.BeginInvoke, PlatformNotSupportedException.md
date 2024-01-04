@@ -1,7 +1,7 @@
 ---
 title: '[笔记] 记录一次该死的 “玄学“ Bug, 赶紧看看避开这个坑!!! .NET Core, Delegate.BeginInvoke, PlatformNotSupportedException'
 slug: '[笔记]记录一次该死的“玄学“Bug,赶紧看看避开这个坑,,,.NETCore,Delegate.BeginInvoke,PlatformNotSupportedException'
-date: 2021-03-09 21:48:03
+date: 2021-03-09T21:48:03+08:00
 tags:
   - debug
   - bug

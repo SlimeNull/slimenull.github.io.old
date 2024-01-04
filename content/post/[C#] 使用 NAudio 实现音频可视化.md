@@ -1,7 +1,7 @@
 ---
 title: '[C#] 使用 NAudio 实现音频可视化'
 slug: '[CSharp]使用NAudio实现音频可视化'
-date: 2021-05-09 23:49:18
+date: 2021-05-09T23:49:18+08:00
 tags:
   - 可视化
   - dotnet

@@ -1,7 +1,7 @@
 ---
 title: 'Kali Linux 记录 - 死锁，依赖 ‘Unable to install new version of ...libpng12.so.0 no such file or directory‘'
 slug: 'KaliLinux记录-死锁，依赖‘Unabletoinstallnewversionof...libpng12.so.0nosuchfileordirectory‘'
-date: 2020-12-08 19:54:44
+date: 2020-12-08T19:54:44+08:00
 tags:
   - linux
   - bug

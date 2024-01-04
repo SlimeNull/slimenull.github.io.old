@@ -1,7 +1,7 @@
 ---
 title: 'Kali Linux 新手引导 - Xfce桌面时间配置'
 slug: 'KaliLinux新手引导-Xfce桌面时间配置'
-date: 2020-12-09 12:23:11
+date: 2020-12-09T12:23:11+08:00
 tags:
   - linux
   - xfce

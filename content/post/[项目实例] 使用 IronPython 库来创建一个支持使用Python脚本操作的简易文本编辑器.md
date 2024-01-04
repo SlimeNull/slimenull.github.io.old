@@ -1,7 +1,7 @@
 ---
 title: '[项目实例] 使用 IronPython 库来创建一个支持使用Python脚本操作的简易文本编辑器'
 slug: '[项目实例]使用IronPython库来创建一个支持使用Python脚本操作的简易文本编辑器'
-date: 2021-02-03 06:43:09
+date: 2021-02-03T06:43:09+08:00
 tags:
   - csharp
   - dotnet

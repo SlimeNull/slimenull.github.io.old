@@ -1,7 +1,7 @@
 ---
 title: '[笔记] WPF TextBox GetRectFromCharacterIndex 返回 Width 为 0'
 slug: '[笔记]WPFTextBoxGetRectFromCharacterIndex返回Width为0'
-date: 2022-10-10 10:22:17
+date: 2022-10-10T10:22:17+08:00
 tags:
   - dotnet
   - wpf

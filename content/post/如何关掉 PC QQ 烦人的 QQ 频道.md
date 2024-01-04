@@ -1,7 +1,7 @@
 ---
 title: '如何关掉 PC QQ 烦人的 QQ 频道'
 slug: '如何关掉PCQQ烦人的QQ频道'
-date: 2022-10-17 10:46:08
+date: 2022-10-17T10:46:08+08:00
 categories:
   - 灌水
 description: '通过禁用 QQGuild 文件夹的 "执行" 权限使 QQ 无法运行QQ 频道. 进而实现关闭 QQ 频道功能.'
