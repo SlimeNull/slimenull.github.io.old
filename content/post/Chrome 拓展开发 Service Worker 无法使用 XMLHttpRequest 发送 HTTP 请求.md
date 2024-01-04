@@ -1,6 +1,6 @@
 ---
 title: 'Chrome 拓展开发 Service Worker 无法使用 XMLHttpRequest 发送 HTTP 请求'
-slug: 'Chrome拓展开发ServiceWorker无法使用XMLHttpRequest发送HTTP请求'
+slug: '20221015111704'
 date: 2022-10-15T11:17:04+08:00
 tags:
   - chrome

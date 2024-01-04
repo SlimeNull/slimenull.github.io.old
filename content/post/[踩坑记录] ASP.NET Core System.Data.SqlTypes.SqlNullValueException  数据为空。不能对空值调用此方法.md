@@ -1,6 +1,6 @@
 ---
 title: '[踩坑记录] ASP.NET Core System.Data.SqlTypes.SqlNullValueException: 数据为空。不能对空值调用此方法'
-slug: '[踩坑记录]ASP.NETCoreSystem.Data.SqlTypes.SqlNullValueException 数据为空。不能对空值调用此方法'
+slug: '20210129050708'
 date: 2021-01-29T05:07:08+08:00
 tags:
   - mysql

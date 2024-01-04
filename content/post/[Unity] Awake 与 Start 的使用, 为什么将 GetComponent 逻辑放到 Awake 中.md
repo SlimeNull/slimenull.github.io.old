@@ -1,6 +1,6 @@
 ---
 title: '[Unity] Awake 与 Start 的使用, 为什么将 GetComponent 逻辑放到 Awake 中'
-slug: '[Unity]Awake与Start的使用,为什么将GetComponent逻辑放到Awake中'
+slug: '20220927141618'
 date: 2022-09-27T14:16:18+08:00
 tags:
   - unity

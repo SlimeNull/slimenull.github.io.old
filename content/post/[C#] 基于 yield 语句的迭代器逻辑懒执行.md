@@ -1,6 +1,6 @@
 ---
 title: '[C#] 基于 yield 语句的迭代器逻辑懒执行'
-slug: '[CSharp]基于yield语句的迭代器逻辑懒执行'
+slug: '20231208192209'
 date: 2023-12-08T19:22:09+08:00
 tags:
   - csharp

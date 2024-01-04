@@ -1,6 +1,6 @@
 ---
 title: '[C#] 使用 NullLib.TickAnimation.Drawing 实现 WinForm 过渡动画'
-slug: '[CSharp]使用NullLib.TickAnimation.Drawing实现WinForm过渡动画'
+slug: '20210630024505'
 date: 2021-06-30T02:45:05+08:00
 tags:
   - csharp

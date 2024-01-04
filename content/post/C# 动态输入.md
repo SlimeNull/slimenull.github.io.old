@@ -1,6 +1,6 @@
 ---
 title: 'C# 动态输入'
-slug: 'CSharp动态输入'
+slug: '20200406034849'
 date: 2020-04-06T03:48:49+08:00
 tags:
   - csharp

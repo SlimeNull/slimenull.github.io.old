@@ -1,6 +1,6 @@
 ---
 title: '[C#] 使用 ReadConsoleInput 所需要注意的问题.'
-slug: '[CSharp]使用ReadConsoleInput所需要注意的问题.'
+slug: '20230627205243'
 date: 2023-06-27T20:52:43+08:00
 tags:
   - csharp

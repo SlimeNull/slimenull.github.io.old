@@ -1,6 +1,6 @@
 ---
 title: '[C#] Range函数, 好用就完事儿了!'
-slug: '[CSharp]Range函数,好用就完事儿了,'
+slug: '20210219070741'
 date: 2021-02-19T07:07:41+08:00
 tags:
   - csharp

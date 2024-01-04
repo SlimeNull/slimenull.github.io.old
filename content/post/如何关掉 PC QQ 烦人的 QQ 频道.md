@@ -1,6 +1,6 @@
 ---
 title: '如何关掉 PC QQ 烦人的 QQ 频道'
-slug: '如何关掉PCQQ烦人的QQ频道'
+slug: '20221017104608'
 date: 2022-10-17T10:46:08+08:00
 categories:
   - 灌水

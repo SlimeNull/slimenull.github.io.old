@@ -1,6 +1,6 @@
 ---
 title: '在 System.Text.Json 中使用构造函数进行反序列化'
-slug: '在System.Text.Json中使用构造函数进行反序列化'
+slug: '20220914131137'
 date: 2022-09-14T13:11:37+08:00
 tags:
   - csharp

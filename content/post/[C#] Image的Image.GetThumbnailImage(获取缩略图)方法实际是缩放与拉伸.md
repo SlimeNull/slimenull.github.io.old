@@ -1,6 +1,6 @@
 ---
 title: '[C#] Image的Image.GetThumbnailImage(获取缩略图)方法实际是缩放与拉伸'
-slug: '[CSharp]Image的Image.GetThumbnailImage(获取缩略图)方法实际是缩放与拉伸'
+slug: '20200526051054'
 date: 2020-05-26T05:10:54+08:00
 tags:
   - dotnet

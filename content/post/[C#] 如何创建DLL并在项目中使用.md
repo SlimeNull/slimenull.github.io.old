@@ -1,6 +1,6 @@
 ---
 title: '[C#] 如何创建DLL并在项目中使用'
-slug: '[CSharp]如何创建DLL并在项目中使用'
+slug: '20200705010533'
 date: 2020-07-05T01:05:33+08:00
 tags:
   - csharp

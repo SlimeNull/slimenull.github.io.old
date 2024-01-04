@@ -1,6 +1,6 @@
 ---
 title: '记录一次经验:Image.Save遇到A generic error occurred in GDI+异常'
-slug: '记录一次经验 Image.Save遇到AgenericerroroccurredinGDI+异常'
+slug: '20200826215919'
 date: 2020-08-26T21:59:19+08:00
 categories:
   - 成长记录

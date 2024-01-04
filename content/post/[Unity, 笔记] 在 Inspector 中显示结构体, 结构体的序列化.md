@@ -1,6 +1,6 @@
 ---
 title: '[Unity, 笔记] 在 Inspector 中显示结构体, 结构体的序列化'
-slug: '[Unity,笔记]在Inspector中显示结构体,结构体的序列化'
+slug: '20230831150236'
 date: 2023-08-31T15:02:36+08:00
 tags:
   - csharp
