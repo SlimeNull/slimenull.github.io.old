@@ -57,6 +57,6 @@ sudo dpkg -i sogoupinyin_版本号_amd64.deb
 ## 玄学问题：
 
 1. ###### Fcitx Configuration 启动后， 窗口中没有任何内容（正常情况下应该有一个Keyboard - 语言）
-    > 尝试重启， 重新安装Fcitx， 更换区域与语言（参阅：[Kali Linux 新手引导 - 区域与语言配置](https://blog.csdn.net/m0_46555380/article/details/110821855)）
+    > 尝试重启， 重新安装Fcitx， 更换区域与语言（参阅：[Kali Linux 新手引导 - 区域与语言配置](/p/20201207165005/)）
 2. ###### 在Fcitx Configuration 中添加输入法时， 无法找到sogoupinyin
     > 检查输入法是否正确安装了， 尝试执行apt update， apt upgrade， apt -f install

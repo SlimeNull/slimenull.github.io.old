@@ -41,7 +41,7 @@ description: '步骤 :打开 nuget 包管理器, 工具 -> NuGet 包管理器 ->
 	TriggerStream stream = new TriggerStream();  // TriggerStream是一个能够在写入时触发事件的, 继承了Stream的类.
 	engine.Runtime.IO.SetOutput(stream, Encoding.Default);  // 这样, 我们可以通过TriggerStream的写入事件来获取写入的内容
 	```
-	提示: 了解 TriggerStream, 请查看这篇文章: [支持事件的Stream](https://blog.csdn.net/m0_46555380/article/details/113578296), 关于为什么使用 Encoding.Default 而不使用 UTF-8, 是因为在Windows里面, 都是用的 ANSI. 而Default就是获取ANSI的编码(在中国是GBK)
+	提示: 了解 TriggerStream, 请查看这篇文章: [支持事件的Stream](/p/20210203030237/), 关于为什么使用 Encoding.Default 而不使用 UTF-8, 是因为在 Windows 里面, 都是用的 ANSI. 而 Default 就是获取 ANSI 的编码(在中国是GBK)
 8. 执行 Python 代码:
 	```csharp
 	ScriptSource thisSrc = engine.CreateScriptSourceFromString("print('hello world')", SourceCodeKind.File)

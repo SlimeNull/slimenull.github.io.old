@@ -1768,7 +1768,7 @@ public static int GetStringDisplayLengthEx(string str)
 上面的代码大部分是自动生成的哦~![偷懒](images/20210204201122821.png)
 关于图中使用到的Null.TextEditor, 在这里:
 
-1. CSDN 站内链接: [使用IronPython来创建支持脚本编辑文本内容的文本编辑器](https://blog.csdn.net/m0_46555380/article/details/113578320)
+1. 博客链接: [使用IronPython来创建支持脚本编辑文本内容的文本编辑器](/p/20210203064309/)
 2. Github 仓库地址: [SlimeNull/Null.TextEditor](https://github.com/SlimeNull/Null.TextEditor)
 
 

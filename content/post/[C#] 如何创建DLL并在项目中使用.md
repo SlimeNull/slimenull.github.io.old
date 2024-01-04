@@ -80,7 +80,7 @@ description: '注意:文章适合初学者, 讲的较为详细, 大佬可以绕�
 ## 文章到此结束.
 
 0. 将文本转换为字符串表达式的小工具 ([蓝奏云下载](https://chonet.lanzous.com/i5Uveebcgle))
-1. 关于我写的这个Json操作类库([CSDN文章](https://blog.csdn.net/m0_46555380/article/details/107094462))
+1. 关于我写的这个Json操作类库([文章](/p/20201028235244/))
 
 ##### 关于作者:
 

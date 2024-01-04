@@ -38,4 +38,4 @@ description: '关于我的Kali系统：操作系统：Linux NullKali 5.9.0-kali2
 
 ## 亦见：
 
-[Kali Linux 新手引导 - 区域与语言配置](https://blog.csdn.net/m0_46555380/article/details/110821855)
+[Kali Linux 新手引导 - 区域与语言配置](/p/20201207165005/)

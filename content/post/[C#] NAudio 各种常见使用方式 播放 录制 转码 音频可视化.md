@@ -119,7 +119,7 @@ description: '概述在 NAudio 中, 常用类型有 WaveIn, WaveOut, WaveStream,
    ```
 
 2. 实现音乐可视化
-   完整版 NAudio 实现音乐可视化: [[C#] 使用 NAudio 实现音频可视化](https://blog.csdn.net/m0_46555380/article/details/116573323?spm=1001.2014.3001.5501)
+   完整版 NAudio 实现音乐可视化: [[C#] 使用 NAudio 实现音频可视化](/p/20210509234918/)
    ```csharp
    // 既然我们已经知道了, 那些数据都是一个个的采样, 自然也可以通过它们来绘制频谱, 只需要进行快速傅里叶变换即可
    // 而且有意思的是, NAudio 也为我们准备好了快速傅里叶变换的方法, 位于 NAudio.Dsp 命名空间下

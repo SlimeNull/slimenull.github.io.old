@@ -122,4 +122,4 @@ bool TryGetShortPath(string longPath, out string shortPath, int bufferSize = 256
 
 #### 内容 3:
 
-关于 Windows API 函数的 Unicode 版本和 ANSI 版本的区别, 可参阅: [Windows API 函数后缀的作用](https://blog.csdn.net/m0_46555380/article/details/109834245)
+关于 Windows API 函数的 Unicode 版本和 ANSI 版本的区别, 可参阅: [Windows API 函数后缀的作用](/p/20201120033237/)

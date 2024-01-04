@@ -18,7 +18,7 @@ description: '1. 关于:这是我自己写的一个类库, 已经封装到了一
 2. 它具有较大的容差值, 所以允许一些Json不允许的操作, 例如将Bool值作为Object中的键, CHO.Json支持这样, 由CHO.Json生成的Json文本, CHO.Json完全可以读取. 因为其特殊性, 所以可能别的Json读写模块无法识别, 所以, 为了保证正常使用, 即便CHO.Json支持这些操作, 但务必遵守标准Json的规则.
 
 
-> 最新版的某些函数已经与介绍有些出入, 请查看新文章 [CHO.Json操作](https://blog.csdn.net/m0_46555380/article/details/109348146)
+> 最新版的某些函数已经与介绍有些出入, 请查看新文章 [CHO.Json操作](/p/20201028235244/)
 > 已经添加了关于实体类的序列化与反序列化功能, 详见 [Github仓库](https://github.com/SlimeNull/CHO.Json)
 
 
