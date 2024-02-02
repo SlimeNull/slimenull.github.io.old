@@ -44,7 +44,7 @@ fn main() {
     let hello_str = "Hello world";
     let bytes = hello_str.as_bytes();
 
-	stdout().write_all(bytes).unwrap();
+    stdout().write_all(bytes).unwrap();
 }
 ```
 
@@ -100,7 +100,7 @@ use std::io::{Write, stdout};
 
 ```rust
 fn test1() {
-	println!("hello");
+    println!("hello");
 }
 ```
 
@@ -110,7 +110,7 @@ fn test1() {
 
 ```rust
 fn test2(number: i32) {
-	println!("number: {}", number);
+    println!("number: {}", number);
 }
 ```
 
@@ -120,7 +120,7 @@ fn test2(number: i32) {
 
 ```rust
 fn test3(num1: i32, num2: i32) -> i32 {
-	return num1 + num2;
+    return num1 + num2;
 }
 ```
 
@@ -130,7 +130,7 @@ fn test3(num1: i32, num2: i32) -> i32 {
 
 ```rust
 fn test3(num1: i32, num2: i32) -> i32 {
-	num1 + num2
+    num1 + num2
 }
 ```
 
@@ -140,7 +140,7 @@ fn test3(num1: i32, num2: i32) -> i32 {
 
 ```rust
 fn test4(num1: i32, num2: i32, resolver: fn(i32, i32) -> i32) {
-	println!("{}", resolver(num1, num2));
+    println!("{}", resolver(num1, num2));
 }
 ```
 
@@ -194,7 +194,7 @@ Rust 中的 `if` 不使用括号, 直接跟表达式以及语句即可.
 ```rust
 let num = 114514;
 if num == 114514 {
-	println!("value is 114514");
+    println!("value is 114514");
 }
 ```
 
@@ -204,11 +204,11 @@ if num == 114514 {
 
 ```rust
 if num == 114514 {
-	println!("value is 114514");
+    println!("value is 114514");
 } else if num == 1919810 {
-	println!("value is 1919810");
+    println!("value is 1919810");
 } else {
-	println!("invalid value");
+    println!("invalid value");
 }
 ```
 
@@ -219,9 +219,9 @@ Rust 中的 `if` 也可以实现根据条件返回特定值的需求.
 ```rust
 let num = 114514;
 let tip = if num == 114514 {
-	"哼哼哼"
+    "哼哼哼"
 } else {
-	"啊啊啊"
+    "啊啊啊"
 };
 ```
 
@@ -234,7 +234,7 @@ Rust 中的  `for` 用来对一个实例进行迭代. 使用 `起始值..结束�
 
 ```rust
 for i in 0..10 {
-	println!("current value: {}", i);
+    println!("current value: {}", i);
 }
 ```
 
@@ -247,11 +247,11 @@ for i in 0..10 {
     println!("current value: {}", i);
 
     if i == 3 {
-    	continue;
+        continue;
     }
 
     if i == 7 {
-    	break;
+        break;
     }
 }
 ```
@@ -263,7 +263,7 @@ for i in 0..10 {
 ```rust
 let arr = [1, 2, 3, 4];
 for mut ele in arr {
-	ele = ele * 2;
+    ele = ele * 2;
 }
 ```
 
@@ -277,11 +277,11 @@ loop {
     println!("current value: {}", i);
 
     if i == 3 {
-    	continue;
+        continue;
     }
 
     if i == 10 {
-    	break;
+        break;
     }
 }
 ```
@@ -309,7 +309,7 @@ let result = loop {
     value += 1;
 
     if value == 10 {
-    	break value * 2;
+        break value * 2;
     }
 };
 ```
@@ -541,7 +541,7 @@ let valueOption = hm.remove(&"qwq");
 
 ```rust
 for (k, v) in hm { 
-	println!("Key: {}, Value: {}", k, v);
+    println!("Key: {}, Value: {}", k, v);
 }
 ```
 
@@ -608,7 +608,7 @@ let x = p.x;
 ```rust
 impl Point {
     fn new(x: i32, y: i32) -> Point {
-    	Point { x: x, y: y }
+        Point { x: x, y: y }
     }
 }
 ```
@@ -628,7 +628,7 @@ let p = Point::new(123, 456);
 ```rust
 impl Point {
     fn output(self: &Self) {
-    	println!("Point, x: {}, y: {}", self.x, self.y);
+        println!("Point, x: {}, y: {}", self.x, self.y);
     }
 }
 ```
@@ -669,7 +669,7 @@ impl Point {
 
 ```rust
 trait TestTrait {
-	fn some_func();
+    fn some_func();
 }
 ```
 
@@ -683,7 +683,7 @@ trait TestTrait {
 ```rust
 impl TestTrait for Point {
     fn some_func() {
-    	println!("hello world from struct Point");
+        println!("hello world from struct Point");
     }
 }
 ```
@@ -699,13 +699,13 @@ impl TestTrait for Point {
 trait TestTrait {
     fn get_string(&self) -> String;
     fn print_string(&self) {
-    	println!("{}", self.get_string());
+        println!("{}", self.get_string());
     }
 }
 
 impl TestTrait for Point {
     fn get_string(&self) -> String {
-    	return format!("Point, x: {}, y: {}", self.x, self.y);
+        return format!("Point, x: {}, y: {}", self.x, self.y);
     }
 }
 ```
@@ -751,7 +751,7 @@ let p1 = Point { x: 123, y: 456 };
 let p2 = Point { x: 345, y: 829 };
 
 if p1 == p2 {
-	println!("两点相等")
+    println!("两点相等")
 }
 ```
 
@@ -772,7 +772,7 @@ Rust 对于枚举的优化是很好的, 不像 Java 一般是基于堆中存储�
 
 ```rust
 enum ColorChannel {
-	Red, Green, Blue
+    Red, Green, Blue
 }
 ```
 
@@ -823,11 +823,11 @@ let color = Color::Rgb(89, 43, 233);
 
 match color {
     Color::Rgb(r, g, b) => {
-    	println!("颜色是 RGB 值. R: {}, G: {}, B: {}", r, g, b);
+        println!("颜色是 RGB 值. R: {}, G: {}, B: {}", r, g, b);
     },
 
     Color::Channel(channel) => {
-    	println!("颜色是通道, {}", channel);
+        println!("颜色是通道, {}", channel);
     }
 }
 ```
@@ -841,7 +841,7 @@ match color {
 
 ```rust
 if let Color::Rgb(r, g, b) = color {
-	println!("颜色是 RGB 值. R: {}, G: {}, B: {}", r, g, b);
+    println!("颜色是 RGB 值. R: {}, G: {}, B: {}", r, g, b);
 }
 ```
 
@@ -865,16 +865,16 @@ let color = Color::Rgb { r: 23, g: 12, b: 129 };
 
 match color {
     Color::Rgb { r, g, b } => {
-    	println!("颜色是 RGB 值. R: {}, G: {}, B: {}", r, g, b);
+        println!("颜色是 RGB 值. R: {}, G: {}, B: {}", r, g, b);
     },
 
     Color::Channel { channel }=> {
-    	println!("颜色是通道, {}", channel);
+        println!("颜色是通道, {}", channel);
     }
 }
 
 if let Color::Rgb { r, g, b } = color {
-	println!("颜色是 RGB 值. R: {}, G: {}, B: {}", r, g, b);
+    println!("颜色是 RGB 值. R: {}, G: {}, B: {}", r, g, b);
 }
 ```
 
@@ -895,11 +895,11 @@ if let Color::Rgb { r, g, b } = color {
 
 ```rust
 trait I32Printer {
-	fn print(&self, value: i32);
+    fn print(&self, value: i32);
 }
 
 fn print_i32<Printer: I32Printer>(value: i32, printer: Printer) {
-	printer.print(value);
+    printer.print(value);
 }
 ```
 
@@ -916,18 +916,18 @@ fn print_i32<Printer: I32Printer>(value: i32, printer: Printer) {
 ```rust
 struct SimpleI32Printer;
 struct AnotherI32Printer<'a> {
-	prompt: &'a str,
+    prompt: &'a str,
 }
 
 impl I32Printer for SimpleI32Printer {
     fn print(&self, value: i32) {
-    	println!("{}", value);
+        println!("{}", value);
     }
 }
 
 impl I32Printer for AnotherI32Printer<'_> {
     fn print(&self, value: i32) {
-    	println!("{}: {}", self.prompt, value);
+        println!("{}: {}", self.prompt, value);
     }
 }
 ```
@@ -995,7 +995,7 @@ let two_values = TwoValues {
 ```rust
 impl<T1, T2> TwoValues<T1, T2> {
     fn common_fn(&self) {
-    	println!("common func");
+        println!("common func");
     }
 }
 ```
@@ -1010,7 +1010,7 @@ impl<T1, T2> TwoValues<T1, T2> {
 ```rust
 impl TwoValues<&str, i32> {
     fn test_output(&self) {
-    	println!("{}: {}", self.value1, self.value2);
+        println!("{}: {}", self.value1, self.value2);
     }
 }
 ```
@@ -1025,7 +1025,7 @@ impl TwoValues<&str, i32> {
 ```rust
 impl<T: Display> TwoValues<&str, T> {
     fn test_output2(&self) {
-    	println!("{}: {}", self.value1, self.value2)
+        println!("{}: {}", self.value1, self.value2)
     }
 }
 ```
@@ -1114,11 +1114,11 @@ fn main() {
 
 ```rust
 struct MyValue {
-	value: i32
+    value: i32
 }
 
 fn print_value(value: &MyValue) {
-	println!("value: {}", value.value);
+    println!("value: {}", value.value);
 }
 
 fn main() {

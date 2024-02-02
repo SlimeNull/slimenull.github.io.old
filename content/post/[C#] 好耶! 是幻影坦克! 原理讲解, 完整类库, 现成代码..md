@@ -140,18 +140,18 @@ $$
 ```csharp
 Color CalcPixel(Color x, Color y)
 {
-	int
-		xc = (x.R + x.G + x.B) / 3,
-		yc = (y.R + y.G + z.B) / 3;   // 获取亮度
-	
-	xc = (xc / 255f) * 127 + 128;
-	yc = (yc / 255f) * 127;           // 压制颜色
+    int
+        xc = (x.R + x.G + x.B) / 3,
+        yc = (y.R + y.G + z.B) / 3;   // 获取亮度
+    
+    xc = (xc / 255f) * 127 + 128;
+    yc = (yc / 255f) * 127;           // 压制颜色
 
-	int
-		za = yc - xc + 255,
-		zc = za == 0 ? 0 : yc * 255 / za;           // 运算结果颜色
+    int
+        za = yc - xc + 255,
+        zc = za == 0 ? 0 : yc * 255 / za;           // 运算结果颜色
 
-	return Color.FromArgb(ya, yc, yc, yc);
+    return Color.FromArgb(ya, yc, yc, yc);
 }
 ```
 

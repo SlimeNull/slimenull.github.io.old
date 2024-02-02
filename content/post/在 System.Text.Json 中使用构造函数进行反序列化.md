@@ -86,8 +86,8 @@ class UserModel
 
     [JsonPropertyName("pwd")]
     public static string Password { get; }
-	
-	// 这里与构造函数不同, 此类型无法正常反序列化
+    
+    // 这里与构造函数不同, 此类型无法正常反序列化
     [JsonPropertyName("addr")]
     public static Uri Address { get; }
 }

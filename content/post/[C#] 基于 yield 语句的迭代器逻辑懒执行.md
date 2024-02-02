@@ -130,13 +130,13 @@ private sealed class SomeLogicEnumerator : IEnumerator, IDisposable
 ```csharp
 IEnumerator SomeLogic()
 {
-	Console.WriteLine("QWQ");
-	yield return 1;
-	Console.WriteLine("AWA");
-	yield return 2;
-	Console.WriteLine("QJFD");
-	yield return 3;
-	Console.WriteLine("JWOEIJFOIWE");
+    Console.WriteLine("QWQ");
+    yield return 1;
+    Console.WriteLine("AWA");
+    yield return 2;
+    Console.WriteLine("QJFD");
+    yield return 3;
+    Console.WriteLine("JWOEIJFOIWE");
 }
 ```
 

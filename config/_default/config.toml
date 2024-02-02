@@ -1,5 +1,5 @@
 # Change baseurl before deploy
-baseurl = "https://slimenull.top"
+baseurl = "https://slimenull.com"
 languageCode = "zh-CN"
 paginate = 10
 title = "SlimeNull Blogs"

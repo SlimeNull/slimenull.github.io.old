@@ -73,12 +73,12 @@ description: '淦!琢磨了一晚上啊, 总算有些眉目了.首先, MCI的全
       LPCSTR pszCommand
   );
 
-	MCIERROR mciSendCommand(
-	    MCIDEVICEID IDDevice,    // 设备 ID, 通过另一个函数打开文件可以获得
-	    UINT        uMsg,
-	    DWORD_PTR   fdwCommand,
-	    DWORD_PTR   dwParam
-	);
+    MCIERROR mciSendCommand(
+        MCIDEVICEID IDDevice,    // 设备 ID, 通过另一个函数打开文件可以获得
+        UINT        uMsg,
+        DWORD_PTR   fdwCommand,
+        DWORD_PTR   dwParam
+    );
     ```
 - **C# 声明方式:** 
   ```csharp

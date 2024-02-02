@@ -113,9 +113,9 @@ description: '概述在 NAudio 中, 常用类型有 WaveIn, WaveOut, WaveStream,
    float volume;
    WasapiLoopbackCapture cap = new WasapiLoopbackCapture();
    cap.DataAvailable += (s, args) => volume = Enumerable
-                                        	       .Range(0, args.BytesRecorded / 4)                         // 每一个采样的位置
-                                        	       .Select(i => BitConverter.ToSingle(args.Buffer, i * 4))   // 获取每一个采样
-                                        	       .Aggregate((v1, v2) => v1 > v2 ? v1 : v2);                // 找到值最大的采样
+                                                   .Range(0, args.BytesRecorded / 4)                         // 每一个采样的位置
+                                                   .Select(i => BitConverter.ToSingle(args.Buffer, i * 4))   // 获取每一个采样
+                                                   .Aggregate((v1, v2) => v1 > v2 ? v1 : v2);                // 找到值最大的采样
    ```
 
 2. 实现音乐可视化
@@ -161,7 +161,7 @@ description: '概述在 NAudio 中, 常用类型有 WaveIn, WaveOut, WaveStream,
    
    // 例如一个文件, "./Disconnected.mp3", 我们要将它转换为 wav 格式, 只需要使用下面的代码, CurWave 与 Aiff 同理
    using (Mp3FileReader reader = new Mp3FileReader("./Disconnected.mp3"))
-   	WaveFileWriter.CreateWaveFile("./Disconnected.wav", reader);
+       WaveFileWriter.CreateWaveFile("./Disconnected.wav", reader);
    
    // 从 IWaveProvider 创建 MP3 文件, 假如一个 WaveFileReader 为 src
    MediaFoundationEncoder.EncodeToMp3(src, "./NewMp3.mp3");

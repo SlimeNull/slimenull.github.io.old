@@ -37,22 +37,22 @@ QQ:
 package main
 
 import (
-	"fmt"
-	"net/http"
+    "fmt"
+    "net/http"
 )
 
 func main() {
-	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
-		writer.Write([]byte("========== Headers ==========\n"))
-		for k, v := range request.Header {
-			writer.Write([]byte(fmt.Sprintf("%s: %s;\n", k, v)))
-		}
-		writer.Write([]byte("========== Cookies ==========\n"))
-		for _, v := range request.Cookies() {
-			writer.Write([]byte(fmt.Sprintf("%s - %s: %s;\n", v.Domain, v.Name, v.Value)))
-		}
-	})
-	http.ListenAndServe(":8000", nil)
+    http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+        writer.Write([]byte("========== Headers ==========\n"))
+        for k, v := range request.Header {
+            writer.Write([]byte(fmt.Sprintf("%s: %s;\n", k, v)))
+        }
+        writer.Write([]byte("========== Cookies ==========\n"))
+        for _, v := range request.Cookies() {
+            writer.Write([]byte(fmt.Sprintf("%s - %s: %s;\n", v.Domain, v.Name, v.Value)))
+        }
+    })
+    http.ListenAndServe(":8000", nil)
 }
 ```
 

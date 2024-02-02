@@ -24,30 +24,30 @@ description: '步骤 :打开 nuget 包管理器, 工具 -> NuGet 包管理器 ->
 ![nuget中的IronPython](images/20210203030547151.png)
 3. using 所需的命名空间, Microsoft.Scripting, Microsoft.Scripting.Hosting, Microsoft.Win32, IronPython.Hosting.
 4. 创建 Python 引擎:
-	```csharp
-	ScriptEngine engine = Python.CreateEngine();
-	```
+    ```csharp
+    ScriptEngine engine = Python.CreateEngine();
+    ```
 5. 创建定义域(Scope), 它用来存储变量:
-	```csharp
-	ScriptScope scope = engine.CreateScope();
-	```
+    ```csharp
+    ScriptScope scope = engine.CreateScope();
+    ```
 6. 在 Scope 中设置与获取变量值:
-	```csharp
-	scope.SetVariable("name", "value");   // 其中, name是变量名, "value"可以是任意类型, 表示变量值
-	```
-	获取变量也差不多, 是GetVariable.
+    ```csharp
+    scope.SetVariable("name", "value");   // 其中, name是变量名, "value"可以是任意类型, 表示变量值
+    ```
+    获取变量也差不多, 是GetVariable.
 7. 设置引擎的标准输出流以捕获内容:
-	```csharp
-	TriggerStream stream = new TriggerStream();  // TriggerStream是一个能够在写入时触发事件的, 继承了Stream的类.
-	engine.Runtime.IO.SetOutput(stream, Encoding.Default);  // 这样, 我们可以通过TriggerStream的写入事件来获取写入的内容
-	```
-	提示: 了解 TriggerStream, 请查看这篇文章: [支持事件的Stream](/p/20210203030237/), 关于为什么使用 Encoding.Default 而不使用 UTF-8, 是因为在 Windows 里面, 都是用的 ANSI. 而 Default 就是获取 ANSI 的编码(在中国是GBK)
+    ```csharp
+    TriggerStream stream = new TriggerStream();  // TriggerStream是一个能够在写入时触发事件的, 继承了Stream的类.
+    engine.Runtime.IO.SetOutput(stream, Encoding.Default);  // 这样, 我们可以通过TriggerStream的写入事件来获取写入的内容
+    ```
+    提示: 了解 TriggerStream, 请查看这篇文章: [支持事件的Stream](/p/20210203030237/), 关于为什么使用 Encoding.Default 而不使用 UTF-8, 是因为在 Windows 里面, 都是用的 ANSI. 而 Default 就是获取 ANSI 的编码(在中国是GBK)
 8. 执行 Python 代码:
-	```csharp
-	ScriptSource thisSrc = engine.CreateScriptSourceFromString("print('hello world')", SourceCodeKind.File)
-	thisSrc.Execute(scope);   // 代码在这个定义域种执行
-	```
-	SourceCodeKind.File指这个字符串是来自文件的代码, 也就是说你可以在里面加换行加缩进以定义一个语句块之类的. 还有一个就是SourceCodeKind.Expression, 指一个表达式.
+    ```csharp
+    ScriptSource thisSrc = engine.CreateScriptSourceFromString("print('hello world')", SourceCodeKind.File)
+    thisSrc.Execute(scope);   // 代码在这个定义域种执行
+    ```
+    SourceCodeKind.File指这个字符串是来自文件的代码, 也就是说你可以在里面加换行加缩进以定义一个语句块之类的. 还有一个就是SourceCodeKind.Expression, 指一个表达式.
 
 
 ## 项目 :

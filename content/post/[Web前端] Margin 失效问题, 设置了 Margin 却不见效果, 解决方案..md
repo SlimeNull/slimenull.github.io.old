@@ -47,7 +47,7 @@ description: '首先演示下:.box1{    width: 300px;    height: 300px;}.box2{  
 ```html
 <div class="box1 style-pink"></div>
 <div class="box1 style-pink margin-able">
-	<div class="box2 style-green margin-able"></div>
+    <div class="box2 style-green margin-able"></div>
 </div>
 ```
 

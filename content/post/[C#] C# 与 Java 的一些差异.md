@@ -40,16 +40,16 @@ description: '这篇文章, 可以帮助你借助 C# 的知识快速入门 Java,
 1. 在 C# 中, 枚举是特殊的值类型, 本质是 int, 定义起来非常简单, 在 Java 中, 如果要自定义每一个枚举成员所对应的 int 值, 则定义起来非常繁琐:
     ```java
     public enum ColumnAlignment {
-	    Left(1), Right(2);
+        Left(1), Right(2);
 
-    	private int value;
-	    private ColumnAlignment(int value) {
-        	this.value = value;
-    	}
-    	public int value(){
-        	return this.value;
-    	}
-	}
+        private int value;
+        private ColumnAlignment(int value) {
+            this.value = value;
+        }
+        public int value(){
+            return this.value;
+        }
+    }
     ```
 
 ## 3. Linq 与 Stream
@@ -85,9 +85,9 @@ description: '这篇文章, 可以帮助你借助 C# 的知识快速入门 Java,
         void execute();    // 方法名随意
     }
 
-	Action action = () -> {
-	    System.out.println("F**k you, world");
-	}
+    Action action = () -> {
+        System.out.println("F**k you, world");
+    }
     ```
 
 ## 5. 泛型
@@ -101,12 +101,12 @@ description: '这篇文章, 可以帮助你借助 C# 的知识快速入门 Java,
     }
     ```
 2. 你无法判断一个对象是否是某个泛型类型
-	```java
-	static <T> boolean isType(Object obj){
-	    return obj instanceof T;              // 会报错
-	    // 同样, T.class 也是不可用的
-	}
-	```
+    ```java
+    static <T> boolean isType(Object obj){
+        return obj instanceof T;              // 会报错
+        // 同样, T.class 也是不可用的
+    }
+    ```
 3. 你无法在使用如下重载:
     ```java
     public class Test<T> {

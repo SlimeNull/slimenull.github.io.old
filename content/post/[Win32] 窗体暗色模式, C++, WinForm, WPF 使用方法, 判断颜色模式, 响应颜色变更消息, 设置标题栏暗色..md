@@ -93,12 +93,12 @@ Windows 中自带了一个暗色模式的 WinAPI, 直接调用就可以将窗口
 #include <dwmapi.h>
 
 int main() {
-	HWND hWnd = GetMainWindowHandle(); // 获取主窗口句柄
-	DWORD dwAttribute = DWMWA_USE_IMMERSIVE_DARK_MODE; // 设置暗色模式属性
-	BOOL bValue = TRUE; // 启用暗色模式
-	DwmSetWindowAttribute(hWnd, dwAttribute, &bValue, sizeof(bValue)); // 设置窗口属性
+    HWND hWnd = GetMainWindowHandle(); // 获取主窗口句柄
+    DWORD dwAttribute = DWMWA_USE_IMMERSIVE_DARK_MODE; // 设置暗色模式属性
+    BOOL bValue = TRUE; // 启用暗色模式
+    DwmSetWindowAttribute(hWnd, dwAttribute, &bValue, sizeof(bValue)); // 设置窗口属性
 
-	return 0;
+    return 0;
 }
 ```
 
@@ -111,38 +111,38 @@ public static extern int DwmSetWindowAttribute(IntPtr hwnd, DwmWindowAttribute a
 
 public static bool EnableDarkModeForWindow(IntPtr hWnd, bool enable)
 {
-	int darkMode = enable ? 1 : 0;
-	int hr = DwmSetWindowAttribute(hWnd, DwmWindowAttribute.UseImmersiveDarkMode, ref darkMode, sizeof(int));
-	return hr >= 0;
+    int darkMode = enable ? 1 : 0;
+    int hr = DwmSetWindowAttribute(hWnd, DwmWindowAttribute.UseImmersiveDarkMode, ref darkMode, sizeof(int));
+    return hr >= 0;
 }
 
 public enum DwmWindowAttribute : uint
 {
-	NCRenderingEnabled = 1,
-	NCRenderingPolicy,
-	TransitionsForceDisabled,
-	AllowNCPaint,
-	CaptionButtonBounds,
-	NonClientRtlLayout,
-	ForceIconicRepresentation,
-	Flip3DPolicy,
-	ExtendedFrameBounds,
-	HasIconicBitmap,
-	DisallowPeek,
-	ExcludedFromPeek,
-	Cloak,
-	Cloaked,
-	FreezeRepresentation,
-	PassiveUpdateMode,
-	UseHostBackdropBrush,
-	UseImmersiveDarkMode = 20,
-	WindowCornerPreference = 33,
-	BorderColor,
-	CaptionColor,
-	TextColor,
-	VisibleFrameBorderThickness,
-	SystemBackdropType,
-	Last
+    NCRenderingEnabled = 1,
+    NCRenderingPolicy,
+    TransitionsForceDisabled,
+    AllowNCPaint,
+    CaptionButtonBounds,
+    NonClientRtlLayout,
+    ForceIconicRepresentation,
+    Flip3DPolicy,
+    ExtendedFrameBounds,
+    HasIconicBitmap,
+    DisallowPeek,
+    ExcludedFromPeek,
+    Cloak,
+    Cloaked,
+    FreezeRepresentation,
+    PassiveUpdateMode,
+    UseHostBackdropBrush,
+    UseImmersiveDarkMode = 20,
+    WindowCornerPreference = 33,
+    BorderColor,
+    CaptionColor,
+    TextColor,
+    VisibleFrameBorderThickness,
+    SystemBackdropType,
+    Last
 }
 ```
 

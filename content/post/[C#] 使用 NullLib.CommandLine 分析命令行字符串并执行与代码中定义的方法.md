@@ -65,7 +65,7 @@ class Program
             if (!AppCommandObject.TryExecuteCommand(cmdline, out var result))
             {
                 if (result != null)             // 如果一个方法没有返回值, 则结果是 null.
-	                Console.WriteLine(result);
+                    Console.WriteLine(result);
             }
             else
             {
@@ -151,7 +151,7 @@ Now input commands.
 >>> Sum 1 2 3 4
 10
 >>> Print "一些文本\t转义字符也是受支持的"
-一些文本	转义字符也是受支持的
+一些文本    转义字符也是受支持的
 >>> StringEquals qwq awa
 False
 >>> SetBackground White
@@ -214,7 +214,7 @@ class Program
             if (!AppCommandObject.TryExecuteCommand(cmdline, out var result))
             {
                 if (result != null)             // 如果一个方法没有返回值, 则结果是 null.
-	                Console.WriteLine(result);
+                    Console.WriteLine(result);
             }
             else
             {
@@ -300,7 +300,7 @@ Now input commands.
 >>> Sum 1 2 3 4
 10
 >>> Print "一些文本\t转义字符也是受支持的"
-一些文本	转义字符也是受支持的
+一些文本    转义字符也是受支持的
 >>> StringEquals qwq awa
 False
 >>> SetBackground White

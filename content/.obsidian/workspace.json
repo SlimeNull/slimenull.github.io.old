@@ -1,0 +1,170 @@
+{
+  "main": {
+    "id": "ca208e8780b1b789",
+    "type": "split",
+    "children": [
+      {
+        "id": "b9c5c6d12902b69e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3c6c40d9ee7c66fe",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "post/[Rust] 快速基础入门教程.md",
+                "mode": "preview",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "1f08c7737f3e8e2a",
+    "type": "split",
+    "children": [
+      {
+        "id": "b3c91f73bcbdf246",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2aea49aa6ae01f03",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "6a933a8588166176",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "508ab03b720048f9",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "552c71ac08161842",
+    "type": "split",
+    "children": [
+      {
+        "id": "826c40e772681da2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b6260830551e62f5",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "post/[Rust] 快速基础入门教程.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "832b193e1aa6e371",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "post/[Rust] 快速基础入门教程.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "bd72cdfe50f20b29",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "ca7bb4d148a72e77",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "post/[Rust] 快速基础入门教程.md"
+              }
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "3c6c40d9ee7c66fe",
+  "lastOpenFiles": [
+    "post/[.NET] 查询当前已安装所有 Win32 与 UWP 应用.md",
+    "images/20240201233019.png",
+    "images/20240201232706.png",
+    "images/20240201232429.png",
+    "images/20240201220106.png",
+    "images/20240201220018.png",
+    "images/20240201215927.png",
+    "images/20240201215808.png",
+    "_index.md",
+    "images/20240201215116.png",
+    "Pasted image 20240201215005.png.md",
+    "images/Pasted image 20240201215005.png",
+    "templates/post.md",
+    "post/[C#] 音乐播放 3 种方式 Demo 与 MCI 音乐播放器封装类..md",
+    "post/[.NET,C#] 委托与 Lambda 表达式, 语句详解.md",
+    "post/templates/post.md",
+    "post/templates",
+    "templates"
+  ]
+}

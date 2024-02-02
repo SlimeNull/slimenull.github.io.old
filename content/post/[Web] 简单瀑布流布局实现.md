@@ -81,13 +81,13 @@ HTML:
                 }
             });
 
-			// 创建一个新元素 (设置高度, 背景颜色)
+            // 创建一个新元素 (设置高度, 背景颜色)
             let new_item = document.createElement('div');
             new_item.classList.add('item');
             new_item.style.height = `${Math.random() * 200 + 70}px`;
             new_item.style.backgroundColor = `rgb(${random(0, 255)},${random(0, 255)},${random(0, 255)})`
 
-			// 在高度最低的列中添加元素
+            // 在高度最低的列中添加元素
             minHeightColumn.appendChild(new_item);
         }
 
