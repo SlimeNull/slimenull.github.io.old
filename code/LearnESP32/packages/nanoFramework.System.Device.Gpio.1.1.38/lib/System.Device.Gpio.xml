@@ -1,0 +1,436 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>System.Device.Gpio</name>
+    </assembly>
+    <members>
+        <member name="T:System.Device.Gpio.GpioPin">
+            <summary>
+            Represents a general-purpose I/O (GPIO) pin.
+            </summary>
+        </member>
+        <member name="P:System.Device.Gpio.GpioPin.DebounceTimeout">
+            <summary>
+            Gets or sets the debounce timeout for the general-purpose I/O (GPIO) pin, which is an interval during which changes to the value of the pin are filtered out and do not generate ValueChanged events.
+            </summary>
+            <value>
+            The debounce timeout for the GPIO pin, which is an interval during which changes to the value of the pin are filtered out and do not generate ValueChanged events.
+            If the length of this interval is 0, all changes to the value of the pin generate ValueChanged events.
+            </value>
+        </member>
+        <member name="P:System.Device.Gpio.GpioPin.PinNumber">
+            <summary>
+            Gets the pin number of the general-purpose I/O (GPIO) pin.
+            </summary>
+            <value>
+            The pin number of the GPIO pin.
+            </value>
+        </member>
+        <member name="M:System.Device.Gpio.GpioPin.GetPinMode">
+            <summary>
+            Gets the current pin mode for the general-purpose I/O (GPIO) pin. The pin mode specifies whether the pin is configured as an input or an output, and determines how values are driven onto the pin.
+            </summary>
+            <returns>An enumeration value that indicates the current pin mode for the GPIO pin.
+            The pin mode specifies whether the pin is configured as an input or an output, and determines how values are driven onto the pin.</returns>
+        </member>
+        <member name="M:System.Device.Gpio.GpioPin.IsPinModeSupported(System.Device.Gpio.PinMode)">
+            <summary>
+            Gets whether the general-purpose I/O (GPIO) pin supports the specified pin mode.
+            </summary>
+            <param name="pinMode">The pin mode that you want to check for support.</param>
+            <returns>
+            <see langword="true"/> if the GPIO pin supports the pin mode that pinMode specifies; otherwise false. 
+            If you specify a pin mode for which this method returns <see langword="false"/> when you call <see cref="M:System.Device.Gpio.GpioPin.SetPinMode(System.Device.Gpio.PinMode)"/>, <see cref="M:System.Device.Gpio.GpioPin.SetPinMode(System.Device.Gpio.PinMode)"/> generates an exception.
+            </returns>
+        </member>
+        <member name="M:System.Device.Gpio.GpioPin.SetPinMode(System.Device.Gpio.PinMode)">
+            <summary>
+            Sets the pin mode of the general-purpose I/O (GPIO) pin. 
+            The pin mode specifies whether the pin is configured as an input or an output, and determines how values are driven onto the pin.
+            </summary>
+            <param name="value">An enumeration value that specifies pin mode to use for the GPIO pin.
+            The pin mode specifies whether the pin is configured as an input or an output, and determines how values are driven onto the pin.</param>
+            <exception cref="T:System.ArgumentException">The GPIO pin does not support the specified pin mode.</exception>
+        </member>
+        <member name="M:System.Device.Gpio.GpioPin.Read">
+            <summary>
+            Reads the current value of the general-purpose I/O (GPIO) pin.
+            </summary>
+            <returns>The current value of the GPIO pin. If the pin is configured as an output, the read value is undetermined.</returns>
+        </member>
+        <member name="M:System.Device.Gpio.GpioPin.Write(System.Device.Gpio.PinValue)">
+            <summary>
+            Drives the specified value onto the general purpose I/O (GPIO) pin according to the current pin mode for the pin 
+            if the pin is configured as an output, or updates the latched output value for the pin if the pin is configured as an input.
+            </summary>
+            <param name="value">The enumeration value to write to the GPIO pin.
+            <para>If the GPIO pin is configured as an output, the method drives the specified value onto the pin according to the current pin mode for the pin.</para>
+            <para>If the GPIO pin is configured as an input, the method updates the latched output value for the pin. The latched output value is driven onto the pin when the configuration for the pin changes to output.</para>
+            </param>
+            <exception cref="T:System.InvalidOperationException">This exception will be thrown on an attempt to write to a pin that hasn't been opened or is not configured as output.</exception>
+        </member>
+        <member name="E:System.Device.Gpio.GpioPin.ValueChanged">
+            <summary>
+            Occurs when the value of the general-purpose I/O (GPIO) pin changes, either because of an external stimulus when the pin is configured as an input, or when a value is written to the pin when the pin in configured as an output.
+            </summary>
+        </member>
+        <member name="M:System.Device.Gpio.GpioPin.OnPinChangedInternal(System.Device.Gpio.PinEventTypes)">
+            <summary>
+            Handles internal events and re-dispatches them to the publicly subscribed delegates.
+            </summary>
+            <param name="edge">The state transition for this event.</param>
+        </member>
+        <member name="M:System.Device.Gpio.GpioPin.Toggle">
+            <summary>
+            Toggles the output of the general purpose I/O (GPIO) pin if the pin is configured as an output.
+            </summary>
+        </member>
+        <member name="T:System.Device.Gpio.WaitForEventResult">
+            <summary>
+            Resulting object after waiting for an event to occur.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.WaitForEventResult.EventTypes">
+            <summary>
+            The event types that was detected.
+            This is especially useful when listing to both rising and falling edges, where it will indicate which kind of edge was seen.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.WaitForEventResult.TimedOut">
+            <summary>
+            True if waiting for the event timed out. False if an event was triggered before the timeout expired.
+            </summary>
+        </member>
+        <member name="T:System.Device.Gpio.PinValuePair">
+            <summary>
+            Simple wrapper for a pin/value pair.
+            </summary>
+        </member>
+        <member name="P:System.Device.Gpio.PinValuePair.PinNumber">
+            <summary>
+            The pin number.
+            </summary>
+        </member>
+        <member name="P:System.Device.Gpio.PinValuePair.PinValue">
+            <summary>
+            The pin value.
+            </summary>
+        </member>
+        <member name="M:System.Device.Gpio.PinValuePair.#ctor(System.Int32,System.Device.Gpio.PinValue)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Device.Gpio.PinValuePair"/> struct.
+            </summary>
+            <param name="pinNumber">The pin number.</param>
+            <param name="pinValue">The pin value.</param>
+        </member>
+        <member name="M:System.Device.Gpio.PinValuePair.Deconstruct(System.Int32@,System.Device.Gpio.PinValue@)">
+            <summary>
+            Deconstructor for convenience. Allows using as a "return Tuple".
+            </summary>
+        </member>
+        <member name="T:System.Device.Gpio.PinValueChangedEventArgs">
+            <summary>
+            Arguments passed in when an event is triggered by the GPIO.
+            </summary>
+        </member>
+        <member name="M:System.Device.Gpio.PinValueChangedEventArgs.#ctor(System.Device.Gpio.PinEventTypes,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Device.Gpio.PinValueChangedEventArgs"/> class.
+            </summary>
+            <param name="changeType">The change type that triggered the event.</param>
+            <param name="pinNumber">The pin number that triggered the event.</param>
+        </member>
+        <member name="P:System.Device.Gpio.PinValueChangedEventArgs.ChangeType">
+            <summary>
+            The change type that triggered the event.
+            </summary>
+        </member>
+        <member name="P:System.Device.Gpio.PinValueChangedEventArgs.PinNumber">
+            <summary>
+            The pin number that triggered the event.
+            </summary>
+        </member>
+        <member name="T:System.Device.Gpio.PinValue">
+            <summary>
+            Represents a value for a pin.
+            </summary>
+        </member>
+        <member name="P:System.Device.Gpio.PinValue.High">
+            <summary>
+            The value of the pin is high.
+            </summary>
+        </member>
+        <member name="P:System.Device.Gpio.PinValue.Low">
+            <summary>
+            The value of the pin is low.
+            </summary>
+        </member>
+        <member name="M:System.Device.Gpio.PinValue.op_Implicit(System.Int32)~System.Device.Gpio.PinValue">
+            <summary>
+            Implicit conversion from int. 0 means <see cref="P:System.Device.Gpio.PinValue.Low"/>, everything else means <see cref="P:System.Device.Gpio.PinValue.High"/>.
+            </summary>
+            <param name="value">Value to set</param>
+        </member>
+        <member name="M:System.Device.Gpio.PinValue.op_Implicit(System.Boolean)~System.Device.Gpio.PinValue">
+            <summary>
+            Implicit conversion from bool. <see langword="false"/> means <see cref="P:System.Device.Gpio.PinValue.Low"/>, <see langword="true"/> means <see cref="P:System.Device.Gpio.PinValue.High"/>
+            </summary>
+            <param name="value">Value to set</param>
+        </member>
+        <member name="M:System.Device.Gpio.PinValue.op_Explicit(System.Device.Gpio.PinValue)~System.Byte">
+            <summary>
+            Conversion to byte. Returns 1 on <see cref="P:System.Device.Gpio.PinValue.High"/>, 0 on <see cref="P:System.Device.Gpio.PinValue.Low"/>
+            </summary>
+            <param name="value">PinValue to convert</param>
+        </member>
+        <member name="M:System.Device.Gpio.PinValue.op_Explicit(System.Device.Gpio.PinValue)~System.Int32">
+            <summary>
+            Conversion to int. Returns 1 on <see cref="P:System.Device.Gpio.PinValue.High"/>, 0 on <see cref="P:System.Device.Gpio.PinValue.Low"/>
+            </summary>
+            <param name="value">PinValue to convert</param>
+        </member>
+        <member name="M:System.Device.Gpio.PinValue.op_Explicit(System.Device.Gpio.PinValue)~System.Boolean">
+            <summary>
+            Conversion to byte. Returns <see langword="true"/> on <see cref="P:System.Device.Gpio.PinValue.High"/>, <see langword="false"/> on <see cref="P:System.Device.Gpio.PinValue.Low"/>
+            </summary>
+            <param name="value">PinValue to convert</param>
+        </member>
+        <member name="M:System.Device.Gpio.PinValue.Equals(System.Device.Gpio.PinValue)">
+            <summary>
+            Returns true if the other instance represents the same <see cref="T:System.Device.Gpio.PinValue"/> than this.
+            </summary>
+        </member>
+        <member name="M:System.Device.Gpio.PinValue.Equals(System.Object)">
+            <inheritdoc cref="M:System.ValueType.Equals(System.Object)"/>
+        </member>
+        <member name="M:System.Device.Gpio.PinValue.op_Equality(System.Device.Gpio.PinValue,System.Device.Gpio.PinValue)">
+            <summary>
+            Equality operator
+            </summary>
+        </member>
+        <member name="M:System.Device.Gpio.PinValue.op_Inequality(System.Device.Gpio.PinValue,System.Device.Gpio.PinValue)">
+            <summary>
+            Inequality operator
+            </summary>
+        </member>
+        <member name="M:System.Device.Gpio.PinValue.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:System.Device.Gpio.PinValue.ToString">
+            <summary>
+            Returns "Low" for Low and "High" for High
+            </summary>
+        </member>
+        <member name="T:System.Device.Gpio.PinNumberingScheme">
+            <summary>
+            Different numbering schemes supported by GPIO controllers and drivers.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinNumberingScheme.Logical">
+            <summary>
+            The logical representation of the GPIOs. Refer to the microcontroller's datasheet to find this information.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinNumberingScheme.Board">
+            <summary>
+            The physical pin numbering that is usually accessible by the board headers.
+            </summary>
+        </member>
+        <member name="T:System.Device.Gpio.PinMode">
+            <summary>
+            Pin modes supported by the GPIO controllers and drivers.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinMode.Input">
+            <summary>
+            Configures the GPIO pin in floating mode, with high impedance.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinMode.InputPullDown">
+            <summary>
+            Configures the GPIO pin as high impedance with a pull-down resistor to ground.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinMode.InputPullUp">
+            <summary>
+            Configures the GPIO pin as high impedance with a pull-up resistor to the voltage charge connection (VCC).
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinMode.Output">
+            <summary>
+            Configures the GPIO pin in strong drive mode, with low impedance.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinMode.OutputOpenDrain">
+            <summary>
+            Configures the GPIO in open drain mode.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinMode.OutputOpenDrainPullUp">
+            <summary>
+            Configures the GPIO pin in open drain mode with resistive pull-up mode.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinMode.OutputOpenSource">
+            <summary>
+            Configures the GPIO pin in open collector mode.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinMode.OutputOpenSourcePullDown">
+            <summary>
+            Configures the GPIO pin in open collector mode with resistive pull-down mode.
+            </summary>
+        </member>
+        <member name="T:System.Device.Gpio.PinEventTypes">
+            <summary>
+            Event types that can be triggered by the GPIO.
+            Also used to report the received event types back.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinEventTypes.None">
+            <summary>
+            None.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinEventTypes.Rising">
+            <summary>
+            Triggered when pin value goes from low to high.
+            </summary>
+        </member>
+        <member name="F:System.Device.Gpio.PinEventTypes.Falling">
+            <summary>
+            Triggered when a pin value goes from high to low.
+            </summary>
+        </member>
+        <member name="T:System.Device.Gpio.PinChangeEventHandler">
+            <summary>
+            Delegate that defines the structure for callbacks when a pin value changed event occurs.
+            </summary>
+            <param name="sender">The sender of the event.</param>
+            <param name="pinValueChangedEventArgs">The pin value changed arguments from the event.</param>
+        </member>
+        <member name="T:System.Device.Gpio.GpioController">
+            <summary>
+            Represents a general-purpose I/O (GPIO) controller.
+            </summary>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.#ctor">
+            <summary>
+            Initializes a new instance of the System.Device.Gpio.GpioController class that
+            will use the logical pin numbering scheme as default.
+            </summary>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.#ctor(System.Device.Gpio.PinNumberingScheme)">
+            <summary>
+            Initializes a new instance of the System.Device.Gpio.GpioController class that
+            will use the specified numbering scheme. The controller will default to use the
+            driver that best applies given the platform the program is executing on.
+            </summary>
+            <param name="numberingScheme">The numbering scheme used to represent pins provided by the controller.</param>
+        </member>
+        <member name="P:System.Device.Gpio.GpioController.NumberingScheme">
+            <summary>
+            The numbering scheme used to represent pins provided by the controller.
+            </summary>
+        </member>
+        <member name="P:System.Device.Gpio.GpioController.PinCount">
+            <summary>
+            The number of pins provided by the controller.
+            </summary>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.OpenPin(System.Int32)">
+            <summary>
+            Opens a pin in order for it to be ready to use.
+            </summary>
+            <param name="pinNumber">The pin number in the controller's numbering scheme.</param>
+            <returns>The opened GPIO pin.</returns>
+            <exception cref="T:System.InvalidOperationException">This exception will be thrown if the pin is already open.</exception>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.OpenPin(System.Int32,System.Device.Gpio.PinMode)">
+            <summary>
+            Opens a pin and sets it to a specific mode.
+            </summary>
+            <param name="pinNumber">The pin number in the controller's numbering scheme.</param>
+            <param name="mode">The mode to be set.</param>
+            <returns>The opened GPIO pin.</returns>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.InternalOpenPin(System.Int32)">
+            <summary>
+            Opens a pin in order for it to be ready to use.
+            </summary>
+            <param name="pinNumber">The pin number in the controller's numbering scheme.</param>
+            <exception cref="T:System.InvalidOperationException">This exception will be thrown if the pin is already open.</exception>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.ClosePin(System.Int32)">
+            <summary>
+            Closes an open pin.
+            </summary>
+            <param name="pinNumber">The pin number in the controller's numbering scheme.</param>
+            <exception cref="T:System.InvalidOperationException">This exception will be thrown on an attempt to close a pin that hasn't been opened.</exception>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.Dispose">
+            <summary>
+            Dispose the controller
+            </summary>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.GetPinMode(System.Int32)">
+            <summary>
+            Gets the mode of a pin.
+            </summary>
+            <param name="pinNumber">The pin number in the controller's numbering scheme.</param>
+            <returns>The mode of the pin.</returns>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.IsPinModeSupported(System.Int32,System.Device.Gpio.PinMode)">
+            <summary>
+            Checks if a pin supports a specific mode.
+            </summary>
+            <param name="pinNumber">The pin number in the controller's numbering scheme.</param>
+            <param name="mode">The mode to check.</param>
+            <returns>The status if the pin supports the mode.</returns>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.IsPinOpen(System.Int32)">
+            <summary>
+             Checks if a specific pin is open.
+            </summary>
+            <param name="pinNumber">The pin number in the controller's numbering scheme.</param>
+            <returns>The status if the pin is open or closed.</returns>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.Read(System.Int32)">
+            <summary>
+            Reads the current value of a pin.
+            </summary>
+            <param name="pinNumber">The pin number in the controller's numbering scheme.</param>
+            <returns>The value of the pin.</returns>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.RegisterCallbackForPinValueChangedEvent(System.Int32,System.Device.Gpio.PinEventTypes,System.Device.Gpio.PinChangeEventHandler)">
+            <summary>
+            Adds a callback that will be invoked when pinNumber has an event of type eventType.
+            </summary>
+            <param name="pinNumber">The pin number in the controller's numbering scheme.</param>
+            <param name="eventTypes">The event types to wait for.</param>
+            <param name="callback">The callback method that will be invoked.</param>
+            <exception cref="T:System.InvalidOperationException">This exception will be thrown on an attempt to register a callback to a pin that hasn't been opened.</exception>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.SetPinMode(System.Int32,System.Device.Gpio.PinMode)">
+            <summary>
+            Sets the mode to a pin.
+            </summary>
+            <param name="pinNumber">The pin number in the controller's numbering scheme</param>
+            <param name="mode">The mode to be set.</param>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.UnregisterCallbackForPinValueChangedEvent(System.Int32,System.Device.Gpio.PinChangeEventHandler)">
+            <summary>
+            Removes a callback that was being invoked for pin at pinNumber.
+            </summary>
+            <param name="pinNumber">The pin number in the controller's numbering scheme.</param>
+            <param name="callback">The callback method that will be invoked.</param>
+        </member>
+        <member name="M:System.Device.Gpio.GpioController.Write(System.Int32,System.Device.Gpio.PinValue)">
+            <summary>
+            Writes a value to a pin.
+            </summary>
+            <param name="pinNumber">The pin number in the controller's numbering scheme.</param>
+            <param name="value">The value to be written to the pin.</param>
+        </member>
+    </members>
+</doc>
