@@ -2,5 +2,6 @@
   "attachmentFolderPath": "images",
   "useMarkdownLinks": true,
   "alwaysUpdateLinks": true,
-  "newLinkFormat": "absolute"
+  "newLinkFormat": "absolute",
+  "useTab": false
 }
