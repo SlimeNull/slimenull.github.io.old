@@ -1,6 +1,6 @@
 ---
 title: "[WPF] EleCho.WpfSuite, 控件, 布局容器, 过渡动画, 标记拓展以及实用工具"
-slug: '20240523162351'
+slug: "20240523162351"
 description: 关于 WPF Suite 的介绍与使用方法
 date: 2024-05-23T16:23:51+08:00
 image: 
@@ -9,6 +9,13 @@ license:
 hidden: false
 comments: true
 draft: false
+categories:
+  - dotnet
+  - Windows
+tags:
+  - dotnet
+  - wpf
+  - win32
 ---
 
 相信各位朋友在搞 WPF 开发的时候，不可避免的会重复的写到很多重复的代码，以给WPF擦屁股。例如WPF中没有CornerRadiusAnimation，没有支持自定义的贝塞尔曲线过渡函数，内置的值转换器太少，控件无法设置圆角，容器不能直接通过自己的属性设置元素间距等诸多问题。
