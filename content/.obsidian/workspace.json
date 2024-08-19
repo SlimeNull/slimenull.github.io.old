@@ -13,6 +13,18 @@
             "state": {
               "type": "markdown",
               "state": {
+                "file": "post/[C#] 任意频率 PCM 正弦波生成与 WAV 格式文件保存.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "af84247913b29f63",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
                 "file": "post/[.NET,WPF] 窗体云母, 亚克力, 透明, 混合颜色, 模糊背景, 亮暗色主题全讲.md",
                 "mode": "source",
                 "source": false
@@ -85,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "post/[.NET,WPF] 窗体云母, 亚克力, 透明, 混合颜色, 模糊背景, 亮暗色主题全讲.md",
+                "file": "post/[C#] 任意频率 PCM 正弦波生成与 WAV 格式文件保存.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "post/[.NET,WPF] 窗体云母, 亚克力, 透明, 混合颜色, 模糊背景, 亮暗色主题全讲.md",
+                "file": "post/[C#] 任意频率 PCM 正弦波生成与 WAV 格式文件保存.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +137,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "post/[.NET,WPF] 窗体云母, 亚克力, 透明, 混合颜色, 模糊背景, 亮暗色主题全讲.md"
+                "file": "post/[C#] 任意频率 PCM 正弦波生成与 WAV 格式文件保存.md"
               }
             }
           }
@@ -148,8 +160,26 @@
   },
   "active": "156bd384abfe278c",
   "lastOpenFiles": [
-    "post/[.NET,WPF] 如何使用 CommunityToolkit.Mvvm.md",
     "post/[.NET,WPF] 窗体云母, 亚克力, 透明, 混合颜色, 模糊背景, 亮暗色主题全讲.md",
+    "post/[C#] 任意频率 PCM 正弦波生成与 WAV 格式文件保存.md",
+    "post/[.NET,C.md",
+    "images/the_canonical_wave_file_format.png",
+    "images/the_canonical_wave_file_format.jpg",
+    "images/the_canonical_wave_file_format.png.crdownload",
+    "images/the.jpg",
+    "images/the.jpg.crdownload",
+    "templates/post.md",
+    "post/[.NET,C#] 委托与 Lambda 表达式, 语句详解.md",
+    "post/[.NET] 结构体布局详解与结构体内存对齐具体方式.md",
+    "post/[.NET,WPF] CommunityToolkit.Mvvm 异步指令.md",
+    "post/[.NET] 平台调用(P_Invoke) 与 DllImport 使用的相关讲解与注意事项,.md",
+    "post/HelloWorld/index.md",
+    "post/[Unity] Awake 与 Start 的使用, 为什么将 GetComponent 逻辑放到 Awake 中.md",
+    "post/[WPF] EleCho.WpfSuite, 控件, 布局容器, 过渡动画, 标记拓展以及实用工具.md",
+    "post/Unity 轮转图, 惯性, 自动回正, 点击选择.md",
+    "post/Unity 制作小地图, 实时与静态, 地图标记, 点击导航, 路线显示, 风格化.md",
+    "post/[笔记] 关于各音频编码格式的数据波动幅度与音量的对照关系.md",
+    "post/[.NET,WPF] 如何使用 CommunityToolkit.Mvvm.md",
     "images/Pasted image 20240530153317.png",
     "images/Pasted image 20240530153159.png",
     "images/Pasted image 20240530152815.png",
@@ -158,36 +188,21 @@
     "images/Pasted image 20240530144501.png",
     "images/Pasted image 20240530141807.png",
     "images/Pasted image 20240530141400.png",
-    "images/Pasted image 20240530141233.png",
-    "images/Pasted image 20240530141132.png",
-    "images/Pasted image 20240530140028.png",
     "post/[.NET/[.NET,WPF] 窗体云母, 亚克力, 透明, 混合颜色背景全讲.md",
     "post/[.NET/WPF] 窗体云母, 亚克力, 透明, 混合颜色背景全讲.md",
     "post/[.NET",
     "post/Untitled.md",
-    "post/[WPF] EleCho.WpfSuite, 控件, 布局容器, 过渡动画, 标记拓展以及实用工具.md",
     "post/[.NET] 查询当前已安装所有 Win32 与 UWP 应用.md",
-    "templates/post.md",
     "post/发.md",
     "post/[C#] TOC Tiny - 基于TCP套接字简易网络聊天室.md",
     "Untitled 1.md",
     "post/记录一次经验 Image.Save遇到A generic error occurred in GDI+异常.md",
-    "post/Unity 制作小地图, 实时与静态, 地图标记, 点击导航, 路线显示, 风格化.md",
     "Untitled.md",
     "images/Pasted image 20240523092851.png.md",
-    "post/Unity 轮转图, 惯性, 自动回正, 点击选择.md",
-    "post/摘要, 加密, 数字签名, 数字证书以及加密通信简要介绍.md",
-    "categories/Tutorial/_index.md",
     "categories/Tutorial/cover.jpg.crdownload",
     "categories/Tutorial",
     "categories/New folder",
     "images/20240305-0608-27.7626176.mp4",
-    "post/[Web前端] Margin 失效问题, 设置了 Margin 却不见效果, 解决方案..md",
-    "post/[.NET] Speex 语音编解码介绍, 使用, 代码示例.md",
-    "post/排序算法  超高速根据字符串长度排序的算法.md",
-    "post/加密, 加密通信, 摘要, 数字签名以及数字证书介绍.md",
-    "post/[.NET,C#] 委托与 Lambda 表达式, 语句详解.md",
-    "post/[.NET] 拓展库, 开源库, nuget库收集. (长期更新).md",
     "post/templates",
     "templates"
   ]
