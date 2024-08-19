@@ -1,0 +1,417 @@
+<!doctype html><html lang=zh-CN dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='直接贴代码了, 复制即可用, 源码部分来自网络.如果要计算字符串的 MD5 值, 直接 Encoding.UTF8.GetBytes() 然后就可以了using System;using System.IO;using System.Linq;namespace NullLib.HashCalc{    public class HashHelper    {        public static string CalcMd5x32(byte[] bytValue)        '><title>[C#] 计算 MD5 SHA1 SHA256 SHA384 SHA512 CRC32</title>
+<link rel=canonical href=https://slimenull.com/p/20210418023855/><link rel=stylesheet href=/scss/style.min.73438a911857e6d491e39369614d0dd0c0302dcacfb43e15034e0e48cac08c07.css><meta property='og:title' content='[C#] 计算 MD5 SHA1 SHA256 SHA384 SHA512 CRC32'><meta property='og:description' content='直接贴代码了, 复制即可用, 源码部分来自网络.如果要计算字符串的 MD5 值, 直接 Encoding.UTF8.GetBytes() 然后就可以了using System;using System.IO;using System.Linq;namespace NullLib.HashCalc{    public class HashHelper    {        public static string CalcMd5x32(byte[] bytValue)        '><meta property='og:url' content='https://slimenull.com/p/20210418023855/'><meta property='og:site_name' content='SlimeNull Blogs'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='csharp'><meta property='article:tag' content='dotnet'><meta property='article:tag' content='字符串'><meta property='article:published_time' content='2021-04-18T02:38:55+08:00'><meta property='article:modified_time' content='2021-04-18T02:38:55+08:00'><meta name=twitter:title content="[C#] 计算 MD5 SHA1 SHA256 SHA384 SHA512 CRC32"><meta name=twitter:description content="直接贴代码了, 复制即可用, 源码部分来自网络.如果要计算字符串的 MD5 值, 直接 Encoding.UTF8.GetBytes() 然后就可以了using System;using System.IO;using System.Linq;namespace NullLib.HashCalc{    public class HashHelper    {        public static string CalcMd5x32(byte[] bytValue)        "><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu11436448765783238083.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>SlimeNull Blogs</a></h1><h2 class=site-description>为了更好的开源世界~</h2></div></header><ol class=social-menu><li><a href=https://github.com/SlimeNull target=_blank title=GitHub rel=me><!doctype html><svg t="1702542119184" class="icon" viewBox="0 0 1024 1024" p-id="4136" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M692.906667 938.666667A42.666667 42.666667.0 01650.24 896V785.066667A91.733333 91.733333.0 00627.2 714.24a42.666667 42.666667.0 0126.026667-71.253333c104.106666-12.373334 200.106666-45.653334 200.106666-226.133334a170.666667 170.666667.0 00-28.586666-94.72A117.333333 117.333333.0 01807.253333 234.24a158.293333 158.293333.0 000-60.16A326.4 326.4.0 00718.08 220.586667a42.666667 42.666667.0 01-35.84 6.4 433.066667 433.066667.0 00-235.52.0 42.666667 42.666667.0 01-35.84-6.4A315.733333 315.733333.0 00320.853333 174.08a150.186667 150.186667.0 000 60.16 121.173333 121.173333.0 01-18.346666 88.746667A173.653333 173.653333.0 00273.92 418.133333C273.92 584.106666 354.133333 628.48 474.453333 643.84A42.666667 42.666667.0 01509.44 672a42.666667 42.666667.0 01-8.96 42.666667 87.893333 87.893333.0 00-23.466667 66.56V896A42.666667 42.666667.0 01391.68 896v-24.32a256 256 0 01-224.853333-89.173333A166.4 166.4.0 00117.333333 744.96a42.666667 42.666667.0 1121.333334-82.773333A210.346667 210.346667.0 01224 720.213333c42.666667 42.666667 85.333333 80.213333 166.4 64.853334a165.973333 165.973333.0 019.813333-67.413334C312.32 695.466666 186.88 632.32 186.88 418.986667a256 256 0 0142.666667-142.08 36.266667 36.266667.0 005.546666-26.453334 242.773333 242.773333.0 0114.08-136.96 42.666667 42.666667.0 0126.88-24.32c14.506667-4.266667 66.56-12.8 165.12 51.2a518.826667 518.826667.0 01242.773334.0c98.56-64 150.613333-55.893333 164.693333-51.2a42.666667 42.666667.0 0126.88 24.32A243.626667 243.626667.0 01889.6 250.88a32 32 0 004.693333 24.32A256 256 0 01936.96 417.706667c0 216.32-124.586667 279.04-213.333333 298.666666a182.613333 182.613333.0 019.386666 71.253334V896a42.666667 42.666667.0 01-40.106666 42.666667z" fill="#666" p-id="4137"/></svg></a></li><li><a href=https://space.bilibili.com/441842015 target=_blank title=Bilibili rel=me><!doctype html><svg t="1702541966104" class="icon" viewBox="0 0 1024 1024" p-id="16981" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M306.005333 117.632 444.330667 256h135.296l138.368-138.325333A42.666667 42.666667.0 01778.368 178.048L700.330667 256H789.333333A149.333333 149.333333.0 01938.666667 405.333333v341.333334A149.333333 149.333333.0 01789.333333 896H234.666667A149.333333 149.333333.0 0185.333333 746.666667V405.333333A149.333333 149.333333.0 01234.666667 256h88.96L245.632 177.962667a42.666667 42.666667.0 0160.373333-60.373334zm483.328 223.701333H234.666667a64 64 0 00-63.701334 57.856L170.666667 405.333333v341.333334a64 64 0 0057.856 63.701333L234.666667 810.666667h554.666666a64 64 0 0063.701334-57.856L853.333333 746.666667V405.333333a64 64 0 00-64-64zm-448 128A42.666667 42.666667.0 01384 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666666-42.666667zm341.333334.0A42.666667 42.666667.0 01725.333333 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666667-42.666667z" fill="#666" p-id="16982"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>主页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>链接</span></a></li><div class=menu-bottom-section><li id=i18n-switch><svg class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.239 8-5 8"/><path d="M5 9c-.003 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4-9 4 9"/><path d="M19.1 18h-6.2"/></svg>
+<select name=language onchange="window.location.href=this.selectedOptions[0].value"><option value=https://slimenull.com/ selected></option></select></li><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></div></ol></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/%E7%B1%BB%E5%BA%93/>类库
+</a><a href=/categories/dotnet/ style=background-color:#512cd4;color:#fff>.NET
+</a><a href=/categories/%E7%81%8C%E6%B0%B4/ style=background-color:#b3dbe3;color:#5e7377>灌水</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/20210418023855/>[C#] 计算 MD5 SHA1 SHA256 SHA384 SHA512 CRC32</a></h2><h3 class=article-subtitle>直接贴代码了, 复制即可用, 源码部分来自网络.如果要计算字符串的 MD5 值, 直接 Encoding.UTF8.GetBytes() 然后就可以了using System;using System.IO;using System.Linq;namespace NullLib.HashCalc{ public class HashHelper { public static string CalcMd5x32(byte[] bytValue)</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Apr 18, 2021</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 2 分钟</time></div></footer></div></header><section class=article-content><p>直接贴代码了, 复制即可用, 源码部分来自网络.</p><p>如果要计算字符串的 MD5 值, 直接 Encoding.UTF8.GetBytes() 然后就可以了</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span><span class=lnt>194
+</span><span class=lnt>195
+</span><span class=lnt>196
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=k>using</span> <span class=nn>System</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>using</span> <span class=nn>System.IO</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>using</span> <span class=nn>System.Linq</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>namespace</span> <span class=nn>NullLib.HashCalc</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=k>class</span> <span class=nc>HashHelper</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcMd5x32</span><span class=p>(</span><span class=kt>byte</span><span class=p>[]</span> <span class=n>bytValue</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>CalcMd5x32</span><span class=p>(</span><span class=k>new</span> <span class=n>MemoryStream</span><span class=p>(</span><span class=n>bytValue</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcMd5x16</span><span class=p>(</span><span class=kt>byte</span><span class=p>[]</span> <span class=n>bytValue</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>CalcMd5x16</span><span class=p>(</span><span class=k>new</span> <span class=n>MemoryStream</span><span class=p>(</span><span class=n>bytValue</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcShax1</span><span class=p>(</span><span class=kt>byte</span><span class=p>[]</span> <span class=n>bytValue</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>CalcShax1</span><span class=p>(</span><span class=k>new</span> <span class=n>MemoryStream</span><span class=p>(</span><span class=n>bytValue</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcShax256</span><span class=p>(</span><span class=kt>byte</span><span class=p>[]</span> <span class=n>bytValue</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>CalcShax256</span><span class=p>(</span><span class=k>new</span> <span class=n>MemoryStream</span><span class=p>(</span><span class=n>bytValue</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcShax384</span><span class=p>(</span><span class=kt>byte</span><span class=p>[]</span> <span class=n>bytValue</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>CalcShax384</span><span class=p>(</span><span class=k>new</span> <span class=n>MemoryStream</span><span class=p>(</span><span class=n>bytValue</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcShax512</span><span class=p>(</span><span class=kt>byte</span><span class=p>[]</span> <span class=n>bytValue</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>CalcShax512</span><span class=p>(</span><span class=k>new</span> <span class=n>MemoryStream</span><span class=p>(</span><span class=n>bytValue</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcMd5x32</span><span class=p>(</span><span class=n>Stream</span> <span class=n>stream</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kt>var</span> <span class=n>MD5CSP</span> <span class=p>=</span> <span class=k>new</span> <span class=n>System</span><span class=p>.</span><span class=n>Security</span><span class=p>.</span><span class=n>Cryptography</span><span class=p>.</span><span class=n>MD5CryptoServiceProvider</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>byte</span><span class=p>[]</span> <span class=n>bytHash</span> <span class=p>=</span> <span class=n>MD5CSP</span><span class=p>.</span><span class=n>ComputeHash</span><span class=p>(</span><span class=n>stream</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>MD5CSP</span><span class=p>.</span><span class=n>Clear</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>string</span> <span class=n>sHash</span> <span class=p>=</span> <span class=n>BytesToHex</span><span class=p>(</span><span class=n>bytHash</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>sHash</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcMd5x16</span><span class=p>(</span><span class=n>Stream</span> <span class=n>stream</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>CalcMd5x32</span><span class=p>(</span><span class=n>stream</span><span class=p>).</span><span class=n>Substring</span><span class=p>(</span><span class=m>8</span><span class=p>,</span> <span class=m>16</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcShax1</span><span class=p>(</span><span class=n>Stream</span> <span class=n>stream</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kt>var</span> <span class=n>SHA1CSP</span> <span class=p>=</span> <span class=k>new</span> <span class=n>System</span><span class=p>.</span><span class=n>Security</span><span class=p>.</span><span class=n>Cryptography</span><span class=p>.</span><span class=n>SHA1CryptoServiceProvider</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>byte</span><span class=p>[]</span> <span class=n>bytHash</span> <span class=p>=</span> <span class=n>SHA1CSP</span><span class=p>.</span><span class=n>ComputeHash</span><span class=p>(</span><span class=n>stream</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>SHA1CSP</span><span class=p>.</span><span class=n>Clear</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>string</span> <span class=n>sHash</span> <span class=p>=</span> <span class=n>BytesToHex</span><span class=p>(</span><span class=n>bytHash</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>sHash</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcShax256</span><span class=p>(</span><span class=n>Stream</span> <span class=n>stream</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kt>var</span> <span class=n>SHA256CSP</span> <span class=p>=</span> <span class=k>new</span> <span class=n>System</span><span class=p>.</span><span class=n>Security</span><span class=p>.</span><span class=n>Cryptography</span><span class=p>.</span><span class=n>SHA256CryptoServiceProvider</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>byte</span><span class=p>[]</span> <span class=n>bytHash</span> <span class=p>=</span> <span class=n>SHA256CSP</span><span class=p>.</span><span class=n>ComputeHash</span><span class=p>(</span><span class=n>stream</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>SHA256CSP</span><span class=p>.</span><span class=n>Clear</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>string</span> <span class=n>sHash</span> <span class=p>=</span> <span class=n>BytesToHex</span><span class=p>(</span><span class=n>bytHash</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>sHash</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcShax384</span><span class=p>(</span><span class=n>Stream</span> <span class=n>stream</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kt>var</span> <span class=n>SHA384CSP</span> <span class=p>=</span> <span class=k>new</span> <span class=n>System</span><span class=p>.</span><span class=n>Security</span><span class=p>.</span><span class=n>Cryptography</span><span class=p>.</span><span class=n>SHA384CryptoServiceProvider</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>byte</span><span class=p>[]</span> <span class=n>bytHash</span> <span class=p>=</span> <span class=n>SHA384CSP</span><span class=p>.</span><span class=n>ComputeHash</span><span class=p>(</span><span class=n>stream</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>SHA384CSP</span><span class=p>.</span><span class=n>Clear</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>string</span> <span class=n>sHash</span> <span class=p>=</span> <span class=n>BytesToHex</span><span class=p>(</span><span class=n>bytHash</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>sHash</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcShax512</span><span class=p>(</span><span class=n>Stream</span> <span class=n>stream</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kt>var</span> <span class=n>SHA512CSP</span> <span class=p>=</span> <span class=k>new</span> <span class=n>System</span><span class=p>.</span><span class=n>Security</span><span class=p>.</span><span class=n>Cryptography</span><span class=p>.</span><span class=n>SHA512CryptoServiceProvider</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>byte</span><span class=p>[]</span> <span class=n>bytHash</span> <span class=p>=</span> <span class=n>SHA512CSP</span><span class=p>.</span><span class=n>ComputeHash</span><span class=p>(</span><span class=n>stream</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>SHA512CSP</span><span class=p>.</span><span class=n>Clear</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>string</span> <span class=n>sHash</span> <span class=p>=</span> <span class=n>BytesToHex</span><span class=p>(</span><span class=n>bytHash</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>sHash</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>CalcCrcx32</span><span class=p>(</span><span class=n>Stream</span> <span class=n>stream</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>Crc32</span> <span class=n>calculator</span> <span class=p>=</span> <span class=k>new</span> <span class=n>Crc32</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>            <span class=kt>byte</span><span class=p>[]</span> <span class=n>buffer</span> <span class=p>=</span> <span class=n>calculator</span><span class=p>.</span><span class=n>ComputeHash</span><span class=p>(</span><span class=n>stream</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>calculator</span><span class=p>.</span><span class=n>Clear</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>            <span class=c1>//将字节数组转换成十六进制的字符串形式</span>
+</span></span><span class=line><span class=cl>            <span class=kt>string</span> <span class=n>sHash</span> <span class=p>=</span> <span class=n>BytesToHex</span><span class=p>(</span><span class=n>buffer</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>sHash</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>private</span> <span class=kd>static</span> <span class=kt>string</span> <span class=n>BytesToHex</span><span class=p>(</span><span class=kt>byte</span><span class=p>[]</span> <span class=n>array</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=kt>string</span><span class=p>.</span><span class=n>Join</span><span class=p>(</span><span class=kc>null</span><span class=p>,</span> <span class=n>array</span><span class=p>.</span><span class=n>Select</span><span class=p>(</span><span class=n>v</span> <span class=p>=&gt;</span> <span class=n>Convert</span><span class=p>.</span><span class=n>ToString</span><span class=p>(</span><span class=n>v</span><span class=p>,</span> <span class=m>16</span><span class=p>).</span><span class=n>PadLeft</span><span class=p>(</span><span class=m>2</span><span class=p>,</span> <span class=sc>&#39;0&#39;</span><span class=p>)));</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=cs>/// &lt;summary&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=cs>/// 提供 CRC32 算法的实现</span>
+</span></span><span class=line><span class=cl>        <span class=cs>/// &lt;/summary&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=kd>private</span> <span class=k>class</span> <span class=nc>Crc32</span> <span class=p>:</span> <span class=n>System</span><span class=p>.</span><span class=n>Security</span><span class=p>.</span><span class=n>Cryptography</span><span class=p>.</span><span class=n>HashAlgorithm</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=kd>const</span> <span class=kt>uint</span> <span class=n>DefaultPolynomial</span> <span class=p>=</span> <span class=m>0xedb88320</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=kd>const</span> <span class=kt>uint</span> <span class=n>DefaultSeed</span> <span class=p>=</span> <span class=m>0xffffffff</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kd>private</span> <span class=kt>uint</span> <span class=n>hash</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kd>private</span> <span class=kt>uint</span> <span class=n>seed</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kd>private</span> <span class=kt>uint</span><span class=p>[]</span> <span class=n>table</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kd>private</span> <span class=kd>static</span> <span class=kt>uint</span><span class=p>[]</span> <span class=n>defaultTable</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=n>Crc32</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>table</span> <span class=p>=</span> <span class=n>InitializeTable</span><span class=p>(</span><span class=n>DefaultPolynomial</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                <span class=n>seed</span> <span class=p>=</span> <span class=n>DefaultSeed</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=n>Initialize</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=n>Crc32</span><span class=p>(</span><span class=kt>uint</span> <span class=n>polynomial</span><span class=p>,</span> <span class=kt>uint</span> <span class=n>seed</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>table</span> <span class=p>=</span> <span class=n>InitializeTable</span><span class=p>(</span><span class=n>polynomial</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>seed</span> <span class=p>=</span> <span class=n>seed</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=n>Initialize</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=kd>override</span> <span class=k>void</span> <span class=n>Initialize</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>hash</span> <span class=p>=</span> <span class=n>seed</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>protected</span> <span class=kd>override</span> <span class=k>void</span> <span class=n>HashCore</span><span class=p>(</span><span class=kt>byte</span><span class=p>[]</span> <span class=n>buffer</span><span class=p>,</span> <span class=kt>int</span> <span class=n>start</span><span class=p>,</span> <span class=kt>int</span> <span class=n>length</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>hash</span> <span class=p>=</span> <span class=n>CalculateHash</span><span class=p>(</span><span class=n>table</span><span class=p>,</span> <span class=n>hash</span><span class=p>,</span> <span class=n>buffer</span><span class=p>,</span> <span class=n>start</span><span class=p>,</span> <span class=n>length</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>protected</span> <span class=kd>override</span> <span class=kt>byte</span><span class=p>[]</span> <span class=n>HashFinal</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=kt>byte</span><span class=p>[]</span> <span class=n>hashBuffer</span> <span class=p>=</span> <span class=n>uintToBigEndianBytes</span><span class=p>(~</span><span class=n>hash</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>HashValue</span> <span class=p>=</span> <span class=n>hashBuffer</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>return</span> <span class=n>hashBuffer</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=kd>static</span> <span class=kt>uint</span> <span class=n>Compute</span><span class=p>(</span><span class=kt>byte</span><span class=p>[]</span> <span class=n>buffer</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>return</span> <span class=p>~</span><span class=n>CalculateHash</span><span class=p>(</span><span class=n>InitializeTable</span><span class=p>(</span><span class=n>DefaultPolynomial</span><span class=p>),</span> <span class=n>DefaultSeed</span><span class=p>,</span> <span class=n>buffer</span><span class=p>,</span> <span class=m>0</span><span class=p>,</span> <span class=n>buffer</span><span class=p>.</span><span class=n>Length</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=kd>static</span> <span class=kt>uint</span> <span class=n>Compute</span><span class=p>(</span><span class=kt>uint</span> <span class=n>seed</span><span class=p>,</span> <span class=kt>byte</span><span class=p>[]</span> <span class=n>buffer</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>return</span> <span class=p>~</span><span class=n>CalculateHash</span><span class=p>(</span><span class=n>InitializeTable</span><span class=p>(</span><span class=n>DefaultPolynomial</span><span class=p>),</span> <span class=n>seed</span><span class=p>,</span> <span class=n>buffer</span><span class=p>,</span> <span class=m>0</span><span class=p>,</span> <span class=n>buffer</span><span class=p>.</span><span class=n>Length</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=kd>static</span> <span class=kt>uint</span> <span class=n>Compute</span><span class=p>(</span><span class=kt>uint</span> <span class=n>polynomial</span><span class=p>,</span> <span class=kt>uint</span> <span class=n>seed</span><span class=p>,</span> <span class=kt>byte</span><span class=p>[]</span> <span class=n>buffer</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>return</span> <span class=p>~</span><span class=n>CalculateHash</span><span class=p>(</span><span class=n>InitializeTable</span><span class=p>(</span><span class=n>polynomial</span><span class=p>),</span> <span class=n>seed</span><span class=p>,</span> <span class=n>buffer</span><span class=p>,</span> <span class=m>0</span><span class=p>,</span> <span class=n>buffer</span><span class=p>.</span><span class=n>Length</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>private</span> <span class=kd>static</span> <span class=kt>uint</span><span class=p>[]</span> <span class=n>InitializeTable</span><span class=p>(</span><span class=kt>uint</span> <span class=n>polynomial</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>polynomial</span> <span class=p>==</span> <span class=n>DefaultPolynomial</span> <span class=p>&amp;&amp;</span> <span class=n>defaultTable</span> <span class=p>!=</span> <span class=kc>null</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=n>defaultTable</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=kt>uint</span><span class=p>[]</span> <span class=n>createTable</span> <span class=p>=</span> <span class=k>new</span> <span class=kt>uint</span><span class=p>[</span><span class=m>256</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span> <span class=n>i</span> <span class=p>&lt;</span> <span class=m>256</span><span class=p>;</span> <span class=n>i</span><span class=p>++)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=kt>uint</span> <span class=n>entry</span> <span class=p>=</span> <span class=p>(</span><span class=kt>uint</span><span class=p>)</span><span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span> <span class=n>j</span> <span class=p>&lt;</span> <span class=m>8</span><span class=p>;</span> <span class=n>j</span><span class=p>++)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=k>if</span> <span class=p>((</span><span class=n>entry</span> <span class=p>&amp;</span> <span class=m>1</span><span class=p>)</span> <span class=p>==</span> <span class=m>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                            <span class=n>entry</span> <span class=p>=</span> <span class=p>(</span><span class=n>entry</span> <span class=p>&gt;&gt;</span> <span class=m>1</span><span class=p>)</span> <span class=p>^</span> <span class=n>polynomial</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=k>else</span>
+</span></span><span class=line><span class=cl>                            <span class=n>entry</span> <span class=p>=</span> <span class=n>entry</span> <span class=p>&gt;&gt;</span> <span class=m>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                    <span class=n>createTable</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=p>=</span> <span class=n>entry</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>polynomial</span> <span class=p>==</span> <span class=n>DefaultPolynomial</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>defaultTable</span> <span class=p>=</span> <span class=n>createTable</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>return</span> <span class=n>createTable</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>private</span> <span class=kd>static</span> <span class=kt>uint</span> <span class=n>CalculateHash</span><span class=p>(</span><span class=kt>uint</span><span class=p>[]</span> <span class=n>table</span><span class=p>,</span> <span class=kt>uint</span> <span class=n>seed</span><span class=p>,</span> <span class=kt>byte</span><span class=p>[]</span> <span class=n>buffer</span><span class=p>,</span> <span class=kt>int</span> <span class=n>start</span><span class=p>,</span> <span class=kt>int</span> <span class=n>size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=kt>uint</span> <span class=n>crc</span> <span class=p>=</span> <span class=n>seed</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=p>=</span> <span class=n>start</span><span class=p>;</span> <span class=n>i</span> <span class=p>&lt;</span> <span class=n>size</span><span class=p>;</span> <span class=n>i</span><span class=p>++)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>unchecked</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>crc</span> <span class=p>=</span> <span class=p>(</span><span class=n>crc</span> <span class=p>&gt;&gt;</span> <span class=m>8</span><span class=p>)</span> <span class=p>^</span> <span class=n>table</span><span class=p>[</span><span class=n>buffer</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=p>^</span> <span class=n>crc</span> <span class=p>&amp;</span> <span class=m>0xff</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>return</span> <span class=n>crc</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>private</span> <span class=kt>byte</span><span class=p>[]</span> <span class=n>uintToBigEndianBytes</span><span class=p>(</span><span class=kt>uint</span> <span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>return</span> <span class=k>new</span> <span class=kt>byte</span><span class=p>[]</span> <span class=p>{</span> <span class=p>(</span><span class=kt>byte</span><span class=p>)((</span><span class=n>x</span> <span class=p>&gt;&gt;</span> <span class=m>24</span><span class=p>)</span> <span class=p>&amp;</span> <span class=m>0xff</span><span class=p>),</span> <span class=p>(</span><span class=kt>byte</span><span class=p>)((</span><span class=n>x</span> <span class=p>&gt;&gt;</span> <span class=m>16</span><span class=p>)</span> <span class=p>&amp;</span> <span class=m>0xff</span><span class=p>),</span> <span class=p>(</span><span class=kt>byte</span><span class=p>)((</span><span class=n>x</span> <span class=p>&gt;&gt;</span> <span class=m>8</span><span class=p>)</span> <span class=p>&amp;</span> <span class=m>0xff</span><span class=p>),</span> <span class=p>(</span><span class=kt>byte</span><span class=p>)(</span><span class=n>x</span> <span class=p>&amp;</span> <span class=m>0xff</span><span class=p>)</span> <span class=p>};</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/csharp/>Csharp</a>
+<a href=/tags/dotnet/>Dotnet</a>
+<a href=/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/>字符串</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/20210630024505/><div class=article-details><h2 class=article-title>[C#] 使用 NullLib.TickAnimation.Drawing 实现 WinForm 过渡动画</h2></div></a></article><article><a href=/p/20210219220053/><div class=article-details><h2 class=article-title>[C#] 绘制函数图像. 可拖动, 可缩放, 可调整精度</h2></div></a></article><article><a href=/p/20210219152833/><div class=article-details><h2 class=article-title>[C#] IEnumerable拼接! 将枚举器串起来~</h2></div></a></article><article><a href=/p/20210219070741/><div class=article-details><h2 class=article-title>[C#] Range函数, 好用就完事儿了!</h2></div></a></article><article><a href=/p/20230815153735/><div class=article-details><h2 class=article-title>EV 录屏修复小工具</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=SlimeNull/slimenull.github.io issue-term=pathname label=BlogComment crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
+2023 -
+2024 SlimeNull Blogs</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.21.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

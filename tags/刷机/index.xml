@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>刷机 on SlimeNull Blogs</title><link>https://slimenull.com/tags/%E5%88%B7%E6%9C%BA/</link><description>Recent content in 刷机 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 19 Jul 2023 16:36:23 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/%E5%88%B7%E6%9C%BA/index.xml" rel="self" type="application/rss+xml"/><item><title>[刷机] 9008 刷机救砖笔记</title><link>https://slimenull.com/p/20230719163623/</link><pubDate>Wed, 19 Jul 2023 16:36:23 +0800</pubDate><guid>https://slimenull.com/p/20230719163623/</guid><description>&lt;p>前几日, 我拿着手里的 OnePlus 8T 作死, 成功的把它作成了砖, 系统分区嗝屁, recovery 和 bootloader 分区也都嗝屁, 换言之, 只能使用 9008 进行刷机了&amp;hellip;&lt;/p>
+&lt;h2 id="什么是-9008-深刷">什么是 9008 深刷&lt;/h2>
+&lt;p>按照网上的介绍, 9008 是骁龙系列处理器的手机专有的, 用于为手机硬件下载数据的模式. 只要手机还能通电, 那 9008 模式就能用. 所以, 无论手机怎么成砖了, 都能通过这种方式, 为手机重新刷入系统, 达到救砖的目的.&lt;/p>
+&lt;blockquote>
+&lt;p>这里说的 &amp;ldquo;下载数据&amp;rdquo; 指的是向手机存储器写入数据&lt;/p>
+&lt;/blockquote>
+&lt;br/>
+&lt;h2 id="有什么要求">有什么要求&lt;/h2>
+&lt;p>因为 9008 模式是骁龙处理器独有的功能, 所以, 你的手机必须搭载骁龙处理器. 联发科或者其他则不可以.&lt;/p>
+&lt;blockquote>
+&lt;p>不过据我所知, 联发科也有和 9008 对标的一个救砖方式, 只不过我没有试过.&lt;/p>
+&lt;/blockquote>
+&lt;br/>
+&lt;h2 id="需要做什么准备">需要做什么准备&lt;/h2>
+&lt;p>你电脑需要有骁龙的 USB 驱动, 这样, 在电脑连接到手机的时候, 电脑才能识别到手机.&lt;/p>
+&lt;blockquote>
+&lt;p>一般的, 这个驱动都比较难找, 例如太新的版本可能不行, 太旧的版本也可能不行, 在 Windows11 上, 驱动还需要签名, 或者需要手动添加测试证书什么的, 不过, 只需要去拿着手机牌子, 在网上去搜索驱动下载, 总是能下载到合适的驱动的.&lt;/p>
+&lt;/blockquote>
+&lt;p>在有驱动之后, 你电脑上还需要有专用的 9008 救砖包, 一般厂商会提供这样的救砖包, 一个救砖包中包含刷机工具, 以及刷机包. 在找刷机包的时候, 只需要拿着手机的具体型号, 去搜索即可.&lt;/p>
+&lt;blockquote>
+&lt;p>如果官网找不到的话, 可以去一些刷机论坛上找找, 使用魔法上网, 去 XDA 上能找到许多的你想知道的东西, 例如一些刷机教程.&lt;/p>
+&lt;/blockquote>
+&lt;br/>
+&lt;h2 id="如何进行操作">如何进行操作&lt;/h2>
+&lt;p>对于开放性最强的一加手机, 想要进入 9008 模式, 操作起来极其简单!&lt;/p>
+&lt;ol>
+&lt;li>手机处于关机状态, 并同时按下音量上下键&lt;/li>
+&lt;li>使用数据线连接电脑与手机&lt;/li>
+&lt;li>电脑的设备管理器中, 出现了一个新的串口设备, 名字是 &amp;ldquo;Qualcomm HS-USB QDLoader 9008 (COMx)&amp;rdquo;&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;p>FAQ:&lt;/p>
+&lt;ol>
+&lt;li>如果你电脑没有识别到任何设备
+请确认, 你的线是否是数据线, 你是否按住了音量上下键, 以及你手机是否支持通过这种方式进入 9008 模式&lt;/li>
+&lt;li>电脑识别到了一个新设备, 但它是一个名为 &amp;ldquo;QHSUSB_DLOAD&amp;rdquo; 的未知设备
+显然, 你的电脑没有正确的安装骁龙的 USB 驱动, 请去网上找一些其他可用的驱动试试&lt;/li>
+&lt;li>电脑识别到了 &amp;ldquo;Qualcomm HS-USB QDLoader 9008 (COMx)&amp;rdquo; 设备, 但带有一个感叹号
+你的电脑正确的安装了骁龙的 USB 驱动, 但是它似乎是旧的版本, 旧的骁龙驱动不带有驱动签名, 而在新版的 Windows 中, 驱动必须正确签名才能正常工作, 请去网上找一些其他可用的驱动试试&lt;/li>
+&lt;li>电脑识别到了 &amp;ldquo;Qualcomm HS-USB QDLoader 9008 (COMx)&amp;rdquo; 设备, 但是当我松开音量键的时候, 它就会断开
+尽管网上有人说这是因为安装了不合适的驱动, 但你仍然可以继续按照下面的步骤继续进行, 但是不要松开音量键了.&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>如何卸载驱动?
+只需要在设备管理器中, 右键设备, 单击 &amp;ldquo;卸载设备&amp;rdquo;, 在弹出的窗口中, 会有一个选项 &amp;ldquo;卸载驱动程序&amp;rdquo;, 勾选它, 然后确认即可.&lt;/p>
+&lt;/blockquote>
+&lt;br/>
+&lt;h2 id="开始刷机">开始刷机&lt;/h2>
+&lt;p>打开你的刷机工具, 如果是一加手机, 那它应该是 &amp;ldquo;MsmDownloadTool&amp;rdquo;.&lt;/p>
+&lt;ol>
+&lt;li>打开你的刷机工具&lt;/li>
+&lt;li>按照上一部分的步骤, 将手机以 9008 模式连接到电脑, 此时刷机工具中会出现你的设备, 并且状态显示 &amp;ldquo;已连接&amp;rdquo;&lt;/li>
+&lt;li>点击 &amp;ldquo;开始&amp;rdquo;, 此时刷机工具会通过 9008 端口设备与手机通信, 传输数据&lt;/li>
+&lt;li>等待状态一栏中出现进度条, 就可以松开音量上下键了&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;p>FAQ:&lt;/p>
+&lt;ol>
+&lt;li>Param 预载失败
+更换驱动&lt;/li>
+&lt;li>自动检测 DDR 失败
+手机关机, 重新进入 9008 模式, 并且重启电脑上的刷机工具&lt;/li>
+&lt;li>进度卡住了
+重刷一遍试试&lt;/li>
+&lt;/ol></description></item></channel></rss>

@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Minimap on SlimeNull Blogs</title><link>https://slimenull.com/tags/minimap/</link><description>Recent content in Minimap on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 06 Mar 2024 13:23:52 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/minimap/index.xml" rel="self" type="application/rss+xml"/><item><title>Unity 小地图, 实时与静态, 地图标记, 点击导航, 路线显示, 风格化</title><link>https://slimenull.com/p/20240306132352/</link><pubDate>Wed, 06 Mar 2024 13:23:52 +0800</pubDate><guid>https://slimenull.com/p/20240306132352/</guid><description>&lt;p>&lt;img src="https://slimenull.com/images/vlcsnap-2024-03-08-11h04m42s227.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>如上图, 这些地图分别是:&lt;/p>
+&lt;ol>
+&lt;li>位置和方向均跟随玩家, 并且带有地图标记的地图&lt;/li>
+&lt;li>位置和方向固定, 带有地图标记的地图&lt;/li>
+&lt;li>位置跟随玩家, 带有地图标记的地图&lt;/li>
+&lt;li>位置跟随玩家, 带有部分地图标记, 能够显示导航路线的地图&lt;/li>
+&lt;li>位置跟随玩家, 带有部分地图标记, 能够显示导航路线且风格化的地图.&lt;/li>
+&lt;/ol>
+&lt;br />
+&lt;h2 id="实时地图">实时地图&lt;/h2>
+&lt;p>在 Unity 中, 相机渲染的结果能够直接保存到 &amp;ldquo;渲染贴图&amp;rdquo; 中, 而贴图可以呈现在 UI 界面上, 通过这一方式, 我们可以创建最简单的实时地图.&lt;/p>
+&lt;p>首先, 在项目面板中, 我们需要创建一个用于存储相机渲染输出的 &amp;ldquo;渲染贴图&amp;rdquo;, 右击鼠标, 选择 &amp;ldquo;创建 -&amp;gt; 渲染贴图(Render texture)&amp;rdquo;&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240308111441.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>然后, 在创建中创建一个垂直向下看的相机, 并将投影模式改为 &amp;ldquo;正交(Orthographic)&amp;rdquo;:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240308111814.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>然后, 将相机的 &amp;ldquo;目标贴图&amp;rdquo; 设置为我们刚刚创建好的渲染贴图:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240308112025.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>做完这些操作之后, 你会得到这样的结果:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240308112212.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>最后, 我们只需要使用任意方式, 将贴图展示在屏幕上就可以了. 最简单的方式就是直接使用 UI 中的 &amp;ldquo;RawImage&amp;rdquo; 进行显示.&lt;/p>
+&lt;p>在场景中创建 RawImage, 然后将其要显示的纹理设置为我们创建好的渲染纹理, 最后你会看到, UI 上的图片显示着相机拍摄到的内容.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240308112626.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>至此, 最简单的实时小地图, 我们就做好了. 关于一些简单的拓展的内容, 大概如下:&lt;/p>
+&lt;ol>
+&lt;li>如果要跟随玩家, 那么直接手写脚本, 使相机跟随玩家即可&lt;/li>
+&lt;li>如果要随玩家旋转, 直接手写脚本, 跟随玩家, 并且跟随玩家旋转. 当然你也可以直接将其设置为玩家的子对象, 这样玩家移动和旋转的时候, 相机也会移动和旋转.&lt;/li>
+&lt;/ol>
+&lt;br />
+&lt;h2 id="静态地图">静态地图&lt;/h2>
+&lt;p>静态地图就是提前对场景进行拍摄, 拿到贴图之后放到 UI 上, 然后在实际显示时, 根据比例系数, 移动这张图片.&lt;/p>
+&lt;p>在 Unity 中截图还是比较麻烦的, 建议是写个编辑器脚本, 点击按钮, 动态的创建相机, 然后使用正交相机, 渲染到 RenderTexture, 再将 RenderTexture 保存到本地, 下面是供参考的代码:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;span class="lnt">76
+&lt;/span>&lt;span class="lnt">77
+&lt;/span>&lt;span class="lnt">78
+&lt;/span>&lt;span class="lnt">79
+&lt;/span>&lt;span class="lnt">80
+&lt;/span>&lt;span class="lnt">81
+&lt;/span>&lt;span class="lnt">82
+&lt;/span>&lt;span class="lnt">83
+&lt;/span>&lt;span class="lnt">84
+&lt;/span>&lt;span class="lnt">85
+&lt;/span>&lt;span class="lnt">86
+&lt;/span>&lt;span class="lnt">87
+&lt;/span>&lt;span class="lnt">88
+&lt;/span>&lt;span class="lnt">89
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">MinimapTextureTool&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">EditorWindow&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na"> [MenuItem(&amp;#34;Tools/MinimapTextureTool&amp;#34;)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">static&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Open&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">var&lt;/span> &lt;span class="n">window&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">EditorWindow&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetWindow&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">MinimapTextureTool&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">window&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Show&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">string&lt;/span> &lt;span class="n">_textureSizeStr&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;1024&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">string&lt;/span> &lt;span class="n">_cameraHeightStr&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;5&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">string&lt;/span> &lt;span class="n">_minimapAreaSizeStr&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;50&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">_minimapLayers&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">~&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">void&lt;/span> &lt;span class="n">OnGUI&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">GUILayout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Label&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;纹理工具&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">GUILayout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Label&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;纹理大小: &amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">_textureSizeStr&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">GUILayout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TextField&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">_textureSizeStr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">GUILayout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Label&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;相机高度: &amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">_cameraHeightStr&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">GUILayout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TextField&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">_cameraHeightStr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">GUILayout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Label&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;小地图区域大小: &amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">_minimapAreaSizeStr&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">GUILayout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TextField&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">_minimapAreaSizeStr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">GUILayout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Label&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;小地图层级遮罩: &amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">LayerMask&lt;/span> &lt;span class="n">tempMask&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">EditorGUILayout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MaskField&lt;/span>&lt;span class="p">(&lt;/span> &lt;span class="n">InternalEditorUtility&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">LayerMaskToConcatenatedLayersMask&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">_minimapLayers&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">InternalEditorUtility&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">layers&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">_minimapLayers&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">InternalEditorUtility&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ConcatenatedLayersMaskToLayerMask&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">tempMask&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">GUILayout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Space&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">10&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(!&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TryParse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">_textureSizeStr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">var&lt;/span> &lt;span class="n">textureSize&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">||&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">!&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TryParse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">_cameraHeightStr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">var&lt;/span> &lt;span class="n">cameraHeight&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">||&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">!&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TryParse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">_minimapAreaSizeStr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">var&lt;/span> &lt;span class="n">minimapAreaSize&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">GUILayout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Label&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;输入有误!&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">GUILayout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Button&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;生成小地图纹理&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">string&lt;/span> &lt;span class="n">filename&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">EditorUtility&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SaveFilePanel&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;保存纹理&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Application&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">dataPath&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;小地图&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;png&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 创建渲染纹理&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">RenderTexture&lt;/span> &lt;span class="n">rt&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">RenderTexture&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">textureSize&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">textureSize&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">32&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 创建相机&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">GameObject&lt;/span> &lt;span class="n">cameraGameObject&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">GameObject&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Camera&lt;/span> &lt;span class="n">camera&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">cameraGameObject&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">AddComponent&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Camera&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">cameraGameObject&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">transform&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">eulerAngles&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Vector3&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">90&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">cameraGameObject&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">transform&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">position&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Vector3&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">cameraHeight&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 设置相机属性&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">camera&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">cullingMask&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">_minimapLayers&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">camera&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">clearFlags&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">CameraClearFlags&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SolidColor&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">camera&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">backgroundColor&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Color&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">camera&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">orthographic&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">camera&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">orthographicSize&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">minimapAreaSize&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 渲染&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">camera&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">targetTexture&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">rt&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">camera&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Render&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 保存当前激活的渲染纹理, 然后激活刚创建的渲染纹理&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">var&lt;/span> &lt;span class="n">activeRenderTextureBefore&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">RenderTexture&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">active&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">RenderTexture&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">active&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">rt&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 创建 2D 纹理, 并从渲染纹理中读入数据&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Texture2D&lt;/span> &lt;span class="n">png&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Texture2D&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">textureSize&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">textureSize&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">png&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ReadPixels&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">Rect&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">textureSize&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">textureSize&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">png&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Apply&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 恢复之前激活的渲染纹理&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">RenderTexture&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">active&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">activeRenderTextureBefore&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 编码 PNG, 并保存&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">var&lt;/span> &lt;span class="n">bytes&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">png&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">EncodeToPNG&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">IO&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">File&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteAllBytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">filename&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">bytes&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 清理临时创建的对象&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">DestroyImmediate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cameraGameObject&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">DestroyImmediate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rt&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">DestroyImmediate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">png&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果要手动截图的话, 可以将窗口上的这两个关闭, 隐藏天空盒以及辅助线之类的.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240311112837.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>这里以一个准备好的地图做示例.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240311145121.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>然后, 我们继续写一个简单的脚本用来展示地图, 通过改变顶点 UV, 实现移动地图内容.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">SimpleTextureMinimap&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">MaskableGraphic&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">Texture&lt;/span> &lt;span class="n">MinimapTexture&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">Vector2&lt;/span> &lt;span class="n">Pivot&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Vector2&lt;/span>&lt;span class="p">(.&lt;/span>&lt;span class="m">5f&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">.&lt;/span>&lt;span class="m">5f&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">MinimapAreaSize&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">50&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">DisplayAreaSize&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">10&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">ImageSize&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">100&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">Transform&lt;/span> &lt;span class="n">FollowTarget&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Update&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">FollowTarget&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">SetVerticesDirty&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">override&lt;/span> &lt;span class="n">Texture&lt;/span> &lt;span class="n">mainTexture&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">MinimapTexture&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">protected&lt;/span> &lt;span class="kd">override&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">OnPopulateMesh&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">VertexHelper&lt;/span> &lt;span class="n">vh&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">vh&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Clear&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">var&lt;/span> &lt;span class="n">radius&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ImageSize&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">var&lt;/span> &lt;span class="n">uvRadius&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">DisplayAreaSize&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="n">MinimapAreaSize&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">var&lt;/span> &lt;span class="n">uvOffset&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Vector2&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">FollowTarget&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">uvOffset&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Vector2&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">FollowTarget&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">position&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">FollowTarget&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">position&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">z&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="n">MinimapAreaSize&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">vh&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">AddVert&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">Vector3&lt;/span>&lt;span class="p">(-&lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">-&lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">color&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Pivot&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">uvOffset&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Vector2&lt;/span>&lt;span class="p">(-&lt;/span>&lt;span class="n">uvRadius&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">-&lt;/span>&lt;span class="n">uvRadius&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">vh&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">AddVert&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">Vector3&lt;/span>&lt;span class="p">(-&lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">radius&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">color&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Pivot&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">uvOffset&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Vector2&lt;/span>&lt;span class="p">(-&lt;/span>&lt;span class="n">uvRadius&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">uvRadius&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">vh&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">AddVert&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">Vector3&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">radius&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">color&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Pivot&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">uvOffset&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Vector2&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">uvRadius&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">uvRadius&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">vh&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">AddVert&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">Vector3&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">-&lt;/span>&lt;span class="n">radius&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">color&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Pivot&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">uvOffset&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Vector2&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">uvRadius&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">-&lt;/span>&lt;span class="n">uvRadius&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">vh&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">AddTriangle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">vh&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">AddTriangle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">3&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在上面的代码中, 我们只使用跟随目标的位置计算 UV 偏移量, 没有考虑到当玩家旋转时, 地图也旋转的这种需求, 所以计算就变得简单了许多.&lt;/p>
+&lt;br/>
+&lt;h2 id="地图标记">地图标记&lt;/h2>
+&lt;p>要将场景中的某些物体在地图上标记出来, 方式有很多. 对于基于渲染相机的小地图, 其中最简单的方式是直接在物体上创建一个世界坐标空间的 Canvas, 并在上面放一张图片, 然后让小地图相机拍摄到.&lt;/p>
+&lt;p>就像这样, 调整 Canvas 的位置, 旋转, 缩放使其面朝上方以被相机地图拍摄到, 然后设置单独的层级, 并且使主相机不渲染该层级, 而小地图相机渲染它.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240311155359.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>最后的效果, 就是这样的:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240311155649.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>对于静态地图, 也就是地图由贴图构成, 我们需要做世界坐标到地图坐标的坐标转换, 然后在地图上实例化 Sprite, 并设置其位置.&lt;/p>
+&lt;blockquote>
+&lt;p>地图标记当然不止这一种实现方式, 不如说, 直接用 UI 在小地图上放一个图片是更好的解决方案&lt;/p>
+&lt;/blockquote>
+&lt;br/>
+&lt;h2 id="小地图包">小地图包&lt;/h2>
+&lt;p>对于更多功能, 我将它封装成一个 Unity 包了. 其中就包含实时小地图, 静态小地图, 标记, 点击导航以及路线显示.&lt;/p>
+&lt;p>要安装这个包, 首先确保你的电脑中有安装 &amp;lsquo;git&amp;rsquo;, 然后在 Unity 包管理器中, 单击左上角的 &amp;lsquo;添加包&amp;rsquo; 按钮, 然后单击 &amp;lsquo;从 git URL 添加包&amp;rsquo;, 然后输入 &lt;code>https://github.com/SlimeNull/UnityMinimaps.git&lt;/code> 并确认.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240517105319.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240517105207.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>不出意外的话, 名为 &amp;ldquo;SlimeNull.UnityMinimaps&amp;rdquo; 的包会被安装到你的项目中:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240517105433.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>现在, 我们可以直接在场景中创建小地图了. 在 Unity 菜单栏中, 找到 &lt;code>Tools&lt;/code> 按钮, 单击其中的 &lt;code>Minimap&lt;/code> 即可打开小地图创建工具.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240517105647.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>如果要在场景中创建一个基于相机与渲染纹理的实时地图, 需要以下准备:&lt;/p>
+&lt;ol>
+&lt;li>一个渲染纹理&lt;/li>
+&lt;li>一个地图相机, 并且有赋值上面所说的渲染纹理, 同时该相机必须正向垂直向下照射(X旋转90度, Y 和 Z 不旋转)&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523100248.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>然后, 将小地图类型调整为 &amp;ldquo;Render texture&amp;rdquo;, 拖拽小地图相机到窗口中, 最后在场景层级中选择你要放置小地图的位置(这里是 Canvas 节点), 然后点击 &amp;ldquo;创建&amp;rdquo; 即可.&lt;/p>
+&lt;blockquote>
+&lt;p>如果你在场景层级中选择对象, 它会提示你 &amp;ldquo;选择一个在 Canvas 之下的 GameObject 以创建小地图&amp;rdquo;, 只有当你选择之后, 才会有 &amp;ldquo;创建&amp;rdquo; 按钮.&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523091600.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>在做完上述步骤之后, Canvas 下就会自动创建好一个小地图, 其中显示的内容是相机所照射到的内容. 通过这一方式就能实现实时小地图了.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523091848.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>如果你要调整小地图的显示大小, 则需要设置 &lt;code>Minimap&lt;/code> 组件中的 &lt;code>Size&lt;/code>.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523092024.png"
+loading="lazy"
+>&lt;/p>
+&lt;h3 id="操作">操作&lt;/h3>
+&lt;p>通过更改 &lt;code>Minimap&lt;/code> 组件中的 &lt;code>AreaSize&lt;/code>, 可以指定当前小地图显示的区域大小. 不过, 注意不要超过小地图相机的照射范围, 因为范围之外是显示不到的.&lt;/p>
+&lt;p>自带的 &lt;code>MinimapModifier&lt;/code> 组件是实现用户鼠标滚轮缩放小地图的功能的. &lt;code>Factor&lt;/code> 用来指定缩放的速度倍数, &lt;code>MinSize&lt;/code> 和 &lt;code>MaxSize&lt;/code> 则是最小与最大的大小. 如果你不希望用户能够通过鼠标滚轮调整大小, 移除这个组件就可以了.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523095045.png"
+loading="lazy"
+>&lt;/p>
+&lt;h3 id="人物跟随">人物跟随&lt;/h3>
+&lt;p>要实现人物跟随, 只需要将要跟随的物体设置到 &lt;code>Minimap&lt;/code> 组件的 &lt;code>Origin&lt;/code> 上即可. 并且, 当跟随的物体旋转时, 小地图也会跟着旋转, 保证玩家的前方始终是地图上方.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523092355.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>不过, 需要注意的是, 如果你的小地图相机不会移动, 那么当玩家超出小地图照射范围的时候, 那么小地图的内容也会变成空, 因为小地图渲染器获取不到玩家周围的地图信息了.&lt;/p>
+&lt;p>所以一般的, 如果你需要始终能够正确显示小地图, 你还需要保证小地图跟随玩家, 以保证小地图组件能够获取到玩家周围的地图信息. 我们需要一个简单的物体跟随脚本来使相机始终跟随玩家.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">using&lt;/span> &lt;span class="nn">UnityEngine&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[ExecuteAlways]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">FollowObject&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">MonoBehaviour&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">Transform&lt;/span> &lt;span class="n">Target&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">Vector3&lt;/span> &lt;span class="n">Offset&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">LateUpdate&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Target&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">transform&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">position&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Target&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">position&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">Offset&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>然后挂载到小地图相机上, 这样小地图就始终跟随玩家了.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523100417.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>注意, 不要直接将小地图相机挂载到玩家下, 因为这样, 玩家的旋转会影响到地图, 从而导致地图错乱, 以下的做法是 &lt;strong>错误&lt;/strong> 的!&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523100623.png"
+loading="lazy"
+>&lt;/p>
+&lt;h3 id="多边形地图">多边形地图&lt;/h3>
+&lt;p>默认小地图的显示是 &amp;ldquo;方形&amp;rdquo; 的, 如果你需要换成多边形的小地图, 只需要将小地图中的 &amp;ldquo;MinimapRenderer&amp;rdquo; 组件换成 &amp;ldquo;MinimapPolygonRenderer&amp;rdquo; 即可.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523092958.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523093035.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>通过增加 &amp;ldquo;顶点数&amp;rdquo; 你也可以将它做成近似 &amp;ldquo;圆形&amp;rdquo; 的小地图.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523093233.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>当然, 如果你需要更多奇奇怪怪形状的小地图, 也可以直接使用 UI 上的遮罩, 毕竟小地图的渲染器也是一个 MaskableGraphics.&lt;/p>
+&lt;h3 id="标记">标记&lt;/h3>
+&lt;p>上面我们讲了直接通过让渲染贴图照射到一个 UI 图像来实现的小地图, 但在这里的小地图包中, 直接提供了在小地图 UI 上显示标记的功能.&lt;/p>
+&lt;p>首先我们需要把我们的 &amp;ldquo;标记&amp;rdquo; 做成预制体, 这通常是一个 &amp;ldquo;Image&amp;rdquo; 图片.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523094335.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>然后在小地图的 &amp;ldquo;MinimapIndicator&amp;rdquo; 组件中添加一个新项, 并指定要标记的物体, 以及图标的预制体即可.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523094457.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>在运行时, 小地图标记就会实例化到小地图中, 然后显示出来, 并跟随目标物体.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523094631.png"
+loading="lazy"
+>&lt;/p>
+&lt;h3 id="导航">导航&lt;/h3>
+&lt;p>这个小地图包还支持用户点击小地图时, 调用主角的 &lt;code>NavMeshAgent&lt;/code> 进行导航. 只需要将玩家的 &lt;code>NavMeshAgent&lt;/code> 赋值到小地图下的 &lt;code>MinimapNavigator&lt;/code> 组件的 &lt;code>NavMeshAgent&lt;/code> 上, 然后设置能够导航的层级遮罩即可.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523100906.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>现在, 在地图上点击, 小地图的导航器就会自动做射线检测, 找到目标点, 并设置玩家的 &lt;code>NavMeshAgent&lt;/code> 的目标点.&lt;/p>
+&lt;p>如果你还想要在地图上显示导航路径, 可以用小地图下面的 &lt;code>NavigationPathRenderer&lt;/code>, 默认创建的小地图会包含一个, 将需要显示导航路径的 &lt;code>NavMeshAgent&lt;/code> 赋值上去就可以了.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523101218.png"
+loading="lazy"
+>&lt;/p>
+&lt;h3 id="风格化">风格化&lt;/h3>
+&lt;p>风格化在这里实现的原理就是直接做好场景的一个地图图片, 然后小地图在渲染时, 就基于这个小地图的内容进行渲染. 和实时小地图一样, 你不需要自己编写任何逻辑, 只需要跟随向导, 拍摄一个地图图片, 然后用美术软件对其进行处理, 最后设置好相关属性就可以了.&lt;/p>
+&lt;p>使用小地图工具中的 &amp;ldquo;纹理工具&amp;rdquo; 可以直接拍摄一张当前场景的地图图片, 设定好你想要的纹理大小, 用于拍摄的相机高度, 小地图的区域大小(直径), 以及要拍摄的层级, 最后点击 &amp;ldquo;生成小地图纹理&amp;rdquo; 即可.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523101903.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>最后使用编辑好的地图贴图创建一个静态地图就可以了.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523102150.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>微调设置, 最后的效果大致如此. 可以看到在静态的小地图上, 有我们通过绘图工具绘制的一些线条.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/Pasted%20image%2020240523102350.png"
+loading="lazy"
+>&lt;/p>
+&lt;blockquote>
+&lt;p>需要注意的是, 在创建静态小地图时, 纹理的区域大小必须设置正确, 否则小地图的显示就出问题了. 所以建议对于小地图纹理的命名中包含小地图的大小, 这样就不会忘记地图大小了.&lt;/p>
+&lt;/blockquote>
+&lt;p>另外, 由于静态小地图的渲染基于静止的图片, 所以场景中运动的物体, 你就没办法实时的显示出来它了, 而是应该使用 &amp;ldquo;地图标记&amp;rdquo; 来表示它的位置与方向.&lt;/p></description></item></channel></rss>

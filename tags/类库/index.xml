@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>类库 on SlimeNull Blogs</title><link>https://slimenull.com/tags/%E7%B1%BB%E5%BA%93/</link><description>Recent content in 类库 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 05 Jul 2020 01:05:33 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/%E7%B1%BB%E5%BA%93/index.xml" rel="self" type="application/rss+xml"/><item><title>[C#] 如何创建DLL并在项目中使用</title><link>https://slimenull.com/p/20200705010533/</link><pubDate>Sun, 05 Jul 2020 01:05:33 +0800</pubDate><guid>https://slimenull.com/p/20200705010533/</guid><description>&lt;h2 id="注意">注意:&lt;/h2>
+&lt;ol start="0">
+&lt;li>文章适合初学者, 讲的较为详细, 大佬可以绕道&lt;/li>
+&lt;li>作者也是自学C#的, 所以有些东西可能讲的也有些不好, 请见谅&lt;/li>
+&lt;/ol>
+&lt;h2 id="关于dll">关于DLL:&lt;/h2>
+&lt;ol start="0">
+&lt;li>在C#中, DLL可以说是类库, 创建一个类库类型的项目后, 生成时生成的文件时一个DLL文件&lt;/li>
+&lt;li>一个类库中, 包含一个或多个类, 这些类处于某个命名空间下, 当引用这个DLL文件后, using 相应的命名空间后即可直接使用类库中所包含的类&lt;/li>
+&lt;li>一般的, 创建DLL文件为的是将自己定义的一个类, 直接制作成DLL文件以方便别人使用, 这样不需要复制代码也可以使用你定义的类.&lt;/li>
+&lt;li>(对于不了解引用是什么的初学者, 你需要知道, 一个C#程序, 会使用不少的类库, 比如System.dll, System.Windows.Forms.dll, 但是这些.NET框架含有的类库, C#程序可以直接使用, 而不需要将DLL文件置于程序所在目录下, 项目的&amp;rsquo;引用&amp;rsquo;说明了这个程序使用了什么类库, 而且在你编程的时候, VS也会根据你引用的类库来给你代码提示)&lt;/li>
+&lt;/ol>
+&lt;h2 id="创建dll文件">创建DLL文件:&lt;/h2>
+&lt;ol start="0">
+&lt;li>创建一个 类库(.NET Framework) 项目, 如下图, 不过, 因为我已经有创建过了, 所以我就直接使用之前创建的项目了.&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://slimenull.com/images/2020070500212889.png"
+loading="lazy"
+alt="创建一个 类库(.NET Framework) 项目"
+>&lt;/p>
+&lt;ol>
+&lt;li>创建完成后, 你就可以写代码了, 要清楚, C#的类库包含的其实就是一个个的类, 或者其他成员(不能是字段).&lt;/li>
+&lt;li>下图, 就是我之前的项目, 注意, 这些供使用者访问的成员别忘了使用public修饰.&lt;/li>
+&lt;li>我的这个项目, 是一个用来操作Json的类库, 之后将使用它来尝试操作DLL
+&lt;img src="https://slimenull.com/images/20200705002655466.png"
+loading="lazy"
+alt="已经写好代码的类库项目"
+>&lt;/li>
+&lt;li>生成项目, 并找到生成的DLL文件.&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://slimenull.com/images/20200705003106729.png"
+loading="lazy"
+alt="生成成功"
+>
+&lt;img src="https://slimenull.com/images/20200705003205677.png"
+loading="lazy"
+alt="这就是生成好的DLL文件"
+>&lt;/p>
+&lt;h2 id="引用生成的dll">引用生成的DLL:&lt;/h2>
+&lt;ol start="0">
+&lt;li>首先, 转到另外一个项目, 我们将在这个项目中使用之前生成的DLL.
+&lt;img src="https://slimenull.com/images/20200705003504505.png"
+loading="lazy"
+alt="一个新的控制台项目"
+>&lt;/li>
+&lt;li>添加引用, 在解决方案管理器中右击项目, 添加, 引用,&lt;br>
+&lt;img src="https://slimenull.com/images/20200705003754911.png"
+loading="lazy"
+alt="添加引用"
+>&lt;/li>
+&lt;li>添加引用, 在弹出的窗口中点击浏览, 然后在选择文件窗口中选择之前生成的DLL文件, 点击添加, 最后在引用管理器中点击确定.&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://slimenull.com/images/20200705004309633.png"
+loading="lazy"
+alt="添加引用"
+>
+3. 于是, 我们就成功的引用了之前生成的DLL文件.
+&lt;img src="https://slimenull.com/images/20200705004359951.png"
+loading="lazy"
+alt="添加引用后"
+>&lt;/p>
+&lt;h2 id="使用dll中包含的成员">使用DLL中包含的成员:&lt;/h2>
+&lt;ol start="0">
+&lt;li>在创建DLL时, 可以看到, 成员均处于 CHO.Json 命名空间下, 所以我们using它, 如下图, 并没有出现错误.
+&lt;img src="https://slimenull.com/images/20200705004541827.png"
+loading="lazy"
+alt="添加引用"
+>&lt;/li>
+&lt;li>准备一个Json文本来使程序读取.&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>{
+&amp;ldquo;姓名&amp;rdquo;: &amp;ldquo;小明&amp;rdquo;,
+&amp;ldquo;性别&amp;rdquo;: &amp;ldquo;男&amp;rdquo;,
+&amp;ldquo;年龄&amp;rdquo;: 16,
+&amp;ldquo;自述&amp;rdquo;: null,
+&amp;ldquo;是否患新冠肺炎&amp;rdquo;: false,
+&amp;ldquo;学习的编程语言&amp;rdquo;: [&amp;ldquo;C#&amp;rdquo;, &amp;ldquo;Python&amp;rdquo;, &amp;ldquo;C&amp;rdquo;]
+}&lt;/p>
+&lt;/blockquote>
+&lt;ol start="2">
+&lt;li>将其转换为字符串表达式. (这里使用了我自己的小程序, 文章末尾会附上下载链接)
+&lt;img src="https://slimenull.com/images/20200705005032983.png"
+loading="lazy"
+alt="转换为字符串表达式"
+>&lt;/li>
+&lt;li>将代码写好.&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://slimenull.com/images/20200705005246473.png"
+loading="lazy"
+alt="使用类库中的成员"
+>
+4. 运行程序.
+&lt;img src="https://slimenull.com/images/20200705005450205.png"
+loading="lazy"
+alt="程序运行结果"
+>
+5. 可以看到, 成功使用了类库中的JsonData类,和JsonDataType枚举类型.&lt;/p>
+&lt;h2 id="文章到此结束">文章到此结束.&lt;/h2>
+&lt;ol start="0">
+&lt;li>将文本转换为字符串表达式的小工具 (&lt;a class="link" href="https://chonet.lanzous.com/i5Uveebcgle" target="_blank" rel="noopener"
+>蓝奏云下载&lt;/a>)&lt;/li>
+&lt;li>关于我写的这个Json操作类库(&lt;a class="link" href="https://slimenull.com/p/20201028235244/" >文章&lt;/a>)&lt;/li>
+&lt;/ol>
+&lt;h5 id="关于作者">关于作者:&lt;/h5>
+&lt;ol start="0">
+&lt;li>一个喜欢编程但不喜欢在校学习奇怪东西的奇怪人士.&lt;/li>
+&lt;li>性格沙雕, 但写文章的时候就莫名其妙的认真起来&lt;/li>
+&lt;li>喜欢玩MC, 还有类似的沙盒游戏, 例如废品工程师&lt;/li>
+&lt;/ol>
+&lt;h5 id="联系我">联系我:&lt;/h5>
+&lt;ol start="0">
+&lt;li>发送私信.&lt;/li>
+&lt;li>电子邮件 : &lt;a class="link" href="mailto:creepslime@foxmail.com" >creepslime@foxmail.com&lt;/a>&lt;/li>
+&lt;li>私人QQ : 2056818509&lt;/li>
+&lt;/ol>
+&lt;p>欢迎与我交流吖 ε=ε=ε=(~ ￣▽￣)~&lt;/p></description></item></channel></rss>

@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Xaml on SlimeNull Blogs</title><link>https://slimenull.com/tags/xaml/</link><description>Recent content in Xaml on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sat, 01 Apr 2023 16:53:16 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/xaml/index.xml" rel="self" type="application/rss+xml"/><item><title>[WPF] 集合元素数据绑定与模板</title><link>https://slimenull.com/p/20230401165316/</link><pubDate>Sat, 01 Apr 2023 16:53:16 +0800</pubDate><guid>https://slimenull.com/p/20230401165316/</guid><description>&lt;p>在我们的应用程序里面, 很多时候会用到列表, 而列表元素的样式, 我们是希望能够自定义的, 根据 MVVM 设计模式, 我们的列表元素, 也需要绑定到后台数据, 这样后台数据进行更新的时候, 前台 UI 也会跟着更新, 包括元素也会自动增删.&lt;/p>
+&lt;h2 id="使用-itemscontrol">使用 ItemsControl&lt;/h2>
+&lt;p>ItemsControl 是最基本的 &amp;ldquo;多元素&amp;rdquo; 控件, 像是 ListBox, ListView 他都是基于 ItemsControl 的, 因为 ListBox 和 ListView 它们有一些默认样式. 例如 ListBox 它有一个滚动条, 所以当我们自定义的时候, 还是推荐使用 ItemsControl.&lt;/p>
+&lt;p>首先编写一个简单的数据模型:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">StudentInfo&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">Name&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">set&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">Description&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">set&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">Age&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">set&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">Gender&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">set&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">Grade&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">set&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>再写一个用于绑定数据的 &lt;strong>ViewModel&lt;/strong>:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">MainWindowModel&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">ObservableCollection&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">StudentInfo&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">StudentInfos&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ObservableCollection&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">StudentInfo&lt;/span>&lt;span class="p">&amp;gt;()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">StudentInfo&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Name&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;IFdream&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Description&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;上课不听讲的学生&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Age&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">17&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Gender&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;Female&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Grade&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">114514&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">StudentInfo&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Name&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;ilyFairy&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Description&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;哼哼哼啊啊啊的学生&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Age&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">21&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Gender&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;武装直升机&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Grade&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">1919810&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>然后在窗口中随便写一个简单的界面:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;Window&lt;/span> &lt;span class="na">x:Class=&lt;/span>&lt;span class="s">&amp;#34;WpfItemsBindingTutorial.MainWindow&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:d=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/expression/blend/2008&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:mc=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.openxmlformats.org/markup-compatibility/2006&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:vm=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:WpfItemsBindingTutorial.ViewModels&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:local=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:WpfItemsBindingTutorial&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">mc:Ignorable=&lt;/span>&lt;span class="s">&amp;#34;d&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">Title=&lt;/span>&lt;span class="s">&amp;#34;MainWindow&amp;#34;&lt;/span> &lt;span class="na">Height=&lt;/span>&lt;span class="s">&amp;#34;450&amp;#34;&lt;/span> &lt;span class="na">Width=&lt;/span>&lt;span class="s">&amp;#34;800&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Window.DataContext&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--直接给窗体的 DataContext 赋值--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;vm:MainWindowModel/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Window.DataContext&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Grid&lt;/span> &lt;span class="na">Margin=&lt;/span>&lt;span class="s">&amp;#34;20&amp;#34;&lt;/span> &lt;span class="na">MaxWidth=&lt;/span>&lt;span class="s">&amp;#34;400&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;StackPanel&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--使用 ItemsControl 进行集合的数据绑定, 在 ItemsSource 里面指定我们的集合--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ItemsControl&lt;/span> &lt;span class="na">ItemsSource=&lt;/span>&lt;span class="s">&amp;#34;{Binding StudentInfos}&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ItemsControl.ItemTemplate&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--使用数据模板就可以为每一个元素自定义呈现方式了--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;DataTemplate&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--整一个边框, 加背景颜色, 圆角, 以及内外边距--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Border&lt;/span> &lt;span class="na">Margin=&lt;/span>&lt;span class="s">&amp;#34;0 10 0 0&amp;#34;&lt;/span> &lt;span class="na">Padding=&lt;/span>&lt;span class="s">&amp;#34;5&amp;#34;&lt;/span> &lt;span class="na">Background=&lt;/span>&lt;span class="s">&amp;#34;#eeeeee&amp;#34;&lt;/span> &lt;span class="na">CornerRadius=&lt;/span>&lt;span class="s">&amp;#34;5&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--用 Effect 加个阴影--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Border.Effect&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;DropShadowEffect&lt;/span> &lt;span class="na">ShadowDepth=&lt;/span>&lt;span class="s">&amp;#34;0&amp;#34;&lt;/span> &lt;span class="na">BlurRadius=&lt;/span>&lt;span class="s">&amp;#34;3&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Border.Effect&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--这里用栈布局来做主要内容--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;StackPanel&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--在数据模板中, 可以直接绑定到我们的数据成员--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;TextBlock&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Run&lt;/span> &lt;span class="na">Text=&lt;/span>&lt;span class="s">&amp;#34;Name:&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Run&lt;/span> &lt;span class="na">Text=&lt;/span>&lt;span class="s">&amp;#34;{Binding Name}&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/TextBlock&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;TextBlock&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Run&lt;/span> &lt;span class="na">Text=&lt;/span>&lt;span class="s">&amp;#34;Description:&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Run&lt;/span> &lt;span class="na">Text=&lt;/span>&lt;span class="s">&amp;#34;{Binding Description}&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/TextBlock&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--用 UniformGrid 做个三栏布局--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;UniformGrid&lt;/span> &lt;span class="na">Columns=&lt;/span>&lt;span class="s">&amp;#34;3&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;TextBlock&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Run&lt;/span> &lt;span class="na">Text=&lt;/span>&lt;span class="s">&amp;#34;Age:&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Run&lt;/span> &lt;span class="na">Text=&lt;/span>&lt;span class="s">&amp;#34;{Binding Age}&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/TextBlock&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;TextBlock&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Run&lt;/span> &lt;span class="na">Text=&lt;/span>&lt;span class="s">&amp;#34;Gender:&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Run&lt;/span> &lt;span class="na">Text=&lt;/span>&lt;span class="s">&amp;#34;{Binding Gender}&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/TextBlock&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;TextBlock&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Run&lt;/span> &lt;span class="na">Text=&lt;/span>&lt;span class="s">&amp;#34;Grade:&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Run&lt;/span> &lt;span class="na">Text=&lt;/span>&lt;span class="s">&amp;#34;{Binding Grade}&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/TextBlock&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/UniformGrid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/StackPanel&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Border&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/DataTemplate&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/ItemsControl.ItemTemplate&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/ItemsControl&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/StackPanel&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/Window&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>于是我们就得到了这样的一个页面:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/2c5aa4a7c76b4a1a910bf415c1d429b0.png"
+loading="lazy"
+alt="效果预览"
+>&lt;/p>
+&lt;h2 id="使用-listbox">使用 ListBox&lt;/h2>
+&lt;p>事实上, &lt;code>ListBox&lt;/code> 的使用和 &lt;code>ItemsControl&lt;/code> 是差不多的, 包括同样的方式绑定 &lt;code>ItemsSource&lt;/code>, 同样的方式设置 &lt;code>ItemTemplate&lt;/code>, 只不过 &lt;code>ListBox&lt;/code> 需要用户注意这些内容:&lt;/p>
+&lt;ol>
+&lt;li>&lt;code>ListBox&lt;/code> 的元素是可选中的, 如果你不希望元素可被选中, 那么使用 &lt;code>ItemsControl&lt;/code>&lt;/li>
+&lt;li>&lt;code>ListBox&lt;/code> 是自带滚动条的, 如果你希望自己控制滚动条, 你可以使用 &lt;code>ScrollViewer.XXX&lt;/code> 附加属性来对它操作&lt;/li>
+&lt;/ol>
+&lt;p>&lt;code>ListBox&lt;/code> 的元素是选中的, 这就意味着, 这个东西只适合一些数据的 &amp;ldquo;选择&amp;rdquo;, 例如我要填一个表单, 然后给用户选择一个数据. 如果我要做一个聊天窗口, 聊天窗口里面的聊天消息, 显然是一个 &amp;ldquo;容器&amp;rdquo;, 然后每一个消息气泡, 都是一个元素, 这个完全可以由绑定解决, 而使用 ListBox 会使消息可选中, 这不好, 我只是想让他自动生成控件, 所以使用 ItemsControl.&lt;/p>
+&lt;p>不过, 如果你要用 &lt;code>ListBox&lt;/code> 做一个 &lt;em>&amp;ldquo;导航栏&amp;rdquo;&lt;/em> 的话, 确实是一个不错的选择, 因为可以直接订阅 &lt;code>SelectionChanged&lt;/code>, 并在事件中处理页面跳转的逻辑.&lt;/p></description></item><item><title>[.NET] WPF DoubleAnimation 动画, 一篇文章悟透!</title><link>https://slimenull.com/p/20210215160730/</link><pubDate>Mon, 15 Feb 2021 16:07:30 +0800</pubDate><guid>https://slimenull.com/p/20210215160730/</guid><description>&lt;p>完全理解 DoubleAnimation! 仅需这一篇文章.&lt;/p>
+&lt;h2 id="介绍">介绍&lt;/h2>
+&lt;p>首先, DoubleAnimation可以用来创建一些简单的动画, 这些动画仅限于使用Double值的属性, 例如控件的位置, 尺寸, 缩放, 旋转, 或者透明度变化等.
+一个DoubleAnimation实例, 应该至少指定3个值:&lt;/p>
+&lt;blockquote>
+&lt;p>From (值从哪里开始), To (值到哪里结束), Duration (值的变化经过多少时间)&lt;/p>
+&lt;/blockquote>
+&lt;p>例如, 如果要创建一个 1s 内从值从 0 到 1 的动画, From 就是0, To 就是 1, Duration就是 1s.&lt;/p>
+&lt;p>启动动画, 需要调用将要执行这个动画的对象的 BeginAnimation 方法, 例如一个控件, 或者一个窗口, 参数包括 DependencyProperty(这个动画将对哪个属性执行), AnimationTimeline(执行哪个动画)&lt;/p>
+&lt;br/>
+&lt;h2 id="实例">实例:&lt;/h2>
+&lt;p>例如, 创建一个, 当点击按钮时, 按钮的高度增加 30 个像素.
+&lt;img src="https://slimenull.com/images/20210215113736959.png"
+loading="lazy"
+>
+CS代码:
+&lt;img src="https://slimenull.com/images/20210215114618291.png"
+loading="lazy"
+>
+然后, 看看效果吧:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/037995efd77dcb8f94c17c888d866b7b.gif"
+loading="lazy"
+alt="控件高度变化动画演示"
+>&lt;/p>
+&lt;p>其实, DoubleAnimation还可以指定运动时, 加速在整个时间线中的占比以及减速在整个时间线中的占比.&lt;/p>
+&lt;p>例如, 你想指定这个运动中, 前半部分是加速, 后半部分是匀速, 那么加速占比就是0.5, 减速占比就是0, 如下:
+&lt;img src="https://slimenull.com/images/20210215115429879.png"
+loading="lazy"
+>
+然后, 看看运行效果吧:
+&lt;img src="https://slimenull.com/images/dee4b57b838eef385c68bada3ce48b9c.gif"
+loading="lazy"
+alt="控件高度加速变化动画演示"
+>
+可以看出, 有加速的效果了, 或者, 再狠点, 我们指定全部是减速, 加速占比0, 减速占比1:
+&lt;img src="https://slimenull.com/images/16c2fcc56e8cebcf57f04410b310a585.gif"
+loading="lazy"
+alt="控件高度减速变化动画演示"
+>
+果然减速看起来非常好看啊.&lt;/p>
+&lt;h2 id="纯xaml使用">纯XAML使用:&lt;/h2>
+&lt;p>DoubleAnimation是可以在纯 xaml 中声明并使用的. 有种东西叫做 Trigger, 在 xaml 中声明他, 然后可以合适的触发动画, 如下:
+&lt;img src="https://slimenull.com/images/20210215122545416.png"
+loading="lazy"
+>
+然后, 运行效果的话, 除了不能不断增加高度, 其他的是一样的, 点一次, 就会从20到50, 第二次点击, 还是从20到50.&lt;/p>
+&lt;br/>
+&lt;h2 id="贴代码">贴代码:&lt;/h2>
+&lt;p>按钮事件:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Button_Click&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">RoutedEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">DoubleAnimation&lt;/span> &lt;span class="n">animation&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">DoubleAnimation&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">button1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ActualHeight&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// From 从按钮的 高度 开始&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">button1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ActualHeight&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">30&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// To 到按钮的 高度 + 30 结束&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">Duration&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">TimeSpan&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FromSeconds&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">)))&lt;/span> &lt;span class="c1">// Duration 间隔是 1s&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">AccelerationRatio&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 设置加速占比为一半, 即 0.5&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">DecelerationRatio&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 设置减速占比为0, 其实这里可以省略, 因为默认是0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">button1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BeginAnimation&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Button&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">HeightProperty&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// DependencyProperty 动画是针对于高度的&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">animation&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// AnimationTimeline 指定刚刚创建好的动画&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>纯xaml实现:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;Button&lt;/span> &lt;span class="na">Name=&lt;/span>&lt;span class="s">&amp;#34;button1&amp;#34;&lt;/span> &lt;span class="na">Content=&lt;/span>&lt;span class="s">&amp;#34;Button&amp;#34;&lt;/span> &lt;span class="na">HorizontalAlignment=&lt;/span>&lt;span class="s">&amp;#34;Left&amp;#34;&lt;/span> &lt;span class="na">Margin=&lt;/span>&lt;span class="s">&amp;#34;343,182,0,0&amp;#34;&lt;/span> &lt;span class="na">VerticalAlignment=&lt;/span>&lt;span class="s">&amp;#34;Top&amp;#34;&lt;/span> &lt;span class="na">Width=&lt;/span>&lt;span class="s">&amp;#34;75&amp;#34;&lt;/span> &lt;span class="na">Height=&lt;/span>&lt;span class="s">&amp;#34;20&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Button.Triggers&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;EventTrigger&lt;/span> &lt;span class="na">RoutedEvent=&lt;/span>&lt;span class="s">&amp;#34;Button.Click&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;BeginStoryboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Storyboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;DoubleAnimation&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">Storyboard.TargetProperty=&lt;/span>&lt;span class="s">&amp;#34;Height&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">From=&lt;/span>&lt;span class="s">&amp;#34;20&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">To=&lt;/span>&lt;span class="s">&amp;#34;50&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">Duration=&lt;/span>&lt;span class="s">&amp;#34;0:0:1&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">AccelerationRatio=&lt;/span>&lt;span class="s">&amp;#34;0&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">DecelerationRatio=&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Storyboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/BeginStoryboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/EventTrigger&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Button.Triggers&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/Button&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>小彩蛋~ 是窗口加载时的透明度变化动画欸嘿&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;Window.Triggers&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;EventTrigger&lt;/span> &lt;span class="na">RoutedEvent=&lt;/span>&lt;span class="s">&amp;#34;Loaded&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;BeginStoryboard&lt;/span> &lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Storyboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;DoubleAnimation&lt;/span> &lt;span class="na">From=&lt;/span>&lt;span class="s">&amp;#34;0&amp;#34;&lt;/span> &lt;span class="na">To=&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span> &lt;span class="na">Duration=&lt;/span>&lt;span class="s">&amp;#34;0:0:0.3&amp;#34;&lt;/span> &lt;span class="na">Storyboard.TargetProperty=&lt;/span>&lt;span class="s">&amp;#34;Opacity&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Storyboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/BeginStoryboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/EventTrigger&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/Window.Triggers&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="参考文章">参考文章:&lt;/h2>
+&lt;p>以下文章对本文章的理解有帮助噢~
+&lt;a class="link" href="https://slimenull.com/p/20210215160730/" >[.NET] WPF XAML 原理, 节点与实例, 以及一些重要的零碎知识点.&lt;/a>
+&lt;a class="link" href="https://slimenull.com/p/20210215112655/" >[.NET] WPF Triggers 触发器, EventTrigger, Trigger&lt;/a>&lt;/p></description></item><item><title>[.NET] WPF Triggers 触发器, EventTrigger, Trigger</title><link>https://slimenull.com/p/20210215112655/</link><pubDate>Mon, 15 Feb 2021 11:26:55 +0800</pubDate><guid>https://slimenull.com/p/20210215112655/</guid><description>&lt;p>触发器, 如其名, 可根据某些事件或属性值来触发某些东西, 那么我们来了解一下 xaml 中的触发器吧.&lt;/p>
+&lt;h2 id="样式变更">样式变更:&lt;/h2>
+&lt;p>我们试试通过使用普通触发器来实现当鼠标悬停时更改控件背景颜色.
+&lt;img src="https://slimenull.com/images/20210215073411292.png"
+loading="lazy"
+>
+然后运行一下, 效果就是这样:
+&lt;img src="https://slimenull.com/images/066155f4f6d1a796a57440cae7ecc364.gif"
+loading="lazy"
+>&lt;/p>
+&lt;h2 id="启动动画">启动动画:&lt;/h2>
+&lt;p>然后, 试着用事件触发器(EventTrigger)与DoubleAnimation来创建一个启动动画吧(其实代码都写好了):
+&lt;img src="https://slimenull.com/images/2021021507435775.png"
+loading="lazy"
+>
+然后运行效果如下:
+&lt;img src="https://slimenull.com/images/bf9d63b8401128a5fffe3d6e9324e951.gif"
+loading="lazy"
+alt="在这里插入图片描述"
+>
+可以看到, 窗口是渐渐浮现的, 也就是Opacity从0到1.&lt;/p>
+&lt;h4 id="什么-你问我对应的cs代码怎么写">什么? 你问我对应的CS代码怎么写?&lt;/h4>
+&lt;p>先看看这篇文章吧, 看完它, 相信大多数的 xaml 代码, 你都能写出对应的 CS 代码, 这是一个通用的规律.
+&lt;a class="link" href="https://slimenull.com/p/20210215160730/" >[.NET] WPF XAML 原理, 节点与实例, 以及一些重要的零碎知识点.&lt;/a>&lt;/p>
+&lt;br/>
+&lt;p>推荐文章:
+&lt;a class="link" href="https://slimenull.com/p/20210215160730/" >[.NET] WPF DoubleAnimation 动画, 一篇文章悟透!&lt;/a>&lt;/p></description></item><item><title>[.NET] WPF XAML 原理, 节点与实例, 以及一些重要的零碎知识点.</title><link>https://slimenull.com/p/20210215112610/</link><pubDate>Mon, 15 Feb 2021 11:26:10 +0800</pubDate><guid>https://slimenull.com/p/20210215112610/</guid><description>&lt;p>当你查资料时, 看到那些眼花缭乱的 xaml 代码, 让人瞬间没有了学习的欲望&amp;hellip; 先试着寻找下其中的规律吧.&lt;/p>
+&lt;h2 id="节点与实例">节点与实例:&lt;/h2>
+&lt;p>&lt;img src="https://slimenull.com/images/20210215061732521.png"
+loading="lazy"
+>
+首先看看上面的文章, 从我们最常接触的 Button 入手吧. Button 是可以用 CS 代码来进行实例化, 然后放置在窗口中的, 而其它的元素, 例如根节点 Window, 都是可以通过 CS 代码进行实例化.&lt;/p>
+&lt;p>可以推测出, 在 xaml 中, 一个个的节点, 例如 Button, Label, 其实就是等同于声明一个对应类型的实例.&lt;/p>
+&lt;p>那么如何在 CS 代码中访问这个实例呢? 很简单, 为这个实例指定一个名称(Name), 就如上面的图片中为 Label 指定 Name 那样. 然后就可以在 CS 代码中访问了
+&lt;img src="https://slimenull.com/images/20210215062326997.png"
+loading="lazy"
+>&lt;/p>
+&lt;h2 id="实例的属性">实例的属性:&lt;/h2>
+&lt;p>如果要设置一个 Label 的 Content, 在 xaml 代码中, 该如何设置? 最常用的肯定是下面这个:
+&lt;img src="https://slimenull.com/images/20210215062553167.png"
+loading="lazy"
+>
+xaml 还支持一种, 就是这样:
+&lt;img src="https://slimenull.com/images/20210215062744751.png"
+loading="lazy"
+>
+其实 TextBox 的 Text 属性也是可以这么设置的:
+&lt;img src="https://slimenull.com/images/20210215062905536.png"
+loading="lazy"
+>
+大概猜出了吧? xaml中, 一堆标签之间的值可以设置为对应实例的特定属性设置值. 例如 Label 就是设置Content, TextBox 就是 设置 TextBox.&lt;/p>
+&lt;p>其实, 还有另外一种, 你肯定见过啦, Grid.RowDefinitions 就是这么用的.
+&lt;img src="https://slimenull.com/images/20210215063244895.png"
+loading="lazy"
+>
+你可能会想到, Label 和 TextBox 这类普通的控件, 是否也支持呢?
+&lt;img src="https://slimenull.com/images/20210215063437536.png"
+loading="lazy"
+>&lt;/p>
+&lt;blockquote>
+&lt;p>哈哈, 很有趣吧, 所以说, 以后看到什么 xaml 代码, 对应的 CS 代码也能猜出来一些, 毕竟如果是控件, 也无非是设置属性以及添加成员了, 噢, 下面就是添加成员咯.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="声明控件成员">声明控件成员:&lt;/h2>
+&lt;p>&lt;img src="https://slimenull.com/images/20210215064400870.png"
+loading="lazy"
+>
+如果一个控件可以有子成员, 就可以像上面那样声明, 当然, 这个也肯定经常用, 只是可能没注意过罢了.&lt;/p>
+&lt;h2 id="自定义类型实例">自定义类型实例:&lt;/h2>
+&lt;p>少年, 学过数据绑定吗? 数据绑定的上下文如何声明的, 应该还记得吧. 我之前就像一个憨憨一样, 去用 CS 代码来指定 DataContext. (文章末有关于数据绑定的&lt;a class="link" href="#end_wpfdatabinding" >文章推荐&lt;/a>)
+&lt;img src="https://slimenull.com/images/20210215065018565.png"
+loading="lazy"
+>
+但是,,, 刚刚我们说过, 想 Button, Label 这样的 UI 组件, 其实在声明后, 其实就是一个个的实例, 我们刚刚进行的指定上下文操作, 也是创建一个 TestModel 实例, 然后指定给这个窗口的 DataContext 属性.&lt;/p>
+&lt;p>如何指定属性, 我们知道, 那如何在 xaml 中创建我们自己定义的类型实例呢? 下面是一个示例:
+&lt;img src="https://slimenull.com/images/20210215065718402.png"
+loading="lazy"
+>
+你悟了吗? 通过这个, 我们就可以在 xaml 中声明实例了&amp;hellip; 当然, 肯定有小聪明在想, &amp;ldquo;我试试在 xaml 里面声明一个浮点数试试?&amp;rdquo;
+&lt;img src="https://slimenull.com/images/20210215070612804.png"
+loading="lazy"
+>
+没错, 那个憨憨就是我, 亲自尝试了一下, 不过也不算是没有收获, 至少我们可以知道, 这些实例的声明, 肯定是在特定的情况下才是可以的. 例如这个 Grid 子元素, 你必须指定一个 UIElement, 这跟 CS 代码里的一模一样hhh&lt;/p>
+&lt;p>所以 xaml 跟 CS 还是相关联的哈哈哈, 我一开始还觉得 xaml 跟 CS 的关联不是很大呢.&lt;/p>
+&lt;h2 id="查看窗体完整代码">查看窗体完整代码:&lt;/h2>
+&lt;p>如果你用过 WinForm, 肯定会经常接触这个, 当指定了控件的某些事件, 而这个函数又不存在的时候肯定需要自己调整代码的:
+&lt;img src="https://slimenull.com/images/2021021507141041.png"
+loading="lazy"
+>
+WinForm 的窗体完整代码就在这里了, 一到WPF, 就令人窒息了, 因为没有直接显示这个文件.&lt;/p>
+&lt;p>不过, 你还是可以通过这样的方式去查看的:
+&lt;img src="https://slimenull.com/images/20210215071805683.png"
+loading="lazy"
+>
+然后, 欢呼吧, 虽然一般很少动这个文件(你也没办法动, 自动生成会覆盖你的改动), 但是看这个东西, 肯定对学习 WPF 有帮助的.
+&lt;img src="https://slimenull.com/images/20210215071852423.png"
+loading="lazy"
+>
+&lt;img src="https://slimenull.com/images/202102150720390.png"
+loading="lazy"
+>
+&lt;span id="windowclass">&lt;/span>&lt;/p>
+&lt;h2 id="窗体类型">窗体类型:&lt;/h2>
+&lt;p>其实这里只是指 xaml 中, Window 节点的 x:Class 属性, 我们知道, WPF 会有一些自动生成的代码, 这些代码中声明了这个窗体, 而这个生成的代码中窗体的命名空间和类名, 就是通过 xaml 文档中的 x:Class 属性指定的.&lt;/p>
+&lt;p>例如我指定 x:Class=&amp;ldquo;MvvmTest.View.MainWindow&amp;rdquo;, 那么完整代码中就是这样的:
+&lt;img src="https://slimenull.com/images/20210215175526504.png"
+loading="lazy"
+>
+所以说, 如果要改变这个窗体的命名空间, 你需要指定 x:Class 属性, 以及指定 xaml.cs 文件的命名空间.&lt;/p>
+&lt;p>例如, 你将一个窗体从项目的根目录移动到了项目的View文件夹, 此时, 规范的做法应该是同时将这个窗体的命名空间添加上一个View.&lt;/p>
+&lt;p>&lt;br/>&lt;br/>&lt;br/>&lt;br/>&lt;br/>&lt;/p>
+&lt;p>看的这么开心, 赶快关注诺尔吧qwq, 别忘了点个赞噢~&lt;/p>
+&lt;br/>
+&lt;p>推荐文章:
+&lt;a class="link" href="https://slimenull.com/p/20210211102111/" >[C#] MCI 详解与封装类, MCI 播放音乐, 获取播放状态, 获取音频长度, 进度调整&lt;/a>
+&lt;a class="link" href="https://slimenull.com/p/20230902090054/" >[.NET] WPF 数据绑定与 MVVM 模型&lt;/a>&lt;span id="end_wpfdatabinding">&lt;/span>&lt;/p></description></item></channel></rss>

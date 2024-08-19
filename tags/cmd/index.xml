@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cmd on SlimeNull Blogs</title><link>https://slimenull.com/tags/cmd/</link><description>Recent content in Cmd on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 29 Jun 2021 21:54:51 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/cmd/index.xml" rel="self" type="application/rss+xml"/><item><title>[C#] 使用 NullLib.CommandLine 分析命令行字符串并执行与代码中定义的方法</title><link>https://slimenull.com/p/20210629215451/</link><pubDate>Tue, 29 Jun 2021 21:54:51 +0800</pubDate><guid>https://slimenull.com/p/20210629215451/</guid><description>&lt;h1 id="摘要介绍">摘要介绍&lt;/h1>
+&lt;p>通过命令行字符串来方便快捷的调用 C# 中定义的方法&lt;/p>
+&lt;h2 id="准备">准备&lt;/h2>
+&lt;ol>
+&lt;li>添加 nuget 包: NullLib.CommandLine&lt;/li>
+&lt;/ol>
+&lt;h2 id="使用方式">使用方式&lt;/h2>
+&lt;p>首先, 在 &lt;strong>NullLib.CommandLine&lt;/strong> 中用于调用方法的最基本类型是 &lt;code>CommandObject&lt;/code>, 它包含了方法的各种信息, 例如 &lt;code>MethodInfo&lt;/code>, &lt;code>ParameterInfo&lt;/code>, 以及属性.&lt;/p>
+&lt;p>然后, 你需要定义一个包含要调用方法的类, 在这个类中, 每一个将被调用的方法都应该有一个 &lt;code>Command&lt;/code> 属性, 之后我们将用这个类型实例化一个 &lt;code>CommandObject&lt;/code> 实例.&lt;/p>
+&lt;p>一个示例类型:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">AppCommands&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na"> [Command]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">HelloWorld&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Hello world!&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>实例化一个 &lt;code>CommandObject&lt;/code> 对象, 然后循环执行指令.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">using&lt;/span> &lt;span class="nn">System&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">using&lt;/span> &lt;span class="nn">NullLib.CommandLine&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">Program&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">static&lt;/span> &lt;span class="n">CommandObject&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">AppCommands&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">AppCommandObject&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CommandObject&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">AppCommands&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span> &lt;span class="c1">// 实例化一个 CommandObject 对象&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">static&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Now input commands.&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">while&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Write&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;&amp;gt;&amp;gt;&amp;gt; &amp;#34;&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 提示符&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">string&lt;/span> &lt;span class="n">cmdline&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ReadLine&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(!&lt;/span>&lt;span class="n">AppCommandObject&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TryExecuteCommand&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cmdline&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">var&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">result&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 如果一个方法没有返回值, 则结果是 null.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">result&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Command execute failed.&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>运行程序, 并输入指令:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">Now input commands.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; HelloWorld
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Hello world!
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>为每一个参数指定 &lt;code>ArgumentConverter&lt;/code> 以传递参数到方法.&lt;/p>
+&lt;p>那么, 我们再试试将这些方法添加到 &lt;code>AppCommands&lt;/code> 中&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command(typeof(FloatArguConverter), typeof(FloatArguConverter))]&lt;/span> &lt;span class="c1">// NullLib.CommandLine 中的内置 ArgumentConverter&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">Plus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span> &lt;span class="n">a&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command(typeof(FloatArguConverter))]&lt;/span> &lt;span class="c1">// 如果跟着的转换器与上一个是一样的, 那么你可以忽略它们&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">Mul&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span> &lt;span class="n">a&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command(typeof(DoubleArguConverter))]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">Log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span> &lt;span class="n">n&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">newBase&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">E&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 你也可以使用可选参数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">newBase&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command(typeof(ForeachArguConverter&amp;lt;FloatArguConverter&amp;gt;))]&lt;/span> &lt;span class="c1">// 数组中的每一个字符串都将被 FloatArguConverter 转换&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">Sum&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">params&lt;/span> &lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">nums&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 可变参数的方法也是受支持的&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">float&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">foreach&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">var&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">nums&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command(typeof(ArgutConverter))]&lt;/span> &lt;span class="c1">// 如果不需要做任何转换, 则可以指定一个 &amp;#39;ArguConverter&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">txt&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">txt&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command]&lt;/span> &lt;span class="c1">// 默认的转换器是 &amp;#39;ArguConverter&amp;#39;, 在这种情况下你可以忽略它们&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kt">bool&lt;/span> &lt;span class="n">StringEquals&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">txt1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">txt2&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 或者指定 &amp;#39;null&amp;#39; 来使用上一个转换器(在这里指 ArguConverter)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">txt1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Equals&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">txt2&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command(typeof(EnumArguConverter&amp;lt;ConsoleColor&amp;gt;))]&lt;/span> &lt;span class="c1">// EnumConverter 可以用来将字符串自动转换为枚举类型&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">SetBackground&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ConsoleColor&lt;/span> &lt;span class="n">color&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BackgroundColor&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">color&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Run and input:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">Now input commands.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Plus 1 1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Mul 2 4
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">8
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Log 8 2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Log 8
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">2.07944154167984
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Sum 1 2 3 4
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Print &amp;#34;一些文本\t转义字符也是受支持的&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">一些文本 转义字符也是受支持的
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; StringEquals qwq awa
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">False
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; SetBackground White
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; SetBackground 0
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="更多">更多&lt;/h2>
+&lt;p>通过这个库, 你可以通过命令行字符串方便快捷的调用 C# 中定义的方法, 甚至于通过一些方法实现简单的, 类似于 CMD 命令提示符的命令解释器, 完整文档,&lt;/p>
+&lt;h1 id="nulllibcommandline">NullLib.CommandLine&lt;/h1>
+&lt;p>通过命令行字符串来方便快捷的调用 C# 中定义的方法&lt;/p>
+&lt;h2 id="使用方式-1">使用方式&lt;/h2>
+&lt;p>首先, 在 &lt;strong>NullLib.CommandLine&lt;/strong> 中用于调用方法的最基本类型是 &lt;code>CommandObject&lt;/code>, 它包含了方法的各种信息, 例如 &lt;code>MethodInfo&lt;/code>, &lt;code>ParameterInfo&lt;/code>, 以及属性.&lt;/p>
+&lt;p>然后, 你需要定义一个包含要调用方法的类, 在这个类中, 每一个将被调用的方法都应该有一个 &lt;code>Command&lt;/code> 属性, 之后我们将用这个类型实例化一个 &lt;code>CommandObject&lt;/code> 实例.&lt;/p>
+&lt;p>一个示例类型:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">AppCommands&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na"> [Command]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">HelloWorld&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Hello world!&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>实例化一个 &lt;code>CommandObject&lt;/code> 对象, 然后循环执行指令.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">using&lt;/span> &lt;span class="nn">System&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">using&lt;/span> &lt;span class="nn">NullLib.CommandLine&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">Program&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">static&lt;/span> &lt;span class="n">CommandObject&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">AppCommands&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">AppCommandObject&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CommandObject&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">AppCommands&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span> &lt;span class="c1">// 实例化一个 CommandObject 对象&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">static&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Main&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Now input commands.&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">while&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Write&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;&amp;gt;&amp;gt;&amp;gt; &amp;#34;&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 提示符&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">string&lt;/span> &lt;span class="n">cmdline&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ReadLine&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(!&lt;/span>&lt;span class="n">AppCommandObject&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TryExecuteCommand&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cmdline&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">var&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">result&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 如果一个方法没有返回值, 则结果是 null.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">result&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Command execute failed.&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>运行程序, 并输入指令:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">Now input commands.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; HelloWorld
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Hello world!
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>为每一个参数指定 &lt;code>ArgumentConverter&lt;/code> 来以传递参数到方法.&lt;/p>
+&lt;p>那么, 我们再试试将这些方法添加到 &lt;code>AppCommands&lt;/code> 中&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command(typeof(FloatArguConverter), typeof(FloatArguConverter))]&lt;/span> &lt;span class="c1">// NullLib.CommandLine 中的内置 ArgumentConverter&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">Plus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span> &lt;span class="n">a&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command(typeof(FloatArguConverter))]&lt;/span> &lt;span class="c1">// 如果跟着的转换器与上一个是一样的, 那么你可以忽略它们&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">Mul&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span> &lt;span class="n">a&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command(typeof(DoubleArguConverter))]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">Log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span> &lt;span class="n">n&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">newBase&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">E&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 你也可以使用可选参数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">newBase&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command(typeof(ForeachArguConverter&amp;lt;FloatArguConverter&amp;gt;))]&lt;/span> &lt;span class="c1">// 数组中的每一个字符串都将被 FloatArguConverter 转换&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">Sum&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">params&lt;/span> &lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">nums&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 可变参数的方法也是受支持的&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">float&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">foreach&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">var&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">nums&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command(typeof(ArgutConverter))]&lt;/span> &lt;span class="c1">// 如果不需要做任何转换, 则可以指定一个 &amp;#39;ArguConverter&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">txt&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">txt&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command]&lt;/span> &lt;span class="c1">// 默认的转换器是 &amp;#39;ArguConverter&amp;#39;, 在这种情况下你可以忽略它们&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kt">bool&lt;/span> &lt;span class="n">StringEquals&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">txt1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">txt2&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 或者指定 &amp;#39;null&amp;#39; 来使用上一个转换器(在这里指 ArguConverter)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">txt1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Equals&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">txt2&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[Command(typeof(EnumArguConverter&amp;lt;ConsoleColor&amp;gt;))]&lt;/span> &lt;span class="c1">// EnumConverter 可以用来将字符串自动转换为枚举类型&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">SetBackground&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ConsoleColor&lt;/span> &lt;span class="n">color&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BackgroundColor&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">color&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Run and input:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">Now input commands.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Plus 1 1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Mul 2 4
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">8
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Log 8 2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Log 8
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">2.07944154167984
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Sum 1 2 3 4
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Print &amp;#34;一些文本\t转义字符也是受支持的&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">一些文本 转义字符也是受支持的
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; StringEquals qwq awa
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">False
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; SetBackground White
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; SetBackground 0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&amp;gt;&amp;gt;&amp;gt; Print &amp;#34;你可以通过一个枚举类型的名字或整数值来进行转换&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">你可以通过一个枚举类型的名字或整数值来进行转换
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="types">Types&lt;/h2>
+&lt;ol>
+&lt;li>
+&lt;p>CommandAttribute:&lt;/p>
+&lt;p>可以通过命令行字符串执行的方法必须有一个 &lt;code>CommandAttribute&lt;/code> 属性&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>CommandObject:&lt;/p>
+&lt;p>用于使用命令行字符串调用方法的类&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>CommandInvoker:&lt;/p>
+&lt;p>帮助通过 &lt;code>IArguments&lt;/code> 调用方法&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>CommandParser:&lt;/p>
+&lt;p>帮助分析命令行字符串以调用方法&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ArgumentConverter:&lt;/p>
+&lt;p>继承 &lt;code>IArgumentConverter&lt;/code> 接口, 抽象类, 应该被自定义转换器继承&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ArgumentConverterManager:&lt;/p>
+&lt;p>帮助快速创建 &lt;code>ArgumentConverter&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>CommandLineSegment:&lt;/p>
+&lt;p>命令行字符串的构成部分&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ArgumentParser:&lt;/p>
+&lt;p>帮助将 &lt;code>CommandLineSegment&lt;/code> 分析为 &lt;code>IArgument&lt;/code>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="commandlinesegment">CommandLineSegment&lt;/h2>
+&lt;p>CommandLineSegment 是命令行字符串的组成部分&lt;/p>
+&lt;p>例如, 在 &lt;code>myprogram param1 &amp;quot;param2&amp;quot;&lt;/code> 中, 有三个 CommandLineSegment:&lt;/p>
+&lt;ol>
+&lt;li>{Quoted: false, Content: &amp;ldquo;myprogram&amp;rdquo;}&lt;/li>
+&lt;li>{Quoted: false, Content: &amp;ldquo;param1&amp;rdquo;}&lt;/li>
+&lt;li>{Quoted: true, Content: &amp;ldquo;\&amp;ldquo;param2\&amp;rdquo;&amp;rdquo;}&lt;/li>
+&lt;/ol>
+&lt;p>将命令行字符串分割为 CommandLineSegment[], 使用 &lt;code>CommandParser.SplitCommandLine(string str)&lt;/code>&lt;/p>
+&lt;h2 id="argument">Argument&lt;/h2>
+&lt;p>命令的参数, 可有名称, 继承 &lt;code>IArgument&lt;/code>, 当调用方法时, 将会被传递&lt;/p>
+&lt;h2 id="argumentparser">ArgumentParser&lt;/h2>
+&lt;p>下面是所有内置的 &lt;code>ArgumentParsers&lt;/code>&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>ArguParser:&lt;/p>
+&lt;p>可将任何部分分析为一个 &lt;code>Argument&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>IdentifierArguParser:&lt;/p>
+&lt;p>可将一个标识符部分分析为一个 &lt;code>Argument&lt;/code>. 对应的正则表达式是 &lt;em>&amp;quot;{A-Za-z_}{A-Za-z0-9_}*&amp;quot;&lt;/em>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>StringArguParser:&lt;/p>
+&lt;p>可以将任何 Quoted(被双引号包围的) 部分分析为 &lt;code>Argument&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>FieldArguParser:&lt;/p>
+&lt;p>可以将像 &lt;u>&lt;em>name=value&lt;/em>&lt;/u> 的一个部分, 或者像 &lt;u>&lt;em>name= value&lt;/em>&lt;/u> 的两个部分分析为一个 &lt;code>Argument&lt;/code>, 另外, 你可以指定分隔符, 默认分隔符是 &amp;lsquo;=&amp;rsquo;&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>PropertyArguParser:&lt;/p>
+&lt;p>可以将像 &lt;u>&lt;em>-name value&lt;/em>&lt;/u> 的两个部分分析为 &lt;code>Argument&lt;/code>, 并且你也可以指定 &lt;u>&lt;em>name&lt;/em>&lt;/u> 的起始字符串, 默认是 &amp;ldquo;-&amp;rdquo;&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="argumentconverter">ArgumentConverter&lt;/h2>
+&lt;p>Here is all build-in &lt;code>ArgumentConverter&lt;/code>:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>ArguConverter:&lt;/p>
+&lt;p>不会做任何转换而直接返回源值的默认的 &lt;code>ArgumentConverter&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>BoolArguConverter:&lt;/p>
+&lt;p>帮助转换到布尔值, 使用 bool.Parse 和 bool.TryParse&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>CharArguConverter:&lt;/p>
+&lt;p>帮助转换到字符, 仅当字符串有唯一一个字符时, 返回这个字符, 否则转换失败&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ByteArguConverter:&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ShortArguConverter:&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>IntArguConverter:&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>LongArguConverter:&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>FloatArguConverter:&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>DoubleArguConverter:&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>BigIntArguConverter:&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>DecimalArguConverter:&lt;/p>
+&lt;p>上面提到的转换器均返回对应的数字类型, 并且它们都通过调用对应类型的 &lt;code>Parse&lt;/code> 和 &lt;code>TryParse&lt;/code> 方法实现转换&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>EnumArguConverter&amp;lt;T&amp;gt;:&lt;/p>
+&lt;p>帮助转换到枚举类型, T 应该被指定为一个枚举类型. 它可以从枚举值的名称或数字值来转换&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>ForeachArguConverter&amp;lt;TConverter&amp;gt;:&lt;/p>
+&lt;p>帮助转换到一个数组, 仅用于可变参数(使用 &lt;code>params&lt;/code> 修饰), &lt;code>TConverter&lt;/code> 必须实现 &lt;code>IArgumentConverter&lt;/code> 接口, 每个值都将被指定的转换器转换, 最终得到一个对应类型的数组.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>CharArrayArguConverter:&lt;/p>
+&lt;p>帮助转换到字符数组, 它调用 &lt;code>string.ToCharArray()&lt;/code> 来进行转换.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h2 id="about-argumentparser">About ArgumentParser&lt;/h2>
+&lt;h3 id="custom-parser">Custom Parser:&lt;/h3>
+&lt;p>定义自定义的 &lt;code>ArgumentParser&lt;/code>, 你需要遵守下面的规则:&lt;/p>
+&lt;ol>
+&lt;li>实现 &lt;code>IArgumentParser&lt;/code> 接口&lt;/li>
+&lt;li>在分析完毕后, 引用参数 &lt;code>index&lt;/code> 必须离开参数结果(IArgument)的区域, 例如, 在索引 3, 在你的自定义分析器中, 他将返回结果 (结果被成功分析), 并且分析结果来自于两个 &lt;code>CommandLineSegment&lt;/code>, 所以 &lt;code>index&lt;/code> 必须是 5 (在 3 和 4 之外).&lt;/li>
+&lt;/ol>
+&lt;h2 id="about-argumentconverter">About ArgumentConverter&lt;/h2>
+&lt;h3 id="自定义-converter">自定义 Converter:&lt;/h3>
+&lt;p>定义自定义 &lt;code>ArgumentConverter&lt;/code> 的推荐方式是这样:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">MyConverter&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">ArgumentConverter&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">MyType&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="c1">// 继承 ArgumentConverter&amp;lt;T&amp;gt; 而不是 IArgumentConverter&amp;lt;T&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">override&lt;/span> &lt;span class="n">MyType&lt;/span> &lt;span class="n">Convert&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">argument&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 你的代码&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">override&lt;/span> &lt;span class="kt">bool&lt;/span> &lt;span class="n">TryConvert&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">argument&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="n">MyType&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 你的代码&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>继承 &lt;code>ArgumentConverter&amp;lt;T&amp;gt;&lt;/code> 而不是 &lt;code>IArgumentConverter&amp;lt;T&amp;gt;&lt;/code> 的原因是, 在 &lt;code>ArgumentConverter&amp;lt;T&amp;gt;&lt;/code> 中, 所有方法重载均调用这两个方法:&lt;/p>
+&lt;ol>
+&lt;li>T Convert(string argument);&lt;/li>
+&lt;li>bool TryConverter(string argument, out T result);&lt;/li>
+&lt;/ol>
+&lt;p>所以如果继承 &lt;code>ArgumentConverter&amp;lt;T&amp;gt;&lt;/code>, 你只需要重写这两个方法.&lt;/p>
+&lt;h3 id="tips">Tips:&lt;/h3>
+&lt;ol>
+&lt;li>不要使用 new 表达式来创建一个 &lt;code>ArgumentConverter&lt;/code> 实例, 请使用 &lt;code>ArgumentConverterManager.GetConverter&amp;lt;T&amp;gt;()&lt;/code>.&lt;/li>
+&lt;/ol>
+&lt;h2 id="faq">FAQ&lt;/h2>
+&lt;ol>
+&lt;li>
+&lt;p>当我调用 &lt;code>CommandObject.ExecuteCommand(IArgumentParser[] parsers, string cmdline)&lt;/code> 时, 某些分析器不能正常使用:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 你必须以正确的顺序指定分析器, 否则就会这样:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">CommandObject&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">AppCommands&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">myCmds&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CommandObject&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">AppCommands&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">myCmds&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ExecuteCommand&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">IArgumentParser&lt;/span>&lt;span class="p">[]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">ArguParser&lt;/span>&lt;span class="p">(),&lt;/span> &lt;span class="c1">// 在这种情况下, FieldArguParser 和 PropertyArguParser 将不起作用.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">FieldArguParser&lt;/span>&lt;span class="p">(),&lt;/span> &lt;span class="c1">// 这是因为 ArguParser 可以分析任何 CommandLineSegments, 所以你应该&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">PropertyArguParser&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="c1">// 将 ArguParser 作为最后一个分析器, 这样分析的时候就会先使用前两个&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">},&lt;/span> &lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ReadLine&lt;/span>&lt;span class="p">());&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ol></description></item></channel></rss>

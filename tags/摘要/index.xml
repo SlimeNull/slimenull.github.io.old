@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>摘要 on SlimeNull Blogs</title><link>https://slimenull.com/tags/%E6%91%98%E8%A6%81/</link><description>Recent content in 摘要 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 02 Feb 2024 22:15:35 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/%E6%91%98%E8%A6%81/index.xml" rel="self" type="application/rss+xml"/><item><title>摘要, 加密, 数字签名, 数字证书以及加密通信简要介绍</title><link>https://slimenull.com/p/20240202221535/</link><pubDate>Fri, 02 Feb 2024 22:15:35 +0800</pubDate><guid>https://slimenull.com/p/20240202221535/</guid><description>&lt;p>如今 HTTPS 已几乎完全取代 HTTP, 大部分的网络通信也都有使用加密层, 那么对于非对称加密以及数字证书的学习也就不可避免了.&lt;/p>
+&lt;br />
+&lt;h2 id="摘要">摘要&lt;/h2>
+&lt;p>摘要是一个很简单的概念, 可以类比人类的指纹.&lt;/p>
+&lt;p>摘要是由数据计算而来的, 当数据变更的时候, 它的摘要也随之变更. 对比现实就是, 只要是不同的人, 就基本拥有不同的指纹. 而且摘要当然也是很小的, 一般只有几十个字节的大小.&lt;/p>
+&lt;p>如果要验证一个人是否确实是某个人, 对比这个人的所有身份信息显然是过于繁琐了. 然而对比指纹就简单快速多了. 在计算机中也是如此.&lt;/p>
+&lt;p>当你下载一个文件的时候, 一般还会下载到一个 &amp;ldquo;摘要文件&amp;rdquo;, 在下载完毕之后, 你只需要计算一下下载到的文件的摘要, 再和文件提供方提供的摘要文件对比.
+如果摘要是相同的, 那么说明我们下载到的文件是无误的. 如果对比有误, 那么则说明我们下载到的文件某些内容不正确, 或者下载的摘要不正确. 这时我们就需要考虑是否需要重新下载了.&lt;/p>
+&lt;p>摘要可以视作一种映射, 将大小不一定的数据, 映射到固定大小的数据中. 以 SHA256 为例, 摘要的大小为 256 位, 也就是 32 字节. 由于源数据的可能性是无限的, 而摘要的可能性有限, 所以摘要算法不可避免的会有冲突问题, 即两个不同的数据计算出来的摘要相同.&lt;/p>
+&lt;p>这就像现实中的, 三百六十六个人中, 必然有至少两个人的生日是相同的. 所以优秀的摘要算法, 应该使数据计算出来的摘要, 平均的分布, 以减少冲突.&lt;/p>
+&lt;p>常见的摘要算法&lt;/p>
+&lt;br />
+&lt;h2 id="加密">加密&lt;/h2>
+&lt;p>加密在计算中是保护信息安全的关键. 无论是安全的通信, 或者校验你获得的数据是否安全, 都离不开加密算法.&lt;/p>
+&lt;br />
+&lt;h3 id="对称加密">对称加密&lt;/h3>
+&lt;p>对称加密是最符合直觉的加密方式. 它就像现实中的锁一样, 只能使用唯一一把钥匙打开. 对称加密就是这样的.&lt;/p>
+&lt;p>当加密一份数据的时候, 准备好一份密钥, 在解密的时候, 也只能使用相同的密钥进行解密.&lt;/p>
+&lt;p>最最简单的加密对称加密方式, 就是 &amp;ldquo;异或&amp;rdquo; 加密了. 得益于异或算法的可逆性, 对一个数据执行两次相同的异或操作, 会得到原文.&lt;/p>
+&lt;p>下面是使用 C# 实现的简单异或加密方法:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">byte&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">XorEncrypt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">byte&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">data&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">byte&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">byte&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">encryptedData&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="kt">byte&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">data&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">++)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">encryptedData&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">byte&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="n">data&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">^&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">%&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">]);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">encryptedData&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>当然, 实际已投入使用的加密算法肯定是要比异或加密复杂很多的.&lt;/p>
+&lt;br />
+&lt;h3 id="非对称加密">非对称加密&lt;/h3>
+&lt;p>非对称加密的话, 加密与解密的过程, 是有两份密钥的. 我们暂且称之为密钥 A 和密钥 B.&lt;/p>
+&lt;p>如果你使用密钥 A 加密, 那么加密后的密文只能通过密钥 B 来解密. 反之, 由密钥 B 加密的密文, 只能使用密钥 A 来解密.&lt;/p>
+&lt;blockquote>
+&lt;p>注意, 由 A 加密后的密文, 只能由 B 解密. 使用 A 是无法解密由 A 加密的密文的. 反之亦然.&lt;/p>
+&lt;/blockquote>
+&lt;p>非对称加密的密钥不像对称加密一样可以随意由用户指定, 由于非对称加密算法基于复杂的数学难题, 这对密钥也只能通过特定算法来生成.&lt;/p>
+&lt;p>在实际的使用中, 这对密钥通常一个私有, 一个对外公开, 所以, 这对密钥被称作私钥和公钥.&lt;/p>
+&lt;p>举一个实际使用的示例, 假如你与 A 进行通信, A 有一对非对称密钥对, 其中公钥向外公开, 如果 A 发布一些信息, 通过 A 的私钥进行加密, 那么其他人就可以通过公开的密钥进行解密.
+如果解密成功, 则说明这段信息确实是由 A 发布的, 而不是其他人. 因为其他人不持有私钥, 他们没有办法伪造信息.&lt;/p>
+&lt;br/>
+&lt;h2 id="数字证书">数字证书&lt;/h2>
+&lt;p>数字证书也可以理解为现实中的证书, 可以用来证明一些东西. 一般的, 数字证书中包含以下项:&lt;/p>
+&lt;ul>
+&lt;li>持有者信息&lt;/li>
+&lt;li>颁布者信息&lt;/li>
+&lt;li>颁布时间&lt;/li>
+&lt;li>有效期限&lt;/li>
+&lt;li>数字签名&lt;/li>
+&lt;li>公钥&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>证书中非对称密钥对的私钥由证书持有者拥有, 不会公开.&lt;/p>
+&lt;/blockquote>
+&lt;p>其中, 数字签名是用来校验当前的数字证书是否有效的.&lt;/p>
+&lt;p>数字证书是有继承关系的. 电脑中会内置一些全球公用的 &amp;ldquo;根证书&amp;rdquo;, 其他证书则是这些根证书的子证书, 或者说, 这些证书的颁布者就是这些 &amp;ldquo;根证书机构&amp;rdquo;.&lt;/p>
+&lt;p>当校验其他证书的时候, 会通过这个证书的父证书提供的公钥, 对当前证书数字签名进行校验. 当然, 在使用父证书之前, 也需要对父证书进行校验. 当然, 如果它的父证书是内置在计算机内的, 则视为有效. 因为计算机内置的根证书是始终被视为有效的.&lt;/p>
+&lt;blockquote>
+&lt;p>由此衍生出来一个有意思的现象, 当你使用很旧的操作系统和浏览器时, 访问某些网站, 会提示该网站危险, 但使用新的浏览器就不会. 造成这个现象的原因就是, 该网站的数字证书无法被校验, 旧的操作系统中缺失了一些必要的根证书, 于是缺失的证书以及其下所属所有子证书都无法被校验.&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="常见文件格式">常见文件格式&lt;/h3>
+&lt;p>根据不同的服务器以及服务器的版本, 我们需要用到不同的证书格式, 就市面上主流的服务器来说, 大概有以下格式：&lt;/p>
+&lt;ul>
+&lt;li>.DER .CER, 文件是二进制格式, 只保存证书, 不保存私钥&lt;/li>
+&lt;li>.PEM, 一般是文本格式, 可保存证书, 可保存私钥&lt;/li>
+&lt;li>.CRT, 可以是二进制格式, 可以是文本格式, 与 .DER 格式相同, 不保存私钥&lt;/li>
+&lt;li>.PFX .P12, 二进制格式, 同时包含证书和私钥, 一般有密码保护&lt;/li>
+&lt;li>.JKS, 二进制格式, 同时包含证书和私钥, 一般有密码保护&lt;/li>
+&lt;/ul>
+&lt;p>其中, PEM 是 &amp;ldquo;Privacy Enhanced Mail&amp;rdquo; 的意思, 它本身并不是专门用来存储数字证书的, 只是它使用 Base64, 能用来存储数字证书, 所以用的较多. 它的文件内容大概是这样:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">-----BEGIN XXX-----
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">BASE64 的内容
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-----END XXX-----
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>它的内容也可以有多端, 所以对于证书的存储, 如果只包含证书本身, 那么它只有一个 &amp;ldquo;CERTIFICATE&amp;rdquo; 段, 如果它还包含私钥, 那么它还有一个 &amp;ldquo;PRIVATE KEY&amp;rdquo; 段.&lt;/p>
+&lt;br/>
+&lt;h2 id="数字签名">数字签名&lt;/h2>
+&lt;p>在上面的非对称加密中, 我们举了简单的例子, 通过非对称加密算法对信息的安全性进行校验. 但实际上, 非对称加密算法的计算过程是极其复杂且消耗性能的. 我们不可能将特别大的一串信息使用非对称加密算法进行加密以及解密, 在信息校验中, 更多使用的是对 &amp;ldquo;摘要&amp;rdquo; 进行校验.&lt;/p>
+&lt;p>一段包含数字签名的信息大概至少需要包含以下信息:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>信息&lt;/th>
+&lt;th>描述&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>信息主体&lt;/td>
+&lt;td>信息的内容&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>数字证书&lt;/td>
+&lt;td>一个可被校验的数字证书, 其中包含用于校验的公钥&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>加密后摘要&lt;/td>
+&lt;td>信息主题通过摘要算法计算摘要, 再使用私钥进行加密的结果&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>数字证书是无法伪造的, 在上文中我们已经提到, 而摘要由于是通过只有发布者才持有的私钥进行加密的, 所以同样也无法伪造. 当用户接收到这段信息之后, 先校验数字证书是否有效, 然后再通过数字证书中的公钥对加密后的摘要进行解密, 得到摘要明文, 最后判断信息主题的摘要是否与这段摘要信息匹配就可以了.&lt;/p>
+&lt;p>上面的信息中, 信息主体, 数字证书, 加密后摘要, 这三者任何一者产生改变, 都会导致校验失败. 通过这种方式, 就能够同时实现验证信息是否被伪造或变更了.&lt;/p>
+&lt;p>而这种通过数字证书和加密后的摘要信息进行校验码的方式, 就叫做数字签名.&lt;/p>
+&lt;br/>
+&lt;h2 id="加密通信">加密通信&lt;/h2>
+&lt;p>我们日常中访问的网站, 一般都是加密的. 他们的地址以 &amp;ldquo;HTTPS&amp;rdquo; 开头, 其底层就是用到了 &amp;ldquo;SSL/TLS&amp;rdquo; 协议, 而这个协议就是用到了非对称加密算法实现加密通信的.&lt;/p>
+&lt;p>在前面我们提到, 非对称加密算法的计算是复杂且消耗性能的, 而 HTTPS 进行大量数据传输, 当然也不可能使用非对称加密算法对这些数据进行加密. 事实上, 双方建立通信后, 是通过对称加密算法进行加密信息的, 只需要保证这个对称加密算法所使用的密钥不会被泄露出去就可以.&lt;/p>
+&lt;p>也就是说, 非对称加密在加密通信中的作用, 仅仅是对以后要使用的对称密钥进行加密.&lt;/p>
+&lt;p>在建立通信时, 服务器会将自己的数字证书发送给客户端, 此时客户端可以对证书进行校验. 而证书中包含非对称密钥对中的 &amp;ldquo;公钥&amp;rdquo;, 再然后, 客户端会生成一个随机的密钥, 使用公钥进行加密后, 再发送给服务器.&lt;/p>
+&lt;p>由于公钥加密后的数据仅能使用私钥解密, 所以这串密文, 也只能由服务器解密, 于是这个随机生成的对称密钥, 成功安全的送达到服务器了.&lt;/p>
+&lt;p>至此, 客户端和服务器就成功协商好了一个对称密钥. 在接下来的通信中, 所有的信息均使用这个隐秘的密钥进行加密.&lt;/p></description></item></channel></rss>

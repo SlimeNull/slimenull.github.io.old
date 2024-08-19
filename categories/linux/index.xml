@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on SlimeNull Blogs</title><link>https://slimenull.com/categories/linux/</link><description>Recent content in Linux on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 18 Dec 2020 01:16:10 +0800</lastBuildDate><atom:link href="https://slimenull.com/categories/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>[Linux] 执行但不阻塞 以‘后台‘模式启动程序或脚本</title><link>https://slimenull.com/p/20201218011610/</link><pubDate>Fri, 18 Dec 2020 01:16:10 +0800</pubDate><guid>https://slimenull.com/p/20201218011610/</guid><description>&lt;h2 id="1-使用--符号">1. 使用 &amp;lsquo;&amp;amp;&amp;rsquo; 符号：&lt;/h2>
+&lt;ul>
+&lt;li>例如启动一个脚本，执行 &amp;lsquo;./idea.sh&amp;rsquo; 以启动idea，但终端会被阻塞，若终端被关闭，idea也就被关闭。&lt;/li>
+&lt;li>此时，执行 &amp;lsquo;./idea.sh &amp;amp;&amp;rsquo; 可以使 idea 脱离当前终端运行，即便当前终端被关闭，idea也不会受影响。&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">./idea.sh &lt;span class="c1"># 会阻塞当前终端进程&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">./idea.sh &lt;span class="p">&amp;amp;&lt;/span> &lt;span class="c1"># 不会阻塞&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="2-使用-nohup-指令">2. 使用 &amp;rsquo;nohup&amp;rsquo; 指令：&lt;/h2>
+&lt;ul>
+&lt;li>参考 &lt;a class="link" href="https://www.runoob.com/linux/linux-comm-nohup.html" target="_blank" rel="noopener"
+>菜鸟教程 - nohup指令&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>参考文章：&lt;a class="link" href="https://blog.p2hp.com/archives/5528" target="_blank" rel="noopener"
+>Linux后台执行命令(非阻塞式)&lt;/a>&lt;/p></description></item><item><title>「干货」 装机如此简单！Windows 与 Linux 通用装机方法。(无需VM虚拟机)</title><link>https://slimenull.com/p/20201213001156/</link><pubDate>Sun, 13 Dec 2020 00:11:56 +0800</pubDate><guid>https://slimenull.com/p/20201213001156/</guid><description>&lt;h2 id="windows-与-linux-通用装机方法">Windows 与 Linux 通用装机方法&lt;/h2>
+&lt;h5 id="步骤概述">步骤概述：&lt;/h5>
+&lt;ol>
+&lt;li>准备安装介质&lt;/li>
+&lt;li>从你喜欢的渠道下载ISO镜像&lt;/li>
+&lt;li>将ISO写入到安装介质&lt;/li>
+&lt;/ol>
+&lt;h3 id="步骤">步骤：&lt;/h3>
+&lt;h5 id="1-准备安装介质">1. 准备安装介质&lt;/h5>
+&lt;p>旧时的安装介质指光盘，但现在，一般的，安装介质都指U盘。你需要准备一个U盘，这个U盘的数据将被完全擦除然后写入安装程序，所以，推荐使用空闲U盘，并且空间大小推荐8G左右，不要小于4G，可以大于8G(只不过有些浪费空间就是了)&lt;/p>
+&lt;blockquote>
+&lt;p>Windows10的镜像一般为4G左右，写入到U盘后大于4G
+Linux镜像一般较小，大多4G以下，但是Kali Linux的镜像要大于4G
+这就是为什么推荐8G U盘&lt;/p>
+&lt;/blockquote>
+&lt;h5 id="2-从你喜欢的渠道下载iso镜像">2. 从你喜欢的渠道下载ISO镜像&lt;/h5>
+&lt;p>如果你希望你安装的系统是干净的，那么，你需要使用正确的渠道来下载系统镜像。&lt;/p>
+&lt;ul>
+&lt;li>安装 Windows 系统：
+&lt;ul>
+&lt;li>如果你有激活密钥或可以使用数字激活，建议你去 &lt;strong>&lt;a class="link" href="https://next.itellyou.cn/" target="_blank" rel="noopener"
+>Next, I tell you&lt;/a>&lt;/strong> 下载镜像，你需要登录(这不会花费太长时间)，它也是支持QQ登录的，当然，如果你不想注册账户，也可以去旧的网站 &lt;strong>&lt;a class="link" href="https://next.itellyou.cn/" target="_blank" rel="noopener"
+>MSDN I tell you&lt;/a>&lt;/strong> ， 但在旧的网站，你无法下载Windows10的最新版本 &lt;em>2004&lt;/em>&lt;/li>
+&lt;li>如果你没有激活密钥, 你可以选择购买 Windows 激活码, 在 &lt;a class="link" href="https://www.microsoft.com/" target="_blank" rel="noopener"
+>Microsoft 商城&lt;/a> 或 &lt;a class="link" href="https://search.jd.com/Search?keyword=Windows%E6%BF%80%E6%B4%BB%E7%A0%81" target="_blank" rel="noopener"
+>京东&lt;/a>, &lt;a class="link" href="https://www.taobao.com/" target="_blank" rel="noopener"
+>淘宝&lt;/a> 等电子商城中可以购买到, 购买后, 按照上面的步骤, 下载 Windows 系统镜像. 或者你可以先进行上面的步骤, 在提到的网站中下载镜像, 然后试用 Windows. 如果你想要使用系统激活工具, 一定要知道, 这是不合法的, 并且激活工具常常伴随着病毒, 这些病毒很难被处理掉. &lt;del>360或许可以搞定它们&lt;/del>. 如果你想要使用盗版软件(不需要你为其支付费用), 请参阅文章尾 &lt;em>硬盘安装&lt;/em>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>安装 Linux 系统：
+&lt;ul>
+&lt;li>不用讲了，Linux 的大部分发行版都是免费且开源，直接在官方网站即可下载到。&lt;a class="link" href="https://ubuntu.com/" target="_blank" rel="noopener"
+>Ubuntu&lt;/a>， &lt;a class="link" href="https://www.debian.org/" target="_blank" rel="noopener"
+>Debian&lt;/a>，&lt;a class="link" href="https://www.deepin.org/" target="_blank" rel="noopener"
+>Deepin&lt;/a>，&lt;a class="link" href="https://www.kali.org/" target="_blank" rel="noopener"
+>Kali&lt;/a>，&lt;a class="link" href="https://www.archlinux.org/" target="_blank" rel="noopener"
+>Arch&lt;/a>，&lt;a class="link" href="https://www.centos.org" target="_blank" rel="noopener"
+>CentOS&lt;/a>，&lt;a class="link" href="https://linuxmint.com" target="_blank" rel="noopener"
+>Mint&lt;/a>，&lt;a class="link" href="https://www.redhat.com/" target="_blank" rel="noopener"
+>Red Hat&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>提示：I tell you网站内的ed2k是一个特殊的下载地址，可视作p2p下载链接，推荐使用&lt;a class="link" href="https://dl.xunlei.com/" target="_blank" rel="noopener"
+>迅雷&lt;/a>(别的软件可能对非技术人员不友好)
+注意，大多数国内流行的ISO或GHO镜像下载网站都是&lt;strong>包含捆绑软件&lt;/strong>的&lt;strong>非官方原装系统&lt;/strong>！如果你要使用纯净系统，切记要仔细选择！&lt;/p>
+&lt;/blockquote>
+&lt;h5 id="3-将iso写入到介质">3. 将ISO写入到介质&lt;/h5>
+&lt;p>写入到介质可不单单是将ISO作为压缩包打开并内容拷贝到U盘，这样是错误的操作！但是不必担心，同样，它也不是什么复杂的操作&lt;/p>
+&lt;ul>
+&lt;li>在 Windows 系统中，你需要一个小工具来制作安装介质，它就是&lt;a class="link" href="http://rufus.ie/" target="_blank" rel="noopener"
+>Rufus&lt;/a>！， 一个仅有不到5MB的小工具，并且能够自动帮你检测可能缺失的内容！&lt;a class="link" href="http://rufus.ie/" target="_blank" rel="noopener"
+>Rufus&lt;/a>的使用也非常简便，只需要选择设备，选择ISO镜像，点击开始即可(我是指, 其他配置内容默认不需要更改)。&lt;a class="link" href="http://rufus.ie" target="_blank" rel="noopener"
+>进入Rufus官网&lt;/a>，&lt;a class="link" href="https://github.com/pbatard/rufus/releases/download/v3.13/rufus-3.13p.exe" target="_blank" rel="noopener"
+>下载Rufus 3.13便携版&lt;/a>&lt;/li>
+&lt;li>在Linux中，我们只需要借助一个‘dd’指令即可将ISO镜像写入到U盘，用法是：
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">dd &lt;span class="k">if&lt;/span>&lt;span class="o">=&lt;/span>‘输入文件’ &lt;span class="nv">of&lt;/span>&lt;span class="o">=&lt;/span>‘输出设备’
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 使用lsblk指令可以查看自己当前的接入的存储设备&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># dd指令示例使用示例： dd if=&amp;#39;/home/username/ubuntu20.04lts.iso&amp;#39; of=&amp;#39;/dev/sda&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;blockquote>
+&lt;p>在这里不得不提到一个问题，就是在 Linux 中使用 dd 指令写入 Windows 镜像到U盘，会出现无法安装的问题，但是使用 Rufus 写入就没问题。（可能是格式问题）&lt;/p>
+&lt;/blockquote>
+&lt;/li>
+&lt;/ul>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>示例图像&lt;/th>
+&lt;th>简介&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;/table>
+&lt;p>&lt;img src="https://slimenull.com/images/20201212211500172.png"
+loading="lazy"
+alt="Rufus界面图像"
+> | Rufus 的界面非常简洁, 仅有必要的选项，无任何附加功能，无论小白还是大神，都很适合使用&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/20201212212942916.png"
+loading="lazy"
+alt="在这里插入图片描述"
+>| 这是Ubuntu系统中，dd指令的帮助手册，不过对于只需要将ISO写入到U盘的我们，不需要看那么多内容，只需要知道if和of参数即可&lt;/p>
+&lt;h5 id="4-开始安装">4. 开始安装&lt;/h5>
+&lt;p>待写入完毕，安装准备已经完全就绪了！那么，下一步就是安装步骤了！&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>关闭计算机&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>插入准备好的安装介质，启动计算机&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>从U盘启动（有两种方式）：&lt;/p>
+&lt;ol>
+&lt;li>第一种：按下 &lt;em>选择引导&lt;/em> 的按键，它可能是 F12，但不同主板有不同的按键，Dell电脑的按键即是 F12。&lt;/li>
+&lt;li>第二种：按下进入 &lt;em>启动配置&lt;/em> 的按键 ，在 &lt;em>启动配置&lt;/em> 中调整引导顺序至USB设备最顶级，重启电脑即可进入安装界面&lt;/li>
+&lt;/ol>
+&lt;p>&lt;em>若有疑问，可参阅这篇文章： &lt;a class="link" href="https://slimenull.com/p/20201212233309/" >进入BIOS/UEFI配置页面&lt;/a>&lt;/em>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>成功从U盘启动后，就已经进入到系统安装界面了。接下来，按照安装程序的提示进行即可。一般的，Linux系统的可定制性要比Windows高很多，而Windows的安装就简单了很多。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>享受新系统！&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>&lt;br/>&lt;br/>&lt;/p>
+&lt;h4 id="硬盘安装">硬盘安装：&lt;/h4>
+&lt;ul>
+&lt;li>某些ISO镜像，例如国内较为流行的镜像下载网站提供的ISO，将其中的内容直接解压到某处，启动 setup.exe 即可安装，这种安装方式被称为 &lt;em>硬盘安装&lt;/em> ，并且一般的，这种安装方式都是一键傻瓜式安装，中途完全不需要用户进行任何干涉。&lt;/li>
+&lt;li>下面列举一些国内的非官方镜像下载源：
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="http://www.deepinghost.com/" target="_blank" rel="noopener"
+>深度技术&lt;/a>， &lt;a class="link" href="http://www.ylmfeng.com/" target="_blank" rel="noopener"
+>雨林木风&lt;/a>，&lt;a class="link" href="http://www.luobojiayuanxt.com/" target="_blank" rel="noopener"
+>萝卜家园&lt;/a>，&lt;a class="link" href="http://www.dngs.co/" target="_blank" rel="noopener"
+>电脑公司&lt;/a>，&lt;a class="link" href="http://www.xitongzhijia.net/" target="_blank" rel="noopener"
+>系统之家&lt;/a>，&lt;a class="link" href="http://www.winfanqie.com/" target="_blank" rel="noopener"
+>番茄花园&lt;/a>
+&lt;font color="#EE6666">&lt;strong>注意，你几乎无法在国内流行镜像下载站获取原版镜像！这些都是包含捆绑的非原版镜像！并且极有可能侵犯了微软(Microsoft)的版权，在使用之前，慎重考虑！&lt;/strong>&lt;/font>&lt;/p>
+&lt;/blockquote>
+&lt;/li>
+&lt;li>在下载到支持硬盘安装的ISO镜像后，使用任意压缩包管理软件(例如&lt;a class="link" href="https://www.7-zip.org/" target="_blank" rel="noopener"
+>7zip&lt;/a>)打开，解压其中的内容到任意文件夹，但要求不可以在你要安装系统的分区，例如你要将系统安装到C盘，那就不可以将ISO文件解压到C盘。&lt;/li>
+&lt;li>解压后，双击 setup.exe 按照自己的需要配置一下，如果看不懂，就直接点下一步，然后傻瓜式系统安装就开始了，解压来你需要做的就是等待安装了（喝杯Java提提神？&lt;/li>
+&lt;li>安装完成后，享受新系统吧！（记得将所有捆绑的东西全部卸载&lt;/li>
+&lt;/ul></description></item><item><title>Kali Linux 新手引导 - Xfce桌面时间配置</title><link>https://slimenull.com/p/20201209122311/</link><pubDate>Wed, 09 Dec 2020 12:23:11 +0800</pubDate><guid>https://slimenull.com/p/20201209122311/</guid><description>&lt;h4 id="关于我的kali系统">关于我的Kali系统：&lt;/h4>
+&lt;blockquote>
+&lt;p>操作系统：Linux NullKali 5.9.0-kali2-amd64 #1 SMP Debian 5.9.6-1kali1 (2020-11-11) x86_64 GNU/Linux
+桌面环境：Xfce Desktop Environment Version 4.14, destributed by Debian&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="打开时间配置">打开时间配置：&lt;/h2>
+&lt;ul>
+&lt;li>位于固定&amp;rsquo;任务栏&amp;rsquo;的右侧， 右击时间，选择Properties(属性)&lt;/li>
+&lt;/ul>
+&lt;table>
+&lt;tr>
+&lt;td>
+&lt;img src="https://img-blog.csdnimg.cn/20201209115256539.png" title="时间"/>
+&lt;img src="https://img-blog.csdnimg.cn/2020120911532581.png"/>
+&lt;/td>
+&lt;/tr>
+&lt;/table>
+&lt;h2 id="进行调整">进行调整：&lt;/h2>
+&lt;p>&lt;img src="https://slimenull.com/images/20201209115711659.png"
+loading="lazy"
+alt="界面"
+>&lt;/p>
+&lt;h2 id="亦见">亦见：&lt;/h2>
+&lt;p>&lt;a class="link" href="https://slimenull.com/p/20201207165005/" >Kali Linux 新手引导 - 区域与语言配置&lt;/a>&lt;/p></description></item><item><title>Kali Linux 记录 - 死锁，依赖 ‘Unable to install new version of ...libpng12.so.0 no such file or directory‘</title><link>https://slimenull.com/p/20201208195444/</link><pubDate>Tue, 08 Dec 2020 19:54:44 +0800</pubDate><guid>https://slimenull.com/p/20201208195444/</guid><description>&lt;h2 id="概述">概述:&lt;/h2>
+&lt;ol start="0">
+&lt;li>在使用apt或dpkg安装deb包时， 出现了no such file or directory的错误&lt;/li>
+&lt;/ol>
+&lt;h2 id="要点">要点:&lt;/h2>
+&lt;ol start="0">
+&lt;li>在dpkg时是否指定了错误的路径&lt;/li>
+&lt;li>包对于系统来说是否过旧&lt;/li>
+&lt;/ol>
+&lt;h2 id="我的解决过程">我的解决过程:&lt;/h2>
+&lt;ul>
+&lt;li>我遇到的问题属于要点中的后者， libpng12对于我的系统来说太旧了。&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>具体情况是这样的， 我在使用apt安装一些软件时， 发现， 一直报依赖问题， 让我执行‘apt &amp;ndash;fix-broken install’(即‘apt -f install’)， 但当我执行时， 它尝试安装的libpng12-0始终装不上(都快把孩子急哭了qaq)！ 从报错信息上看， libpng12-0似乎是libpng12.so.0的新版本， 在安装时总是提示no such file or directory。&lt;/p>
+&lt;/blockquote>
+&lt;ol start="0">
+&lt;li>首先， 我在网上搜索了一波， 但是依照国内IT圈子转载满天飞的尿性， 我还是以失败告终 —— 找了几十篇文章也没看到有用的&lt;/li>
+&lt;li>后来我发现， 如果我不处理这个错误， 我不能进行任何apt install， upgrade， remove操作！ 我慌了， 于是我尝试执行apt remove libpng12.so.0， 但是提示它被libwebkitgtk什么的一个我不认识的东西包所依赖， 然后， 不能移除。。。&lt;/li>
+&lt;li>然后我又尝试移除这个依赖于libpng的libwebkitgtk的什么包， 然后我发现它又被sunloginclient(应该是向日葵远程控制软件客户端)所依赖，，， 移除失败，，，&lt;/li>
+&lt;li>于是我尝试移除sunloginclient这个包（反正我目前不大用得到向日葵）， 但是，，，正如我前面所说的， 虽然sunloginclient不被什么包所依赖， 但是因为我们libpng12-0的依赖问题没解决， 所以，，， 移除失败。。。&lt;/li>
+&lt;li>于是， 我似乎陷入了一个逻辑问题， 想要处理这个依赖问题， 我就得移除掉旧的libpng12.so.0， 想要移除它我就得移除sunloginclient然后最后移除它， 而只有我处理完依赖问题后， 才能够使用apt来进行安装与移除操作！&lt;/li>
+&lt;/ol>
+&lt;table align="center">&lt;tr>&lt;td>绝了&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;img align="center" width="100" height="100" src="https://i0.hdslb.com/bfs/emote/35d62c496d1e4ea9e091243fa812866f5fecc101.png@112w_112h.png"/>&lt;/td>&lt;/tr>&lt;/table>
+&lt;ol start="5">
+&lt;li>查资料， 查资料， 查资料， 经过一段时间的周旋， 我顿悟了， 很快啊， 我打开终端， 用dpkg把sunloginclient给移除了， 然后顺理成章的把libwebkitgtk， libpng12.so.0给移除了&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>完美解决&lt;/p>
+&lt;/blockquote></description></item><item><title>Kali Linux 新手引导 - 配置中文输入法</title><link>https://slimenull.com/p/20201207203524/</link><pubDate>Mon, 07 Dec 2020 20:35:24 +0800</pubDate><guid>https://slimenull.com/p/20201207203524/</guid><description>&lt;h4 id="关于我的kali系统">关于我的Kali系统：&lt;/h4>
+&lt;blockquote>
+&lt;p>操作系统：Linux NullKali 5.9.0-kali2-amd64 #1 SMP Debian 5.9.6-1kali1 (2020-11-11) x86_64 GNU/Linux
+桌面环境：Xfce Desktop Environment Version 4.14, destributed by Debian&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="安装输入法框架fcitx">安装输入法框架Fcitx&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">sudo apt install fcitx
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 这里推荐的是Fcitx， kali默认是装了fcitx的， 如果没有安装， 就执行上边的指令安装吧&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="安装好用的输入法">安装好用的输入法&lt;/h2>
+&lt;p>访问 ‘搜狗输入法 for Linux’ 官网并下载deb包。&lt;a class="link" href="https://pinyin.sogou.com/linux/" target="_blank" rel="noopener"
+>点此处跳转&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">sudo dpkg -i sogoupinyin_版本号_amd64.deb
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 若出现依赖问题， 则执行指令以尝试修复: sudo apt -f install&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="配置输入法">配置输入法&lt;/h2>
+&lt;ol>
+&lt;li>启动 Fcitx Configuration ， 点击左下角加号以添加输入法， 取消勾选‘Only Show Current Language’， 找到sogoupinyiin （没错， 不是sougou而是sogou）
+&lt;img src="https://img-blog.csdnimg.cn/20201207180141330.png"/>&lt;/li>
+&lt;li>现在， 一切就绪， 你可以使用输入法了。 默认的输入法切换快捷键是 ‘Ctrl + Space’ ， 可在Fcitx Configuration的Global Config中调整。切换至‘搜狗拼音’时， 在屏幕上会出现在搜狗拼音的语言栏， 如下：
+&lt;img src="https://img-blog.csdnimg.cn/20201207180555556.png"/>&lt;/li>
+&lt;li>此时， 你可以正常使用输入法。若有其他问题， 可继续阅读下面的内容。&lt;/li>
+&lt;/ol>
+&lt;table>
+&lt;tr>
+&lt;td>
+&lt;span>&lt;font color="#888">下图即配置好的Fcitx&lt;/font>&lt;/span>
+&lt;img src="https://img-blog.csdnimg.cn/20201207180031275.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2NTU1Mzgw,size_16,color_FFFFFF,t_70"/>
+&lt;/td>
+&lt;/tr>
+&lt;/table>
+&lt;h2 id="玄学问题">玄学问题：&lt;/h2>
+&lt;ol>
+&lt;li>
+&lt;h6 id="fcitx-configuration-启动后-窗口中没有任何内容正常情况下应该有一个keyboard---语言">Fcitx Configuration 启动后， 窗口中没有任何内容（正常情况下应该有一个Keyboard - 语言）&lt;/h6>
+&lt;blockquote>
+&lt;p>尝试重启， 重新安装Fcitx， 更换区域与语言（参阅：&lt;a class="link" href="https://slimenull.com/p/20201207165005/" >Kali Linux 新手引导 - 区域与语言配置&lt;/a>）&lt;/p>
+&lt;/blockquote>
+&lt;/li>
+&lt;li>
+&lt;h6 id="在fcitx-configuration-中添加输入法时-无法找到sogoupinyin">在Fcitx Configuration 中添加输入法时， 无法找到sogoupinyin&lt;/h6>
+&lt;blockquote>
+&lt;p>检查输入法是否正确安装了， 尝试执行apt update， apt upgrade， apt -f install&lt;/p>
+&lt;/blockquote>
+&lt;/li>
+&lt;/ol></description></item></channel></rss>

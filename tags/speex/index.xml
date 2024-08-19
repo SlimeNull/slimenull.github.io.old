@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Speex on SlimeNull Blogs</title><link>https://slimenull.com/tags/speex/</link><description>Recent content in Speex on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 13 Nov 2023 09:45:19 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/speex/index.xml" rel="self" type="application/rss+xml"/><item><title>[.NET] Speex 语音编解码介绍, 使用, 代码示例</title><link>https://slimenull.com/p/20231113094519/</link><pubDate>Mon, 13 Nov 2023 09:45:19 +0800</pubDate><guid>https://slimenull.com/p/20231113094519/</guid><description>&lt;p>Speex 是一个开源的, 适合语音编解码的算法, 常应用于网络电话中.&lt;/p>
+&lt;p>在下面的的介绍中, 我们将使用 &lt;a class="link" href="https://github.com/SlimeNull/SpeexSharp" target="_blank" rel="noopener"
+>SpeexSharp&lt;/a> 对 Speex 编码在 .NET 中的使用做介绍&lt;/p>
+&lt;blockquote>
+&lt;p>SpeexSharp 可以在 nuget 中直接安装, 并且已经封装了编解码器的类供使用. 如果你不希望了解 Speex 的具体编解码过程, 可以忽略下面的 &amp;lsquo;编码&amp;rsquo; 和 &amp;lsquo;解码&amp;rsquo; 部分, 只看 Speex 的介绍, 然后直接使用这些类进行编解码.&lt;/p>
+&lt;/blockquote>
+&lt;br/>
+&lt;h2 id="采样">采样&lt;/h2>
+&lt;p>Speex 的编解码是基于采样的, 传入数据的时候, 我们需要给定采样, 传出的时候, Speex 也是解码为采样.&lt;/p>
+&lt;p>Speex 支持的采样格式有两种, 浮点数和有符号 16 位整数.&lt;/p>
+&lt;br/>
+&lt;h2 id="模式和质量">模式和质量&lt;/h2>
+&lt;p>Speex 目前有三种模式, 窄带, 宽带, 超宽带. 这三种模式中, 对音频数据编码后的数据大小是不一样的. 如其名, 在窄带模式下, 音频编码后最小, 质量也最低, 反之, 超宽带是编码后最大, 质量最好的模式.&lt;/p>
+&lt;p>选择好模式之后, 你还可以对编码质量进行微调. 质量的等级是一个从 0 到 10 的值(包含 0 和 10), 设置编码器的质量之后, 编码的结果大小和质量也会变更.&lt;/p>
+&lt;br/>
+&lt;h2 id="存储流">存储流&lt;/h2>
+&lt;p>要进行 Speex 编码, 我们需要一个存储需要编码的数据的缓冲区, Speex 已经为我们准备好了这个类型, 并且 Speex 会自动管理这个缓冲区. 它叫做 &lt;code>SpeexBits&lt;/code>.&lt;/p>
+&lt;p>初始化一个 &lt;code>SpeexBits&lt;/code>, 我们需要声明一个 &lt;code>SpeexBits&lt;/code> 类型的变量, 然后调用 Speex 的初始化函数.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="n">SpeexBits&lt;/span> &lt;span class="n">bits&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BitsInit&lt;/span>&lt;span class="p">(&amp;amp;&lt;/span>&lt;span class="n">bits&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>无论是编码还是解码, 都是需要 &lt;code>SpeexBits&lt;/code> 作为存储的.&lt;/p>
+&lt;p>编码时, 用户将采样数据的指针传给编码函数, 函数内部对帧进行编码, 最后将编码后的结果放入 &lt;code>SpeexBits&lt;/code> 中.&lt;/p>
+&lt;p>解码时则是用户将需要解码的数据放入 &lt;code>SpeexBits&lt;/code>, 将输出数据的缓冲区传给解码函数, 解码函数从中读取, 解码数据, 然后将解码后的数据写入用户指定的缓冲区中.&lt;/p>
+&lt;p>另外, SpeexBits 之所以叫 Bits, 是因为它其中存储的数据, 基本单位是比特. 在编码时, 你可能会得到 69.5 个字节. 也就是 556 个比特. 在这种情况下, 我们要存储它的数据时, 肯定是要向上舍入, 也就是存储它内部的 70 个字节.&lt;/p>
+&lt;br/>
+&lt;h2 id="帧大小与采样率">帧大小与采样率&lt;/h2>
+&lt;p>Speex 的编解码是对于 &amp;ldquo;帧&amp;rdquo; 而言的. 每一次编码, 都必须是一个完整的帧, 即一定数量的采样数. 而帧的大小取决于上面提到的 Speex 编码模式.&lt;/p>
+&lt;p>而且, 在编码的时候, 传入采样的采样率也应该与编码器设定的采样率一致. 这样才能获得最好的编码效果.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>数据 \ 模式&lt;/th>
+&lt;th>窄带&lt;/th>
+&lt;th>宽带&lt;/th>
+&lt;th>超宽带&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>帧大小&lt;/td>
+&lt;td>160&lt;/td>
+&lt;td>320&lt;/td>
+&lt;td>640&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>默认采样率&lt;/td>
+&lt;td>8000Hz&lt;/td>
+&lt;td>16000Hz&lt;/td>
+&lt;td>32000Hz&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;blockquote>
+&lt;p>注意, 帧大小是针对 &amp;lsquo;采样数量&amp;rsquo; 的, 例如, 如果你要以宽带模式编码浮点数采样, 那么你需要 320 个浮点采样, 每个 4 字节, 总共需要 1280 个字节. 如果是带符号 16 位整数则是需要 640 个字节.&lt;/p>
+&lt;/blockquote>
+&lt;p>如果你希望将使用 Speex 编码的语音存储到文件, 你可能需要做一些处理. 因为 Speex 的编解码是针对于帧的, 所以你的文件中至少需要有标识帧的地方. 在解码时, 读取一帧, 然后调用解码方法, 得到原始采样.&lt;/p>
+&lt;p>最简单的方式就是在每一帧的前面加一字节的头, 这个字节用来标识后面多少字节是一帧.&lt;/p>
+&lt;br/>
+&lt;h2 id="编码过程">编码过程&lt;/h2>
+&lt;p>要进行完整的编码, 需要进行以下大概步骤&lt;/p>
+&lt;ol>
+&lt;li>准备用于存储的 SpeexBits&lt;/li>
+&lt;li>初始化一个编码器&lt;/li>
+&lt;li>调用编码方法&lt;/li>
+&lt;li>从 SpeexBits 中读取编码结果&lt;/li>
+&lt;/ol>
+&lt;p>下面是宽带模式编码的示例代码:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 要进行编码的采样数据&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">samples&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 取 320 个采样, 也就是宽带模式下的一帧&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">frame&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">samples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Take&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">320&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 定义并初始化用于存储的 SpeexBits&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">SpeexBits&lt;/span> &lt;span class="n">bits&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BitsInit&lt;/span>&lt;span class="p">(&amp;amp;&lt;/span>&lt;span class="n">bits&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 获取表示宽带模式的指针, 0, 1, 2 分别是窄带, 宽带, 超宽带&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">SpeexMode&lt;/span>&lt;span class="p">*&lt;/span> &lt;span class="n">mode&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">LibGetMode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 初始化编码器, 得到表示编码器状态的指针&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">void&lt;/span>&lt;span class="p">*&lt;/span> &lt;span class="n">encoderState&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">EncoderInit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mode&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 将数组转为指针&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">fixed&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="p">*&lt;/span> &lt;span class="n">framePtr&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">frame&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 重置 SpeexBits 内容&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BitsReset&lt;/span>&lt;span class="p">(&amp;amp;&lt;/span>&lt;span class="n">bits&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 调用编码方法&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Encode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">encoderState&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">framePtr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">&amp;amp;&lt;/span>&lt;span class="n">bits&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 获取编码后的数量 (也就是 bits 中存储的字节数)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">bitCount&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">bits&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BitCount&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">byteCount&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">bits&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BitCount&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">7&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;gt;&amp;gt;&lt;/span> &lt;span class="m">3&lt;/span> &lt;span class="c1">// 向上舍入&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 声明一个缓冲区用于存储编码后结果&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">byte&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">buffer&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="kt">byte&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">byteCount&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 固定缓冲区, 转为指针&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">fixed&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">byte&lt;/span>&lt;span class="p">*&lt;/span> &lt;span class="n">bufferPtr&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">buffer&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 将 Bits 内存储的编码结果写入到我们自己的缓冲区中&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BitsWrite&lt;/span>&lt;span class="p">(&amp;amp;&lt;/span>&lt;span class="n">bits&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">bufferPtr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">buffer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 做其他处理.&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>需要注意的是, 每一次编码之后, 你都应该重置一下 SpeexBits&lt;/p>
+&lt;p>因为编码方法的结果再往 SpeexBits 存入时, 如果没有抹除旧的数据, SpeexBits 中就会同时存储着旧的数据和新的数据, 如果你没有手动往 SpeexBits 里面写入一些东西做标识, 那么你就无法区分不同的帧了.&lt;/p>
+&lt;p>最简单的方式就是, 每一次编码后, 读取编码结果, 然后清空 SpeexBits.&lt;/p>
+&lt;p>如果你需要将所有采样都编码了, 很简单, 只需要用 for 进行循环就好了. 但在这之前, 你还需要对原始的采样做填充处理, 确保它的大小是帧大小的整数倍, 这样你在做编码的时候, 就不会出现访问冲突的问题了.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">samples&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">padLength&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">samples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span> &lt;span class="p">%&lt;/span> &lt;span class="m">360&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">padLength&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">padLength&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">360&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">padLength&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">paddedSamples&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="n">samples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">padLength&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Array&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Copy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">samples&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">paddedSamples&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">samples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">fixed&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="p">*&lt;/span> &lt;span class="n">paddedSamplesPtr&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">paddedSamples&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">paddedSamples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="m">360&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BitsReset&lt;/span>&lt;span class="p">(&amp;amp;&lt;/span>&lt;span class="n">bits&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Encode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">encoderState&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">paddedSamplesPtr&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">&amp;amp;&lt;/span>&lt;span class="n">bits&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;br/>
+&lt;h2 id="解码过程">解码过程&lt;/h2>
+&lt;p>解码同样很简单, 只需要我们将已经编码的一帧以及输出缓冲区传入到 &lt;code>Decode&lt;/code> 函数中, Speex 就会将解码后的一帧存入到缓冲区中.&lt;/p>
+&lt;ol>
+&lt;li>准备用于存储的 SpeexBits&lt;/li>
+&lt;li>初始化一个解码器&lt;/li>
+&lt;li>将需要解码的帧存入到 SpeexBits 中&lt;/li>
+&lt;li>调用解码方法&lt;/li>
+&lt;/ol>
+&lt;p>同样的, 解码的时候也是逐帧解码的, 你传入的缓冲区至少能容纳一帧的音频才可以.&lt;/p>
+&lt;p>下面是宽带模式解码的示例代码:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 要进行解码的 Speex 数据&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">byte&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">speex&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 声明用于存储解码结果的缓冲区&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">buffer&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="kt">float&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="m">320&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 定义并初始化用于存储的 SpeexBits&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">SpeexBits&lt;/span> &lt;span class="n">bits&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BitsInit&lt;/span>&lt;span class="p">(&amp;amp;&lt;/span>&lt;span class="n">bits&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 获取表示宽带模式的指针&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">SpeexMode&lt;/span>&lt;span class="p">*&lt;/span> &lt;span class="n">mode&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">LibGetMode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 初始化解码器&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">void&lt;/span>&lt;span class="p">*&lt;/span> &lt;span class="n">decoderState&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DecoderInit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mode&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 固定 Speex 数据&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">fixed&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">byte&lt;/span>&lt;span class="p">*&lt;/span> &lt;span class="n">speexPtr&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">speex&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 将其读入到 SpeexBits 中&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BitsReadFrom&lt;/span>&lt;span class="p">(&amp;amp;&lt;/span>&lt;span class="n">bits&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">speexPtr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 固定缓冲区&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">fixed&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="p">*&lt;/span> &lt;span class="n">bufferPtr&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">buffer&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 进行解码&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Speex&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Decode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">decoderState&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">&amp;amp;&lt;/span>&lt;span class="n">bits&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">bufferPtr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 做其他处理&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>需要注意的是, 在解码时, 读入 SpeexBits 的数据只能是一帧, 如果你存入两帧或者更多的话, 那么解码会出问题.&lt;/p>
+&lt;p>如果你存入了半个帧或者数据损坏的一个帧, 解码仍然能成功, 只不过输出结果的质量会下降.&lt;/p>
+&lt;br/>
+&lt;h2 id="托管调用">托管调用&lt;/h2>
+&lt;p>以上, 我们已经了解了 Speex 编解码的具体过程, 但 SpeexSharp 还提供了编解码器的类封装, 内部会自动初始化 SpeexBits, 存取编解码数据等.&lt;/p>
+&lt;p>如果要使用这些封装好的类来进行编解码, 只需要新建 SpeexEncoder 或 SpeexDecoder 的示例即可.&lt;/p></description></item></channel></rss>

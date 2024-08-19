@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>接口 on SlimeNull Blogs</title><link>https://slimenull.com/tags/%E6%8E%A5%E5%8F%A3/</link><description>Recent content in 接口 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 19 Oct 2020 21:16:01 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/%E6%8E%A5%E5%8F%A3/index.xml" rel="self" type="application/rss+xml"/><item><title>[C#] 各种关于类型与反射的常用操作. 类型操作, 根据Type进行类型转换, 接口获取与比较, 泛型接口获取与比较, 类的字段获取与设置.</title><link>https://slimenull.com/p/20201019211601/</link><pubDate>Mon, 19 Oct 2020 21:16:01 +0800</pubDate><guid>https://slimenull.com/p/20201019211601/</guid><description>&lt;h1 id="直切入正题">直切入正题&lt;/h1>
+&lt;blockquote>
+&lt;p>本文章是面向初学者的一些资料
+注意: 存在即合理, 可能某些初学者认为这些东西并无必要, 但实际上它们有很大的用处&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="获取类型type对象">获取类型(Type)对象&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">object&lt;/span> &lt;span class="n">obj&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Type&lt;/span> &lt;span class="n">objType&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">obj&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetType&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="判断类型是否可以转换">判断类型是否可以转换&lt;/h3>
+&lt;blockquote>
+&lt;p>这个方法同样可以判断B是否继承于A(可以是类和接口), 但是如果你要判断一个类是否继承了一个泛型接口, 不指定相同的泛型参数, 是无法判断成功的, 比如一个继承了Demo&amp;lt;string, string&amp;gt;接口的类在使用下面的方法来判断是否继承Demo&amp;lt;&amp;gt;接口时, 就无法获得正确的结果. 这种方法是严谨的.&lt;/p>
+&lt;/blockquote>
+&lt;p>例子表示了A是否派生B, 也就是B是否继承于A, 或者说B是否可以强制转换为A&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">bool&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">typeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">B&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">IsAssignableFrom&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">typeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">B&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="获取类型继承的的接口-包含泛型接口">获取类型继承的的接口 (包含泛型接口)&lt;/h3>
+&lt;blockquote>
+&lt;ul>
+&lt;li>获取的接口, 都是接口原型, 比如获取到的会是IDicrionary&amp;lt;,&amp;gt;, 而不是IDictionary&amp;lt;TKey, TValue&amp;gt;. 利用这个特性, 我们可以判断一个类型是否继承某个泛型接口, 而不需要指定详细的泛型参数.&lt;/li>
+&lt;li>下面的原始接口指IDictionary&amp;lt;string,string&amp;gt;与IDictionary&amp;lt;,&amp;gt;之间的关系, IDictionary即原始接口 (这个概念并不是公认概念, 但是没有已经规定的概念来描述&amp;quot;原始接口&amp;quot;, 所以在这里提出了这个概念)&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Type&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">interfaces&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">typeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">A&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">GetInterfaces&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>参考: 判断是否继承某个泛型接口并获取泛型参数:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 在这个方法中, 会比对targetType的原始接口是否与interfaceType一致&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">bool&lt;/span> &lt;span class="n">CheckInterface&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Type&lt;/span> &lt;span class="n">targetType&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Type&lt;/span> &lt;span class="n">interfaceType&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="n">Type&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">geneticTypes&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">foreach&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Type&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">targetType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetInterfaces&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetGenericTypeDefinition&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="n">Equals&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">interfaceType&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="c1">// GetGenericTypeDefinition() 即获取原始接口类型. 如果去除这个方法, 则是严谨的比较类型&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">geneticTypes&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetGenericArguments&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">geneticTypes&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="类的字段获取与设置">类的字段获取与设置&lt;/h3>
+&lt;p>以类型A为例:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="n">A&lt;/span> &lt;span class="n">obj&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">A&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Type&lt;/span> &lt;span class="n">objType&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">typeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">A&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">FieldInfo&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">fieldInfos&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">objType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetFields&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 获取字段信息&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">object&lt;/span> &lt;span class="n">fieldValue&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">fieldInfos&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">GetValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">obj&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 获取字段值&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">fieldInfos&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">SetValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">obj&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;这是一个值&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 设置字段的值&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="根据type对象进行类型转换">根据Type对象进行类型转换&lt;/h3>
+&lt;p>例如, 将A转换为B&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="n">A&lt;/span> &lt;span class="n">objA&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">A&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">object&lt;/span> &lt;span class="n">objB&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Convert&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ChangeType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">objA&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">typeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">B&lt;/span>&lt;span class="p">));&lt;/span> &lt;span class="c1">// 返回了转换为B类型的对象的引用&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

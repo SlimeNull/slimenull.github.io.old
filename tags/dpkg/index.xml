@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Dpkg on SlimeNull Blogs</title><link>https://slimenull.com/tags/dpkg/</link><description>Recent content in Dpkg on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 08 Dec 2020 19:54:44 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/dpkg/index.xml" rel="self" type="application/rss+xml"/><item><title>Kali Linux 记录 - 死锁，依赖 ‘Unable to install new version of ...libpng12.so.0 no such file or directory‘</title><link>https://slimenull.com/p/20201208195444/</link><pubDate>Tue, 08 Dec 2020 19:54:44 +0800</pubDate><guid>https://slimenull.com/p/20201208195444/</guid><description>&lt;h2 id="概述">概述:&lt;/h2>
+&lt;ol start="0">
+&lt;li>在使用apt或dpkg安装deb包时， 出现了no such file or directory的错误&lt;/li>
+&lt;/ol>
+&lt;h2 id="要点">要点:&lt;/h2>
+&lt;ol start="0">
+&lt;li>在dpkg时是否指定了错误的路径&lt;/li>
+&lt;li>包对于系统来说是否过旧&lt;/li>
+&lt;/ol>
+&lt;h2 id="我的解决过程">我的解决过程:&lt;/h2>
+&lt;ul>
+&lt;li>我遇到的问题属于要点中的后者， libpng12对于我的系统来说太旧了。&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>具体情况是这样的， 我在使用apt安装一些软件时， 发现， 一直报依赖问题， 让我执行‘apt &amp;ndash;fix-broken install’(即‘apt -f install’)， 但当我执行时， 它尝试安装的libpng12-0始终装不上(都快把孩子急哭了qaq)！ 从报错信息上看， libpng12-0似乎是libpng12.so.0的新版本， 在安装时总是提示no such file or directory。&lt;/p>
+&lt;/blockquote>
+&lt;ol start="0">
+&lt;li>首先， 我在网上搜索了一波， 但是依照国内IT圈子转载满天飞的尿性， 我还是以失败告终 —— 找了几十篇文章也没看到有用的&lt;/li>
+&lt;li>后来我发现， 如果我不处理这个错误， 我不能进行任何apt install， upgrade， remove操作！ 我慌了， 于是我尝试执行apt remove libpng12.so.0， 但是提示它被libwebkitgtk什么的一个我不认识的东西包所依赖， 然后， 不能移除。。。&lt;/li>
+&lt;li>然后我又尝试移除这个依赖于libpng的libwebkitgtk的什么包， 然后我发现它又被sunloginclient(应该是向日葵远程控制软件客户端)所依赖，，， 移除失败，，，&lt;/li>
+&lt;li>于是我尝试移除sunloginclient这个包（反正我目前不大用得到向日葵）， 但是，，，正如我前面所说的， 虽然sunloginclient不被什么包所依赖， 但是因为我们libpng12-0的依赖问题没解决， 所以，，， 移除失败。。。&lt;/li>
+&lt;li>于是， 我似乎陷入了一个逻辑问题， 想要处理这个依赖问题， 我就得移除掉旧的libpng12.so.0， 想要移除它我就得移除sunloginclient然后最后移除它， 而只有我处理完依赖问题后， 才能够使用apt来进行安装与移除操作！&lt;/li>
+&lt;/ol>
+&lt;table align="center">&lt;tr>&lt;td>绝了&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;img align="center" width="100" height="100" src="https://i0.hdslb.com/bfs/emote/35d62c496d1e4ea9e091243fa812866f5fecc101.png@112w_112h.png"/>&lt;/td>&lt;/tr>&lt;/table>
+&lt;ol start="5">
+&lt;li>查资料， 查资料， 查资料， 经过一段时间的周旋， 我顿悟了， 很快啊， 我打开终端， 用dpkg把sunloginclient给移除了， 然后顺理成章的把libwebkitgtk， libpng12.so.0给移除了&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>完美解决&lt;/p>
+&lt;/blockquote></description></item></channel></rss>

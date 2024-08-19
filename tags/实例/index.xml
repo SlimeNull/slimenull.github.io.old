@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>实例 on SlimeNull Blogs</title><link>https://slimenull.com/tags/%E5%AE%9E%E4%BE%8B/</link><description>Recent content in 实例 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 06 Jul 2020 06:52:50 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/%E5%AE%9E%E4%BE%8B/index.xml" rel="self" type="application/rss+xml"/><item><title>[C#] 鼠标拖动实现控件移动 - 一个类实现对多个控件与窗体的鼠标拖动移动操作</title><link>https://slimenull.com/p/20200706065250/</link><pubDate>Mon, 06 Jul 2020 06:52:50 +0800</pubDate><guid>https://slimenull.com/p/20200706065250/</guid><description>&lt;h2 id="关于文章">关于文章:&lt;/h2>
+&lt;ol start="0">
+&lt;li>
+&lt;h6 id="文章包含以下部分">文章包含以下部分:&lt;/h6>
+&lt;/li>
+&lt;li>对鼠标拖动实现控件移动的原理详解&lt;/li>
+&lt;li>使用类将功能封装&lt;/li>
+&lt;/ol>
+&lt;h2 id="适用于">适用于:&lt;/h2>
+&lt;ol start="0">
+&lt;li>C# WinForm&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>更新日志: 2020-07-07 9:05AM 更改了多控件实现的算法, 使其能够支持移动窗体&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="原理">原理:&lt;/h2>
+&lt;ol start="0">
+&lt;li>每当鼠标移动时, 根据鼠标坐标计算出控件应处于的位置并将控件移动到计算出的位置, 另外, 为了标识是否正在拖动控件, 还需要订阅控件的MouseDown和MouseUp事件.&lt;/li>
+&lt;li>当MouseDown事件触发时, 标识是否正在拖动控件的布尔变量设置为true, 当MouseUp事件触发时, 标识是否正在拖动控件的布尔变量设置为false; 在鼠标移动时, 会判断这个变量的值以决定是否应该移动控件.&lt;/li>
+&lt;li>为了保证鼠标相对控件的位置是不变的, 所以还需要一个Point类型的变量来标识鼠标按下控件时, 鼠标相对控件的相对位置.&lt;/li>
+&lt;/ol>
+&lt;h2 id="一些资料">一些资料:&lt;/h2>
+&lt;ol start="0">
+&lt;li>获取鼠标相对屏幕的坐标 : Control.MousePosition;&lt;/li>
+&lt;li>获取一个 相对于屏幕的坐标 相对某个控件的相对坐标 : 控件.PointToClient(一个相对于屏幕的坐标);&lt;/li>
+&lt;li>
+&lt;h6 id="下面是方便初学者的">下面是方便初学者的:&lt;/h6>
+&lt;/li>
+&lt;li>as运算符, 将某个实例作为某种类型使用, 例如:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// obj是一个Button转换为object类型的按钮&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 那么, (obj as Button).Text = &amp;#34;新的文本&amp;#34;; 是可用的, 它将为控件指定一个新的文本&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>&lt;span class="n">obj&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Button&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Text&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;新的文本&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 注意, as运算符的优先级低于.运算符, 所以括号不可以省去&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="单控件实现">单控件实现:&lt;/h2>
+&lt;ol start="0">
+&lt;li>新建项目, 项目类型是WinForm.&lt;/li>
+&lt;li>添加控件 (我这里将控件的Name设置为了ExempleButton)&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>浓浓的Chinglish味道, 哈哈哈&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;img src="https://slimenull.com/images/20200706052109567.png"
+loading="lazy"
+alt="添加按钮控件"
+>
+3. 添加相关事件(MouseDown, MouseMove, MouseUp):&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/20200706052323882.png"
+loading="lazy"
+alt="添加相关事件"
+>
+4. 转到代码, 添加相关变量.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/20200706052556910.png"
+loading="lazy"
+alt="添加相关变量"
+>
+5. 添加关键代码:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/20200706054641301.png"
+loading="lazy"
+alt="代码图片"
+>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">bool&lt;/span> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 标识是否在拖动控件&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Point&lt;/span> &lt;span class="n">MouseFirstLocation&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 鼠标按下时, 相对于控件的坐标&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">ExempleButton_MouseDown&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 表示进入拖动控件的状态&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">MousePoint&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MousePosition&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 获取鼠标相对屏幕的坐标&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MouseFirstLocation&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ExempleButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PointToClient&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MousePoint&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 获取坐标相对于控件的相对坐标并赋值给MouseFirstLocation&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">ExempleButton_MouseMove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Moving&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">MousePoint&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MousePosition&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 获取鼠标相对屏幕的坐标&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">MousePointToContainer&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ExempleButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Parent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PointToClient&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MousePoint&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 获取鼠标相对控件父容器的坐标&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">ControlNewLocation&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MousePointToContainer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">MouseFirstLocation&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MousePointToContainer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">MouseFirstLocation&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 计算控件应处于的, 新的坐标&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ExempleButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ControlNewLocation&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 移动控件&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">ExempleButton_MouseUp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 脱离拖动控件的状态&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>可以使用了~&lt;/li>
+&lt;/ul>
+&lt;h2 id="多控件实现">多控件实现:&lt;/h2>
+&lt;ul>
+&lt;li>使用类封装功能, 类的AddControl(Control control)方法来快捷使某个控件支持鼠标拖动移动位置.&lt;/li>
+&lt;li>这里的原理与前面的单控件实现有些出入, 但也是通过初始鼠标坐标(这里是相对父容器而不是移动的控件)与初始坐标计算出的&lt;/li>
+&lt;li>这个类不仅支持窗体内的控件, 而且还支持窗体 (没有直接使用WindowsAPI)&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt"> 10
+&lt;/span>&lt;span class="lnt"> 11
+&lt;/span>&lt;span class="lnt"> 12
+&lt;/span>&lt;span class="lnt"> 13
+&lt;/span>&lt;span class="lnt"> 14
+&lt;/span>&lt;span class="lnt"> 15
+&lt;/span>&lt;span class="lnt"> 16
+&lt;/span>&lt;span class="lnt"> 17
+&lt;/span>&lt;span class="lnt"> 18
+&lt;/span>&lt;span class="lnt"> 19
+&lt;/span>&lt;span class="lnt"> 20
+&lt;/span>&lt;span class="lnt"> 21
+&lt;/span>&lt;span class="lnt"> 22
+&lt;/span>&lt;span class="lnt"> 23
+&lt;/span>&lt;span class="lnt"> 24
+&lt;/span>&lt;span class="lnt"> 25
+&lt;/span>&lt;span class="lnt"> 26
+&lt;/span>&lt;span class="lnt"> 27
+&lt;/span>&lt;span class="lnt"> 28
+&lt;/span>&lt;span class="lnt"> 29
+&lt;/span>&lt;span class="lnt"> 30
+&lt;/span>&lt;span class="lnt"> 31
+&lt;/span>&lt;span class="lnt"> 32
+&lt;/span>&lt;span class="lnt"> 33
+&lt;/span>&lt;span class="lnt"> 34
+&lt;/span>&lt;span class="lnt"> 35
+&lt;/span>&lt;span class="lnt"> 36
+&lt;/span>&lt;span class="lnt"> 37
+&lt;/span>&lt;span class="lnt"> 38
+&lt;/span>&lt;span class="lnt"> 39
+&lt;/span>&lt;span class="lnt"> 40
+&lt;/span>&lt;span class="lnt"> 41
+&lt;/span>&lt;span class="lnt"> 42
+&lt;/span>&lt;span class="lnt"> 43
+&lt;/span>&lt;span class="lnt"> 44
+&lt;/span>&lt;span class="lnt"> 45
+&lt;/span>&lt;span class="lnt"> 46
+&lt;/span>&lt;span class="lnt"> 47
+&lt;/span>&lt;span class="lnt"> 48
+&lt;/span>&lt;span class="lnt"> 49
+&lt;/span>&lt;span class="lnt"> 50
+&lt;/span>&lt;span class="lnt"> 51
+&lt;/span>&lt;span class="lnt"> 52
+&lt;/span>&lt;span class="lnt"> 53
+&lt;/span>&lt;span class="lnt"> 54
+&lt;/span>&lt;span class="lnt"> 55
+&lt;/span>&lt;span class="lnt"> 56
+&lt;/span>&lt;span class="lnt"> 57
+&lt;/span>&lt;span class="lnt"> 58
+&lt;/span>&lt;span class="lnt"> 59
+&lt;/span>&lt;span class="lnt"> 60
+&lt;/span>&lt;span class="lnt"> 61
+&lt;/span>&lt;span class="lnt"> 62
+&lt;/span>&lt;span class="lnt"> 63
+&lt;/span>&lt;span class="lnt"> 64
+&lt;/span>&lt;span class="lnt"> 65
+&lt;/span>&lt;span class="lnt"> 66
+&lt;/span>&lt;span class="lnt"> 67
+&lt;/span>&lt;span class="lnt"> 68
+&lt;/span>&lt;span class="lnt"> 69
+&lt;/span>&lt;span class="lnt"> 70
+&lt;/span>&lt;span class="lnt"> 71
+&lt;/span>&lt;span class="lnt"> 72
+&lt;/span>&lt;span class="lnt"> 73
+&lt;/span>&lt;span class="lnt"> 74
+&lt;/span>&lt;span class="lnt"> 75
+&lt;/span>&lt;span class="lnt"> 76
+&lt;/span>&lt;span class="lnt"> 77
+&lt;/span>&lt;span class="lnt"> 78
+&lt;/span>&lt;span class="lnt"> 79
+&lt;/span>&lt;span class="lnt"> 80
+&lt;/span>&lt;span class="lnt"> 81
+&lt;/span>&lt;span class="lnt"> 82
+&lt;/span>&lt;span class="lnt"> 83
+&lt;/span>&lt;span class="lnt"> 84
+&lt;/span>&lt;span class="lnt"> 85
+&lt;/span>&lt;span class="lnt"> 86
+&lt;/span>&lt;span class="lnt"> 87
+&lt;/span>&lt;span class="lnt"> 88
+&lt;/span>&lt;span class="lnt"> 89
+&lt;/span>&lt;span class="lnt"> 90
+&lt;/span>&lt;span class="lnt"> 91
+&lt;/span>&lt;span class="lnt"> 92
+&lt;/span>&lt;span class="lnt"> 93
+&lt;/span>&lt;span class="lnt"> 94
+&lt;/span>&lt;span class="lnt"> 95
+&lt;/span>&lt;span class="lnt"> 96
+&lt;/span>&lt;span class="lnt"> 97
+&lt;/span>&lt;span class="lnt"> 98
+&lt;/span>&lt;span class="lnt"> 99
+&lt;/span>&lt;span class="lnt">100
+&lt;/span>&lt;span class="lnt">101
+&lt;/span>&lt;span class="lnt">102
+&lt;/span>&lt;span class="lnt">103
+&lt;/span>&lt;span class="lnt">104
+&lt;/span>&lt;span class="lnt">105
+&lt;/span>&lt;span class="lnt">106
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">DragMove&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">DragMove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MouseButtons&lt;/span> &lt;span class="n">MouseButton&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseButton&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">MouseButton&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">DragMove&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">AllMouseButton&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">object&lt;/span> &lt;span class="n">AboutControl&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 表示当前移动控件操作是针对哪个控件的&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">bool&lt;/span> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 表示是否正在移动控件&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">bool&lt;/span> &lt;span class="n">AllMouseButton&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 表示是否处理所有按钮&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">ControlStartLocation&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 表示移动操作时, 控件的初始位置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">MouseFirstLocationAboutParent&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 表示移动操作时, 鼠标的初始位置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MouseButtons&lt;/span> &lt;span class="n">MouseButton&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Control&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">AddedControls&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Control&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">void&lt;/span> &lt;span class="n">MouseDownEvent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">((&lt;/span>&lt;span class="n">e&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Button&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">MouseButton&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">||&lt;/span> &lt;span class="n">AllMouseButton&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">AboutControl&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ControlStartLocation&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Location&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="k">is&lt;/span> &lt;span class="n">Form&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MouseFirstLocationAboutParent&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MousePosition&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MouseFirstLocationAboutParent&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Parent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PointToClient&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MousePosition&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">void&lt;/span> &lt;span class="n">MouseMoveEvent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">AboutControl&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Moving&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">MouseLocationNow&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="k">is&lt;/span> &lt;span class="n">Form&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MouseLocationNow&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MousePosition&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MouseLocationNow&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Parent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PointToClient&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MousePosition&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">ControlNewLocation&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MouseLocationNow&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">MouseFirstLocationAboutParent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">ControlStartLocation&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseLocationNow&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">MouseFirstLocationAboutParent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">ControlStartLocation&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ControlNewLocation&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Moving&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">(&lt;/span>&lt;span class="n">AboutControl&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ControlStartLocation&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">void&lt;/span> &lt;span class="n">MouseUpEvent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="n">AboutControl&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Moving&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">(&lt;/span>&lt;span class="n">AboutControl&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ControlStartLocation&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">bool&lt;/span> &lt;span class="n">AddControl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Control&lt;/span> &lt;span class="n">control&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">AddedControls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Contains&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">control&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseDown&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="n">MouseDownEvent&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseMove&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="n">MouseMoveEvent&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseUp&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="n">MouseUpEvent&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">AddedControls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">control&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">bool&lt;/span> &lt;span class="n">RemoveControl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Control&lt;/span> &lt;span class="n">control&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">AddedControls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Contains&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">control&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseDown&lt;/span> &lt;span class="p">-=&lt;/span> &lt;span class="n">MouseDownEvent&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseMove&lt;/span> &lt;span class="p">-=&lt;/span> &lt;span class="n">MouseMoveEvent&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseUp&lt;/span> &lt;span class="p">-=&lt;/span> &lt;span class="n">MouseUpEvent&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">AddedControls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Remove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">control&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>这个类包含了判断鼠标按键的功能, 比如只允许右键拖动控件, 也有一些预防措施, 保证类能够正常工作的一些措施(判断控件), 也支持添加与移除控件&lt;/li>
+&lt;/ul></description></item></channel></rss>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kali on SlimeNull Blogs</title><link>https://slimenull.com/categories/kali/</link><description>Recent content in Kali on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 07 Dec 2020 20:35:24 +0800</lastBuildDate><atom:link href="https://slimenull.com/categories/kali/index.xml" rel="self" type="application/rss+xml"/><item><title>Kali Linux 新手引导 - 配置中文输入法</title><link>https://slimenull.com/p/20201207203524/</link><pubDate>Mon, 07 Dec 2020 20:35:24 +0800</pubDate><guid>https://slimenull.com/p/20201207203524/</guid><description>&lt;h4 id="关于我的kali系统">关于我的Kali系统：&lt;/h4>
+&lt;blockquote>
+&lt;p>操作系统：Linux NullKali 5.9.0-kali2-amd64 #1 SMP Debian 5.9.6-1kali1 (2020-11-11) x86_64 GNU/Linux
+桌面环境：Xfce Desktop Environment Version 4.14, destributed by Debian&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="安装输入法框架fcitx">安装输入法框架Fcitx&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">sudo apt install fcitx
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 这里推荐的是Fcitx， kali默认是装了fcitx的， 如果没有安装， 就执行上边的指令安装吧&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="安装好用的输入法">安装好用的输入法&lt;/h2>
+&lt;p>访问 ‘搜狗输入法 for Linux’ 官网并下载deb包。&lt;a class="link" href="https://pinyin.sogou.com/linux/" target="_blank" rel="noopener"
+>点此处跳转&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">sudo dpkg -i sogoupinyin_版本号_amd64.deb
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 若出现依赖问题， 则执行指令以尝试修复: sudo apt -f install&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="配置输入法">配置输入法&lt;/h2>
+&lt;ol>
+&lt;li>启动 Fcitx Configuration ， 点击左下角加号以添加输入法， 取消勾选‘Only Show Current Language’， 找到sogoupinyiin （没错， 不是sougou而是sogou）
+&lt;img src="https://img-blog.csdnimg.cn/20201207180141330.png"/>&lt;/li>
+&lt;li>现在， 一切就绪， 你可以使用输入法了。 默认的输入法切换快捷键是 ‘Ctrl + Space’ ， 可在Fcitx Configuration的Global Config中调整。切换至‘搜狗拼音’时， 在屏幕上会出现在搜狗拼音的语言栏， 如下：
+&lt;img src="https://img-blog.csdnimg.cn/20201207180555556.png"/>&lt;/li>
+&lt;li>此时， 你可以正常使用输入法。若有其他问题， 可继续阅读下面的内容。&lt;/li>
+&lt;/ol>
+&lt;table>
+&lt;tr>
+&lt;td>
+&lt;span>&lt;font color="#888">下图即配置好的Fcitx&lt;/font>&lt;/span>
+&lt;img src="https://img-blog.csdnimg.cn/20201207180031275.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2NTU1Mzgw,size_16,color_FFFFFF,t_70"/>
+&lt;/td>
+&lt;/tr>
+&lt;/table>
+&lt;h2 id="玄学问题">玄学问题：&lt;/h2>
+&lt;ol>
+&lt;li>
+&lt;h6 id="fcitx-configuration-启动后-窗口中没有任何内容正常情况下应该有一个keyboard---语言">Fcitx Configuration 启动后， 窗口中没有任何内容（正常情况下应该有一个Keyboard - 语言）&lt;/h6>
+&lt;blockquote>
+&lt;p>尝试重启， 重新安装Fcitx， 更换区域与语言（参阅：&lt;a class="link" href="https://slimenull.com/p/20201207165005/" >Kali Linux 新手引导 - 区域与语言配置&lt;/a>）&lt;/p>
+&lt;/blockquote>
+&lt;/li>
+&lt;li>
+&lt;h6 id="在fcitx-configuration-中添加输入法时-无法找到sogoupinyin">在Fcitx Configuration 中添加输入法时， 无法找到sogoupinyin&lt;/h6>
+&lt;blockquote>
+&lt;p>检查输入法是否正确安装了， 尝试执行apt update， apt upgrade， apt -f install&lt;/p>
+&lt;/blockquote>
+&lt;/li>
+&lt;/ol></description></item></channel></rss>

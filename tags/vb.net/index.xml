@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Vb.net on SlimeNull Blogs</title><link>https://slimenull.com/tags/vb.net/</link><description>Recent content in Vb.net on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 15 Feb 2021 16:07:30 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/vb.net/index.xml" rel="self" type="application/rss+xml"/><item><title>[.NET] WPF DoubleAnimation 动画, 一篇文章悟透!</title><link>https://slimenull.com/p/20210215160730/</link><pubDate>Mon, 15 Feb 2021 16:07:30 +0800</pubDate><guid>https://slimenull.com/p/20210215160730/</guid><description>&lt;p>完全理解 DoubleAnimation! 仅需这一篇文章.&lt;/p>
+&lt;h2 id="介绍">介绍&lt;/h2>
+&lt;p>首先, DoubleAnimation可以用来创建一些简单的动画, 这些动画仅限于使用Double值的属性, 例如控件的位置, 尺寸, 缩放, 旋转, 或者透明度变化等.
+一个DoubleAnimation实例, 应该至少指定3个值:&lt;/p>
+&lt;blockquote>
+&lt;p>From (值从哪里开始), To (值到哪里结束), Duration (值的变化经过多少时间)&lt;/p>
+&lt;/blockquote>
+&lt;p>例如, 如果要创建一个 1s 内从值从 0 到 1 的动画, From 就是0, To 就是 1, Duration就是 1s.&lt;/p>
+&lt;p>启动动画, 需要调用将要执行这个动画的对象的 BeginAnimation 方法, 例如一个控件, 或者一个窗口, 参数包括 DependencyProperty(这个动画将对哪个属性执行), AnimationTimeline(执行哪个动画)&lt;/p>
+&lt;br/>
+&lt;h2 id="实例">实例:&lt;/h2>
+&lt;p>例如, 创建一个, 当点击按钮时, 按钮的高度增加 30 个像素.
+&lt;img src="https://slimenull.com/images/20210215113736959.png"
+loading="lazy"
+>
+CS代码:
+&lt;img src="https://slimenull.com/images/20210215114618291.png"
+loading="lazy"
+>
+然后, 看看效果吧:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/037995efd77dcb8f94c17c888d866b7b.gif"
+loading="lazy"
+alt="控件高度变化动画演示"
+>&lt;/p>
+&lt;p>其实, DoubleAnimation还可以指定运动时, 加速在整个时间线中的占比以及减速在整个时间线中的占比.&lt;/p>
+&lt;p>例如, 你想指定这个运动中, 前半部分是加速, 后半部分是匀速, 那么加速占比就是0.5, 减速占比就是0, 如下:
+&lt;img src="https://slimenull.com/images/20210215115429879.png"
+loading="lazy"
+>
+然后, 看看运行效果吧:
+&lt;img src="https://slimenull.com/images/dee4b57b838eef385c68bada3ce48b9c.gif"
+loading="lazy"
+alt="控件高度加速变化动画演示"
+>
+可以看出, 有加速的效果了, 或者, 再狠点, 我们指定全部是减速, 加速占比0, 减速占比1:
+&lt;img src="https://slimenull.com/images/16c2fcc56e8cebcf57f04410b310a585.gif"
+loading="lazy"
+alt="控件高度减速变化动画演示"
+>
+果然减速看起来非常好看啊.&lt;/p>
+&lt;h2 id="纯xaml使用">纯XAML使用:&lt;/h2>
+&lt;p>DoubleAnimation是可以在纯 xaml 中声明并使用的. 有种东西叫做 Trigger, 在 xaml 中声明他, 然后可以合适的触发动画, 如下:
+&lt;img src="https://slimenull.com/images/20210215122545416.png"
+loading="lazy"
+>
+然后, 运行效果的话, 除了不能不断增加高度, 其他的是一样的, 点一次, 就会从20到50, 第二次点击, 还是从20到50.&lt;/p>
+&lt;br/>
+&lt;h2 id="贴代码">贴代码:&lt;/h2>
+&lt;p>按钮事件:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Button_Click&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">RoutedEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">DoubleAnimation&lt;/span> &lt;span class="n">animation&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">DoubleAnimation&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">button1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ActualHeight&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// From 从按钮的 高度 开始&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">button1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ActualHeight&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">30&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// To 到按钮的 高度 + 30 结束&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">Duration&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">TimeSpan&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FromSeconds&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">)))&lt;/span> &lt;span class="c1">// Duration 间隔是 1s&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">AccelerationRatio&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 设置加速占比为一半, 即 0.5&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">DecelerationRatio&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 设置减速占比为0, 其实这里可以省略, 因为默认是0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">button1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BeginAnimation&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Button&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">HeightProperty&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// DependencyProperty 动画是针对于高度的&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">animation&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// AnimationTimeline 指定刚刚创建好的动画&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>纯xaml实现:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;Button&lt;/span> &lt;span class="na">Name=&lt;/span>&lt;span class="s">&amp;#34;button1&amp;#34;&lt;/span> &lt;span class="na">Content=&lt;/span>&lt;span class="s">&amp;#34;Button&amp;#34;&lt;/span> &lt;span class="na">HorizontalAlignment=&lt;/span>&lt;span class="s">&amp;#34;Left&amp;#34;&lt;/span> &lt;span class="na">Margin=&lt;/span>&lt;span class="s">&amp;#34;343,182,0,0&amp;#34;&lt;/span> &lt;span class="na">VerticalAlignment=&lt;/span>&lt;span class="s">&amp;#34;Top&amp;#34;&lt;/span> &lt;span class="na">Width=&lt;/span>&lt;span class="s">&amp;#34;75&amp;#34;&lt;/span> &lt;span class="na">Height=&lt;/span>&lt;span class="s">&amp;#34;20&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Button.Triggers&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;EventTrigger&lt;/span> &lt;span class="na">RoutedEvent=&lt;/span>&lt;span class="s">&amp;#34;Button.Click&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;BeginStoryboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Storyboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;DoubleAnimation&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">Storyboard.TargetProperty=&lt;/span>&lt;span class="s">&amp;#34;Height&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">From=&lt;/span>&lt;span class="s">&amp;#34;20&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">To=&lt;/span>&lt;span class="s">&amp;#34;50&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">Duration=&lt;/span>&lt;span class="s">&amp;#34;0:0:1&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">AccelerationRatio=&lt;/span>&lt;span class="s">&amp;#34;0&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">DecelerationRatio=&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Storyboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/BeginStoryboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/EventTrigger&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Button.Triggers&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/Button&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>小彩蛋~ 是窗口加载时的透明度变化动画欸嘿&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;Window.Triggers&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;EventTrigger&lt;/span> &lt;span class="na">RoutedEvent=&lt;/span>&lt;span class="s">&amp;#34;Loaded&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;BeginStoryboard&lt;/span> &lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Storyboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;DoubleAnimation&lt;/span> &lt;span class="na">From=&lt;/span>&lt;span class="s">&amp;#34;0&amp;#34;&lt;/span> &lt;span class="na">To=&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span> &lt;span class="na">Duration=&lt;/span>&lt;span class="s">&amp;#34;0:0:0.3&amp;#34;&lt;/span> &lt;span class="na">Storyboard.TargetProperty=&lt;/span>&lt;span class="s">&amp;#34;Opacity&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Storyboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/BeginStoryboard&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/EventTrigger&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/Window.Triggers&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="参考文章">参考文章:&lt;/h2>
+&lt;p>以下文章对本文章的理解有帮助噢~
+&lt;a class="link" href="https://slimenull.com/p/20210215160730/" >[.NET] WPF XAML 原理, 节点与实例, 以及一些重要的零碎知识点.&lt;/a>
+&lt;a class="link" href="https://slimenull.com/p/20210215112655/" >[.NET] WPF Triggers 触发器, EventTrigger, Trigger&lt;/a>&lt;/p></description></item><item><title>[.NET] WPF Triggers 触发器, EventTrigger, Trigger</title><link>https://slimenull.com/p/20210215112655/</link><pubDate>Mon, 15 Feb 2021 11:26:55 +0800</pubDate><guid>https://slimenull.com/p/20210215112655/</guid><description>&lt;p>触发器, 如其名, 可根据某些事件或属性值来触发某些东西, 那么我们来了解一下 xaml 中的触发器吧.&lt;/p>
+&lt;h2 id="样式变更">样式变更:&lt;/h2>
+&lt;p>我们试试通过使用普通触发器来实现当鼠标悬停时更改控件背景颜色.
+&lt;img src="https://slimenull.com/images/20210215073411292.png"
+loading="lazy"
+>
+然后运行一下, 效果就是这样:
+&lt;img src="https://slimenull.com/images/066155f4f6d1a796a57440cae7ecc364.gif"
+loading="lazy"
+>&lt;/p>
+&lt;h2 id="启动动画">启动动画:&lt;/h2>
+&lt;p>然后, 试着用事件触发器(EventTrigger)与DoubleAnimation来创建一个启动动画吧(其实代码都写好了):
+&lt;img src="https://slimenull.com/images/2021021507435775.png"
+loading="lazy"
+>
+然后运行效果如下:
+&lt;img src="https://slimenull.com/images/bf9d63b8401128a5fffe3d6e9324e951.gif"
+loading="lazy"
+alt="在这里插入图片描述"
+>
+可以看到, 窗口是渐渐浮现的, 也就是Opacity从0到1.&lt;/p>
+&lt;h4 id="什么-你问我对应的cs代码怎么写">什么? 你问我对应的CS代码怎么写?&lt;/h4>
+&lt;p>先看看这篇文章吧, 看完它, 相信大多数的 xaml 代码, 你都能写出对应的 CS 代码, 这是一个通用的规律.
+&lt;a class="link" href="https://slimenull.com/p/20210215160730/" >[.NET] WPF XAML 原理, 节点与实例, 以及一些重要的零碎知识点.&lt;/a>&lt;/p>
+&lt;br/>
+&lt;p>推荐文章:
+&lt;a class="link" href="https://slimenull.com/p/20210215160730/" >[.NET] WPF DoubleAnimation 动画, 一篇文章悟透!&lt;/a>&lt;/p></description></item><item><title>[.NET] WPF XAML 原理, 节点与实例, 以及一些重要的零碎知识点.</title><link>https://slimenull.com/p/20210215112610/</link><pubDate>Mon, 15 Feb 2021 11:26:10 +0800</pubDate><guid>https://slimenull.com/p/20210215112610/</guid><description>&lt;p>当你查资料时, 看到那些眼花缭乱的 xaml 代码, 让人瞬间没有了学习的欲望&amp;hellip; 先试着寻找下其中的规律吧.&lt;/p>
+&lt;h2 id="节点与实例">节点与实例:&lt;/h2>
+&lt;p>&lt;img src="https://slimenull.com/images/20210215061732521.png"
+loading="lazy"
+>
+首先看看上面的文章, 从我们最常接触的 Button 入手吧. Button 是可以用 CS 代码来进行实例化, 然后放置在窗口中的, 而其它的元素, 例如根节点 Window, 都是可以通过 CS 代码进行实例化.&lt;/p>
+&lt;p>可以推测出, 在 xaml 中, 一个个的节点, 例如 Button, Label, 其实就是等同于声明一个对应类型的实例.&lt;/p>
+&lt;p>那么如何在 CS 代码中访问这个实例呢? 很简单, 为这个实例指定一个名称(Name), 就如上面的图片中为 Label 指定 Name 那样. 然后就可以在 CS 代码中访问了
+&lt;img src="https://slimenull.com/images/20210215062326997.png"
+loading="lazy"
+>&lt;/p>
+&lt;h2 id="实例的属性">实例的属性:&lt;/h2>
+&lt;p>如果要设置一个 Label 的 Content, 在 xaml 代码中, 该如何设置? 最常用的肯定是下面这个:
+&lt;img src="https://slimenull.com/images/20210215062553167.png"
+loading="lazy"
+>
+xaml 还支持一种, 就是这样:
+&lt;img src="https://slimenull.com/images/20210215062744751.png"
+loading="lazy"
+>
+其实 TextBox 的 Text 属性也是可以这么设置的:
+&lt;img src="https://slimenull.com/images/20210215062905536.png"
+loading="lazy"
+>
+大概猜出了吧? xaml中, 一堆标签之间的值可以设置为对应实例的特定属性设置值. 例如 Label 就是设置Content, TextBox 就是 设置 TextBox.&lt;/p>
+&lt;p>其实, 还有另外一种, 你肯定见过啦, Grid.RowDefinitions 就是这么用的.
+&lt;img src="https://slimenull.com/images/20210215063244895.png"
+loading="lazy"
+>
+你可能会想到, Label 和 TextBox 这类普通的控件, 是否也支持呢?
+&lt;img src="https://slimenull.com/images/20210215063437536.png"
+loading="lazy"
+>&lt;/p>
+&lt;blockquote>
+&lt;p>哈哈, 很有趣吧, 所以说, 以后看到什么 xaml 代码, 对应的 CS 代码也能猜出来一些, 毕竟如果是控件, 也无非是设置属性以及添加成员了, 噢, 下面就是添加成员咯.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="声明控件成员">声明控件成员:&lt;/h2>
+&lt;p>&lt;img src="https://slimenull.com/images/20210215064400870.png"
+loading="lazy"
+>
+如果一个控件可以有子成员, 就可以像上面那样声明, 当然, 这个也肯定经常用, 只是可能没注意过罢了.&lt;/p>
+&lt;h2 id="自定义类型实例">自定义类型实例:&lt;/h2>
+&lt;p>少年, 学过数据绑定吗? 数据绑定的上下文如何声明的, 应该还记得吧. 我之前就像一个憨憨一样, 去用 CS 代码来指定 DataContext. (文章末有关于数据绑定的&lt;a class="link" href="#end_wpfdatabinding" >文章推荐&lt;/a>)
+&lt;img src="https://slimenull.com/images/20210215065018565.png"
+loading="lazy"
+>
+但是,,, 刚刚我们说过, 想 Button, Label 这样的 UI 组件, 其实在声明后, 其实就是一个个的实例, 我们刚刚进行的指定上下文操作, 也是创建一个 TestModel 实例, 然后指定给这个窗口的 DataContext 属性.&lt;/p>
+&lt;p>如何指定属性, 我们知道, 那如何在 xaml 中创建我们自己定义的类型实例呢? 下面是一个示例:
+&lt;img src="https://slimenull.com/images/20210215065718402.png"
+loading="lazy"
+>
+你悟了吗? 通过这个, 我们就可以在 xaml 中声明实例了&amp;hellip; 当然, 肯定有小聪明在想, &amp;ldquo;我试试在 xaml 里面声明一个浮点数试试?&amp;rdquo;
+&lt;img src="https://slimenull.com/images/20210215070612804.png"
+loading="lazy"
+>
+没错, 那个憨憨就是我, 亲自尝试了一下, 不过也不算是没有收获, 至少我们可以知道, 这些实例的声明, 肯定是在特定的情况下才是可以的. 例如这个 Grid 子元素, 你必须指定一个 UIElement, 这跟 CS 代码里的一模一样hhh&lt;/p>
+&lt;p>所以 xaml 跟 CS 还是相关联的哈哈哈, 我一开始还觉得 xaml 跟 CS 的关联不是很大呢.&lt;/p>
+&lt;h2 id="查看窗体完整代码">查看窗体完整代码:&lt;/h2>
+&lt;p>如果你用过 WinForm, 肯定会经常接触这个, 当指定了控件的某些事件, 而这个函数又不存在的时候肯定需要自己调整代码的:
+&lt;img src="https://slimenull.com/images/2021021507141041.png"
+loading="lazy"
+>
+WinForm 的窗体完整代码就在这里了, 一到WPF, 就令人窒息了, 因为没有直接显示这个文件.&lt;/p>
+&lt;p>不过, 你还是可以通过这样的方式去查看的:
+&lt;img src="https://slimenull.com/images/20210215071805683.png"
+loading="lazy"
+>
+然后, 欢呼吧, 虽然一般很少动这个文件(你也没办法动, 自动生成会覆盖你的改动), 但是看这个东西, 肯定对学习 WPF 有帮助的.
+&lt;img src="https://slimenull.com/images/20210215071852423.png"
+loading="lazy"
+>
+&lt;img src="https://slimenull.com/images/202102150720390.png"
+loading="lazy"
+>
+&lt;span id="windowclass">&lt;/span>&lt;/p>
+&lt;h2 id="窗体类型">窗体类型:&lt;/h2>
+&lt;p>其实这里只是指 xaml 中, Window 节点的 x:Class 属性, 我们知道, WPF 会有一些自动生成的代码, 这些代码中声明了这个窗体, 而这个生成的代码中窗体的命名空间和类名, 就是通过 xaml 文档中的 x:Class 属性指定的.&lt;/p>
+&lt;p>例如我指定 x:Class=&amp;ldquo;MvvmTest.View.MainWindow&amp;rdquo;, 那么完整代码中就是这样的:
+&lt;img src="https://slimenull.com/images/20210215175526504.png"
+loading="lazy"
+>
+所以说, 如果要改变这个窗体的命名空间, 你需要指定 x:Class 属性, 以及指定 xaml.cs 文件的命名空间.&lt;/p>
+&lt;p>例如, 你将一个窗体从项目的根目录移动到了项目的View文件夹, 此时, 规范的做法应该是同时将这个窗体的命名空间添加上一个View.&lt;/p>
+&lt;p>&lt;br/>&lt;br/>&lt;br/>&lt;br/>&lt;br/>&lt;/p>
+&lt;p>看的这么开心, 赶快关注诺尔吧qwq, 别忘了点个赞噢~&lt;/p>
+&lt;br/>
+&lt;p>推荐文章:
+&lt;a class="link" href="https://slimenull.com/p/20210211102111/" >[C#] MCI 详解与封装类, MCI 播放音乐, 获取播放状态, 获取音频长度, 进度调整&lt;/a>
+&lt;a class="link" href="https://slimenull.com/p/20230902090054/" >[.NET] WPF 数据绑定与 MVVM 模型&lt;/a>&lt;span id="end_wpfdatabinding">&lt;/span>&lt;/p></description></item><item><title>[C#/VB.NET] C# 与 VB.NET 的类库跨语言引用.</title><link>https://slimenull.com/p/20210215015702/</link><pubDate>Mon, 15 Feb 2021 01:57:02 +0800</pubDate><guid>https://slimenull.com/p/20210215015702/</guid><description>&lt;p>例如你有一个程序, 是 VB.NET 写的, 你希望在里面引用 C# 的代码, 那么, 该如何操作呢?&lt;/p>
+&lt;h2 id="准备材料">准备材料:&lt;/h2>
+&lt;ol>
+&lt;li>一个 C# 或 VB.NET 项目, 我们以一个测试项目(WinForm)开始&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://slimenull.com/images/20210215012757638.png"
+loading="lazy"
+>&lt;/p>
+&lt;ol start="2">
+&lt;li>与该项目语言不同的, 但是是基于 .NET 的类代码片. 代码地址: &lt;a class="link" href="https://slimenull.com/p/20200706065250/" >一个类实现控件拖拽移动&lt;/a>
+&lt;img src="https://slimenull.com/images/20210215012826547.png"
+loading="lazy"
+>&lt;/li>
+&lt;/ol>
+&lt;h2 id="分布演示">分布演示:&lt;/h2>
+&lt;h4 id="1--创建类库项目">1. &amp;gt; 创建类库项目:&lt;/h4>
+&lt;p>创建一个与我们准备的类库语言相同的类库, 并将代码拷贝到其中:
+&lt;img src="https://slimenull.com/images/20210215013356542.png"
+loading="lazy"
+>&lt;/p>
+&lt;h4 id="2--添加项目引用">2. &amp;gt; 添加项目引用:&lt;/h4>
+&lt;p>在刚刚准备好的 WinForm 项目中, 添加对类库项目的引用.
+&lt;img src="https://slimenull.com/images/20210215013532277.png"
+loading="lazy"
+>
+&lt;img src="https://slimenull.com/images/20210215013627662.png"
+loading="lazy"
+>&lt;/p>
+&lt;h4 id="3--开始使用">3. &amp;gt; 开始使用:&lt;/h4>
+&lt;p>现在, 你就可以直接使用类库中的类了.
+&lt;img src="https://slimenull.com/images/20210215014935805.png"
+loading="lazy"
+>&lt;/p>
+&lt;h4 id="-使用效果">&amp;gt; 使用效果:&lt;/h4>
+&lt;p>&lt;img src="https://slimenull.com/images/5fd315dfb8b8e8c224db58c96f7797f5.gif"
+loading="lazy"
+>&lt;/p></description></item></channel></rss>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>进制 on SlimeNull Blogs</title><link>https://slimenull.com/tags/%E8%BF%9B%E5%88%B6/</link><description>Recent content in 进制 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 06 Apr 2021 22:37:59 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/%E8%BF%9B%E5%88%B6/index.xml" rel="self" type="application/rss+xml"/><item><title>[C#] 二进制, 十进制, 十六进制, 进制转换</title><link>https://slimenull.com/p/20210406223759/</link><pubDate>Tue, 06 Apr 2021 22:37:59 +0800</pubDate><guid>https://slimenull.com/p/20210406223759/</guid><description>&lt;h3 id="在源码中">在源码中:&lt;/h3>
+&lt;p>C# 中允许在代码中使用 0x 开头的十六进制数字, 以及 0b 开头的二进制数字来表示一个整数. 下面的语法是合理的.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">123&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">b&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0xFF&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">c&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="n">b10010&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="从数字转换">从数字转换&lt;/h3>
+&lt;p>将一个数字转换为某进制的字符串, 有两种方式:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 第一种: 使用 Convert 类. 可转换为 二进制 八进制 十进制 十六进制&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Convert&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">10&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 二进制, 返回 &amp;#34;1010&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Convert&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">10&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">8&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 八进制, 返回 &amp;#34;12&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Convert&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">10&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">10&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 十进制, 返回 &amp;#34;10&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Convert&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">10&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">16&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 十六进制, 返回 &amp;#34;a&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 第二种: 使用对象的 ToString() 方法. 只能转换为 十六进制&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="m">10.&lt;/span>&lt;span class="n">ToString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;x&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 返回 &amp;#34;a&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="m">10.&lt;/span>&lt;span class="n">ToString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;X&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 返回 &amp;#34;A&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="m">10.&lt;/span>&lt;span class="n">ToString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;x2&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 返回 &amp;#34;0a&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="m">10.&lt;/span>&lt;span class="n">ToString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;X2&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 返回 &amp;#34;0A&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 第三种: 使用 String 的静态方法 Format, 只能转换为 十六进制&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">string&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;{0:x}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">10&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 返回 &amp;#34;a&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">string&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;{0:X}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">10&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 返回 &amp;#34;A&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">string&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;{0:x2}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">10&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 返回 &amp;#34;0a&amp;#34;, 即填充至宽2&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">string&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;{0:X2}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">10&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 返回 &amp;#34;0A&amp;#34;, 同样填充&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="从字符串转换">从字符串转换&lt;/h3>
+&lt;p>将字符串转换为对应的数据, 有两种方式&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 第一种: 使用 Convert类. 可转换 二进制 八进制 十进制 十六进制, 这里以 int 为例&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Convert&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToInt32&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;1010&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 二进制, 返回 10&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Convert&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToInt32&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;12&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">8&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 八进制, 返回 10&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Convert&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToInt32&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;10&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">10&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 十进制, 返回 10&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Convert&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToInt32&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;A&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">16&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 十六进制, 返回 10&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 第二种: 使用对应数据类型的 Parse 方法, 只支持 十六进制, 这里以 int 为例&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Parse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;A&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">NumberStyles&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">HexNumber&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 返回 10&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="从字符数组转换">从字符数组转换&lt;/h3>
+&lt;p>最常用的就是将字符数组转换为十六进制字符串了, Linq 可以帮到我们许多&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">byte&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">array&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 假定这个数组有值&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 第一种: 对应上面的 Convert 类静态方法, 也是个人比较推荐的&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">string&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">array&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">Convert&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">16&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">PadLeft&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="sc">&amp;#39;0&amp;#39;&lt;/span>&lt;span class="p">)));&lt;/span> &lt;span class="c1">// 返回小写的&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 第二种: 对应格式化方法&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">string&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">array&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;X2&amp;#34;&lt;/span>&lt;span class="p">)));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 第三种: 对应 String 静态 Format 方法&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">string&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Join&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">array&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="kt">string&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;{0:X2}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">)));&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

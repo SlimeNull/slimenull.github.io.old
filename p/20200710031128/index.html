@@ -1,0 +1,1013 @@
+<!doctype html><html lang=zh-CN dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='最近闲来无事, 倒是借助WebAPI实现翻译器, 本想设计一个炫酷的界面(模仿VS), 却没想到, 难度大大超出我的想象, 拖拽, 调整大小, 如果要实现VS的边框, 还需要想办法做到过渡透明! 这对于WinForm来说实在是太难了, 如果不过渡透明, 就是全透明, 那鼠标就直接穿窗体了!不过还是有些成果的, 比如, 造了两个轮子(我真是一个热衷于造轮子的傻子)所说的轮子就是文章标题咯, 因为之前我还做了一个类来实现拖拽移动控件或窗体嘛, 所以我就直接把这个调整大小的跟之前的功能整合到了..'><title>[C#] 一个类实现拖拽调整窗体或控件大小</title>
+<link rel=canonical href=https://slimenull.com/p/20200710031128/><link rel=stylesheet href=/scss/style.min.73438a911857e6d491e39369614d0dd0c0302dcacfb43e15034e0e48cac08c07.css><meta property='og:title' content='[C#] 一个类实现拖拽调整窗体或控件大小'><meta property='og:description' content='最近闲来无事, 倒是借助WebAPI实现翻译器, 本想设计一个炫酷的界面(模仿VS), 却没想到, 难度大大超出我的想象, 拖拽, 调整大小, 如果要实现VS的边框, 还需要想办法做到过渡透明! 这对于WinForm来说实在是太难了, 如果不过渡透明, 就是全透明, 那鼠标就直接穿窗体了!不过还是有些成果的, 比如, 造了两个轮子(我真是一个热衷于造轮子的傻子)所说的轮子就是文章标题咯, 因为之前我还做了一个类来实现拖拽移动控件或窗体嘛, 所以我就直接把这个调整大小的跟之前的功能整合到了..'><meta property='og:url' content='https://slimenull.com/p/20200710031128/'><meta property='og:site_name' content='SlimeNull Blogs'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2020-07-10T03:11:28+08:00'><meta property='article:modified_time' content='2020-07-10T03:11:28+08:00'><meta name=twitter:title content="[C#] 一个类实现拖拽调整窗体或控件大小"><meta name=twitter:description content="最近闲来无事, 倒是借助WebAPI实现翻译器, 本想设计一个炫酷的界面(模仿VS), 却没想到, 难度大大超出我的想象, 拖拽, 调整大小, 如果要实现VS的边框, 还需要想办法做到过渡透明! 这对于WinForm来说实在是太难了, 如果不过渡透明, 就是全透明, 那鼠标就直接穿窗体了!不过还是有些成果的, 比如, 造了两个轮子(我真是一个热衷于造轮子的傻子)所说的轮子就是文章标题咯, 因为之前我还做了一个类来实现拖拽移动控件或窗体嘛, 所以我就直接把这个调整大小的跟之前的功能整合到了.."><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu11436448765783238083.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>SlimeNull Blogs</a></h1><h2 class=site-description>为了更好的开源世界~</h2></div></header><ol class=social-menu><li><a href=https://github.com/SlimeNull target=_blank title=GitHub rel=me><!doctype html><svg t="1702542119184" class="icon" viewBox="0 0 1024 1024" p-id="4136" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M692.906667 938.666667A42.666667 42.666667.0 01650.24 896V785.066667A91.733333 91.733333.0 00627.2 714.24a42.666667 42.666667.0 0126.026667-71.253333c104.106666-12.373334 200.106666-45.653334 200.106666-226.133334a170.666667 170.666667.0 00-28.586666-94.72A117.333333 117.333333.0 01807.253333 234.24a158.293333 158.293333.0 000-60.16A326.4 326.4.0 00718.08 220.586667a42.666667 42.666667.0 01-35.84 6.4 433.066667 433.066667.0 00-235.52.0 42.666667 42.666667.0 01-35.84-6.4A315.733333 315.733333.0 00320.853333 174.08a150.186667 150.186667.0 000 60.16 121.173333 121.173333.0 01-18.346666 88.746667A173.653333 173.653333.0 00273.92 418.133333C273.92 584.106666 354.133333 628.48 474.453333 643.84A42.666667 42.666667.0 01509.44 672a42.666667 42.666667.0 01-8.96 42.666667 87.893333 87.893333.0 00-23.466667 66.56V896A42.666667 42.666667.0 01391.68 896v-24.32a256 256 0 01-224.853333-89.173333A166.4 166.4.0 00117.333333 744.96a42.666667 42.666667.0 1121.333334-82.773333A210.346667 210.346667.0 01224 720.213333c42.666667 42.666667 85.333333 80.213333 166.4 64.853334a165.973333 165.973333.0 019.813333-67.413334C312.32 695.466666 186.88 632.32 186.88 418.986667a256 256 0 0142.666667-142.08 36.266667 36.266667.0 005.546666-26.453334 242.773333 242.773333.0 0114.08-136.96 42.666667 42.666667.0 0126.88-24.32c14.506667-4.266667 66.56-12.8 165.12 51.2a518.826667 518.826667.0 01242.773334.0c98.56-64 150.613333-55.893333 164.693333-51.2a42.666667 42.666667.0 0126.88 24.32A243.626667 243.626667.0 01889.6 250.88a32 32 0 004.693333 24.32A256 256 0 01936.96 417.706667c0 216.32-124.586667 279.04-213.333333 298.666666a182.613333 182.613333.0 019.386666 71.253334V896a42.666667 42.666667.0 01-40.106666 42.666667z" fill="#666" p-id="4137"/></svg></a></li><li><a href=https://space.bilibili.com/441842015 target=_blank title=Bilibili rel=me><!doctype html><svg t="1702541966104" class="icon" viewBox="0 0 1024 1024" p-id="16981" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M306.005333 117.632 444.330667 256h135.296l138.368-138.325333A42.666667 42.666667.0 01778.368 178.048L700.330667 256H789.333333A149.333333 149.333333.0 01938.666667 405.333333v341.333334A149.333333 149.333333.0 01789.333333 896H234.666667A149.333333 149.333333.0 0185.333333 746.666667V405.333333A149.333333 149.333333.0 01234.666667 256h88.96L245.632 177.962667a42.666667 42.666667.0 0160.373333-60.373334zm483.328 223.701333H234.666667a64 64 0 00-63.701334 57.856L170.666667 405.333333v341.333334a64 64 0 0057.856 63.701333L234.666667 810.666667h554.666666a64 64 0 0063.701334-57.856L853.333333 746.666667V405.333333a64 64 0 00-64-64zm-448 128A42.666667 42.666667.0 01384 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666666-42.666667zm341.333334.0A42.666667 42.666667.0 01725.333333 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666667-42.666667z" fill="#666" p-id="16982"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>主页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>链接</span></a></li><div class=menu-bottom-section><li id=i18n-switch><svg class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.239 8-5 8"/><path d="M5 9c-.003 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4-9 4 9"/><path d="M19.1 18h-6.2"/></svg>
+<select name=language onchange="window.location.href=this.selectedOptions[0].value"><option value=https://slimenull.com/ selected></option></select></li><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></div></ol></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/%E7%B1%BB%E5%BA%93/>类库
+</a><a href=/categories/%E6%A1%8C%E9%9D%A2%E7%A8%8B%E5%BA%8F/>桌面程序
+</a><a href=/categories/dotnet/ style=background-color:#512cd4;color:#fff>.NET</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/20200710031128/>[C#] 一个类实现拖拽调整窗体或控件大小</a></h2><h3 class=article-subtitle>最近闲来无事, 倒是借助WebAPI实现翻译器, 本想设计一个炫酷的界面(模仿VS), 却没想到, 难度大大超出我的想象, 拖拽, 调整大小, 如果要实现VS的边框, 还需要想办法做到过渡透明! 这对于WinForm来说实在是太难了, 如果不过渡透明, 就是全透明, 那鼠标就直接穿窗体了!不过还是有些成果的, 比如, 造了两个轮子(我真是一个热衷于造轮子的傻子)所说的轮子就是文章标题咯, 因为之前我还做了一个类来实现拖拽移动控件或窗体嘛, 所以我就直接把这个调整大小的跟之前的功能整合到了..</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jul 10, 2020</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 5 分钟</time></div></footer></div></header><section class=article-content><p><img src=/images/2020071002573582.png loading=lazy alt=在这里插入图片描述></p><ol start=0><li>最近闲来无事, 倒是借助WebAPI实现翻译器, 本想设计一个炫酷的界面(模仿VS), 却没想到, 难度大大超出我的想象, 拖拽, 调整大小, 如果要实现VS的边框, 还需要想办法做到过渡透明! 这对于WinForm来说实在是太难了, 如果不过渡透明, 就是全透明, 那鼠标就直接穿窗体了!</li><li>不过还是有些成果的, 比如, 造了两个轮子</li></ol><blockquote><p>(我真是一个热衷于造轮子的傻子)</p></blockquote><ol start=2><li><p>所说的轮子就是文章标题咯, 因为之前我还做了一个类来实现拖拽移动控件或窗体嘛, 所以我就直接把这个调整大小的跟之前的功能整合到了一起. (可以提到的是, 期间因为特殊需求, 还做了一个映射拖拽移动控件窗体, 就是拖拽控件1, 移动控件2)</p></li><li><p>下面的代码就是程序主体了, 它是应该被封装到一个类库里的, 所以, 不要直接把这些代码添加到你的文件中, 而是新建一个类库(不是新建项目, 而是添加到你的项目中), 然后把这些代码覆盖到新的文件中, 在你的程序中using CHO.DragOperation即可使用代码所包含的3个功能( <del>DragMove,MapDragMove,DragResize</del> )</p></li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span><span class=lnt>194
+</span><span class=lnt>195
+</span><span class=lnt>196
+</span><span class=lnt>197
+</span><span class=lnt>198
+</span><span class=lnt>199
+</span><span class=lnt>200
+</span><span class=lnt>201
+</span><span class=lnt>202
+</span><span class=lnt>203
+</span><span class=lnt>204
+</span><span class=lnt>205
+</span><span class=lnt>206
+</span><span class=lnt>207
+</span><span class=lnt>208
+</span><span class=lnt>209
+</span><span class=lnt>210
+</span><span class=lnt>211
+</span><span class=lnt>212
+</span><span class=lnt>213
+</span><span class=lnt>214
+</span><span class=lnt>215
+</span><span class=lnt>216
+</span><span class=lnt>217
+</span><span class=lnt>218
+</span><span class=lnt>219
+</span><span class=lnt>220
+</span><span class=lnt>221
+</span><span class=lnt>222
+</span><span class=lnt>223
+</span><span class=lnt>224
+</span><span class=lnt>225
+</span><span class=lnt>226
+</span><span class=lnt>227
+</span><span class=lnt>228
+</span><span class=lnt>229
+</span><span class=lnt>230
+</span><span class=lnt>231
+</span><span class=lnt>232
+</span><span class=lnt>233
+</span><span class=lnt>234
+</span><span class=lnt>235
+</span><span class=lnt>236
+</span><span class=lnt>237
+</span><span class=lnt>238
+</span><span class=lnt>239
+</span><span class=lnt>240
+</span><span class=lnt>241
+</span><span class=lnt>242
+</span><span class=lnt>243
+</span><span class=lnt>244
+</span><span class=lnt>245
+</span><span class=lnt>246
+</span><span class=lnt>247
+</span><span class=lnt>248
+</span><span class=lnt>249
+</span><span class=lnt>250
+</span><span class=lnt>251
+</span><span class=lnt>252
+</span><span class=lnt>253
+</span><span class=lnt>254
+</span><span class=lnt>255
+</span><span class=lnt>256
+</span><span class=lnt>257
+</span><span class=lnt>258
+</span><span class=lnt>259
+</span><span class=lnt>260
+</span><span class=lnt>261
+</span><span class=lnt>262
+</span><span class=lnt>263
+</span><span class=lnt>264
+</span><span class=lnt>265
+</span><span class=lnt>266
+</span><span class=lnt>267
+</span><span class=lnt>268
+</span><span class=lnt>269
+</span><span class=lnt>270
+</span><span class=lnt>271
+</span><span class=lnt>272
+</span><span class=lnt>273
+</span><span class=lnt>274
+</span><span class=lnt>275
+</span><span class=lnt>276
+</span><span class=lnt>277
+</span><span class=lnt>278
+</span><span class=lnt>279
+</span><span class=lnt>280
+</span><span class=lnt>281
+</span><span class=lnt>282
+</span><span class=lnt>283
+</span><span class=lnt>284
+</span><span class=lnt>285
+</span><span class=lnt>286
+</span><span class=lnt>287
+</span><span class=lnt>288
+</span><span class=lnt>289
+</span><span class=lnt>290
+</span><span class=lnt>291
+</span><span class=lnt>292
+</span><span class=lnt>293
+</span><span class=lnt>294
+</span><span class=lnt>295
+</span><span class=lnt>296
+</span><span class=lnt>297
+</span><span class=lnt>298
+</span><span class=lnt>299
+</span><span class=lnt>300
+</span><span class=lnt>301
+</span><span class=lnt>302
+</span><span class=lnt>303
+</span><span class=lnt>304
+</span><span class=lnt>305
+</span><span class=lnt>306
+</span><span class=lnt>307
+</span><span class=lnt>308
+</span><span class=lnt>309
+</span><span class=lnt>310
+</span><span class=lnt>311
+</span><span class=lnt>312
+</span><span class=lnt>313
+</span><span class=lnt>314
+</span><span class=lnt>315
+</span><span class=lnt>316
+</span><span class=lnt>317
+</span><span class=lnt>318
+</span><span class=lnt>319
+</span><span class=lnt>320
+</span><span class=lnt>321
+</span><span class=lnt>322
+</span><span class=lnt>323
+</span><span class=lnt>324
+</span><span class=lnt>325
+</span><span class=lnt>326
+</span><span class=lnt>327
+</span><span class=lnt>328
+</span><span class=lnt>329
+</span><span class=lnt>330
+</span><span class=lnt>331
+</span><span class=lnt>332
+</span><span class=lnt>333
+</span><span class=lnt>334
+</span><span class=lnt>335
+</span><span class=lnt>336
+</span><span class=lnt>337
+</span><span class=lnt>338
+</span><span class=lnt>339
+</span><span class=lnt>340
+</span><span class=lnt>341
+</span><span class=lnt>342
+</span><span class=lnt>343
+</span><span class=lnt>344
+</span><span class=lnt>345
+</span><span class=lnt>346
+</span><span class=lnt>347
+</span><span class=lnt>348
+</span><span class=lnt>349
+</span><span class=lnt>350
+</span><span class=lnt>351
+</span><span class=lnt>352
+</span><span class=lnt>353
+</span><span class=lnt>354
+</span><span class=lnt>355
+</span><span class=lnt>356
+</span><span class=lnt>357
+</span><span class=lnt>358
+</span><span class=lnt>359
+</span><span class=lnt>360
+</span><span class=lnt>361
+</span><span class=lnt>362
+</span><span class=lnt>363
+</span><span class=lnt>364
+</span><span class=lnt>365
+</span><span class=lnt>366
+</span><span class=lnt>367
+</span><span class=lnt>368
+</span><span class=lnt>369
+</span><span class=lnt>370
+</span><span class=lnt>371
+</span><span class=lnt>372
+</span><span class=lnt>373
+</span><span class=lnt>374
+</span><span class=lnt>375
+</span><span class=lnt>376
+</span><span class=lnt>377
+</span><span class=lnt>378
+</span><span class=lnt>379
+</span><span class=lnt>380
+</span><span class=lnt>381
+</span><span class=lnt>382
+</span><span class=lnt>383
+</span><span class=lnt>384
+</span><span class=lnt>385
+</span><span class=lnt>386
+</span><span class=lnt>387
+</span><span class=lnt>388
+</span><span class=lnt>389
+</span><span class=lnt>390
+</span><span class=lnt>391
+</span><span class=lnt>392
+</span><span class=lnt>393
+</span><span class=lnt>394
+</span><span class=lnt>395
+</span><span class=lnt>396
+</span><span class=lnt>397
+</span><span class=lnt>398
+</span><span class=lnt>399
+</span><span class=lnt>400
+</span><span class=lnt>401
+</span><span class=lnt>402
+</span><span class=lnt>403
+</span><span class=lnt>404
+</span><span class=lnt>405
+</span><span class=lnt>406
+</span><span class=lnt>407
+</span><span class=lnt>408
+</span><span class=lnt>409
+</span><span class=lnt>410
+</span><span class=lnt>411
+</span><span class=lnt>412
+</span><span class=lnt>413
+</span><span class=lnt>414
+</span><span class=lnt>415
+</span><span class=lnt>416
+</span><span class=lnt>417
+</span><span class=lnt>418
+</span><span class=lnt>419
+</span><span class=lnt>420
+</span><span class=lnt>421
+</span><span class=lnt>422
+</span><span class=lnt>423
+</span><span class=lnt>424
+</span><span class=lnt>425
+</span><span class=lnt>426
+</span><span class=lnt>427
+</span><span class=lnt>428
+</span><span class=lnt>429
+</span><span class=lnt>430
+</span><span class=lnt>431
+</span><span class=lnt>432
+</span><span class=lnt>433
+</span><span class=lnt>434
+</span><span class=lnt>435
+</span><span class=lnt>436
+</span><span class=lnt>437
+</span><span class=lnt>438
+</span><span class=lnt>439
+</span><span class=lnt>440
+</span><span class=lnt>441
+</span><span class=lnt>442
+</span><span class=lnt>443
+</span><span class=lnt>444
+</span><span class=lnt>445
+</span><span class=lnt>446
+</span><span class=lnt>447
+</span><span class=lnt>448
+</span><span class=lnt>449
+</span><span class=lnt>450
+</span><span class=lnt>451
+</span><span class=lnt>452
+</span><span class=lnt>453
+</span><span class=lnt>454
+</span><span class=lnt>455
+</span><span class=lnt>456
+</span><span class=lnt>457
+</span><span class=lnt>458
+</span><span class=lnt>459
+</span><span class=lnt>460
+</span><span class=lnt>461
+</span><span class=lnt>462
+</span><span class=lnt>463
+</span><span class=lnt>464
+</span><span class=lnt>465
+</span><span class=lnt>466
+</span><span class=lnt>467
+</span><span class=lnt>468
+</span><span class=lnt>469
+</span><span class=lnt>470
+</span><span class=lnt>471
+</span><span class=lnt>472
+</span><span class=lnt>473
+</span><span class=lnt>474
+</span><span class=lnt>475
+</span><span class=lnt>476
+</span><span class=lnt>477
+</span><span class=lnt>478
+</span><span class=lnt>479
+</span><span class=lnt>480
+</span><span class=lnt>481
+</span><span class=lnt>482
+</span><span class=lnt>483
+</span><span class=lnt>484
+</span><span class=lnt>485
+</span><span class=lnt>486
+</span><span class=lnt>487
+</span><span class=lnt>488
+</span><span class=lnt>489
+</span><span class=lnt>490
+</span><span class=lnt>491
+</span><span class=lnt>492
+</span><span class=lnt>493
+</span><span class=lnt>494
+</span><span class=lnt>495
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=k>using</span> <span class=nn>System</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>using</span> <span class=nn>System.Collections.Generic</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>using</span> <span class=nn>System.Drawing</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=k>using</span> <span class=nn>System.Windows.Forms</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>namespace</span> <span class=nn>CHO</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>namespace</span> <span class=nn>DragOperation</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=k>class</span> <span class=nc>DragMove</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=n>DragMove</span><span class=p>(</span><span class=n>MouseButtons</span> <span class=n>MouseButton</span><span class=p>,</span> <span class=n>DragMoveMode</span> <span class=n>FollowMode</span> <span class=p>=</span> <span class=n>DragMoveMode</span><span class=p>.</span><span class=n>All</span><span class=p>,</span> <span class=kt>bool</span> <span class=n>OutParent</span> <span class=p>=</span> <span class=kc>false</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>MouseButton</span> <span class=p>=</span> <span class=n>MouseButton</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>FollowMode</span> <span class=p>=</span> <span class=n>FollowMode</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>OutParent</span> <span class=p>=</span> <span class=n>OutParent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=n>DragMove</span><span class=p>(</span><span class=n>DragMoveMode</span> <span class=n>FollowMode</span> <span class=p>=</span> <span class=n>DragMoveMode</span><span class=p>.</span><span class=n>All</span><span class=p>,</span> <span class=kt>bool</span> <span class=n>OutParent</span> <span class=p>=</span> <span class=kc>false</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>AllMouseButton</span> <span class=p>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>FollowMode</span> <span class=p>=</span> <span class=n>FollowMode</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>OutParent</span> <span class=p>=</span> <span class=n>OutParent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>object</span> <span class=n>AboutControl</span><span class=p>;</span>                                  <span class=c1>// 表示当前移动控件操作是针对哪个控件的</span>
+</span></span><span class=line><span class=cl>            <span class=kt>bool</span> <span class=n>Moving</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>                                  <span class=c1>// 表示是否正在移动控件</span>
+</span></span><span class=line><span class=cl>            <span class=kt>bool</span> <span class=n>AllMouseButton</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>                          <span class=c1>// 表示是否处理所有按钮</span>
+</span></span><span class=line><span class=cl>            <span class=kt>bool</span> <span class=n>OutParent</span><span class=p>;</span>                                       <span class=c1>// 表示是否允许脱离父容器的显示区域</span>
+</span></span><span class=line><span class=cl>            <span class=n>Point</span> <span class=n>ControlStartLocation</span><span class=p>;</span>                           <span class=c1>// 表示移动操作时, 控件的初始位置</span>
+</span></span><span class=line><span class=cl>            <span class=n>Point</span> <span class=n>MouseFirstLocationAboutParent</span><span class=p>;</span>                  <span class=c1>// 表示移动操作时, 鼠标的初始位置</span>
+</span></span><span class=line><span class=cl>            <span class=n>DragMoveMode</span> <span class=n>FollowMode</span><span class=p>;</span>                              <span class=c1>// 跟随模式</span>
+</span></span><span class=line><span class=cl>            <span class=n>MouseButtons</span> <span class=n>MouseButton</span><span class=p>;</span>                             <span class=c1>// 判定按钮</span>
+</span></span><span class=line><span class=cl>            <span class=n>List</span><span class=p>&lt;</span><span class=n>Control</span><span class=p>&gt;</span> <span class=n>AddedControls</span> <span class=p>=</span> <span class=k>new</span> <span class=n>List</span><span class=p>&lt;</span><span class=n>Control</span><span class=p>&gt;();</span>    <span class=c1>// 已添加控件</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=k>void</span> <span class=n>MouseDownEvent</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>MouseEventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>((</span><span class=n>e</span><span class=p>.</span><span class=n>Button</span> <span class=p>==</span> <span class=n>MouseButton</span><span class=p>)</span> <span class=p>||</span> <span class=n>AllMouseButton</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>AboutControl</span> <span class=p>=</span> <span class=n>sender</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>Moving</span> <span class=p>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>ControlStartLocation</span> <span class=p>=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Location</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=p>(</span><span class=n>sender</span> <span class=k>is</span> <span class=n>Form</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>MouseFirstLocationAboutParent</span> <span class=p>=</span> <span class=n>Control</span><span class=p>.</span><span class=n>MousePosition</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                    <span class=k>else</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>MouseFirstLocationAboutParent</span> <span class=p>=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Parent</span><span class=p>.</span><span class=n>PointToClient</span><span class=p>(</span><span class=n>Control</span><span class=p>.</span><span class=n>MousePosition</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>void</span> <span class=n>MouseMoveEvent</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>MouseEventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>sender</span> <span class=p>==</span> <span class=n>AboutControl</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=p>(</span><span class=n>Moving</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>Point</span> <span class=n>MouseLocationNow</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=k>if</span> <span class=p>(</span><span class=n>sender</span> <span class=k>is</span> <span class=n>Form</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>MouseLocationNow</span> <span class=p>=</span> <span class=n>Control</span><span class=p>.</span><span class=n>MousePosition</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=k>else</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>MouseLocationNow</span> <span class=p>=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Parent</span><span class=p>.</span><span class=n>PointToClient</span><span class=p>(</span><span class=n>Control</span><span class=p>.</span><span class=n>MousePosition</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=kt>int</span> <span class=n>NewX</span> <span class=p>=</span> <span class=n>MouseLocationNow</span><span class=p>.</span><span class=n>X</span> <span class=p>-</span> <span class=n>MouseFirstLocationAboutParent</span><span class=p>.</span><span class=n>X</span> <span class=p>+</span> <span class=n>ControlStartLocation</span><span class=p>.</span><span class=n>X</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=kt>int</span> <span class=n>NewY</span> <span class=p>=</span> <span class=n>MouseLocationNow</span><span class=p>.</span><span class=n>Y</span> <span class=p>-</span> <span class=n>MouseFirstLocationAboutParent</span><span class=p>.</span><span class=n>Y</span> <span class=p>+</span> <span class=n>ControlStartLocation</span><span class=p>.</span><span class=n>Y</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=k>if</span> <span class=p>(!</span><span class=n>OutParent</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=k>if</span> <span class=p>(!(</span><span class=n>sender</span> <span class=k>is</span> <span class=n>Form</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>                            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                                <span class=k>if</span> <span class=p>(</span><span class=n>NewX</span> <span class=p>&lt;</span> <span class=m>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                                    <span class=n>NewX</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                                <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>NewX</span> <span class=p>+</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Width</span> <span class=p>&gt;</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Parent</span><span class=p>.</span><span class=n>Width</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                                    <span class=n>NewX</span> <span class=p>=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Parent</span><span class=p>.</span><span class=n>Width</span> <span class=p>-</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Width</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                                <span class=k>if</span> <span class=p>(</span><span class=n>NewY</span> <span class=p>&lt;</span> <span class=m>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                                    <span class=n>NewY</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                                <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>NewY</span> <span class=p>+</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Height</span> <span class=p>&gt;</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Parent</span><span class=p>.</span><span class=n>Height</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                                    <span class=n>NewY</span> <span class=p>=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Parent</span><span class=p>.</span><span class=n>Height</span> <span class=p>-</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Height</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                            <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=k>if</span> <span class=p>(</span><span class=n>FollowMode</span> <span class=p>==</span> <span class=n>DragMoveMode</span><span class=p>.</span><span class=n>X</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>NewY</span> <span class=p>=</span> <span class=n>ControlStartLocation</span><span class=p>.</span><span class=n>Y</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=k>if</span> <span class=p>(</span><span class=n>FollowMode</span> <span class=p>==</span> <span class=n>DragMoveMode</span><span class=p>.</span><span class=n>Y</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>NewX</span> <span class=p>=</span> <span class=n>ControlStartLocation</span><span class=p>.</span><span class=n>X</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Location</span> <span class=p>=</span> <span class=k>new</span> <span class=n>Point</span><span class=p>(</span><span class=n>NewX</span><span class=p>,</span> <span class=n>NewY</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=p>(</span><span class=n>Moving</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>Moving</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>AboutControl</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Location</span> <span class=p>=</span> <span class=n>ControlStartLocation</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>void</span> <span class=n>MouseUpEvent</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>MouseEventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>sender</span> <span class=p>!=</span> <span class=n>AboutControl</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=p>(</span><span class=n>Moving</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>AboutControl</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Location</span> <span class=p>=</span> <span class=n>ControlStartLocation</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=n>Moving</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=kt>bool</span> <span class=n>AddControl</span><span class=p>(</span><span class=n>Control</span> <span class=n>control</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>AddedControls</span><span class=p>.</span><span class=n>Contains</span><span class=p>(</span><span class=n>control</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseDown</span> <span class=p>+=</span> <span class=n>MouseDownEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseMove</span> <span class=p>+=</span> <span class=n>MouseMoveEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseUp</span> <span class=p>+=</span> <span class=n>MouseUpEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>AddedControls</span><span class=p>.</span><span class=n>Add</span><span class=p>(</span><span class=n>control</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=kt>bool</span> <span class=n>RemoveControl</span><span class=p>(</span><span class=n>Control</span> <span class=n>control</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>AddedControls</span><span class=p>.</span><span class=n>Contains</span><span class=p>(</span><span class=n>control</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseDown</span> <span class=p>-=</span> <span class=n>MouseDownEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseMove</span> <span class=p>-=</span> <span class=n>MouseMoveEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseUp</span> <span class=p>-=</span> <span class=n>MouseUpEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>AddedControls</span><span class=p>.</span><span class=n>Remove</span><span class=p>(</span><span class=n>control</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=k>class</span> <span class=nc>MapDragMove</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=n>MapDragMove</span><span class=p>(</span><span class=n>MouseButtons</span> <span class=n>MouseButton</span><span class=p>,</span> <span class=n>DragMoveMode</span> <span class=n>FollowMode</span> <span class=p>=</span> <span class=n>DragMoveMode</span><span class=p>.</span><span class=n>All</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>MouseButton</span> <span class=p>=</span> <span class=n>MouseButton</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>FollowMode</span> <span class=p>=</span> <span class=n>FollowMode</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=n>MapDragMove</span><span class=p>(</span><span class=n>DragMoveMode</span> <span class=n>FollowMode</span> <span class=p>=</span> <span class=n>DragMoveMode</span><span class=p>.</span><span class=n>All</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>AllMouseButton</span> <span class=p>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>FollowMode</span> <span class=p>=</span> <span class=n>FollowMode</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>object</span> <span class=n>AboutControl</span><span class=p>;</span>                                  <span class=c1>// 表示当前移动控件操作是针对哪个控件的</span>
+</span></span><span class=line><span class=cl>            <span class=kt>bool</span> <span class=n>Moving</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>                                  <span class=c1>// 表示是否正在移动控件</span>
+</span></span><span class=line><span class=cl>            <span class=kt>bool</span> <span class=n>AllMouseButton</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>                          <span class=c1>// 表示是否处理所有按钮</span>
+</span></span><span class=line><span class=cl>            <span class=n>Point</span> <span class=n>ControlStartLocation</span><span class=p>;</span>                           <span class=c1>// 表示移动操作时, 控件的初始位置</span>
+</span></span><span class=line><span class=cl>            <span class=n>Point</span> <span class=n>MouseFirstLocation</span><span class=p>;</span>                             <span class=c1>// 表示移动操作时, 鼠标的初始位置</span>
+</span></span><span class=line><span class=cl>            <span class=n>DragMoveMode</span> <span class=n>FollowMode</span><span class=p>;</span>                              <span class=c1>// 跟随模式</span>
+</span></span><span class=line><span class=cl>            <span class=n>MouseButtons</span> <span class=n>MouseButton</span><span class=p>;</span>                             <span class=c1>// 判定按钮</span>
+</span></span><span class=line><span class=cl>            <span class=n>Dictionary</span><span class=p>&lt;</span><span class=n>Control</span><span class=p>,</span> <span class=n>Control</span><span class=p>&gt;</span> <span class=n>AddedControls</span> <span class=p>=</span> <span class=k>new</span> <span class=n>Dictionary</span><span class=p>&lt;</span><span class=n>Control</span><span class=p>,</span> <span class=n>Control</span><span class=p>&gt;();</span>    <span class=c1>// 已添加控件</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=k>void</span> <span class=n>MouseDownEvent</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>MouseEventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>((</span><span class=n>e</span><span class=p>.</span><span class=n>Button</span> <span class=p>==</span> <span class=n>MouseButton</span><span class=p>)</span> <span class=p>||</span> <span class=n>AllMouseButton</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>AboutControl</span> <span class=p>=</span> <span class=n>sender</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>Moving</span> <span class=p>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>ControlStartLocation</span> <span class=p>=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Location</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>MouseFirstLocation</span> <span class=p>=</span> <span class=n>Control</span><span class=p>.</span><span class=n>MousePosition</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>void</span> <span class=n>MouseMoveEvent</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>MouseEventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>sender</span> <span class=p>==</span> <span class=n>AboutControl</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=p>(</span><span class=n>Moving</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>Point</span> <span class=n>MouseLocationNow</span> <span class=p>=</span> <span class=n>Control</span><span class=p>.</span><span class=n>MousePosition</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                        <span class=k>if</span> <span class=p>(</span><span class=n>FollowMode</span> <span class=p>==</span> <span class=n>DragMoveMode</span><span class=p>.</span><span class=n>X</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>AddedControls</span><span class=p>[</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>].</span><span class=n>Left</span> <span class=p>+=</span> <span class=n>MouseLocationNow</span><span class=p>.</span><span class=n>X</span> <span class=p>-</span> <span class=n>MouseFirstLocation</span><span class=p>.</span><span class=n>X</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>FollowMode</span> <span class=p>==</span> <span class=n>DragMoveMode</span><span class=p>.</span><span class=n>Y</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>AddedControls</span><span class=p>[</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>].</span><span class=n>Top</span> <span class=p>+=</span> <span class=n>MouseLocationNow</span><span class=p>.</span><span class=n>Y</span> <span class=p>-</span> <span class=n>MouseFirstLocation</span><span class=p>.</span><span class=n>Y</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=k>else</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=n>AddedControls</span><span class=p>[</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>].</span><span class=n>Location</span> <span class=p>=</span> <span class=k>new</span> <span class=n>Point</span><span class=p>(</span><span class=n>AddedControls</span><span class=p>[</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>].</span><span class=n>Location</span><span class=p>.</span><span class=n>X</span> <span class=p>+</span> <span class=p>(</span><span class=n>MouseLocationNow</span><span class=p>.</span><span class=n>X</span> <span class=p>-</span> <span class=n>MouseFirstLocation</span><span class=p>.</span><span class=n>X</span><span class=p>),</span> <span class=n>AddedControls</span><span class=p>[</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>].</span><span class=n>Location</span><span class=p>.</span><span class=n>Y</span> <span class=p>+</span> <span class=p>(</span><span class=n>MouseLocationNow</span><span class=p>.</span><span class=n>Y</span> <span class=p>-</span> <span class=n>MouseFirstLocation</span><span class=p>.</span><span class=n>Y</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                        <span class=n>MouseFirstLocation</span> <span class=p>=</span> <span class=n>MouseLocationNow</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=p>(</span><span class=n>Moving</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>Moving</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>AboutControl</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Location</span> <span class=p>=</span> <span class=n>ControlStartLocation</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>void</span> <span class=n>MouseUpEvent</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>MouseEventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>sender</span> <span class=p>!=</span> <span class=n>AboutControl</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=p>(</span><span class=n>Moving</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>AboutControl</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Location</span> <span class=p>=</span> <span class=n>ControlStartLocation</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=n>Moving</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=kt>bool</span> <span class=n>AddControl</span><span class=p>(</span><span class=n>Control</span> <span class=n>dragControl</span><span class=p>,</span> <span class=n>Control</span> <span class=n>moveControl</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>AddedControls</span><span class=p>.</span><span class=n>ContainsKey</span><span class=p>(</span><span class=n>dragControl</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>dragControl</span><span class=p>.</span><span class=n>MouseDown</span> <span class=p>+=</span> <span class=n>MouseDownEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>dragControl</span><span class=p>.</span><span class=n>MouseMove</span> <span class=p>+=</span> <span class=n>MouseMoveEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>dragControl</span><span class=p>.</span><span class=n>MouseUp</span> <span class=p>+=</span> <span class=n>MouseUpEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>AddedControls</span><span class=p>.</span><span class=n>Add</span><span class=p>(</span><span class=n>dragControl</span><span class=p>,</span> <span class=n>moveControl</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=kt>bool</span> <span class=n>RemoveControl</span><span class=p>(</span><span class=n>Control</span> <span class=n>control</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>AddedControls</span><span class=p>.</span><span class=n>ContainsKey</span><span class=p>(</span><span class=n>control</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseDown</span> <span class=p>-=</span> <span class=n>MouseDownEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseMove</span> <span class=p>-=</span> <span class=n>MouseMoveEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseUp</span> <span class=p>-=</span> <span class=n>MouseUpEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>AddedControls</span><span class=p>.</span><span class=n>Remove</span><span class=p>(</span><span class=n>control</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=cs>/// &lt;summary&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=cs>/// 控件跟随鼠标的移动模式</span>
+</span></span><span class=line><span class=cl>        <span class=cs>/// &lt;/summary&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kd>enum</span> <span class=n>DragMoveMode</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=cs>/// &lt;summary&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=cs>/// 表示只跟随横坐标</span>
+</span></span><span class=line><span class=cl>            <span class=cs>/// &lt;/summary&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=n>X</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=cs>/// &lt;summary&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=cs>/// 表示只跟随纵坐标</span>
+</span></span><span class=line><span class=cl>            <span class=cs>/// &lt;/summary&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=n>Y</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=cs>/// &lt;summary&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=cs>/// 跟随横坐标与纵坐标</span>
+</span></span><span class=line><span class=cl>            <span class=cs>/// &lt;/summary&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=n>All</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=k>class</span> <span class=nc>DragResize</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=n>DragResize</span><span class=p>(</span><span class=n>MouseButtons</span> <span class=n>MouseButton</span><span class=p>,</span> <span class=kt>int</span> <span class=n>BorderSize</span> <span class=p>=</span> <span class=m>5</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>MouseButton</span> <span class=p>=</span> <span class=n>MouseButton</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>BorderSize</span> <span class=p>=</span> <span class=n>BorderSize</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=n>DragResize</span><span class=p>(</span><span class=kt>int</span> <span class=n>BorderSize</span> <span class=p>=</span> <span class=m>5</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>AllMouseButton</span> <span class=p>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>this</span><span class=p>.</span><span class=n>BorderSize</span> <span class=p>=</span> <span class=n>BorderSize</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>int</span> <span class=n>BorderSize</span> <span class=p>=</span> <span class=m>10</span><span class=p>;</span>                                  <span class=c1>// 边框判断大小</span>
+</span></span><span class=line><span class=cl>            <span class=kt>object</span> <span class=n>AboutControl</span><span class=p>;</span>                                  <span class=c1>// 表示当前调整控件操作是针对哪个控件的</span>
+</span></span><span class=line><span class=cl>            <span class=kt>bool</span> <span class=n>Resizing</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>                                <span class=c1>// 表示是否正在调整控件</span>
+</span></span><span class=line><span class=cl>            <span class=kt>bool</span> <span class=n>AllMouseButton</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>                          <span class=c1>// 表示是否处理所有按钮</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>bool</span> <span class=n>MouseDownING</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kt>bool</span> <span class=n>LeftResize</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kt>bool</span> <span class=n>RightResize</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kt>bool</span> <span class=n>TopResize</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kt>bool</span> <span class=n>BottomResize</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kd>private</span> <span class=n>Point</span> <span class=n>MouseFirstLocation</span><span class=p>;</span>                     <span class=c1>// 表示调整操作时, 鼠标的初始位置</span>
+</span></span><span class=line><span class=cl>            <span class=n>MouseButtons</span> <span class=n>MouseButton</span><span class=p>;</span>                             <span class=c1>// 判定按钮</span>
+</span></span><span class=line><span class=cl>            <span class=n>List</span><span class=p>&lt;</span><span class=n>Control</span><span class=p>&gt;</span> <span class=n>AddedControls</span> <span class=p>=</span> <span class=k>new</span> <span class=n>List</span><span class=p>&lt;</span><span class=n>Control</span><span class=p>&gt;();</span>    <span class=c1>// 已添加控件</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=k>void</span> <span class=n>CheckMouse</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>Point</span> <span class=n>mousePosition</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>sender</span> <span class=k>is</span> <span class=n>Form</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>mousePosition</span> <span class=p>=</span> <span class=n>Control</span><span class=p>.</span><span class=n>MousePosition</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>mousePosition</span> <span class=p>=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Parent</span><span class=p>.</span><span class=n>PointToClient</span><span class=p>(</span><span class=n>Control</span><span class=p>.</span><span class=n>MousePosition</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>mousePosition</span><span class=p>.</span><span class=n>X</span> <span class=p>&gt;=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Form</span><span class=p>).</span><span class=n>Left</span> <span class=p>&amp;&amp;</span> <span class=n>mousePosition</span><span class=p>.</span><span class=n>X</span> <span class=p>&lt;=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Form</span><span class=p>).</span><span class=n>Left</span> <span class=p>+</span> <span class=n>BorderSize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>LeftResize</span> <span class=p>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>mousePosition</span><span class=p>.</span><span class=n>X</span> <span class=p>&gt;=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Form</span><span class=p>).</span><span class=n>Left</span> <span class=p>+</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Form</span><span class=p>).</span><span class=n>Width</span> <span class=p>-</span> <span class=n>BorderSize</span> <span class=p>&amp;&amp;</span> <span class=n>mousePosition</span><span class=p>.</span><span class=n>X</span> <span class=p>&lt;=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Form</span><span class=p>).</span><span class=n>Left</span> <span class=p>+</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Form</span><span class=p>).</span><span class=n>Width</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>RightResize</span> <span class=p>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>LeftResize</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>RightResize</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>mousePosition</span><span class=p>.</span><span class=n>Y</span> <span class=p>&lt;=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Form</span><span class=p>).</span><span class=n>Top</span> <span class=p>+</span> <span class=n>BorderSize</span> <span class=p>&amp;&amp;</span> <span class=n>mousePosition</span><span class=p>.</span><span class=n>Y</span> <span class=p>&gt;=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Form</span><span class=p>).</span><span class=n>Top</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>TopResize</span> <span class=p>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>mousePosition</span><span class=p>.</span><span class=n>Y</span> <span class=p>&gt;=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Form</span><span class=p>).</span><span class=n>Top</span> <span class=p>+</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Form</span><span class=p>).</span><span class=n>Height</span> <span class=p>-</span> <span class=n>BorderSize</span> <span class=p>&amp;&amp;</span> <span class=n>mousePosition</span><span class=p>.</span><span class=n>Y</span> <span class=p>&lt;=</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Form</span><span class=p>).</span><span class=n>Top</span> <span class=p>+</span> <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Form</span><span class=p>).</span><span class=n>Height</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>BottomResize</span> <span class=p>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>TopResize</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>BottomResize</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>((</span><span class=n>LeftResize</span> <span class=p>||</span> <span class=n>RightResize</span> <span class=p>||</span> <span class=n>TopResize</span> <span class=p>||</span> <span class=n>BottomResize</span><span class=p>)</span> <span class=p>&amp;&amp;</span> <span class=n>MouseDownING</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>Resizing</span> <span class=p>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>AboutControl</span> <span class=p>=</span> <span class=n>sender</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>Resizing</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=k>void</span> <span class=n>MouseDownEvent</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>MouseEventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>AllMouseButton</span> <span class=p>||</span> <span class=n>e</span><span class=p>.</span><span class=n>Button</span> <span class=p>==</span> <span class=n>MouseButton</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>MouseDownING</span> <span class=p>=</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>CheckMouse</span><span class=p>(</span><span class=n>sender</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=p>(</span><span class=n>Resizing</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=n>MouseFirstLocation</span> <span class=p>=</span> <span class=n>Control</span><span class=p>.</span><span class=n>MousePosition</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>void</span> <span class=n>MouseMoveEvent</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>MouseEventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>Resizing</span> <span class=p>&amp;&amp;</span> <span class=n>sender</span> <span class=p>==</span> <span class=n>AboutControl</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>Point</span> <span class=n>mousePosition</span> <span class=p>=</span> <span class=n>Control</span><span class=p>.</span><span class=n>MousePosition</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Invalidate</span><span class=p>(</span><span class=kc>false</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=p>(</span><span class=n>LeftResize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Width</span> <span class=p>+=</span> <span class=n>MouseFirstLocation</span><span class=p>.</span><span class=n>X</span> <span class=p>-</span> <span class=n>mousePosition</span><span class=p>.</span><span class=n>X</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Left</span> <span class=p>-=</span> <span class=n>MouseFirstLocation</span><span class=p>.</span><span class=n>X</span> <span class=p>-</span> <span class=n>mousePosition</span><span class=p>.</span><span class=n>X</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                    <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>RightResize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Width</span> <span class=p>+=</span> <span class=n>mousePosition</span><span class=p>.</span><span class=n>X</span> <span class=p>-</span> <span class=n>MouseFirstLocation</span><span class=p>.</span><span class=n>X</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=p>(</span><span class=n>TopResize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Height</span> <span class=p>+=</span> <span class=n>MouseFirstLocation</span><span class=p>.</span><span class=n>Y</span> <span class=p>-</span> <span class=n>mousePosition</span><span class=p>.</span><span class=n>Y</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Top</span> <span class=p>-=</span> <span class=n>MouseFirstLocation</span><span class=p>.</span><span class=n>Y</span> <span class=p>-</span> <span class=n>mousePosition</span><span class=p>.</span><span class=n>Y</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                    <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>BottomResize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Height</span> <span class=p>+=</span> <span class=n>mousePosition</span><span class=p>.</span><span class=n>Y</span> <span class=p>-</span> <span class=n>MouseFirstLocation</span><span class=p>.</span><span class=n>Y</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                    <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Invalidate</span><span class=p>(</span><span class=kc>true</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                    <span class=n>MouseFirstLocation</span> <span class=p>=</span> <span class=n>mousePosition</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>CheckMouse</span><span class=p>(</span><span class=n>sender</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=p>(</span><span class=n>TopResize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=k>if</span> <span class=p>(</span><span class=n>LeftResize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Cursor</span> <span class=p>=</span> <span class=n>Cursors</span><span class=p>.</span><span class=n>SizeNWSE</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>RightResize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Cursor</span> <span class=p>=</span> <span class=n>Cursors</span><span class=p>.</span><span class=n>SizeNESW</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=k>else</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Cursor</span> <span class=p>=</span> <span class=n>Cursors</span><span class=p>.</span><span class=n>SizeNS</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                    <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>BottomResize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=k>if</span> <span class=p>(</span><span class=n>LeftResize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Cursor</span> <span class=p>=</span> <span class=n>Cursors</span><span class=p>.</span><span class=n>SizeNESW</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>RightResize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Cursor</span> <span class=p>=</span> <span class=n>Cursors</span><span class=p>.</span><span class=n>SizeNWSE</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=k>else</span>
+</span></span><span class=line><span class=cl>                        <span class=p>{</span>
+</span></span><span class=line><span class=cl>                            <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Cursor</span> <span class=p>=</span> <span class=n>Cursors</span><span class=p>.</span><span class=n>SizeNS</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                    <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>LeftResize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Cursor</span> <span class=p>=</span> <span class=n>Cursors</span><span class=p>.</span><span class=n>SizeWE</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                    <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>RightResize</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Cursor</span> <span class=p>=</span> <span class=n>Cursors</span><span class=p>.</span><span class=n>SizeWE</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>                    <span class=k>else</span>
+</span></span><span class=line><span class=cl>                    <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Cursor</span> <span class=p>=</span> <span class=n>Cursors</span><span class=p>.</span><span class=n>Default</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>void</span> <span class=n>MouseUpEvent</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>MouseEventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>MouseDownING</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>Resizing</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>Resizing</span> <span class=p>=</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=k>void</span> <span class=n>MouseLeaveEvent</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>EventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=p>(</span><span class=n>sender</span> <span class=k>as</span> <span class=n>Control</span><span class=p>).</span><span class=n>Cursor</span> <span class=p>=</span> <span class=n>Cursors</span><span class=p>.</span><span class=n>Default</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=kt>bool</span> <span class=n>AddControl</span><span class=p>(</span><span class=n>Control</span> <span class=n>control</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>AddedControls</span><span class=p>.</span><span class=n>Contains</span><span class=p>(</span><span class=n>control</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseLeave</span> <span class=p>+=</span> <span class=n>MouseLeaveEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseDown</span> <span class=p>+=</span> <span class=n>MouseDownEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseMove</span> <span class=p>+=</span> <span class=n>MouseMoveEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseUp</span> <span class=p>+=</span> <span class=n>MouseUpEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>AddedControls</span><span class=p>.</span><span class=n>Add</span><span class=p>(</span><span class=n>control</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=kd>public</span> <span class=kt>bool</span> <span class=n>RemoveControl</span><span class=p>(</span><span class=n>Control</span> <span class=n>control</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>AddedControls</span><span class=p>.</span><span class=n>Contains</span><span class=p>(</span><span class=n>control</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseDown</span> <span class=p>-=</span> <span class=n>MouseDownEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseMove</span> <span class=p>-=</span> <span class=n>MouseMoveEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>control</span><span class=p>.</span><span class=n>MouseUp</span> <span class=p>-=</span> <span class=n>MouseUpEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>AddedControls</span><span class=p>.</span><span class=n>Remove</span><span class=p>(</span><span class=n>control</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=kc>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=k>else</span>
+</span></span><span class=line><span class=cl>                <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>return</span> <span class=kc>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/20210219220053/><div class=article-details><h2 class=article-title>[C#] 绘制函数图像. 可拖动, 可缩放, 可调整精度</h2></div></a></article><article><a href=/p/20240530104846/><div class=article-details><h2 class=article-title>[.NET,WPF] 窗体云母, 亚克力, 透明, 混合颜色, 模糊背景, 亮暗色主题全讲</h2></div></a></article><article><a href=/p/20231113094519/><div class=article-details><h2 class=article-title>[.NET] Speex 语音编解码介绍, 使用, 代码示例</h2></div></a></article><article><a href=/p/20230902085924/><div class=article-details><h2 class=article-title>[.NET/WPF] 设置按钮, 以及其他任何包含边框的控件的圆角</h2></div></a></article><article><a href=/p/20230818143649/><div class=article-details><h2 class=article-title>[.NET/WPF] CommunityToolkit.Mvvm 异步指令</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=SlimeNull/slimenull.github.io issue-term=pathname label=BlogComment crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
+2023 -
+2024 SlimeNull Blogs</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.21.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

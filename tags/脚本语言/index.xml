@@ -1,0 +1,1197 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>脚本语言 on SlimeNull Blogs</title><link>https://slimenull.com/tags/%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80/</link><description>Recent content in 脚本语言 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 24 Mar 2021 15:42:12 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/%E8%84%9A%E6%9C%AC%E8%AF%AD%E8%A8%80/index.xml" rel="self" type="application/rss+xml"/><item><title>[PowerShell] 快速入门, 基本语法, 常用类型, 函数, .NET 互操作</title><link>https://slimenull.com/p/20210324154212/</link><pubDate>Wed, 24 Mar 2021 15:42:12 +0800</pubDate><guid>https://slimenull.com/p/20210324154212/</guid><description>&lt;h1 id="powershell-快速入门">PowerShell 快速入门&lt;/h1>
+&lt;blockquote>
+&lt;p>开始之前, 我们认定你已经有一定的编程基础, 熟悉 .NET 中的类型与对象.&lt;/p>
+&lt;p>此文章对于 .NET 开发者来说更简单哦!&lt;/p>
+&lt;/blockquote>
+&lt;p>在 PowerShell 中, 几乎一切都是对象. 与 CMD 有很大不同. PowerShell 是强类型的, 它基于 .NET, 故, PowerShell 可以近乎完美的调用 .NET 的标准库.&lt;/p>
+&lt;h2 id="0-准备工作">0. 准备工作&lt;/h2>
+&lt;h3 id="--官方文档">- 官方文档&lt;/h3>
+&lt;p>既然要学新东西, 肯定要会查阅官方文档才彳亍呀! 本文章参阅官方文档, 并使用更简单的语言讲述给读者, 在每一部分都会有推荐的官方文档链接目录, 点击即可跳转.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/scripting/how-to-use-docs?view=powershell-7.1" target="_blank" rel="noopener"
+>MSDocs PowerShell : 如何使用 PowerShell 官方文档&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/scripting/overview?view=powershell-7.1" target="_blank" rel="noopener"
+>MSDocs PowerShell : PowerShell 是什么&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_arrays?view=powershell-7.1" target="_blank" rel="noopener"
+>MSDocs PowerShell : 关于主题 (涵盖有关 PowerShell 的一系列概念)&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>另外, 在文档的中文页面的左侧索引部分, 你无法看到所有的内容, 例如 Reference 分类, 其中包含了非常多的 &amp;lsquo;隐藏&amp;rsquo; 内容, 只有你切换到英文页面才可以看到它们.&lt;/p>
+&lt;p>至于如何切换页面语言, 也简单, 只需要将地址栏中的 &amp;lsquo;zh-cn&amp;rsquo; 改为 &amp;rsquo;en-us&amp;rsquo; 即可, 同理, 如果某个页面你看不懂, 想要切换到中文, 可以将 &amp;rsquo;en-us&amp;rsquo; 改为 &amp;lsquo;zh-cn&amp;rsquo;, 不过需要注意的是, 部分页面是没有提供中文翻译的.&lt;/p>
+&lt;p>为了方便, 本文涉及到的所有文档链接均为英文直链, 如需访问中文页面, 请自行修改链接地址.&lt;/p>
+&lt;h3 id="--启动-powershell">- 启动 PowerShell&lt;/h3>
+&lt;p>PowerShell 同 CMD 一样有许多启动方式, 准备好开始了吗? 那么开始吧!&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>按下 &amp;ldquo;Win&amp;rdquo; + &amp;ldquo;R&amp;rdquo; 打开 &amp;lsquo;运行&amp;rsquo; 窗口, 键入 &amp;lsquo;PowerShell&amp;rsquo; 并确认.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>按 &amp;ldquo;Win&amp;rdquo; + X, 然后按 &amp;lsquo;I&amp;rsquo;, 或者按 &amp;lsquo;A&amp;rsquo;(以管理员身份运行).&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在桌面或资源管理器, 不选中任何条目, 按住 Shift, 右击背景, 在弹出的菜单中选择 &amp;lsquo;在此处启动 PowerShell&amp;rsquo;.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在资源管理器中, 在地址栏输入 &amp;lsquo;PowerShell&amp;rsquo; 并按 Enter 键确认.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>接下来, 出现的蓝底白字的控制台页面就是 PowerShell 的主程序了! 在其中输入指令(代码)可以运行一些东西.&lt;/p>
+&lt;h2 id="1-基本语法">1. 基本语法&lt;/h2>
+&lt;h3 id="--标准输出">- 标准输出&lt;/h3>
+&lt;p>让我们从一个 &amp;lsquo;hello world&amp;rsquo; 的输出开始吧, 与 CMD, Bash 一样, 使用 echo 指令是可以输出内容的.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="s2">&amp;#34;Hello World!&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>输出:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">Hello World!
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="--获取帮助">- 获取帮助:&lt;/h3>
+&lt;p>执行以下指令来获取关于 echo 的帮助内容.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">Get-Help&lt;/span> &lt;span class="nb">echo
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>输出:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">NAME
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Write-Output
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">SYNTAX
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Write-Output [-InputObject] &amp;lt;psobject[]&amp;gt; [-NoEnumerate] [&amp;lt;CommonParameters&amp;gt;]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ALIASES
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> write
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> echo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">REMARKS
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Get-Help cannot find the Help files for this cmdlet on this computer. It is displaying only partial help.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -- To download and install Help files for the module that includes this cmdlet, use Update-Help.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -- To view the Help topic for this cmdlet online, type: &amp;#34;Get-Help Write-Output -Online&amp;#34; or
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> go to https://go.microsoft.com/fwlink/?LinkID=113427.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>看到结果, 你懂了吧, echo 实际上是 Write-Output 的别名, 同时也可以用 write 来执行.&lt;/p>
+&lt;p>另外, PowerShell 的指令是不区分大小写的, 所以 Write-Output 与 wRITE-oUTPUT 是一样执行效果的&lt;/p>
+&lt;h3 id="--定义变量">- 定义变量&lt;/h3>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_variables" target="_blank" rel="noopener"
+>PowerShell 官方文档 : 关于变量&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>定义变量的方式与 Bash 差不多, 都是用 $ 开头, 后跟变量名&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$var&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">123&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$var&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>输出:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">123
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="--固定常量">- 固定常量&lt;/h3>
+&lt;p>PowerShell 中有一些常量, 不可被赋值 (如果对其赋值, 不会产生任何作用, 且不会抛出异常)&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>常量名&lt;/th>
+&lt;th>类型&lt;/th>
+&lt;th>值&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>$null&lt;/td>
+&lt;td>object&lt;/td>
+&lt;td>null&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>$true&lt;/td>
+&lt;td>bool&lt;/td>
+&lt;td>true&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>$false&lt;/td>
+&lt;td>bool&lt;/td>
+&lt;td>false&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>如果访问一些未定义的变量, 返回的值同样是 null&lt;/p>
+&lt;h3 id="--类型概念">- 类型概念&lt;/h3>
+&lt;p>PowerShell 是强类型的. 例如刚刚我们定义的变量, 其实就是一个 int 变量. 示例:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$a&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">123&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$b&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">321&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$c&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nv">$a&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="nv">$b&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$c&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>输出:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">444
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>数字支持运算, 所以理所当然的可以进行运算.&lt;/p>
+&lt;h3 id="--表达式与指令">- 表达式与指令&lt;/h3>
+&lt;p>刚刚我们所用的 echo 指令, 同时可以说是一个表达式. 而刚刚我们进行加法运算时, 所使用的 &amp;lsquo;$a + $b&amp;rsquo; 通用&lt;/p>
+&lt;p>我没猜错的话, 在刚刚的变量部分, 也同样有人这么执行:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$a&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">123&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$b&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">321&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$a&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="nv">$b&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>然后结果就是, 输出了&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">$a + $b
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>而解决办法就是, 为这个表达式加上括号, 优先运算这个表达式, 于是就正常了, 或者你可以直接 echo 一个表达式:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">123&lt;/span>&lt;span class="p">+&lt;/span>&lt;span class="mf">321&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>输出&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">444
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="--运算符">- 运算符&lt;/h3>
+&lt;p>刚刚我们从尝试了加法运算, 同时在 PowerShell 中, 也是支持减法, 乘法, 除法的, 除此之外还有小于, 大于, 等于, 大于等于, 小于等于:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span> &lt;span class="o">-lt&lt;/span> &lt;span class="mf">10&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>输出:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">True
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>运算符&lt;/th>
+&lt;th>描述&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>-eq&lt;/td>
+&lt;td>等于&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>-ne&lt;/td>
+&lt;td>不等于&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>-lt&lt;/td>
+&lt;td>小于&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>-gt&lt;/td>
+&lt;td>大于&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>-le&lt;/td>
+&lt;td>小于等于&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>-ge&lt;/td>
+&lt;td>大于等于&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h2 id="2-流程控制">2. 流程控制:&lt;/h2>
+&lt;h3 id="--基本判断">- 基本判断&lt;/h3>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_if" target="_blank" rel="noopener"
+>MSDocs PowerShell : 关于 If&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>判断的话, 毋庸置疑是 if 语句. 当然, 无非是 &amp;lsquo;if&amp;rsquo; &amp;rsquo;else&amp;rsquo; &amp;rsquo;else if&amp;rsquo;&lt;/p>
+&lt;p>在 PowerShell 中, if 语句的语法可以是这样:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">exp&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">statement&lt;/span> &lt;span class="n">block&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span> &lt;span class="k">elseif&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">statement&lt;/span> &lt;span class="n">block&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">statement&lt;/span> &lt;span class="n">block&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$randint&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nb">New-Object&lt;/span> &lt;span class="n">Random&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="py">Next&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="c"># 生成一个随机数, 并赋值给 randint 变量&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$randint&lt;/span> &lt;span class="o">-eq&lt;/span> &lt;span class="mf">114514&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo &lt;/span>&lt;span class="s2">&amp;#34;嗯哼哼哼啊啊啊啊啊啊啊啊&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span> &lt;span class="k">elseif&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$randint&lt;/span> &lt;span class="o">-gt&lt;/span> &lt;span class="mf">114514&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo &lt;/span>&lt;span class="s2">&amp;#34;吔屎了你, 梁非凡!&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo &lt;/span>&lt;span class="s2">&amp;#34;听不见! 就这点声音还想开军舰!?&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>没错, PowerShell 中, &amp;rsquo;else if&amp;rsquo; 的话是不允许带空格的. 并且需要注意的是, 这个大括号不允许省略.&lt;/p>
+&lt;h3 id="--循环语句">- 循环语句&lt;/h3>
+&lt;p>for 循环&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_for?view=powershell-7.1" target="_blank" rel="noopener"
+>MSDocs PowerShell : 关于 For&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">exp&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">exp&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">exp&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">statement&lt;/span> &lt;span class="n">block&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nv">$i&lt;/span> &lt;span class="o">-lt&lt;/span> &lt;span class="mf">10&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nv">$i&lt;/span>&lt;span class="p">++)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo &lt;/span>&lt;span class="nv">$i&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nv">$i&lt;/span> &lt;span class="o">-lt&lt;/span> &lt;span class="mf">10&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nv">$i&lt;/span>&lt;span class="p">++)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$j&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nv">$j&lt;/span> &lt;span class="o">-le&lt;/span> &lt;span class="nv">$i&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nv">$j&lt;/span>&lt;span class="p">++)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">[&lt;/span>&lt;span class="no">Console&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Write&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="s2">&amp;#34;{0}x{1}={2}&lt;/span>&lt;span class="se">`t&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">-f&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$j&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nv">$i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nv">$i&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="nv">$j&lt;/span>&lt;span class="p">)))&lt;/span> &lt;span class="c"># 不换行输出&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">[&lt;/span>&lt;span class="no">Console&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="c"># 换行&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>foreach 循环&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_foreach" target="_blank" rel="noopener"
+>MSDocs PowerShell : 关于 Foreach&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="k">foreach&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$var&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">enumerable&lt;/span> &lt;span class="n">object&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">statement&lt;/span> &lt;span class="n">block&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">foreach&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$num&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.5&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo &lt;/span>&lt;span class="nv">$num&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>while 循环&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_while" target="_blank" rel="noopener"
+>MSDocs PowerShell : 关于 While&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="k">while&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">exp&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">statement&lt;/span> &lt;span class="n">block&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>打破循环:&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_break" target="_blank" rel="noopener"
+>MSDocs PowerShell : 关于 Break&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 在 for 中打破循环 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nv">$i&lt;/span> &lt;span class="o">-lt&lt;/span> &lt;span class="mf">10&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nv">$i&lt;/span>&lt;span class="p">++)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$i&lt;/span> &lt;span class="o">-eq&lt;/span> &lt;span class="mf">5&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo &lt;/span>&lt;span class="nv">$i&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 在 foreach 语句中打破循环 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">foreach&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$i&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.10&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$i&lt;/span> &lt;span class="o">-eq&lt;/span> &lt;span class="mf">5&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo &lt;/span>&lt;span class="nv">$i&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 在 while 语句中打破循环 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">while&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="vm">$true&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$i&lt;/span> &lt;span class="o">-eq&lt;/span> &lt;span class="mf">5&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo &lt;/span>&lt;span class="nv">$i&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">$i&lt;/span>&lt;span class="p">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="3-常用类型">3. 常用类型&lt;/h2>
+&lt;h3 id="--对象数组">- 对象数组&lt;/h3>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_arrays?view=powershell-7.1" target="_blank" rel="noopener"
+>MSDocs PowerShell : 关于数组&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-arrays?view=powershell-7.1" target="_blank" rel="noopener"
+>MSDocs PowerShell : 关于数组的各项须知内容&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>在 PowerShell 中, 当然也存在数组, 通过以下方式来创建:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 语法 1:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$var&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">element&lt;/span> &lt;span class="mf">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">element&lt;/span> &lt;span class="mf">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">element&lt;/span> &lt;span class="mf">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">....,&lt;/span> &lt;span class="n">element&lt;/span> &lt;span class="n">n&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">5&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 语法 2:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$var&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">start&lt;/span>&lt;span class="p">..&lt;/span>&lt;span class="k">end&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.5&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c"># 生成的数组等同于: @(1, 2, 3, 4, 5)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 提示, @() 是可以省略的. 不过如果要创建空数组, 不可省略&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>数组的访问, 与其他大多数编程语言一致, 通过中括号就可以:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.4&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="mf">2&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c"># 输出 3&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.4&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mf">2&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">114514&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$array&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mf">2&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c"># 输出 114514&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>PowerShell 的数组还支持获取多个值, 它返回一个新的数组:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.4&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array2&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nv">$array&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mf">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">2&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$array2&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mf">0&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c"># 输出 1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$array2&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c"># 输出 3&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>添加元素, 可以用 &amp;lsquo;+=&amp;rsquo; 运算符, 但注意, 不推荐这么做, 因为每为数组添加元素, 实际上都是重新创建了新的数组, 如果需要更灵活的数组, 请使用 泛型List&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.4&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="mf">114514&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$array&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mf">4&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c"># 输出 114514&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果获取数组元素值时, 索引超出界限, 不会抛出异常, 会返回 null:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.4&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$array&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mf">114514&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c"># 不会有任何输出, 因为值是null&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果对一个不是数组的变量使用索引操作符, 则会抛出异常:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$test&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">$null&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$test&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mf">0&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c"># 抛出异常&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>两个数组相加, 返回数组连接后的结果:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array1&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.3&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array2&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">3&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nv">$array1&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="nv">$array2&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>输出:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>使用 -contains 操作符来判断数组是否包含某元素:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.4&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nv">$array&lt;/span> &lt;span class="o">-contains&lt;/span> &lt;span class="mf">2&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c"># 输出 True&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在 PowerShell 的数组中, -eq 操作符将对所有元素进行判断, 即, 遍历内容, 逐一进行 -eq 运算, 如若有任何元素运算返回 True, 则表达式返回真.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.4&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nv">$array&lt;/span> &lt;span class="o">-eq&lt;/span> &lt;span class="mf">3&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c"># 返回 True&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果判断一个变量(可能是数组)为空, 请不要将这个变量放在左侧:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array&lt;/span> &lt;span class="o">-eq&lt;/span> &lt;span class="vm">$null&lt;/span> &lt;span class="c"># 不要这样使用&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="vm">$null&lt;/span> &lt;span class="o">-eq&lt;/span> &lt;span class="nv">$array&lt;/span> &lt;span class="c"># 正确的使用方式&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>使用 Count 来获取一个数组的长度, 但注意, 如果一个变量值为null, 同样可以使用 count 来获取长度, 它返回 0:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$array&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.4&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$array&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Count&lt;/span> &lt;span class="c"># 返回 4&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="vm">$null&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Count&lt;/span> &lt;span class="c"># 返回 0&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>你也可以通过 Length 来获取一个数组的长度, 它与 Count 用法一样, 并且如果是 $null, 同样返回 0.&lt;/p>
+&lt;h3 id="--哈希表">- 哈希表&lt;/h3>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_hash_tables" target="_blank" rel="noopener"
+>MSDocs PowerShell : 关于哈希表&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-hashtable?view=powershell-7.1" target="_blank" rel="noopener"
+>MSDocs PowerShell : 关于哈希表的一些注意事项&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>哈希表, 即 HashTable. 在 PowerShell 中这样创建 HashTable:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$table&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">key&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">value&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">key&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">value&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$table&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">{}&lt;/span> &lt;span class="c"># 创建空表&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$table&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">@&lt;/span>&lt;span class="p">{&lt;/span> &lt;span class="c"># 创建有初始值的表, 下面的示例将使用这个表&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;NullSlime&amp;#34;&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">100&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;MoYuro&amp;#34;&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">96&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;Muchen&amp;#34;&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">94&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;KingHans&amp;#34;&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">88&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>访问哈希表, 通过索引运算符, 指定键:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 使用刚刚创建的 table&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$table&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;MoYuro&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c"># 输出 96&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$table&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;MoYuro&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">97&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$table&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;MoYuro&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c"># 输出 97&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>向表中添加键值对, 使用 Add 方法:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$table&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">value&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$table&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;KunLong&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">76&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>删除表中的某个键值对, 使用 Remove 方法:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$table&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Remove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$table&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Remove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;KingHans&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>哈希表和数组一样支持选择多个值, 只需要在索引运算符中指定多个键:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$table&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="no">key1, key2, ... , key n&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$table&lt;/span>&lt;span class="p">[(&lt;/span>&lt;span class="n">key1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">key2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">...&lt;/span> &lt;span class="p">,&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="n">n&lt;/span>&lt;span class="p">)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$table&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="vm">@&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">key2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">...&lt;/span> &lt;span class="p">,&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="n">n&lt;/span>&lt;span class="p">)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$values&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nv">$table&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;NullSlime&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;MoYuro&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c"># 返回一个数组&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$values&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mf">0&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c"># 输出 100&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$values&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="c"># 输出 96&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>通过 Keys 与 Values 来获取这个哈希表的所有键以及值&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$keys&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nv">$tables&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Keys&lt;/span> &lt;span class="c"># 返回哈希表的所有键&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$values&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nv">$tables&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Values&lt;/span> &lt;span class="c"># 返回哈希表的所有值&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>可以通过对哈希表的枚举器来进行循环哈希表的每一个键值对:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="k">foreach&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$pair&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="nv">$table&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">GetEnumerator&lt;/span>&lt;span class="p">())&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;{0}: {1}&amp;#34;&lt;/span> &lt;span class="o">-f&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$pair&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Key&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nv">$pair&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Value&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>当通过foreach对哈希表进行迭代时, 不可以对哈希表进行删减:&lt;/p>
+&lt;h2 id="4-脚本函数">4. 脚本函数&lt;/h2>
+&lt;h3 id="--关于函数">- 关于函数&lt;/h3>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions" target="_blank" rel="noopener"
+>PowerShell 官方文档 : 关于函数&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>PowerShell 中定义函数很简单, 它的本质是脚本块(ScriptBlock):&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">name(parameters&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">statement&lt;/span> &lt;span class="n">block&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">myFunc($a&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nv">$b&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nv">$a&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="nv">$b&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>调用 PowerShell 中定义的函数, 语法如下:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="n">name&lt;/span> &lt;span class="n">argv1&lt;/span> &lt;span class="n">argv2&lt;/span> &lt;span class="n">argv3&lt;/span> &lt;span class="p">....&lt;/span> &lt;span class="n">argv&lt;/span> &lt;span class="n">n&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">myFunc&lt;/span> &lt;span class="mf">114000&lt;/span> &lt;span class="mf">514&lt;/span> &lt;span class="c"># 输出 114514&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果要获取这个函数的对象引用 可以这样:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$function&lt;/span>&lt;span class="err">:&lt;/span>&lt;span class="n">name&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$function&lt;/span>&lt;span class="err">:&lt;/span>&lt;span class="n">myFunc&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>输出:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">param($a, $b)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">echo ($a + $b)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>通过函数的对象引用, 可以使用 Invoke 来调用:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$function&lt;/span>&lt;span class="err">:&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Invoke&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">parameters&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$function&lt;/span>&lt;span class="err">:&lt;/span>&lt;span class="n">myFunc&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Invoke&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">114000&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">514&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c"># 输出 114514&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>删除一个一定义的函数, 可以使用 del 语句:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">del &lt;/span>&lt;span class="n">function&lt;/span>&lt;span class="err">:&lt;/span>&lt;span class="n">name&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">del &lt;/span>&lt;span class="n">function&lt;/span>&lt;span class="err">:&lt;/span>&lt;span class="n">myFunc&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$function&lt;/span>&lt;span class="err">:&lt;/span>&lt;span class="n">myFunc&lt;/span> &lt;span class="c"># 由于函数已删除, 所以不会有任何输出&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>函数可以有返回值, 只需要使用 return 语句:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">myFunc($a&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nv">$b&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="nv">$a&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="nv">$b&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">myFunc&lt;/span> &lt;span class="mf">114000&lt;/span> &lt;span class="mf">514&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$result&lt;/span> &lt;span class="c"># 输出 114514&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="5-面向对象">5. 面向对象&lt;/h2>
+&lt;h3 id="--使用对象">- 使用对象&lt;/h3>
+&lt;p>肯定会有人执行这个指令:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="n">Hello&lt;/span> &lt;span class="n">World&lt;/span>&lt;span class="p">!&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>虽然仅仅少了一对双引号, 但是, 它表示的意思其实跟之前我们写的完全不一样. 如果不加双引号, 那么在这个指令中, Hello 和 World! 会被认为是两个参数! 或者准确来说, 是两个对象!&lt;/p>
+&lt;p>这条没有加双引号的指令, 输出结果是:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Hello&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">World&lt;/span>&lt;span class="p">!&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>另外, 命令的输出同样也是一个个对象, 执行下面的指令:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="mf">1&lt;/span>&lt;span class="p">+&lt;/span>&lt;span class="mf">1&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>输出&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">2
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="--net-互操作">- .NET 互操作&lt;/h3>
+&lt;p>事实上, PowerShell 中的对象都是 .NET 对象. 并且我们可以进行 .NET 对象中所支持的操作. 执行下面的指令:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">+&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="py">GetType&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>输出:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">IsPublic IsSerial Name BaseType
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-------- -------- ---- --------
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">True True Int32 System.ValueType
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这熟悉的命名空间, 可不就是 .NET 吗?&lt;/p>
+&lt;p>试试以下指令:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>&lt;span class="nb">echo &lt;/span>&lt;span class="mf">123&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="py">GetType&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>输出:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">IsPublic IsSerial Name BaseType
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-------- -------- ---- --------
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">True True Int32 System.ValueType
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>好家伙, 原来 echo 直接就是把这个对象输出出来对吧!&lt;/p>
+&lt;p>而事实上, 一个表达式的运算结果(返回值), 是会打印到控制台的, 这点与 Python 一样.&lt;/p>
+&lt;p>所以如果你执行一个 &amp;lsquo;1+1&amp;rsquo;, 这个表达式的运算结果是 2, 则 2 会被打印到控制台.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="mf">1&lt;/span>&lt;span class="p">+&lt;/span>&lt;span class="mf">1&lt;/span> &lt;span class="c"># 输出 2&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果你不希望一个语句的返回值被打印到控制台, 可以在首部添加 [void], 它表示将语句的返回值强制转换为 void 以保证没有输出&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="no">void&lt;/span>&lt;span class="p">](&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">+&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c"># 没有输出&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>使用 New-Object 可以创建一个对象, 指定 .NET 对象的全名即可创建:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$random&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Random&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$randint&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nv">$random&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Next&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="c"># 调用 System.Random 对象的 Next 方法&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$randint&lt;/span> &lt;span class="c"># 输出一个随机的数字&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果需要带参数的创建 .NET 对象, 直接在 New-Object 语句后添加参数数组即可:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$str&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">String&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;草&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mf">20&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c"># 生草&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo &lt;/span>&lt;span class="nv">$str&lt;/span> &lt;span class="c"># 返回 &amp;#39;草草草草草草草草草草草草草草草草草草草草&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>PowerShell 中的强制类型转换是这样使用的:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="n">类型&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="n">对象&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$numArray&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">int[]&lt;/span>&lt;span class="p">](&lt;/span>&lt;span class="mf">1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="mf">.4&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c"># 将 object[] 转换为 int[]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>调用 .NET 类的静态方法, 使用下面的语法:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="n">类的全名&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">方法名&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">参数&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 示例 :&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="no">Console&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Hello world!&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c"># 输出 Hello world&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>访问字段, 也是一样的&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$ansi&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Text.Encoding&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="k">Default&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果要使用某个命名空间, 使用下面的语句:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="n">using&lt;/span> &lt;span class="n">namespace&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Text&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$ansi&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">Encoding&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="k">Default&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>值得高兴的是, 通过调用 .NET 的组件, 你甚至可以在 PowerShell 中创建 UI 窗体, 下面是一个简单的示例代码:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">Add-Type&lt;/span> &lt;span class="n">-AssemblyName&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Windows&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Forms&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">Add-Type&lt;/span> &lt;span class="n">-AssemblyName&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Drawing&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$form&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Windows&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Forms&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Form&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$form&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Text&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s1">&amp;#39;Select a Computer&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$form&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Size&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Drawing&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Size&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">300&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mf">200&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$form&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">StartPosition&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s1">&amp;#39;CenterScreen&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$okButton&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Windows&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Forms&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Button&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$okButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Anchor&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.AnchorStyles&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Bottom&lt;/span> &lt;span class="o">-bor&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.AnchorStyles&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Right&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$okButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Drawing&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">75&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mf">120&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$okButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Size&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Drawing&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Size&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">75&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mf">23&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$okButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Text&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s1">&amp;#39;OK&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$okButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">DialogResult&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.DialogResult&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">OK&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$form&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">AcceptButton&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nv">$okButton&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$form&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Controls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nv">$okButton&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$cancelButton&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Windows&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Forms&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Button&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$cancelButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Anchor&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.AnchorStyles&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Bottom&lt;/span> &lt;span class="o">-bor&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.AnchorStyles&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Right&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$cancelButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Drawing&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">150&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mf">120&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$cancelButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Size&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Drawing&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Size&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">75&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mf">23&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$cancelButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Text&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s1">&amp;#39;Cancel&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$cancelButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">DialogResult&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.DialogResult&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Cancel&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$form&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">CancelButton&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nv">$cancelButton&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$form&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Controls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nv">$cancelButton&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$label&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Windows&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Forms&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Label&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$label&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Anchor&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.AnchorStyles&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Top&lt;/span> &lt;span class="o">-bor&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.AnchorStyles&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Left&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$label&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Drawing&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">10&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mf">20&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$label&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Size&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Drawing&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Size&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">280&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mf">20&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$label&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Text&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s1">&amp;#39;Please select a computer:&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$form&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Controls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nv">$label&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$listBox&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Windows&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Forms&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">ListBox&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$listBox&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Anchor&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.AnchorStyles&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Top&lt;/span> &lt;span class="o">-bor&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.AnchorStyles&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Left&lt;/span> &lt;span class="o">-bor&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.AnchorStyles&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Bottom&lt;/span> &lt;span class="o">-bor&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.AnchorStyles&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Right&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$listBox&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Drawing&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">10&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mf">40&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$listBox&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Size&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nb">New-Object&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Drawing&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Size&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mf">260&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mf">20&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$listBox&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Height&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mf">80&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="no">void&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="nv">$listBox&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Items&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;atl-dc-001&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="no">void&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="nv">$listBox&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Items&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;atl-dc-002&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="no">void&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="nv">$listBox&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Items&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;atl-dc-003&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="no">void&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="nv">$listBox&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Items&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;atl-dc-004&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="no">void&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="nv">$listBox&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Items&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;atl-dc-005&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="no">void&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="nv">$listBox&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Items&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;atl-dc-006&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>&lt;span class="no">void&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="nv">$listBox&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Items&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;atl-dc-007&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$form&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Controls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nv">$listBox&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$form&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">Topmost&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="vm">$true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">$result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nv">$form&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">ShowDialog&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nv">$result&lt;/span> &lt;span class="o">-eq&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.DialogResult&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">OK&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">$x&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nv">$listBox&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">SelectedItem&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.MessageBox&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Show&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;你选择了:&amp;#34;&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="nv">$x&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="py">ToString&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">[&lt;/span>&lt;span class="no">System.Windows.Forms.MessageBox&lt;/span>&lt;span class="p">]::&lt;/span>&lt;span class="n">Show&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;你没有选择任何条目&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

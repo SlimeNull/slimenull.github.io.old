@@ -1,0 +1,1247 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ui on SlimeNull Blogs</title><link>https://slimenull.com/tags/ui/</link><description>Recent content in Ui on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 03 Apr 2023 13:36:18 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/ui/index.xml" rel="self" type="application/rss+xml"/><item><title>[WPF] 资源, 静态资源, 动态资源的使用及注意事项. 使用资源字典进行 “语言国际化“ 与 “颜色模式切换“</title><link>https://slimenull.com/p/20230403133618/</link><pubDate>Mon, 03 Apr 2023 13:36:18 +0800</pubDate><guid>https://slimenull.com/p/20230403133618/</guid><description>&lt;p>资源是 WPF 里面的一个好东西, 你可以在里面存很多东西, 然后直接在 XAML 或 CS 代码中调用获取对应的值. 任何东西都可以存进去, 只要它是可以由文本表示的, 那就可以.&lt;/p>
+&lt;h2 id="定义资源的方式">定义资源的方式&lt;/h2>
+&lt;p>资源定义有很多方式, 它们也有不同的效果, 作用域, 以及合适的用途.&lt;/p>
+&lt;h3 id="1-在控件中定义资源">1. 在控件中定义资源&lt;/h3>
+&lt;p>在 WPF 中, 任何一个 &lt;code>FrameworkElement&lt;/code> (框架元素) 都可以用来定义资源, 它有一个 &lt;code>Resources&lt;/code> 属性, 我们使用它来定义所需资源即可.&lt;/p>
+&lt;p>在一个控件中定义的资源, 这个资源也只能在这个控件中被访问, 外部是无法访问到这个资源的.&lt;/p>
+&lt;p>下面是一个在 &lt;code>StackPanel&lt;/code> 中定义一个适用于 &lt;code>Button&lt;/code> 的 &lt;code>Style&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;StackPanel&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;StackPanel.Resources&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Style&lt;/span> &lt;span class="na">TargetType=&lt;/span>&lt;span class="s">&amp;#34;Button&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Setter&lt;/span> &lt;span class="na">Property=&lt;/span>&lt;span class="s">&amp;#34;Margin&amp;#34;&lt;/span> &lt;span class="na">Value=&lt;/span>&lt;span class="s">&amp;#34;3&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Style&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/StackPanel.Resources&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Button&amp;gt;&lt;/span>Click&lt;span class="nt">&amp;lt;/Button&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Button&amp;gt;&lt;/span>Me&lt;span class="nt">&amp;lt;/Button&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Button&amp;gt;&lt;/span>To&lt;span class="nt">&amp;lt;/Button&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Button&amp;gt;&lt;/span>Go&lt;span class="nt">&amp;lt;/Button&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/StackPanel&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在上面的代码中, &lt;code>StackPanel&lt;/code> 控件的 &lt;code>Resources&lt;/code> 中定义了一个 &lt;code>Style&lt;/code>, 这个 &lt;code>Style&lt;/code> 的目标类型是 &lt;code>Button&lt;/code>, 它将应用于 &lt;code>StackPanel&lt;/code> 下所有的 &lt;code>Button&lt;/code>, 例如在上面代码中, 我们为按钮定义了 &lt;code>Margin&lt;/code> 值为 3, 这样, 这个 &lt;code>StackPanel&lt;/code> 中的所有 &lt;code>Button&lt;/code> 都可以快速的空出一些间距, 而不需要我们为每一个 &lt;code>Button&lt;/code> 赋值 &lt;code>Margin&lt;/code> 了.&lt;/p>
+&lt;p>效果图:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/c8787655929448d88d727980e975e2ae.png"
+loading="lazy"
+alt="效果图"
+>&lt;/p>
+&lt;p>很多时候, 我们也在 &lt;code>Window&lt;/code> 或 &lt;code>Page&lt;/code> 中定义一些资源, 例如转换器, 某些必要的数据之类的, 这些资源在整个 &lt;code>Window&lt;/code> 和 &lt;code>Page&lt;/code> 都能访问, 而不会被外面访问到, 非常方便.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;Page&lt;/span> &lt;span class="na">x:Class=&lt;/span>&lt;span class="s">&amp;#34;OpenGptChat.Views.MainPage&amp;#34;&lt;/span> &lt;span class="na">Title=&lt;/span>&lt;span class="s">&amp;#34;MainPage&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:mc=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.openxmlformats.org/markup-compatibility/2006&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:d=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/expression/blend/2008&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:local=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:OpenGptChat.Views&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:utilities=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:OpenGptChat.Utilities;assembly=OpenGptChat.Common&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">mc:Ignorable=&lt;/span>&lt;span class="s">&amp;#34;d&amp;#34;&lt;/span> &lt;span class="na">d:DesignHeight=&lt;/span>&lt;span class="s">&amp;#34;600&amp;#34;&lt;/span> &lt;span class="na">d:DesignWidth=&lt;/span>&lt;span class="s">&amp;#34;880&amp;#34;&lt;/span> &lt;span class="na">d:Background=&lt;/span>&lt;span class="s">&amp;#34;White&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">d:DataContext=&lt;/span>&lt;span class="s">&amp;#34;{d:DesignInstance Type=local:MainPage}&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">Background=&lt;/span>&lt;span class="s">&amp;#34;{DynamicResource GeneralBackground}&amp;#34;&lt;/span> &lt;span class="na">Style=&lt;/span>&lt;span class="s">&amp;#34;{DynamicResource AnimatedPageStyle}&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Page.Resources&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;utilities:BindingProxy&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;PageSelf&amp;#34;&lt;/span> &lt;span class="na">Data=&lt;/span>&lt;span class="s">&amp;#34;{Binding}&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Page.Resources&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--省略页面内容--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/Page&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="2-在资源字典中定义资源">2. 在资源字典中定义资源&lt;/h3>
+&lt;p>如果你翻了 &lt;code>FrameworkElement&lt;/code> 的定义, 你会发现, 它的 &lt;code>Resources&lt;/code> 属性的类型, 就是 &lt;code>ResourceDictionary&lt;/code>, 即: 资源字典.&lt;/p>
+&lt;p>在 WPF 中, 你同样可以在你的项目中创建一个资源字典文件, 它是一个 XAML 文件, 大概是这样的格式:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--在这里定义资源--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/ResourceDictionary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果你想在别的地方引用一个资源字典, 可以直接在你的 XAML 中这么声明:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">Source=&lt;/span>&lt;span class="s">&amp;#34;资源字典的路径&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>因为刚刚的 &lt;code>FrameworkElement&lt;/code> 的 &lt;code>Resources&lt;/code> 属性是 &lt;code>ResourceDictionary&lt;/code> 类型, 所以你也可以直接把自己的资源字典赋值过去, 大概是这样的:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;StackPanel&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;StackPanel.Resources&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">Source=&lt;/span>&lt;span class="s">&amp;#34;资源字典的路径&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/StackPanel.Resources&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/StackPanel&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果你希望定义一些全局都能使用的资源, 那么你可以直接在项目中的 &lt;code>App.xaml&lt;/code> 中定义. 在 &lt;code>App.xaml&lt;/code> 定义的资源, 是整个程序都可以直接访问到的, 例如这样:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;Application&lt;/span> &lt;span class="na">x:Class=&lt;/span>&lt;span class="s">&amp;#34;WpfTutorial.App&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:local=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:WpfTutorial&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">StartupUri=&lt;/span>&lt;span class="s">&amp;#34;MainWindow.xaml&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Application.Resources&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Style&lt;/span> &lt;span class="na">TargetType=&lt;/span>&lt;span class="s">&amp;#34;Button&amp;#34;&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;pinkButton&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Setter&lt;/span> &lt;span class="na">Property=&lt;/span>&lt;span class="s">&amp;#34;Background&amp;#34;&lt;/span> &lt;span class="na">Value=&lt;/span>&lt;span class="s">&amp;#34;Pink&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Style&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Application.Resources&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/Application&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>需要知道的是, 资源字典也是可以合并的, &lt;code>ResourceDictionary&lt;/code> 有一个属性叫做 &lt;code>MergedDictionaries&lt;/code>, 你可以在这里添加一些其他的资源字典, 然后那些资源字典中包含的资源, 就会合并到当前字典中.&lt;/p>
+&lt;p>&lt;code>OpenGptChat&lt;/code> 的 &lt;code>App.xaml&lt;/code> 是这样定义的:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;Application&lt;/span> &lt;span class="na">x:Class=&lt;/span>&lt;span class="s">&amp;#34;OpenGptChat.App&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:local=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:OpenGptChat&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Application.Resources&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary.MergedDictionaries&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">Source=&lt;/span>&lt;span class="s">&amp;#34;/Themes/Generic.xaml&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">Source=&lt;/span>&lt;span class="s">&amp;#34;/Resources/AnimationStyles.xaml&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">Source=&lt;/span>&lt;span class="s">&amp;#34;/Resources/ControlStyles/All.xaml&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">Source=&lt;/span>&lt;span class="s">&amp;#34;/Converters/SingletonConverters.xaml&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">Source=&lt;/span>&lt;span class="s">&amp;#34;pack://application:,,,/OpenGptChat.Common;component/ColorModes/BrightMode.xaml&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">Source=&lt;/span>&lt;span class="s">&amp;#34;pack://application:,,,/OpenGptChat.Common;component/Languages/en.xaml&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/ResourceDictionary.MergedDictionaries&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/ResourceDictionary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Application.Resources&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/Application&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>从上面的代码中我们可以看到, 它没有直接在 &lt;code>App.xaml&lt;/code> 中直接定义任何资源, 而是在其他的地方定义资源, 最后将它们合并到 &lt;code>App.xaml&lt;/code>, 这样将资源分门别类, 管理起来也是方便的.&lt;/p>
+&lt;h2 id="访问资源的方式">访问资源的方式&lt;/h2>
+&lt;p>在上面的内容中, 你应该也看到了, 我直接在控件中定义的 &lt;code>Style&lt;/code>, 它有一个 &lt;code>TargetType&lt;/code> 属性, 或者我在上面 &lt;code>App.xaml&lt;/code> 中定义 &lt;code>Style&lt;/code> 的时候, 添加了一个 &lt;code>x:Key&lt;/code> 属性. 是这些决定了资源的访问方式.&lt;/p>
+&lt;h3 id="1-访问使用目标类型定义的资源">1. 访问使用目标类型定义的资源&lt;/h3>
+&lt;p>如果一个资源是一个 &lt;code>Style&lt;/code>, 那么它可以直接有一个 &lt;code>TargetType&lt;/code> 属性, 当你给它赋值后, 所有能访问到该资源的, 对应类型的控件, 都会应用这个样式, 换言之, 你可以用它定义一些 &lt;em>全局&lt;/em> 或 &lt;em>通用&lt;/em> 的样式, 然后应用到你想要的地方.&lt;/p>
+&lt;p>上面直接在 &lt;code>StackPanel&lt;/code> 中定义 &lt;code>Style&lt;/code> 资源的例子就是使用的这种方式, 它只有一个 &lt;code>TargetType&lt;/code>, 于是它的成员中, 所有的 &lt;code>Button&lt;/code> 都会应用这个样式, 然后设置 &lt;code>Margin&lt;/code> 值为样式中指定的值.&lt;/p>
+&lt;p>如果你希望将一个样式应用到整个应用程序, 很简单, 只需要让它可以被整个应用程序访问即可, 那么我们应该用什么呢? 当然是 &lt;code>App.xaml&lt;/code> 了. 你在 &lt;code>App.xaml&lt;/code> 中直接定义的 &lt;code>Style&lt;/code> 资源或者合并到 &lt;code>App.xaml&lt;/code> 的 &lt;code>Style&lt;/code> 资源, 如果设置了 &lt;code>TargetType&lt;/code> 并且没有设置 &lt;code>x:Key&lt;/code>, 那么它们就会对全局进行应用.&lt;/p>
+&lt;h3 id="2-访问使用键定义的资源">2. 访问使用键定义的资源&lt;/h3>
+&lt;p>任何一个资源, 如果你定义了键, 也就是 &lt;code>x:Key&lt;/code>, 那么访问它的时候, 就只能通过 &lt;code>{StaticResource 键}&lt;/code> 或 &lt;code>{DynamicResource 键}&lt;/code> 来访问.&lt;/p>
+&lt;p>它们分别是静态资源和动态资源. 作用就和它们的名字一样, 静态资源一旦引用之后, 就不会变更, 而使用动态资源引用的资源, 如果你动态更新了资源字典, 那么这个引用也会更新.&lt;/p>
+&lt;p>通过这个特性, 我们可以用来做 &amp;ldquo;语言国际化&amp;rdquo;, 也就是给程序添加多语言支持. 同理, 如果你要做程序的颜色模式切换, 那么也可以直接做, 毕竟, 控件的 &lt;code>Foreground&lt;/code>, &lt;code>Background&lt;/code> 以及几乎任何东西都是可以通过动态资源来引用的.&lt;/p>
+&lt;h2 id="动态切换资源">动态切换资源&lt;/h2>
+&lt;p>只要你的 CS 代码能访问到的地方, 你都可以操作. 以 &lt;code>App.xaml&lt;/code> 为例, 它其实是一个类, 基类型是 &lt;code>Application&lt;/code>, 而我们在 &lt;code>App.xaml&lt;/code> 中访问到的属性, 基本都是在访问 &lt;code>Application&lt;/code> 的属性.&lt;/p>
+&lt;h3 id="1-基本操作">1. 基本操作&lt;/h3>
+&lt;p>如果你翻过 &lt;code>Application&lt;/code> 的定义, 你会发现, 它提供了一个 &lt;code>Current&lt;/code> 属性, 用来获取当前正在运行的 &lt;code>Application&lt;/code> 实例.&lt;/p>
+&lt;p>下面是操作 &lt;code>Application&lt;/code> 替换当前程序的资源的示例代码.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="n">ResourceDictionary&lt;/span> &lt;span class="n">res&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="err">我的资源字典&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">这里怎么获取到的你自己决定咯&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 直接将当前应用程序的资源替换成我们的资源&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Application&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Current&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Resources&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">res&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>或者委婉一点, 我们也可以在当前程序资源字典中的 &lt;code>MergedDictionaries&lt;/code> 中添加自己的资源, 它可以直接覆盖掉相同 &lt;code>x:Key&lt;/code> 的值.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="n">ResourceDictionary&lt;/span> &lt;span class="n">res&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="err">我的资源字典&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="err">这里怎么获取的你自己决定咯&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 在当前应用程序的资源中, 添加我们自己的资源.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Application&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Current&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Resources&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MergedDictionaries&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">res&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="2-删掉旧的-添加新的">2. 删掉旧的, 添加新的&lt;/h3>
+&lt;p>直接替换掉程序的资源字典显然不好, 因为我们里面可能定义了很多东西, 更换起来不方便. 而直接向里面添加新的, 覆盖旧的也不好, 因为久而久之, 资源字典会越积越多, 可能会影响程序的性能.&lt;/p>
+&lt;p>想要删去旧的字典, 首先我们就得知道这个字典是不是我们所要删去的字典. 例如我程序资源的合并字典中有一个用来存放 &lt;em>语言&lt;/em> 的字典, 那么做得让它有个地方能够标识出 &amp;ldquo;这个字典是用来存放语言信息的&amp;rdquo;. 最简单的方式就是在字典中加入一个带有标识性质的资源, 例如这样:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:s=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:System;assembly=mscorlib&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!-- 这里存放资源 --&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!-- 用一个名称不会和其他资源字典资源重复的任意资源做标识 --&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:Boolean&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;IsLanguageResource&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>True&lt;span class="nt">&amp;lt;/s:Boolean&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/ResourceDictionary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在判断的时候这样写:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">var&lt;/span> &lt;span class="n">oldResources&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Application&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Current&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Resources&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MergedDictionaries&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Where&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">res&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">res&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Contains&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;IsLanguageResource&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToList&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>下面的代码取自 &lt;a class="link" href="https://github.com/SlimeNull/OpenGptChat" target="_blank" rel="noopener"
+>OpenGptChat&lt;/a> 的 &lt;code>ColorModeService&lt;/code>, 可以做动态资源切换的参考:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 切换资源到指定资源字典&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">SwitchTo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ResourceDictionary&lt;/span> &lt;span class="n">colorModeResource&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 拿到旧的资源&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">var&lt;/span> &lt;span class="n">oldColorModeResources&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Application&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Current&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Resources&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MergedDictionaries&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Where&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dict&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">dict&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Contains&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;IsColorModeResource&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToList&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 删掉旧的资源&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">foreach&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">var&lt;/span> &lt;span class="n">res&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">oldColorModeResources&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Application&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Current&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Resources&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MergedDictionaries&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Remove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">res&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 添加新的资源&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Application&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Current&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Resources&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MergedDictionaries&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">colorModeResource&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="国际化与配色切换">国际化与配色切换&lt;/h2>
+&lt;p>WPF 中的界面可以绑定到资源, 而资源切换后界面也会跟着更新, 利用这个特点, 我们可以将要显示的文本绑定到我们的语言资源, 将界面中前景色, 背景色等各种控件的颜色绑定到我们的配色资源, 然后动态切换资源, 即可做到国际化与配色切换.&lt;/p>
+&lt;h3 id="1-编写多个资源文件">1. 编写多个资源文件&lt;/h3>
+&lt;p>做国际化的时候, 为了避免资源找不到的情况, 我们还需要一个 &lt;em>fallback&lt;/em> 的情况. 因为资源是可覆盖的, 所以我们使用以下逻辑:&lt;/p>
+&lt;ol>
+&lt;li>定义一个 &lt;code>_base.xaml&lt;/code>, 在里面编写一些基础的资源, 以及默认语言的一些文本.&lt;/li>
+&lt;li>定义其他语言, 例如 &lt;code>zh-Hans.xaml&lt;/code>, 然后在 &lt;code>MergedDictionaries&lt;/code> 中添加 &lt;code>_base.xaml&lt;/code>, 这样, 雀食的内容会 &lt;em>fallback&lt;/em> 到 &lt;code>_base.xaml&lt;/code> 中的资源, 而重复的资源则会进行覆盖.&lt;/li>
+&lt;/ol>
+&lt;p>下面是来自 &lt;a class="link" href="https://github.com/SlimeNull/OpenGptChat" target="_blank" rel="noopener"
+>OpenGptChat&lt;/a> 的, 可参考的 &lt;code>_base.xaml&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:s=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:System;assembly=mscorlib&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--页面名--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrChat&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Chat&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrConfiguration&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Configuration&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--配置名--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrAPIKey&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>API Key&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrAPIGPTModel&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>API GPT Model&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrAPIHost&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>API Host&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrAPITimeout&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>API Timeout&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrTemperature&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Temperature&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrSystemMessages&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>System messages&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrApply&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Apply&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrWindowAlwaysOnTop&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Window always on top&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrLanguage&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Language&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrColorMode&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Color mode&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--热键描述--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrHotkeyTips&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Hotkety Tips&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrCloseApplication&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Close application&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrHideApplication&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Hide application&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrShowApplication&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Show application&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrSendMessage&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Send message&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrGlobalHotkey&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Global hotkey&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrInputBox&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Input box&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--按钮--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrSend&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Send&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrSave&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Save&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrNewSession&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>New Session&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--工具提示--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrAboutOpenGptChat&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>About OpenGptChat&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrGoBackToMainPage&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Go back to Main page&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrResetChat&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Reset chat&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrGoToConfigurationPage&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Go to Configuration page&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--菜单相关--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrCopy&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Copy&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrEdit&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Edit&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrDelete&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>Delete&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--最后使用一个 &amp;#39;IsLanguageResource&amp;#39; 标识当前资源字典是语言资源--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:Boolean&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;IsLanguageResource&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>True&lt;span class="nt">&amp;lt;/s:Boolean&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/ResourceDictionary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>可以看到, 上面的内容中, 我们使用的是英文, 所以当我们编写 &lt;code>en.xaml&lt;/code> 的时候, 只需要直接 &lt;em>fallback&lt;/em>, 而不需要重新写内容:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:s=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:System;assembly=mscorlib&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary.MergedDictionaries&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">Source=&lt;/span>&lt;span class="s">&amp;#34;_base.xaml&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/ResourceDictionary.MergedDictionaries&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--英语是默认语言, 直接 fallback 过去--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/ResourceDictionary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>但是, 如果是中文的话, 我们就需要进行覆盖了:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:s=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:System;assembly=mscorlib&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary.MergedDictionaries&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ResourceDictionary&lt;/span> &lt;span class="na">Source=&lt;/span>&lt;span class="s">&amp;#34;_base.xaml&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/ResourceDictionary.MergedDictionaries&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--页面名称--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrChat&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>聊天&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrConfiguration&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>配置&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--配置名称--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrAPIKey&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>API 密钥&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrAPIHost&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>API 主机&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrAPIGPTModel&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>API GPT 模型&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrAPITimeout&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>API 超时时间&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrTemperature&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>温度&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrSystemMessages&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>系统消息&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrApply&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>应用&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrWindowAlwaysOnTop&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>窗口置顶&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrLanguage&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>语言&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrColorMode&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>色彩模式&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--热键描述--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrHotkeyTips&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>热键提示&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrCloseApplication&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>关闭程序&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrHideApplication&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>隐藏程序&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrShowApplication&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>显示程序&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrSendMessage&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>发送消息&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrGlobalHotkey&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>全局热键&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrInputBox&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>输入框&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--按钮--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrSend&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>发送&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrSave&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>保存&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrNewSession&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>新建会话&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--工具提示--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrAboutOpenGptChat&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>关于 OpenGptChat&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrGoBackToMainPage&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>返回到主页面&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrResetChat&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>重置聊天&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrGoToConfigurationPage&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>转到配置页面&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--菜单--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrCopy&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>复制&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrEdit&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>编辑&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;s:String&lt;/span> &lt;span class="na">x:Key=&lt;/span>&lt;span class="s">&amp;#34;StrDelete&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>删除&lt;span class="nt">&amp;lt;/s:String&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/ResourceDictionary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="2-编写资源切换的逻辑">2. 编写资源切换的逻辑&lt;/h3>
+&lt;p>按照我们刚刚所说的逻辑, 只需要稍加完善, 即可得到下面用于语言切换的代码:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;span class="lnt">76
+&lt;/span>&lt;span class="lnt">77
+&lt;/span>&lt;span class="lnt">78
+&lt;/span>&lt;span class="lnt">79
+&lt;/span>&lt;span class="lnt">80
+&lt;/span>&lt;span class="lnt">81
+&lt;/span>&lt;span class="lnt">82
+&lt;/span>&lt;span class="lnt">83
+&lt;/span>&lt;span class="lnt">84
+&lt;/span>&lt;span class="lnt">85
+&lt;/span>&lt;span class="lnt">86
+&lt;/span>&lt;span class="lnt">87
+&lt;/span>&lt;span class="lnt">88
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">LanguageService&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">resourceUriPrefix&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;pack://application:,,,/OpenGptChat.Common;component&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">Dictionary&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">languageResources&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">Dictionary&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">&amp;gt;()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;en&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="n">Source&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Uri&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;{resourceUriPrefix}/Languages/en.xaml&amp;#34;&lt;/span> &lt;span class="p">)&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;zh-hans&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="n">Source&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Uri&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;{resourceUriPrefix}/Languages/zh-hans.xaml&amp;#34;&lt;/span> &lt;span class="p">)&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;zh-hant&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="n">Source&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Uri&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;{resourceUriPrefix}/Languages/zh-hant.xaml&amp;#34;&lt;/span> &lt;span class="p">)&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;ja&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="n">Source&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Uri&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;{resourceUriPrefix}/Languages/ja.xaml&amp;#34;&lt;/span> &lt;span class="p">)&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;ar&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="n">Source&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Uri&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;{resourceUriPrefix}/Languages/ar.xaml&amp;#34;&lt;/span> &lt;span class="p">)&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;es&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="n">Source&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Uri&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;{resourceUriPrefix}/Languages/es.xaml&amp;#34;&lt;/span> &lt;span class="p">)&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;fr&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="n">Source&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Uri&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;{resourceUriPrefix}/Languages/fr.xaml&amp;#34;&lt;/span> &lt;span class="p">)&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;ru&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="n">Source&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Uri&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;{resourceUriPrefix}/Languages/ru.xaml&amp;#34;&lt;/span> &lt;span class="p">)&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;ur&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="n">Source&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Uri&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;{resourceUriPrefix}/Languages/ur.xaml&amp;#34;&lt;/span> &lt;span class="p">)&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;tr&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="n">Source&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Uri&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;{resourceUriPrefix}/Languages/tr.xaml&amp;#34;&lt;/span> &lt;span class="p">)&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">CultureInfo&lt;/span> &lt;span class="n">defaultLanguage&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;en&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">LanguageService&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ConfigurationService&lt;/span> &lt;span class="n">configurationService&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 如果配置文件里面有指定语言, 则设置语言&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">CultureInfo&lt;/span> &lt;span class="n">language&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CurrentCulture&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(!&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">IsNullOrWhiteSpace&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">configurationService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Configuration&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Language&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">language&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">configurationService&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Configuration&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Language&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">SetLanguage&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">language&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="n">CultureInfo&lt;/span> &lt;span class="n">currentLanguage&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">defaultLanguage&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">IEnumerable&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">Languages&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">languageResources&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Keys&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">CultureInfo&lt;/span> &lt;span class="n">CurrentLanguage&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">get&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">currentLanguage&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">set&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(!&lt;/span>&lt;span class="n">SetLanguage&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">value&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ArgumentException&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Unsupport language&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">bool&lt;/span> &lt;span class="n">SetLanguage&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CultureInfo&lt;/span> &lt;span class="n">language&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 查找一个合适的 key (先查找完全符合的语言)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">CultureInfo&lt;/span>&lt;span class="p">?&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Languages&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Where&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Equals&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">language&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">FirstOrDefault&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 如果没找到, 就降低要求, 找语言相同的语言&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 例如资源中只有美式英语, 但是需要切换到英式英语&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 因为这俩是同一个语言只是地区不同, 所以也能切换过去&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">key&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">key&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Languages&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Where&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TwoLetterISOLanguageName&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">language&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TwoLetterISOLanguageName&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">FirstOrDefault&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">key&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 取资源字典&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ResourceDictionary&lt;/span>&lt;span class="p">?&lt;/span> &lt;span class="n">resourceDictionary&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">languageResources&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 取旧的资源&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">var&lt;/span> &lt;span class="n">oldLanguageResources&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Application&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Current&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Resources&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MergedDictionaries&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Where&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dict&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">dict&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Contains&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;IsLanguageResource&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToList&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//删去旧的字典&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">foreach&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">var&lt;/span> &lt;span class="n">res&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">oldLanguageResources&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Application&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Current&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Resources&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MergedDictionaries&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Remove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">res&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 添加新的资源&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Application&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Current&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Resources&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MergedDictionaries&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">resourceDictionary&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">currentLanguage&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="3-原理相同的配色切换">3. 原理相同的配色切换&lt;/h3>
+&lt;p>配色切换也是一样的逻辑, 也使用一个 Key 来标识当前资源是 &amp;ldquo;配色&amp;rdquo; 资源, 切换的时候也是如此, 拿到旧的资源, 删掉它们, 然后添加新的资源.&lt;/p>
+&lt;h2 id="结语">结语:&lt;/h2>
+&lt;p>这些都是我在编写 &lt;a class="link" href="https://github.com/SlimeNull/OpenGptChat" target="_blank" rel="noopener"
+>OpenGptChat&lt;/a> 时总结出来的用法, 想学习 WPF 建议去看一下这个项目.&lt;/p></description></item><item><title>[WPF] 多页面程序基本跳转</title><link>https://slimenull.com/p/20230401210013/</link><pubDate>Sat, 01 Apr 2023 21:00:13 +0800</pubDate><guid>https://slimenull.com/p/20230401210013/</guid><description>&lt;p>多页面程序是一种很常见的设计, 一个程序中有多个页面, 然后直接切换页面而不需要创建新的窗口, WPF 中使用 &lt;code>Frame&lt;/code> 来做页面跳转, 但是如何优雅的设计一个多页面程序, 这是个问题.&lt;/p>
+&lt;h2 id="最基本的页面跳转">最基本的页面跳转&lt;/h2>
+&lt;p>编写一个最基本的页面跳转, 首先我们需要在主窗口中放一个 &lt;code>Frame&lt;/code> 控件, 然后再编写两个 &lt;code>Page&lt;/code>. 下面我们以两个页面 &lt;em>MainPage&lt;/em> 和 &lt;em>Configuration&lt;/em> 作为示例讲解.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--窗口 UI--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;Window&lt;/span> &lt;span class="na">x:Class=&lt;/span>&lt;span class="s">&amp;#34;WpfNavigationTutorial.MainWindow&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:d=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/expression/blend/2008&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:mc=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.openxmlformats.org/markup-compatibility/2006&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:local=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:WpfNavigationTutorial&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:pages=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:WpfTutorial.Views.Pages&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">mc:Ignorable=&lt;/span>&lt;span class="s">&amp;#34;d&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">Title=&lt;/span>&lt;span class="s">&amp;#34;MainWindow&amp;#34;&lt;/span> &lt;span class="na">Height=&lt;/span>&lt;span class="s">&amp;#34;450&amp;#34;&lt;/span> &lt;span class="na">Width=&lt;/span>&lt;span class="s">&amp;#34;800&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Grid.ColumnDefinitions&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ColumnDefinition&lt;/span> &lt;span class="na">Width=&lt;/span>&lt;span class="s">&amp;#34;3*&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ColumnDefinition&lt;/span> &lt;span class="na">Width=&lt;/span>&lt;span class="s">&amp;#34;13*&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Grid.ColumnDefinitions&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ListBox&lt;/span> &lt;span class="na">Name=&lt;/span>&lt;span class="s">&amp;#34;navMenu&amp;#34;&lt;/span> &lt;span class="na">SelectionChanged=&lt;/span>&lt;span class="s">&amp;#34;ListBox_SelectionChanged&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ListBoxItem&lt;/span> &lt;span class="na">Content=&lt;/span>&lt;span class="s">&amp;#34;Main&amp;#34;&lt;/span> &lt;span class="na">Tag=&lt;/span>&lt;span class="s">&amp;#34;{x:Type pages:MainPage}&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ListBoxItem&lt;/span> &lt;span class="na">Content=&lt;/span>&lt;span class="s">&amp;#34;Configuration&amp;#34;&lt;/span> &lt;span class="na">Tag=&lt;/span>&lt;span class="s">&amp;#34;{x:Type pages:ConfigurationPage}&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/ListBox&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Frame&lt;/span> &lt;span class="na">Grid.Column=&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span> &lt;span class="na">Name=&lt;/span>&lt;span class="s">&amp;#34;appFrame&amp;#34;&lt;/span> &lt;span class="na">NavigationUIVisibility=&lt;/span>&lt;span class="s">&amp;#34;Hidden&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/Window&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在上面的代码中, 我们使用了一个左右两栏布局, 左侧放了一个 &lt;code>ListBox&lt;/code>, 右侧放了一个 &lt;code>Frame&lt;/code>, 在 &lt;code>ListBox&lt;/code> 中, 我们放了两个 &lt;code>ListBoxItem&lt;/code>, 使用 &lt;code>Content&lt;/code> 做内容, 并且给加了 &lt;code>Tag&lt;/code> 标识这个按钮具体要跳转到哪个页面.&lt;/p>
+&lt;p>然后在两个页面中分别这么简单写一下内容:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--这里是主页面--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;Page&lt;/span> &lt;span class="na">x:Class=&lt;/span>&lt;span class="s">&amp;#34;WpfTutorial.Views.Pages.MainPage&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:mc=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.openxmlformats.org/markup-compatibility/2006&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:d=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/expression/blend/2008&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:local=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:WpfTutorial.Views.Pages&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">mc:Ignorable=&lt;/span>&lt;span class="s">&amp;#34;d&amp;#34;&lt;/span> &lt;span class="na">d:DesignHeight=&lt;/span>&lt;span class="s">&amp;#34;450&amp;#34;&lt;/span> &lt;span class="na">d:DesignWidth=&lt;/span>&lt;span class="s">&amp;#34;800&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">Title=&lt;/span>&lt;span class="s">&amp;#34;MainPage&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Grid&lt;/span> &lt;span class="na">MaxWidth=&lt;/span>&lt;span class="s">&amp;#34;400&amp;#34;&lt;/span> &lt;span class="na">Margin=&lt;/span>&lt;span class="s">&amp;#34;20&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;StackPanel&lt;/span> &lt;span class="na">HorizontalAlignment=&lt;/span>&lt;span class="s">&amp;#34;Stretch&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;TextBlock&amp;gt;&lt;/span>This is main page&lt;span class="nt">&amp;lt;/TextBlock&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/StackPanel&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/Page&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="c">&amp;lt;!--这里是里一个页面页面 (配置页面)--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;Page&lt;/span> &lt;span class="na">x:Class=&lt;/span>&lt;span class="s">&amp;#34;WpfTutorial.Views.Pages.ConfigurationPage&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:mc=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.openxmlformats.org/markup-compatibility/2006&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:d=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/expression/blend/2008&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:local=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:WpfTutorial.Views.Pages&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">mc:Ignorable=&lt;/span>&lt;span class="s">&amp;#34;d&amp;#34;&lt;/span> &lt;span class="na">d:DesignHeight=&lt;/span>&lt;span class="s">&amp;#34;450&amp;#34;&lt;/span> &lt;span class="na">d:DesignWidth=&lt;/span>&lt;span class="s">&amp;#34;800&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">Title=&lt;/span>&lt;span class="s">&amp;#34;ConfigurationPage&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Grid&lt;/span> &lt;span class="na">MaxWidth=&lt;/span>&lt;span class="s">&amp;#34;400&amp;#34;&lt;/span> &lt;span class="na">Margin=&lt;/span>&lt;span class="s">&amp;#34;20&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;StackPanel&lt;/span> &lt;span class="na">HorizontalAlignment=&lt;/span>&lt;span class="s">&amp;#34;Stretch&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;TextBlock&amp;gt;&lt;/span>This is configuration page&lt;span class="nt">&amp;lt;/TextBlock&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/StackPanel&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/Page&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在后台代码中, 我们这么写, 当选择项变更的时候, 也使用 &lt;code>Frame&lt;/code> 进行页面跳转.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">partial&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">MainWindow&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">Window&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">MainWindow&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">InitializeComponent&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 页面实例的缓存&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="k">readonly&lt;/span> &lt;span class="n">Dictionary&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Type&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Page&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">bufferedPages&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">Dictionary&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Type&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Page&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 当&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">ListBox_SelectionChanged&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">SelectionChangedEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 如果选择项不是 ListBoxItem, 则返回&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">navMenu&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SelectedItem&lt;/span> &lt;span class="k">is&lt;/span> &lt;span class="n">not&lt;/span> &lt;span class="n">ListBoxItem&lt;/span> &lt;span class="n">item&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 如果 Tag 不是一个类型, 则返回&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">item&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Tag&lt;/span> &lt;span class="k">is&lt;/span> &lt;span class="n">not&lt;/span> &lt;span class="n">Type&lt;/span> &lt;span class="n">type&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 如果页面缓存中找不到页面, 则创建一个新的页面并存入&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(!&lt;/span>&lt;span class="n">bufferedPages&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TryGetValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">type&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="n">Page&lt;/span>&lt;span class="p">?&lt;/span> &lt;span class="n">page&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">page&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">bufferedPages&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">type&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Activator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CreateInstance&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">type&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Page&lt;/span> &lt;span class="p">??&lt;/span> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Exception&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;this would never happen&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 使用 Frame 进行导航.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">appFrame&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Navigate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>最后的效果就是这样, 点击左侧项目的时候, 右侧页面会直接进行跳转:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/77d72828e9fc4e58948aaee80a267ece.png"
+loading="lazy"
+alt="预览效果"
+>&lt;/p>
+&lt;h2 id="加一点美化">加一点美化&lt;/h2>
+&lt;p>用 ListBox 做侧边页面栏就太丑了, 我们可以使用 &lt;code>ListBox&lt;/code> 自己给它套一个样式.&lt;/p>
+&lt;blockquote>
+&lt;p>这里不使用 &lt;code>ItemsControl&lt;/code> 是因为, &lt;code>ListBox&lt;/code> 的项目是 &lt;em>&amp;ldquo;可选中&amp;rdquo;&lt;/em> 的, 而 &lt;code>ItemsControl&lt;/code> 是没有的, &lt;code>ItemsControl&lt;/code> 只适合界面控件的批量绑定生成.&lt;/p>
+&lt;/blockquote>
+&lt;p>创建一个 &lt;code>NavigationItem&lt;/code> 用来存放导航数据:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">NavigationItem&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cs">/// &amp;lt;summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cs">/// 导航标题&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cs">/// &amp;lt;/summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">Title&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">set&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kt">string&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Empty&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cs">/// &amp;lt;summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cs">/// 导航描述&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cs">/// &amp;lt;/summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">Description&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">set&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kt">string&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Empty&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cs">/// &amp;lt;summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cs">/// 目标页面的类型&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cs">/// &amp;lt;/summary&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">Type&lt;/span> &lt;span class="n">TargetPageType&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">set&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">typeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Page&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>为 &lt;code>MainWindow&lt;/code> 创建一个 &lt;code>MainWindowModel&lt;/code> 用来存放页面数据:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">MainWndowModel&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">ObservableCollection&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">NavigationItem&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">NavigationItems&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">ObservableCollection&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">NavigationItem&lt;/span>&lt;span class="p">&amp;gt;()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">NavigationItem&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Title&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;Main&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Description&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;The main page of this application&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">TargetPageType&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">typeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MainPage&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">NavigationItem&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Title&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;Configuration&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Description&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;Configure something you want&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">TargetPageType&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">typeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ConfigurationPage&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>然后将主页面的代码改成这样:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;Window&lt;/span> &lt;span class="na">x:Class=&lt;/span>&lt;span class="s">&amp;#34;WpfNavigationTutorial.MainWindow&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:x=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/winfx/2006/xaml&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:d=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.microsoft.com/expression/blend/2008&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:mc=&lt;/span>&lt;span class="s">&amp;#34;http://schemas.openxmlformats.org/markup-compatibility/2006&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:local=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:WpfNavigationTutorial&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:pages=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:WpfTutorial.Views.Pages&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">xmlns:vm=&lt;/span>&lt;span class="s">&amp;#34;clr-namespace:WpfNavigationTutorial.ViewModels&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">mc:Ignorable=&lt;/span>&lt;span class="s">&amp;#34;d&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">Title=&lt;/span>&lt;span class="s">&amp;#34;MainWindow&amp;#34;&lt;/span> &lt;span class="na">Height=&lt;/span>&lt;span class="s">&amp;#34;450&amp;#34;&lt;/span> &lt;span class="na">Width=&lt;/span>&lt;span class="s">&amp;#34;800&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Window.DataContext&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--直接在 XAML 中给 Window 的 DataContext 赋值--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;vm:MainWndowModel/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Window.DataContext&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Grid.ColumnDefinitions&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ColumnDefinition&lt;/span> &lt;span class="na">Width=&lt;/span>&lt;span class="s">&amp;#34;3*&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ColumnDefinition&lt;/span> &lt;span class="na">Width=&lt;/span>&lt;span class="s">&amp;#34;13*&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Grid.ColumnDefinitions&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--使用 ListBox, 并且将 ItemsSource 绑定到我们的数据--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--记得要使用禁用它的水平滚动条--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ListBox&lt;/span> &lt;span class="na">Name=&lt;/span>&lt;span class="s">&amp;#34;navMenu&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">ItemsSource=&lt;/span>&lt;span class="s">&amp;#34;{Binding NavigationItems}&amp;#34;&lt;/span> &lt;span class="na">BorderThickness=&lt;/span>&lt;span class="s">&amp;#34;0 0 1 0&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">ScrollViewer.HorizontalScrollBarVisibility=&lt;/span>&lt;span class="s">&amp;#34;Disabled&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">SelectionChanged=&lt;/span>&lt;span class="s">&amp;#34;navMenu_SelectionChanged&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;ListBox.ItemTemplate&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;DataTemplate&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Border&lt;/span> &lt;span class="na">Padding=&lt;/span>&lt;span class="s">&amp;#34;5&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;StackPanel&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;TextBlock&lt;/span> &lt;span class="na">Text=&lt;/span>&lt;span class="s">&amp;#34;{Binding Title}&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c">&amp;lt;!--描述信息用灰色字体, 字号也小一点, 多余的部分剪切掉--&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;TextBlock&lt;/span> &lt;span class="na">Text=&lt;/span>&lt;span class="s">&amp;#34;{Binding Description}&amp;#34;&lt;/span> &lt;span class="na">Foreground=&lt;/span>&lt;span class="s">&amp;#34;Gray&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="na">FontSize=&lt;/span>&lt;span class="s">&amp;#34;10&amp;#34;&lt;/span> &lt;span class="na">TextTrimming=&lt;/span>&lt;span class="s">&amp;#34;CharacterEllipsis&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/StackPanel&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Border&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/DataTemplate&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/ListBox.ItemTemplate&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/ListBox&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;Frame&lt;/span> &lt;span class="na">Grid.Column=&lt;/span>&lt;span class="s">&amp;#34;1&amp;#34;&lt;/span> &lt;span class="na">Name=&lt;/span>&lt;span class="s">&amp;#34;appFrame&amp;#34;&lt;/span> &lt;span class="na">NavigationUIVisibility=&lt;/span>&lt;span class="s">&amp;#34;Hidden&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;lt;/Grid&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nt">&amp;lt;/Window&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>后台代码也相应的改一下, 只需要判断数据是否是 &lt;code>NavigationItem&lt;/code> 就好:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">partial&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">MainWindow&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">Window&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">MainWindow&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">InitializeComponent&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="k">readonly&lt;/span> &lt;span class="n">Dictionary&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Type&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Page&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">bufferedPages&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">Dictionary&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Type&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Page&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">navMenu_SelectionChanged&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">SelectionChangedEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 如果选择项不是 FrameworkElement, 则返回&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">navMenu&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SelectedItem&lt;/span> &lt;span class="k">is&lt;/span> &lt;span class="n">not&lt;/span> &lt;span class="n">NavigationItem&lt;/span> &lt;span class="n">item&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Type&lt;/span> &lt;span class="n">type&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">item&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TargetPageType&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 如果页面缓存中找不到页面, 则创建一个新的页面并存入&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(!&lt;/span>&lt;span class="n">bufferedPages&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TryGetValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">type&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="n">Page&lt;/span>&lt;span class="p">?&lt;/span> &lt;span class="n">page&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">page&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">bufferedPages&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">type&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Activator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CreateInstance&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">type&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Page&lt;/span> &lt;span class="p">??&lt;/span> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Exception&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;this would never happen&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">appFrame&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Navigate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">page&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>最后的效果:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/369cf51132824f63a3d621731d0ac32b.png"
+loading="lazy"
+alt="稍微美化一点"
+>&lt;/p>
+&lt;blockquote>
+&lt;p>当然, 这样的效果还是很简单, 不过, 更复杂的设计, 就任由你自己发挥啦. 例如改掉 &lt;code>ListBox&lt;/code> 元素被选中时的丑陋颜色, 以及去掉聚集焦点时的虚线, 或者加一些动画, 都可以.&lt;/p>
+&lt;/blockquote></description></item></channel></rss>

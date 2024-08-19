@@ -1,0 +1,2023 @@
+<!doctype html><html lang=zh-CN dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='在 Y 分钟内学会 Python这是翻译, 原文地址: Learn Python in Y Minutes在 90 年代初, Python 由 Guido van Rossum 创造, 现在, 它是最受欢迎的编程语言之一. 因其简明的语法, 我爱上了它. 语法基本上是可以执行的伪代码.提示: 这篇文章适用于 Python 3, 如果你想要学习旧版 Python 2.7, 单击这里# 单行注释以 '><title>[教程] 在 Y 分钟内学会 Python</title>
+<link rel=canonical href=https://slimenull.com/p/20210505184421/><link rel=stylesheet href=/scss/style.min.73438a911857e6d491e39369614d0dd0c0302dcacfb43e15034e0e48cac08c07.css><meta property='og:title' content='[教程] 在 Y 分钟内学会 Python'><meta property='og:description' content='在 Y 分钟内学会 Python这是翻译, 原文地址: Learn Python in Y Minutes在 90 年代初, Python 由 Guido van Rossum 创造, 现在, 它是最受欢迎的编程语言之一. 因其简明的语法, 我爱上了它. 语法基本上是可以执行的伪代码.提示: 这篇文章适用于 Python 3, 如果你想要学习旧版 Python 2.7, 单击这里# 单行注释以 '><meta property='og:url' content='https://slimenull.com/p/20210505184421/'><meta property='og:site_name' content='SlimeNull Blogs'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='python'><meta property='article:published_time' content='2021-05-05T18:44:21+08:00'><meta property='article:modified_time' content='2021-05-05T18:44:21+08:00'><meta name=twitter:title content="[教程] 在 Y 分钟内学会 Python"><meta name=twitter:description content="在 Y 分钟内学会 Python这是翻译, 原文地址: Learn Python in Y Minutes在 90 年代初, Python 由 Guido van Rossum 创造, 现在, 它是最受欢迎的编程语言之一. 因其简明的语法, 我爱上了它. 语法基本上是可以执行的伪代码.提示: 这篇文章适用于 Python 3, 如果你想要学习旧版 Python 2.7, 单击这里# 单行注释以 "><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu11436448765783238083.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>SlimeNull Blogs</a></h1><h2 class=site-description>为了更好的开源世界~</h2></div></header><ol class=social-menu><li><a href=https://github.com/SlimeNull target=_blank title=GitHub rel=me><!doctype html><svg t="1702542119184" class="icon" viewBox="0 0 1024 1024" p-id="4136" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M692.906667 938.666667A42.666667 42.666667.0 01650.24 896V785.066667A91.733333 91.733333.0 00627.2 714.24a42.666667 42.666667.0 0126.026667-71.253333c104.106666-12.373334 200.106666-45.653334 200.106666-226.133334a170.666667 170.666667.0 00-28.586666-94.72A117.333333 117.333333.0 01807.253333 234.24a158.293333 158.293333.0 000-60.16A326.4 326.4.0 00718.08 220.586667a42.666667 42.666667.0 01-35.84 6.4 433.066667 433.066667.0 00-235.52.0 42.666667 42.666667.0 01-35.84-6.4A315.733333 315.733333.0 00320.853333 174.08a150.186667 150.186667.0 000 60.16 121.173333 121.173333.0 01-18.346666 88.746667A173.653333 173.653333.0 00273.92 418.133333C273.92 584.106666 354.133333 628.48 474.453333 643.84A42.666667 42.666667.0 01509.44 672a42.666667 42.666667.0 01-8.96 42.666667 87.893333 87.893333.0 00-23.466667 66.56V896A42.666667 42.666667.0 01391.68 896v-24.32a256 256 0 01-224.853333-89.173333A166.4 166.4.0 00117.333333 744.96a42.666667 42.666667.0 1121.333334-82.773333A210.346667 210.346667.0 01224 720.213333c42.666667 42.666667 85.333333 80.213333 166.4 64.853334a165.973333 165.973333.0 019.813333-67.413334C312.32 695.466666 186.88 632.32 186.88 418.986667a256 256 0 0142.666667-142.08 36.266667 36.266667.0 005.546666-26.453334 242.773333 242.773333.0 0114.08-136.96 42.666667 42.666667.0 0126.88-24.32c14.506667-4.266667 66.56-12.8 165.12 51.2a518.826667 518.826667.0 01242.773334.0c98.56-64 150.613333-55.893333 164.693333-51.2a42.666667 42.666667.0 0126.88 24.32A243.626667 243.626667.0 01889.6 250.88a32 32 0 004.693333 24.32A256 256 0 01936.96 417.706667c0 216.32-124.586667 279.04-213.333333 298.666666a182.613333 182.613333.0 019.386666 71.253334V896a42.666667 42.666667.0 01-40.106666 42.666667z" fill="#666" p-id="4137"/></svg></a></li><li><a href=https://space.bilibili.com/441842015 target=_blank title=Bilibili rel=me><!doctype html><svg t="1702541966104" class="icon" viewBox="0 0 1024 1024" p-id="16981" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M306.005333 117.632 444.330667 256h135.296l138.368-138.325333A42.666667 42.666667.0 01778.368 178.048L700.330667 256H789.333333A149.333333 149.333333.0 01938.666667 405.333333v341.333334A149.333333 149.333333.0 01789.333333 896H234.666667A149.333333 149.333333.0 0185.333333 746.666667V405.333333A149.333333 149.333333.0 01234.666667 256h88.96L245.632 177.962667a42.666667 42.666667.0 0160.373333-60.373334zm483.328 223.701333H234.666667a64 64 0 00-63.701334 57.856L170.666667 405.333333v341.333334a64 64 0 0057.856 63.701333L234.666667 810.666667h554.666666a64 64 0 0063.701334-57.856L853.333333 746.666667V405.333333a64 64 0 00-64-64zm-448 128A42.666667 42.666667.0 01384 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666666-42.666667zm341.333334.0A42.666667 42.666667.0 01725.333333 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666667-42.666667z" fill="#666" p-id="16982"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>主页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>链接</span></a></li><div class=menu-bottom-section><li id=i18n-switch><svg class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.239 8-5 8"/><path d="M5 9c-.003 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4-9 4 9"/><path d="M19.1 18h-6.2"/></svg>
+<select name=language onchange="window.location.href=this.selectedOptions[0].value"><option value=https://slimenull.com/ selected></option></select></li><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></div></ol></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/note/ style=background-color:#fdf0c4;color:#3d3d3d>笔记
+</a><a href=/categories/%E6%88%90%E9%95%BF%E8%AE%B0%E5%BD%95/>成长记录
+</a><a href=/categories/%E7%81%8C%E6%B0%B4/ style=background-color:#b3dbe3;color:#5e7377>灌水</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/20210505184421/>[教程] 在 Y 分钟内学会 Python</a></h2><h3 class=article-subtitle>在 Y 分钟内学会 Python这是翻译, 原文地址: Learn Python in Y Minutes在 90 年代初, Python 由 Guido van Rossum 创造, 现在, 它是最受欢迎的编程语言之一. 因其简明的语法, 我爱上了它. 语法基本上是可以执行的伪代码.提示: 这篇文章适用于 Python 3, 如果你想要学习旧版 Python 2.7, 单击这里# 单行注释以</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 05, 2021</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 20 分钟</time></div></footer></div></header><section class=article-content><h1 id=在-y-分钟内学会-python>在 Y 分钟内学会 Python</h1><blockquote><p>这是翻译, 原文地址: <a class=link href=https://learnxinyminutes.com/docs/python/ target=_blank rel=noopener>Learn Python in Y Minutes</a></p></blockquote><p>在 90 年代初, Python 由 Guido van Rossum 创造, 现在, 它是最受欢迎的编程语言之一. 因其简明的语法, 我爱上了它. 语法基本上是可以执行的伪代码.</p><p>提示: 这篇文章适用于 Python 3, 如果你想要学习旧版 Python 2.7, 单击<a class=link href=http://learnxinyminutes.com/docs/pythonlegacy/ target=_blank rel=noopener>这里</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>   1
+</span><span class=lnt>   2
+</span><span class=lnt>   3
+</span><span class=lnt>   4
+</span><span class=lnt>   5
+</span><span class=lnt>   6
+</span><span class=lnt>   7
+</span><span class=lnt>   8
+</span><span class=lnt>   9
+</span><span class=lnt>  10
+</span><span class=lnt>  11
+</span><span class=lnt>  12
+</span><span class=lnt>  13
+</span><span class=lnt>  14
+</span><span class=lnt>  15
+</span><span class=lnt>  16
+</span><span class=lnt>  17
+</span><span class=lnt>  18
+</span><span class=lnt>  19
+</span><span class=lnt>  20
+</span><span class=lnt>  21
+</span><span class=lnt>  22
+</span><span class=lnt>  23
+</span><span class=lnt>  24
+</span><span class=lnt>  25
+</span><span class=lnt>  26
+</span><span class=lnt>  27
+</span><span class=lnt>  28
+</span><span class=lnt>  29
+</span><span class=lnt>  30
+</span><span class=lnt>  31
+</span><span class=lnt>  32
+</span><span class=lnt>  33
+</span><span class=lnt>  34
+</span><span class=lnt>  35
+</span><span class=lnt>  36
+</span><span class=lnt>  37
+</span><span class=lnt>  38
+</span><span class=lnt>  39
+</span><span class=lnt>  40
+</span><span class=lnt>  41
+</span><span class=lnt>  42
+</span><span class=lnt>  43
+</span><span class=lnt>  44
+</span><span class=lnt>  45
+</span><span class=lnt>  46
+</span><span class=lnt>  47
+</span><span class=lnt>  48
+</span><span class=lnt>  49
+</span><span class=lnt>  50
+</span><span class=lnt>  51
+</span><span class=lnt>  52
+</span><span class=lnt>  53
+</span><span class=lnt>  54
+</span><span class=lnt>  55
+</span><span class=lnt>  56
+</span><span class=lnt>  57
+</span><span class=lnt>  58
+</span><span class=lnt>  59
+</span><span class=lnt>  60
+</span><span class=lnt>  61
+</span><span class=lnt>  62
+</span><span class=lnt>  63
+</span><span class=lnt>  64
+</span><span class=lnt>  65
+</span><span class=lnt>  66
+</span><span class=lnt>  67
+</span><span class=lnt>  68
+</span><span class=lnt>  69
+</span><span class=lnt>  70
+</span><span class=lnt>  71
+</span><span class=lnt>  72
+</span><span class=lnt>  73
+</span><span class=lnt>  74
+</span><span class=lnt>  75
+</span><span class=lnt>  76
+</span><span class=lnt>  77
+</span><span class=lnt>  78
+</span><span class=lnt>  79
+</span><span class=lnt>  80
+</span><span class=lnt>  81
+</span><span class=lnt>  82
+</span><span class=lnt>  83
+</span><span class=lnt>  84
+</span><span class=lnt>  85
+</span><span class=lnt>  86
+</span><span class=lnt>  87
+</span><span class=lnt>  88
+</span><span class=lnt>  89
+</span><span class=lnt>  90
+</span><span class=lnt>  91
+</span><span class=lnt>  92
+</span><span class=lnt>  93
+</span><span class=lnt>  94
+</span><span class=lnt>  95
+</span><span class=lnt>  96
+</span><span class=lnt>  97
+</span><span class=lnt>  98
+</span><span class=lnt>  99
+</span><span class=lnt> 100
+</span><span class=lnt> 101
+</span><span class=lnt> 102
+</span><span class=lnt> 103
+</span><span class=lnt> 104
+</span><span class=lnt> 105
+</span><span class=lnt> 106
+</span><span class=lnt> 107
+</span><span class=lnt> 108
+</span><span class=lnt> 109
+</span><span class=lnt> 110
+</span><span class=lnt> 111
+</span><span class=lnt> 112
+</span><span class=lnt> 113
+</span><span class=lnt> 114
+</span><span class=lnt> 115
+</span><span class=lnt> 116
+</span><span class=lnt> 117
+</span><span class=lnt> 118
+</span><span class=lnt> 119
+</span><span class=lnt> 120
+</span><span class=lnt> 121
+</span><span class=lnt> 122
+</span><span class=lnt> 123
+</span><span class=lnt> 124
+</span><span class=lnt> 125
+</span><span class=lnt> 126
+</span><span class=lnt> 127
+</span><span class=lnt> 128
+</span><span class=lnt> 129
+</span><span class=lnt> 130
+</span><span class=lnt> 131
+</span><span class=lnt> 132
+</span><span class=lnt> 133
+</span><span class=lnt> 134
+</span><span class=lnt> 135
+</span><span class=lnt> 136
+</span><span class=lnt> 137
+</span><span class=lnt> 138
+</span><span class=lnt> 139
+</span><span class=lnt> 140
+</span><span class=lnt> 141
+</span><span class=lnt> 142
+</span><span class=lnt> 143
+</span><span class=lnt> 144
+</span><span class=lnt> 145
+</span><span class=lnt> 146
+</span><span class=lnt> 147
+</span><span class=lnt> 148
+</span><span class=lnt> 149
+</span><span class=lnt> 150
+</span><span class=lnt> 151
+</span><span class=lnt> 152
+</span><span class=lnt> 153
+</span><span class=lnt> 154
+</span><span class=lnt> 155
+</span><span class=lnt> 156
+</span><span class=lnt> 157
+</span><span class=lnt> 158
+</span><span class=lnt> 159
+</span><span class=lnt> 160
+</span><span class=lnt> 161
+</span><span class=lnt> 162
+</span><span class=lnt> 163
+</span><span class=lnt> 164
+</span><span class=lnt> 165
+</span><span class=lnt> 166
+</span><span class=lnt> 167
+</span><span class=lnt> 168
+</span><span class=lnt> 169
+</span><span class=lnt> 170
+</span><span class=lnt> 171
+</span><span class=lnt> 172
+</span><span class=lnt> 173
+</span><span class=lnt> 174
+</span><span class=lnt> 175
+</span><span class=lnt> 176
+</span><span class=lnt> 177
+</span><span class=lnt> 178
+</span><span class=lnt> 179
+</span><span class=lnt> 180
+</span><span class=lnt> 181
+</span><span class=lnt> 182
+</span><span class=lnt> 183
+</span><span class=lnt> 184
+</span><span class=lnt> 185
+</span><span class=lnt> 186
+</span><span class=lnt> 187
+</span><span class=lnt> 188
+</span><span class=lnt> 189
+</span><span class=lnt> 190
+</span><span class=lnt> 191
+</span><span class=lnt> 192
+</span><span class=lnt> 193
+</span><span class=lnt> 194
+</span><span class=lnt> 195
+</span><span class=lnt> 196
+</span><span class=lnt> 197
+</span><span class=lnt> 198
+</span><span class=lnt> 199
+</span><span class=lnt> 200
+</span><span class=lnt> 201
+</span><span class=lnt> 202
+</span><span class=lnt> 203
+</span><span class=lnt> 204
+</span><span class=lnt> 205
+</span><span class=lnt> 206
+</span><span class=lnt> 207
+</span><span class=lnt> 208
+</span><span class=lnt> 209
+</span><span class=lnt> 210
+</span><span class=lnt> 211
+</span><span class=lnt> 212
+</span><span class=lnt> 213
+</span><span class=lnt> 214
+</span><span class=lnt> 215
+</span><span class=lnt> 216
+</span><span class=lnt> 217
+</span><span class=lnt> 218
+</span><span class=lnt> 219
+</span><span class=lnt> 220
+</span><span class=lnt> 221
+</span><span class=lnt> 222
+</span><span class=lnt> 223
+</span><span class=lnt> 224
+</span><span class=lnt> 225
+</span><span class=lnt> 226
+</span><span class=lnt> 227
+</span><span class=lnt> 228
+</span><span class=lnt> 229
+</span><span class=lnt> 230
+</span><span class=lnt> 231
+</span><span class=lnt> 232
+</span><span class=lnt> 233
+</span><span class=lnt> 234
+</span><span class=lnt> 235
+</span><span class=lnt> 236
+</span><span class=lnt> 237
+</span><span class=lnt> 238
+</span><span class=lnt> 239
+</span><span class=lnt> 240
+</span><span class=lnt> 241
+</span><span class=lnt> 242
+</span><span class=lnt> 243
+</span><span class=lnt> 244
+</span><span class=lnt> 245
+</span><span class=lnt> 246
+</span><span class=lnt> 247
+</span><span class=lnt> 248
+</span><span class=lnt> 249
+</span><span class=lnt> 250
+</span><span class=lnt> 251
+</span><span class=lnt> 252
+</span><span class=lnt> 253
+</span><span class=lnt> 254
+</span><span class=lnt> 255
+</span><span class=lnt> 256
+</span><span class=lnt> 257
+</span><span class=lnt> 258
+</span><span class=lnt> 259
+</span><span class=lnt> 260
+</span><span class=lnt> 261
+</span><span class=lnt> 262
+</span><span class=lnt> 263
+</span><span class=lnt> 264
+</span><span class=lnt> 265
+</span><span class=lnt> 266
+</span><span class=lnt> 267
+</span><span class=lnt> 268
+</span><span class=lnt> 269
+</span><span class=lnt> 270
+</span><span class=lnt> 271
+</span><span class=lnt> 272
+</span><span class=lnt> 273
+</span><span class=lnt> 274
+</span><span class=lnt> 275
+</span><span class=lnt> 276
+</span><span class=lnt> 277
+</span><span class=lnt> 278
+</span><span class=lnt> 279
+</span><span class=lnt> 280
+</span><span class=lnt> 281
+</span><span class=lnt> 282
+</span><span class=lnt> 283
+</span><span class=lnt> 284
+</span><span class=lnt> 285
+</span><span class=lnt> 286
+</span><span class=lnt> 287
+</span><span class=lnt> 288
+</span><span class=lnt> 289
+</span><span class=lnt> 290
+</span><span class=lnt> 291
+</span><span class=lnt> 292
+</span><span class=lnt> 293
+</span><span class=lnt> 294
+</span><span class=lnt> 295
+</span><span class=lnt> 296
+</span><span class=lnt> 297
+</span><span class=lnt> 298
+</span><span class=lnt> 299
+</span><span class=lnt> 300
+</span><span class=lnt> 301
+</span><span class=lnt> 302
+</span><span class=lnt> 303
+</span><span class=lnt> 304
+</span><span class=lnt> 305
+</span><span class=lnt> 306
+</span><span class=lnt> 307
+</span><span class=lnt> 308
+</span><span class=lnt> 309
+</span><span class=lnt> 310
+</span><span class=lnt> 311
+</span><span class=lnt> 312
+</span><span class=lnt> 313
+</span><span class=lnt> 314
+</span><span class=lnt> 315
+</span><span class=lnt> 316
+</span><span class=lnt> 317
+</span><span class=lnt> 318
+</span><span class=lnt> 319
+</span><span class=lnt> 320
+</span><span class=lnt> 321
+</span><span class=lnt> 322
+</span><span class=lnt> 323
+</span><span class=lnt> 324
+</span><span class=lnt> 325
+</span><span class=lnt> 326
+</span><span class=lnt> 327
+</span><span class=lnt> 328
+</span><span class=lnt> 329
+</span><span class=lnt> 330
+</span><span class=lnt> 331
+</span><span class=lnt> 332
+</span><span class=lnt> 333
+</span><span class=lnt> 334
+</span><span class=lnt> 335
+</span><span class=lnt> 336
+</span><span class=lnt> 337
+</span><span class=lnt> 338
+</span><span class=lnt> 339
+</span><span class=lnt> 340
+</span><span class=lnt> 341
+</span><span class=lnt> 342
+</span><span class=lnt> 343
+</span><span class=lnt> 344
+</span><span class=lnt> 345
+</span><span class=lnt> 346
+</span><span class=lnt> 347
+</span><span class=lnt> 348
+</span><span class=lnt> 349
+</span><span class=lnt> 350
+</span><span class=lnt> 351
+</span><span class=lnt> 352
+</span><span class=lnt> 353
+</span><span class=lnt> 354
+</span><span class=lnt> 355
+</span><span class=lnt> 356
+</span><span class=lnt> 357
+</span><span class=lnt> 358
+</span><span class=lnt> 359
+</span><span class=lnt> 360
+</span><span class=lnt> 361
+</span><span class=lnt> 362
+</span><span class=lnt> 363
+</span><span class=lnt> 364
+</span><span class=lnt> 365
+</span><span class=lnt> 366
+</span><span class=lnt> 367
+</span><span class=lnt> 368
+</span><span class=lnt> 369
+</span><span class=lnt> 370
+</span><span class=lnt> 371
+</span><span class=lnt> 372
+</span><span class=lnt> 373
+</span><span class=lnt> 374
+</span><span class=lnt> 375
+</span><span class=lnt> 376
+</span><span class=lnt> 377
+</span><span class=lnt> 378
+</span><span class=lnt> 379
+</span><span class=lnt> 380
+</span><span class=lnt> 381
+</span><span class=lnt> 382
+</span><span class=lnt> 383
+</span><span class=lnt> 384
+</span><span class=lnt> 385
+</span><span class=lnt> 386
+</span><span class=lnt> 387
+</span><span class=lnt> 388
+</span><span class=lnt> 389
+</span><span class=lnt> 390
+</span><span class=lnt> 391
+</span><span class=lnt> 392
+</span><span class=lnt> 393
+</span><span class=lnt> 394
+</span><span class=lnt> 395
+</span><span class=lnt> 396
+</span><span class=lnt> 397
+</span><span class=lnt> 398
+</span><span class=lnt> 399
+</span><span class=lnt> 400
+</span><span class=lnt> 401
+</span><span class=lnt> 402
+</span><span class=lnt> 403
+</span><span class=lnt> 404
+</span><span class=lnt> 405
+</span><span class=lnt> 406
+</span><span class=lnt> 407
+</span><span class=lnt> 408
+</span><span class=lnt> 409
+</span><span class=lnt> 410
+</span><span class=lnt> 411
+</span><span class=lnt> 412
+</span><span class=lnt> 413
+</span><span class=lnt> 414
+</span><span class=lnt> 415
+</span><span class=lnt> 416
+</span><span class=lnt> 417
+</span><span class=lnt> 418
+</span><span class=lnt> 419
+</span><span class=lnt> 420
+</span><span class=lnt> 421
+</span><span class=lnt> 422
+</span><span class=lnt> 423
+</span><span class=lnt> 424
+</span><span class=lnt> 425
+</span><span class=lnt> 426
+</span><span class=lnt> 427
+</span><span class=lnt> 428
+</span><span class=lnt> 429
+</span><span class=lnt> 430
+</span><span class=lnt> 431
+</span><span class=lnt> 432
+</span><span class=lnt> 433
+</span><span class=lnt> 434
+</span><span class=lnt> 435
+</span><span class=lnt> 436
+</span><span class=lnt> 437
+</span><span class=lnt> 438
+</span><span class=lnt> 439
+</span><span class=lnt> 440
+</span><span class=lnt> 441
+</span><span class=lnt> 442
+</span><span class=lnt> 443
+</span><span class=lnt> 444
+</span><span class=lnt> 445
+</span><span class=lnt> 446
+</span><span class=lnt> 447
+</span><span class=lnt> 448
+</span><span class=lnt> 449
+</span><span class=lnt> 450
+</span><span class=lnt> 451
+</span><span class=lnt> 452
+</span><span class=lnt> 453
+</span><span class=lnt> 454
+</span><span class=lnt> 455
+</span><span class=lnt> 456
+</span><span class=lnt> 457
+</span><span class=lnt> 458
+</span><span class=lnt> 459
+</span><span class=lnt> 460
+</span><span class=lnt> 461
+</span><span class=lnt> 462
+</span><span class=lnt> 463
+</span><span class=lnt> 464
+</span><span class=lnt> 465
+</span><span class=lnt> 466
+</span><span class=lnt> 467
+</span><span class=lnt> 468
+</span><span class=lnt> 469
+</span><span class=lnt> 470
+</span><span class=lnt> 471
+</span><span class=lnt> 472
+</span><span class=lnt> 473
+</span><span class=lnt> 474
+</span><span class=lnt> 475
+</span><span class=lnt> 476
+</span><span class=lnt> 477
+</span><span class=lnt> 478
+</span><span class=lnt> 479
+</span><span class=lnt> 480
+</span><span class=lnt> 481
+</span><span class=lnt> 482
+</span><span class=lnt> 483
+</span><span class=lnt> 484
+</span><span class=lnt> 485
+</span><span class=lnt> 486
+</span><span class=lnt> 487
+</span><span class=lnt> 488
+</span><span class=lnt> 489
+</span><span class=lnt> 490
+</span><span class=lnt> 491
+</span><span class=lnt> 492
+</span><span class=lnt> 493
+</span><span class=lnt> 494
+</span><span class=lnt> 495
+</span><span class=lnt> 496
+</span><span class=lnt> 497
+</span><span class=lnt> 498
+</span><span class=lnt> 499
+</span><span class=lnt> 500
+</span><span class=lnt> 501
+</span><span class=lnt> 502
+</span><span class=lnt> 503
+</span><span class=lnt> 504
+</span><span class=lnt> 505
+</span><span class=lnt> 506
+</span><span class=lnt> 507
+</span><span class=lnt> 508
+</span><span class=lnt> 509
+</span><span class=lnt> 510
+</span><span class=lnt> 511
+</span><span class=lnt> 512
+</span><span class=lnt> 513
+</span><span class=lnt> 514
+</span><span class=lnt> 515
+</span><span class=lnt> 516
+</span><span class=lnt> 517
+</span><span class=lnt> 518
+</span><span class=lnt> 519
+</span><span class=lnt> 520
+</span><span class=lnt> 521
+</span><span class=lnt> 522
+</span><span class=lnt> 523
+</span><span class=lnt> 524
+</span><span class=lnt> 525
+</span><span class=lnt> 526
+</span><span class=lnt> 527
+</span><span class=lnt> 528
+</span><span class=lnt> 529
+</span><span class=lnt> 530
+</span><span class=lnt> 531
+</span><span class=lnt> 532
+</span><span class=lnt> 533
+</span><span class=lnt> 534
+</span><span class=lnt> 535
+</span><span class=lnt> 536
+</span><span class=lnt> 537
+</span><span class=lnt> 538
+</span><span class=lnt> 539
+</span><span class=lnt> 540
+</span><span class=lnt> 541
+</span><span class=lnt> 542
+</span><span class=lnt> 543
+</span><span class=lnt> 544
+</span><span class=lnt> 545
+</span><span class=lnt> 546
+</span><span class=lnt> 547
+</span><span class=lnt> 548
+</span><span class=lnt> 549
+</span><span class=lnt> 550
+</span><span class=lnt> 551
+</span><span class=lnt> 552
+</span><span class=lnt> 553
+</span><span class=lnt> 554
+</span><span class=lnt> 555
+</span><span class=lnt> 556
+</span><span class=lnt> 557
+</span><span class=lnt> 558
+</span><span class=lnt> 559
+</span><span class=lnt> 560
+</span><span class=lnt> 561
+</span><span class=lnt> 562
+</span><span class=lnt> 563
+</span><span class=lnt> 564
+</span><span class=lnt> 565
+</span><span class=lnt> 566
+</span><span class=lnt> 567
+</span><span class=lnt> 568
+</span><span class=lnt> 569
+</span><span class=lnt> 570
+</span><span class=lnt> 571
+</span><span class=lnt> 572
+</span><span class=lnt> 573
+</span><span class=lnt> 574
+</span><span class=lnt> 575
+</span><span class=lnt> 576
+</span><span class=lnt> 577
+</span><span class=lnt> 578
+</span><span class=lnt> 579
+</span><span class=lnt> 580
+</span><span class=lnt> 581
+</span><span class=lnt> 582
+</span><span class=lnt> 583
+</span><span class=lnt> 584
+</span><span class=lnt> 585
+</span><span class=lnt> 586
+</span><span class=lnt> 587
+</span><span class=lnt> 588
+</span><span class=lnt> 589
+</span><span class=lnt> 590
+</span><span class=lnt> 591
+</span><span class=lnt> 592
+</span><span class=lnt> 593
+</span><span class=lnt> 594
+</span><span class=lnt> 595
+</span><span class=lnt> 596
+</span><span class=lnt> 597
+</span><span class=lnt> 598
+</span><span class=lnt> 599
+</span><span class=lnt> 600
+</span><span class=lnt> 601
+</span><span class=lnt> 602
+</span><span class=lnt> 603
+</span><span class=lnt> 604
+</span><span class=lnt> 605
+</span><span class=lnt> 606
+</span><span class=lnt> 607
+</span><span class=lnt> 608
+</span><span class=lnt> 609
+</span><span class=lnt> 610
+</span><span class=lnt> 611
+</span><span class=lnt> 612
+</span><span class=lnt> 613
+</span><span class=lnt> 614
+</span><span class=lnt> 615
+</span><span class=lnt> 616
+</span><span class=lnt> 617
+</span><span class=lnt> 618
+</span><span class=lnt> 619
+</span><span class=lnt> 620
+</span><span class=lnt> 621
+</span><span class=lnt> 622
+</span><span class=lnt> 623
+</span><span class=lnt> 624
+</span><span class=lnt> 625
+</span><span class=lnt> 626
+</span><span class=lnt> 627
+</span><span class=lnt> 628
+</span><span class=lnt> 629
+</span><span class=lnt> 630
+</span><span class=lnt> 631
+</span><span class=lnt> 632
+</span><span class=lnt> 633
+</span><span class=lnt> 634
+</span><span class=lnt> 635
+</span><span class=lnt> 636
+</span><span class=lnt> 637
+</span><span class=lnt> 638
+</span><span class=lnt> 639
+</span><span class=lnt> 640
+</span><span class=lnt> 641
+</span><span class=lnt> 642
+</span><span class=lnt> 643
+</span><span class=lnt> 644
+</span><span class=lnt> 645
+</span><span class=lnt> 646
+</span><span class=lnt> 647
+</span><span class=lnt> 648
+</span><span class=lnt> 649
+</span><span class=lnt> 650
+</span><span class=lnt> 651
+</span><span class=lnt> 652
+</span><span class=lnt> 653
+</span><span class=lnt> 654
+</span><span class=lnt> 655
+</span><span class=lnt> 656
+</span><span class=lnt> 657
+</span><span class=lnt> 658
+</span><span class=lnt> 659
+</span><span class=lnt> 660
+</span><span class=lnt> 661
+</span><span class=lnt> 662
+</span><span class=lnt> 663
+</span><span class=lnt> 664
+</span><span class=lnt> 665
+</span><span class=lnt> 666
+</span><span class=lnt> 667
+</span><span class=lnt> 668
+</span><span class=lnt> 669
+</span><span class=lnt> 670
+</span><span class=lnt> 671
+</span><span class=lnt> 672
+</span><span class=lnt> 673
+</span><span class=lnt> 674
+</span><span class=lnt> 675
+</span><span class=lnt> 676
+</span><span class=lnt> 677
+</span><span class=lnt> 678
+</span><span class=lnt> 679
+</span><span class=lnt> 680
+</span><span class=lnt> 681
+</span><span class=lnt> 682
+</span><span class=lnt> 683
+</span><span class=lnt> 684
+</span><span class=lnt> 685
+</span><span class=lnt> 686
+</span><span class=lnt> 687
+</span><span class=lnt> 688
+</span><span class=lnt> 689
+</span><span class=lnt> 690
+</span><span class=lnt> 691
+</span><span class=lnt> 692
+</span><span class=lnt> 693
+</span><span class=lnt> 694
+</span><span class=lnt> 695
+</span><span class=lnt> 696
+</span><span class=lnt> 697
+</span><span class=lnt> 698
+</span><span class=lnt> 699
+</span><span class=lnt> 700
+</span><span class=lnt> 701
+</span><span class=lnt> 702
+</span><span class=lnt> 703
+</span><span class=lnt> 704
+</span><span class=lnt> 705
+</span><span class=lnt> 706
+</span><span class=lnt> 707
+</span><span class=lnt> 708
+</span><span class=lnt> 709
+</span><span class=lnt> 710
+</span><span class=lnt> 711
+</span><span class=lnt> 712
+</span><span class=lnt> 713
+</span><span class=lnt> 714
+</span><span class=lnt> 715
+</span><span class=lnt> 716
+</span><span class=lnt> 717
+</span><span class=lnt> 718
+</span><span class=lnt> 719
+</span><span class=lnt> 720
+</span><span class=lnt> 721
+</span><span class=lnt> 722
+</span><span class=lnt> 723
+</span><span class=lnt> 724
+</span><span class=lnt> 725
+</span><span class=lnt> 726
+</span><span class=lnt> 727
+</span><span class=lnt> 728
+</span><span class=lnt> 729
+</span><span class=lnt> 730
+</span><span class=lnt> 731
+</span><span class=lnt> 732
+</span><span class=lnt> 733
+</span><span class=lnt> 734
+</span><span class=lnt> 735
+</span><span class=lnt> 736
+</span><span class=lnt> 737
+</span><span class=lnt> 738
+</span><span class=lnt> 739
+</span><span class=lnt> 740
+</span><span class=lnt> 741
+</span><span class=lnt> 742
+</span><span class=lnt> 743
+</span><span class=lnt> 744
+</span><span class=lnt> 745
+</span><span class=lnt> 746
+</span><span class=lnt> 747
+</span><span class=lnt> 748
+</span><span class=lnt> 749
+</span><span class=lnt> 750
+</span><span class=lnt> 751
+</span><span class=lnt> 752
+</span><span class=lnt> 753
+</span><span class=lnt> 754
+</span><span class=lnt> 755
+</span><span class=lnt> 756
+</span><span class=lnt> 757
+</span><span class=lnt> 758
+</span><span class=lnt> 759
+</span><span class=lnt> 760
+</span><span class=lnt> 761
+</span><span class=lnt> 762
+</span><span class=lnt> 763
+</span><span class=lnt> 764
+</span><span class=lnt> 765
+</span><span class=lnt> 766
+</span><span class=lnt> 767
+</span><span class=lnt> 768
+</span><span class=lnt> 769
+</span><span class=lnt> 770
+</span><span class=lnt> 771
+</span><span class=lnt> 772
+</span><span class=lnt> 773
+</span><span class=lnt> 774
+</span><span class=lnt> 775
+</span><span class=lnt> 776
+</span><span class=lnt> 777
+</span><span class=lnt> 778
+</span><span class=lnt> 779
+</span><span class=lnt> 780
+</span><span class=lnt> 781
+</span><span class=lnt> 782
+</span><span class=lnt> 783
+</span><span class=lnt> 784
+</span><span class=lnt> 785
+</span><span class=lnt> 786
+</span><span class=lnt> 787
+</span><span class=lnt> 788
+</span><span class=lnt> 789
+</span><span class=lnt> 790
+</span><span class=lnt> 791
+</span><span class=lnt> 792
+</span><span class=lnt> 793
+</span><span class=lnt> 794
+</span><span class=lnt> 795
+</span><span class=lnt> 796
+</span><span class=lnt> 797
+</span><span class=lnt> 798
+</span><span class=lnt> 799
+</span><span class=lnt> 800
+</span><span class=lnt> 801
+</span><span class=lnt> 802
+</span><span class=lnt> 803
+</span><span class=lnt> 804
+</span><span class=lnt> 805
+</span><span class=lnt> 806
+</span><span class=lnt> 807
+</span><span class=lnt> 808
+</span><span class=lnt> 809
+</span><span class=lnt> 810
+</span><span class=lnt> 811
+</span><span class=lnt> 812
+</span><span class=lnt> 813
+</span><span class=lnt> 814
+</span><span class=lnt> 815
+</span><span class=lnt> 816
+</span><span class=lnt> 817
+</span><span class=lnt> 818
+</span><span class=lnt> 819
+</span><span class=lnt> 820
+</span><span class=lnt> 821
+</span><span class=lnt> 822
+</span><span class=lnt> 823
+</span><span class=lnt> 824
+</span><span class=lnt> 825
+</span><span class=lnt> 826
+</span><span class=lnt> 827
+</span><span class=lnt> 828
+</span><span class=lnt> 829
+</span><span class=lnt> 830
+</span><span class=lnt> 831
+</span><span class=lnt> 832
+</span><span class=lnt> 833
+</span><span class=lnt> 834
+</span><span class=lnt> 835
+</span><span class=lnt> 836
+</span><span class=lnt> 837
+</span><span class=lnt> 838
+</span><span class=lnt> 839
+</span><span class=lnt> 840
+</span><span class=lnt> 841
+</span><span class=lnt> 842
+</span><span class=lnt> 843
+</span><span class=lnt> 844
+</span><span class=lnt> 845
+</span><span class=lnt> 846
+</span><span class=lnt> 847
+</span><span class=lnt> 848
+</span><span class=lnt> 849
+</span><span class=lnt> 850
+</span><span class=lnt> 851
+</span><span class=lnt> 852
+</span><span class=lnt> 853
+</span><span class=lnt> 854
+</span><span class=lnt> 855
+</span><span class=lnt> 856
+</span><span class=lnt> 857
+</span><span class=lnt> 858
+</span><span class=lnt> 859
+</span><span class=lnt> 860
+</span><span class=lnt> 861
+</span><span class=lnt> 862
+</span><span class=lnt> 863
+</span><span class=lnt> 864
+</span><span class=lnt> 865
+</span><span class=lnt> 866
+</span><span class=lnt> 867
+</span><span class=lnt> 868
+</span><span class=lnt> 869
+</span><span class=lnt> 870
+</span><span class=lnt> 871
+</span><span class=lnt> 872
+</span><span class=lnt> 873
+</span><span class=lnt> 874
+</span><span class=lnt> 875
+</span><span class=lnt> 876
+</span><span class=lnt> 877
+</span><span class=lnt> 878
+</span><span class=lnt> 879
+</span><span class=lnt> 880
+</span><span class=lnt> 881
+</span><span class=lnt> 882
+</span><span class=lnt> 883
+</span><span class=lnt> 884
+</span><span class=lnt> 885
+</span><span class=lnt> 886
+</span><span class=lnt> 887
+</span><span class=lnt> 888
+</span><span class=lnt> 889
+</span><span class=lnt> 890
+</span><span class=lnt> 891
+</span><span class=lnt> 892
+</span><span class=lnt> 893
+</span><span class=lnt> 894
+</span><span class=lnt> 895
+</span><span class=lnt> 896
+</span><span class=lnt> 897
+</span><span class=lnt> 898
+</span><span class=lnt> 899
+</span><span class=lnt> 900
+</span><span class=lnt> 901
+</span><span class=lnt> 902
+</span><span class=lnt> 903
+</span><span class=lnt> 904
+</span><span class=lnt> 905
+</span><span class=lnt> 906
+</span><span class=lnt> 907
+</span><span class=lnt> 908
+</span><span class=lnt> 909
+</span><span class=lnt> 910
+</span><span class=lnt> 911
+</span><span class=lnt> 912
+</span><span class=lnt> 913
+</span><span class=lnt> 914
+</span><span class=lnt> 915
+</span><span class=lnt> 916
+</span><span class=lnt> 917
+</span><span class=lnt> 918
+</span><span class=lnt> 919
+</span><span class=lnt> 920
+</span><span class=lnt> 921
+</span><span class=lnt> 922
+</span><span class=lnt> 923
+</span><span class=lnt> 924
+</span><span class=lnt> 925
+</span><span class=lnt> 926
+</span><span class=lnt> 927
+</span><span class=lnt> 928
+</span><span class=lnt> 929
+</span><span class=lnt> 930
+</span><span class=lnt> 931
+</span><span class=lnt> 932
+</span><span class=lnt> 933
+</span><span class=lnt> 934
+</span><span class=lnt> 935
+</span><span class=lnt> 936
+</span><span class=lnt> 937
+</span><span class=lnt> 938
+</span><span class=lnt> 939
+</span><span class=lnt> 940
+</span><span class=lnt> 941
+</span><span class=lnt> 942
+</span><span class=lnt> 943
+</span><span class=lnt> 944
+</span><span class=lnt> 945
+</span><span class=lnt> 946
+</span><span class=lnt> 947
+</span><span class=lnt> 948
+</span><span class=lnt> 949
+</span><span class=lnt> 950
+</span><span class=lnt> 951
+</span><span class=lnt> 952
+</span><span class=lnt> 953
+</span><span class=lnt> 954
+</span><span class=lnt> 955
+</span><span class=lnt> 956
+</span><span class=lnt> 957
+</span><span class=lnt> 958
+</span><span class=lnt> 959
+</span><span class=lnt> 960
+</span><span class=lnt> 961
+</span><span class=lnt> 962
+</span><span class=lnt> 963
+</span><span class=lnt> 964
+</span><span class=lnt> 965
+</span><span class=lnt> 966
+</span><span class=lnt> 967
+</span><span class=lnt> 968
+</span><span class=lnt> 969
+</span><span class=lnt> 970
+</span><span class=lnt> 971
+</span><span class=lnt> 972
+</span><span class=lnt> 973
+</span><span class=lnt> 974
+</span><span class=lnt> 975
+</span><span class=lnt> 976
+</span><span class=lnt> 977
+</span><span class=lnt> 978
+</span><span class=lnt> 979
+</span><span class=lnt> 980
+</span><span class=lnt> 981
+</span><span class=lnt> 982
+</span><span class=lnt> 983
+</span><span class=lnt> 984
+</span><span class=lnt> 985
+</span><span class=lnt> 986
+</span><span class=lnt> 987
+</span><span class=lnt> 988
+</span><span class=lnt> 989
+</span><span class=lnt> 990
+</span><span class=lnt> 991
+</span><span class=lnt> 992
+</span><span class=lnt> 993
+</span><span class=lnt> 994
+</span><span class=lnt> 995
+</span><span class=lnt> 996
+</span><span class=lnt> 997
+</span><span class=lnt> 998
+</span><span class=lnt> 999
+</span><span class=lnt>1000
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 单行注释以 &#39;#&#39; 作为开头</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;多行注释可以使用三个双引号
+</span></span></span><span class=line><span class=cl><span class=s2>   并且经常用与书写文档
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl><span class=c1>## 1. 原始数据类型和操作符</span>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以使用数字</span>
+</span></span><span class=line><span class=cl><span class=mi>3</span>  <span class=c1># 等同于 3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 数学运算也是你希望使用的形式</span>
+</span></span><span class=line><span class=cl><span class=mi>1</span> <span class=o>+</span> <span class=mi>1</span>  <span class=c1># 结果是 2</span>
+</span></span><span class=line><span class=cl><span class=mi>8</span> <span class=o>-</span> <span class=mi>1</span>  <span class=c1># 结果是 7</span>
+</span></span><span class=line><span class=cl><span class=mi>10</span> <span class=o>*</span> <span class=mi>2</span>  <span class=c1># 结果是 20</span>
+</span></span><span class=line><span class=cl><span class=mi>35</span> <span class=o>/</span> <span class=mi>5</span>  <span class=c1># 结果是 7.0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 正负数的整除都会向下取整</span>
+</span></span><span class=line><span class=cl><span class=mi>5</span> <span class=o>//</span> <span class=mi>3</span>  <span class=c1># 结果是 1</span>
+</span></span><span class=line><span class=cl><span class=o>-</span><span class=mi>5</span> <span class=o>//</span> <span class=mi>3</span>  <span class=c1># 结果是 -2</span>
+</span></span><span class=line><span class=cl><span class=mf>5.0</span> <span class=o>//</span> <span class=mf>3.0</span>  <span class=c1># 结果是 1.0 # 在浮点运算中也同样生效</span>
+</span></span><span class=line><span class=cl><span class=o>-</span><span class=mf>5.0</span> <span class=o>//</span> <span class=mf>3.0</span>  <span class=c1># 结果是 -2.0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 除法的运算结果始终是浮点数</span>
+</span></span><span class=line><span class=cl><span class=mf>10.0</span> <span class=o>/</span> <span class=mi>3</span>  <span class=c1># 结果是 3.3333333333333335</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 取模运算</span>
+</span></span><span class=line><span class=cl><span class=mi>7</span> <span class=o>%</span> <span class=mi>3</span>  <span class=c1># 结果是 1</span>
+</span></span><span class=line><span class=cl><span class=c1># i % j 结果的符号与 j 相同, 这与 C 语言不同</span>
+</span></span><span class=line><span class=cl><span class=o>-</span><span class=mi>7</span> <span class=o>%</span> <span class=mi>3</span>  <span class=c1># 结果是 2</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 幂运算 (x**y, x的y次方)</span>
+</span></span><span class=line><span class=cl><span class=mi>2</span> <span class=o>**</span> <span class=mi>3</span>  <span class=c1># 结果是 8</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 用括号来强制优先运算</span>
+</span></span><span class=line><span class=cl><span class=mi>1</span> <span class=o>+</span> <span class=mi>3</span> <span class=o>*</span> <span class=mi>2</span>  <span class=c1># 结果是 7</span>
+</span></span><span class=line><span class=cl><span class=p>(</span><span class=mi>1</span> <span class=o>+</span> <span class=mi>3</span><span class=p>)</span> <span class=o>*</span> <span class=mi>2</span>  <span class=c1># 结果是 8</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 布尔值是基本数据类型</span>
+</span></span><span class=line><span class=cl><span class=kc>True</span>  <span class=c1># 值为 真(true)</span>
+</span></span><span class=line><span class=cl><span class=kc>False</span>  <span class=c1># 值为 假(false)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 not 来进行非运算</span>
+</span></span><span class=line><span class=cl><span class=ow>not</span> <span class=kc>True</span>  <span class=c1># 结果是 假</span>
+</span></span><span class=line><span class=cl><span class=ow>not</span> <span class=kc>False</span>  <span class=c1># 结果是 真</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 布尔值操作符:</span>
+</span></span><span class=line><span class=cl><span class=c1># 提示, &#39;and&#39; 和 &#39;or&#39; 是区分大小写的</span>
+</span></span><span class=line><span class=cl><span class=kc>True</span> <span class=ow>and</span> <span class=kc>False</span>  <span class=c1># 结果是 假</span>
+</span></span><span class=line><span class=cl><span class=kc>False</span> <span class=ow>or</span> <span class=kc>True</span>  <span class=c1># 结果是 真</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># True 和 False 事实上也等同于 1 和 0, 只不过是使用了不同的关键字</span>
+</span></span><span class=line><span class=cl><span class=kc>True</span> <span class=o>+</span> <span class=kc>True</span>  <span class=c1># 结果是 2</span>
+</span></span><span class=line><span class=cl><span class=kc>True</span> <span class=o>*</span> <span class=mi>8</span>  <span class=c1># 结果是 8</span>
+</span></span><span class=line><span class=cl><span class=kc>False</span> <span class=o>-</span> <span class=mi>5</span>  <span class=c1># 结果是 -5</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 比较运算符会检查 True 和 False 的数字值</span>
+</span></span><span class=line><span class=cl><span class=mi>0</span> <span class=o>==</span> <span class=kc>False</span>  <span class=c1># 结果是 真</span>
+</span></span><span class=line><span class=cl><span class=mi>1</span> <span class=o>==</span> <span class=kc>True</span>  <span class=c1># 结果是 真</span>
+</span></span><span class=line><span class=cl><span class=mi>2</span> <span class=o>==</span> <span class=kc>True</span>  <span class=c1># 结果是 假</span>
+</span></span><span class=line><span class=cl><span class=o>-</span><span class=mi>5</span> <span class=o>!=</span> <span class=kc>False</span>  <span class=c1># 结果是 真</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 对整数使用布尔逻辑操作符, 则会将它们转换为布尔值以求值，但返回未转换的值</span>
+</span></span><span class=line><span class=cl><span class=c1># 不要把 bool(ints) 和 位运算 and/or 搞混了</span>
+</span></span><span class=line><span class=cl><span class=nb>bool</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>  <span class=c1># 返回 假</span>
+</span></span><span class=line><span class=cl><span class=nb>bool</span><span class=p>(</span><span class=mi>4</span><span class=p>)</span>  <span class=c1># 返回 真</span>
+</span></span><span class=line><span class=cl><span class=nb>bool</span><span class=p>(</span><span class=o>-</span><span class=mi>6</span><span class=p>)</span>  <span class=c1># 返回 真</span>
+</span></span><span class=line><span class=cl><span class=mi>0</span> <span class=ow>and</span> <span class=mi>2</span>  <span class=c1># 返回 0</span>
+</span></span><span class=line><span class=cl><span class=o>-</span><span class=mi>5</span> <span class=ow>or</span> <span class=mi>0</span>  <span class=c1># 返回 -5</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 运算符 &#39;等同于&#39; 是 ==</span>
+</span></span><span class=line><span class=cl><span class=mi>1</span> <span class=o>==</span> <span class=mi>1</span>  <span class=c1># 返回 真</span>
+</span></span><span class=line><span class=cl><span class=mi>2</span> <span class=o>==</span> <span class=mi>1</span>  <span class=c1># 返回 假</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 运算符 &#39;不等于&#39; 是 !=</span>
+</span></span><span class=line><span class=cl><span class=mi>1</span> <span class=o>!=</span> <span class=mi>1</span>  <span class=c1># 返回 假</span>
+</span></span><span class=line><span class=cl><span class=mi>2</span> <span class=o>!=</span> <span class=mi>1</span>  <span class=c1># 返回 真</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 更多比较运算符</span>
+</span></span><span class=line><span class=cl><span class=mi>1</span> <span class=o>&lt;</span> <span class=mi>10</span>  <span class=c1># 返回 真</span>
+</span></span><span class=line><span class=cl><span class=mi>1</span> <span class=o>&gt;</span> <span class=mi>10</span>  <span class=c1># 返回 假</span>
+</span></span><span class=line><span class=cl><span class=mi>2</span> <span class=o>&lt;=</span> <span class=mi>2</span>  <span class=c1># 返回真</span>
+</span></span><span class=line><span class=cl><span class=mi>2</span> <span class=o>&gt;=</span> <span class=mi>2</span>  <span class=c1># 返回真</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 检查一个值是否在指定范围内</span>
+</span></span><span class=line><span class=cl><span class=mi>1</span> <span class=o>&lt;</span> <span class=mi>2</span> <span class=ow>and</span> <span class=mi>2</span> <span class=o>&lt;</span> <span class=mi>3</span>  <span class=c1># 返回 真</span>
+</span></span><span class=line><span class=cl><span class=mi>1</span> <span class=o>&lt;</span> <span class=mi>3</span> <span class=ow>and</span> <span class=mi>3</span> <span class=o>&lt;</span> <span class=mi>2</span>  <span class=c1># 返回 假</span>
+</span></span><span class=line><span class=cl><span class=c1># 连接起来, 这样看起来会更好看些</span>
+</span></span><span class=line><span class=cl><span class=mi>1</span> <span class=o>&lt;</span> <span class=mi>2</span> <span class=o>&lt;</span> <span class=mi>3</span>  <span class=c1># 返回 真</span>
+</span></span><span class=line><span class=cl><span class=mi>2</span> <span class=o>&lt;</span> <span class=mi>3</span> <span class=o>&lt;</span> <span class=mi>2</span>  <span class=c1># 返回 假</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># (is 与 ==) is 将会检查两个变量是否引用了同一个对象, 但是 == 检查</span>
+</span></span><span class=line><span class=cl><span class=c1># 两个对象是否指向了相同的值</span>
+</span></span><span class=line><span class=cl><span class=n>a</span> <span class=o>=</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>]</span>  <span class=c1># 使 a 指向一个新的列表, [1, 2, 3, 4]</span>
+</span></span><span class=line><span class=cl><span class=n>b</span> <span class=o>=</span> <span class=n>a</span>  <span class=c1># 使 b 指向 a 所指向的对象</span>
+</span></span><span class=line><span class=cl><span class=n>b</span> <span class=ow>is</span> <span class=n>a</span>  <span class=c1># 返回 真, a 和 b 引用的是同一个对象</span>
+</span></span><span class=line><span class=cl><span class=n>b</span> <span class=o>==</span> <span class=n>a</span>  <span class=c1># 返回 真, a 和 b 的对象是相等的</span>
+</span></span><span class=line><span class=cl><span class=n>b</span> <span class=o>=</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>]</span>  <span class=c1># 使 b 指向一个新的列表, [1, 2, 3, 4]</span>
+</span></span><span class=line><span class=cl><span class=n>b</span> <span class=ow>is</span> <span class=n>a</span>  <span class=c1># 返回 假, a 与 b 并不引用同一个对象</span>
+</span></span><span class=line><span class=cl><span class=n>b</span> <span class=o>==</span> <span class=n>a</span>  <span class=c1># 返回 真, a 和 b 的对象使相等的</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 字符串可以使用 双引号 &#34; 或 单引号 &#39; 来创建</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;这是一个字符串&#34;</span>
+</span></span><span class=line><span class=cl><span class=s1>&#39;这也是一个字符串&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 字符串可以相加</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;Hello &#34;</span> <span class=o>+</span> <span class=s2>&#34;world!&#34;</span>  <span class=c1># 返回 &#34;Hello world!&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;Hello &#34;</span> <span class=s2>&#34;world!&#34;</span>  <span class=c1># 等同于 &#34;Hello world!&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 字符串可以用作一个字符列表</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;Hello world!&#34;</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>  <span class=c1># 返回 &#39;H&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以获取字符串的长度:</span>
+</span></span><span class=line><span class=cl><span class=nb>len</span><span class=p>(</span><span class=s2>&#34;这是一个字符串&#34;</span><span class=p>)</span>  <span class=c1># 返回 7</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以使用 f-字符串 或 格式化字符串 来对字符串文本进行格式化 (在 Python 3.6 或更高版本)</span>
+</span></span><span class=line><span class=cl><span class=n>name</span> <span class=o>=</span> <span class=s2>&#34;小红&#34;</span>
+</span></span><span class=line><span class=cl><span class=sa>f</span><span class=s2>&#34;她说她的名字是</span><span class=si>{</span><span class=n>name</span><span class=si>}</span><span class=s2>.&#34;</span>  <span class=c1># 返回 &#34;她说她的名字是小红.&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># 你可以基本的将 Python 表达式放到括号内, 然后它就会被输出到字符串中.</span>
+</span></span><span class=line><span class=cl><span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>name</span><span class=si>}</span><span class=s2>是</span><span class=si>{</span><span class=nb>len</span><span class=p>(</span><span class=n>name</span><span class=p>)</span><span class=si>}</span><span class=s2>字符长.&#34;</span>  <span class=c1># 返回 &#34;小红是两个字符长&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># None 是一个对象</span>
+</span></span><span class=line><span class=cl><span class=kc>None</span>  <span class=c1># 返回 None</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 不要使用等同于运算符 &#39;==&#39; 来比较对象和 None</span>
+</span></span><span class=line><span class=cl><span class=c1># 使用 &#39;is&#39; 来代替. 这个会检查对象标识是否相同.</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;etc&#34;</span> <span class=ow>is</span> <span class=kc>None</span>  <span class=c1># 返回 假</span>
+</span></span><span class=line><span class=cl><span class=kc>None</span> <span class=ow>is</span> <span class=kc>None</span>  <span class=c1># 返回 真</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># None, 0, 以及空的字符串/列表/字典/元组, 都计算为 假</span>
+</span></span><span class=line><span class=cl><span class=nb>bool</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>  <span class=c1># =&gt; 假</span>
+</span></span><span class=line><span class=cl><span class=nb>bool</span><span class=p>(</span><span class=s1>&#39;&#39;</span><span class=p>)</span>  <span class=c1># =&gt; 假</span>
+</span></span><span class=line><span class=cl><span class=nb>bool</span><span class=p>([])</span>  <span class=c1># =&gt; 假</span>
+</span></span><span class=line><span class=cl><span class=nb>bool</span><span class=p>({})</span>  <span class=c1># =&gt; 假</span>
+</span></span><span class=line><span class=cl><span class=nb>bool</span><span class=p>(())</span>  <span class=c1># =&gt; 假</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl><span class=c1>## 2. 变量和集合</span>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Python 有一个 print 函数, 用于标准输出</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;我是Python, 很高兴见到你!&#34;</span><span class=p>)</span>  <span class=c1># =&gt; 我是Python, 很高兴见到你!</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 默认的, print 函数还会在结尾输出一个换行符</span>
+</span></span><span class=line><span class=cl><span class=c1># 使用可选参数 &#39;end&#39; 来改变末尾的字符串.</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Hello, world&#34;</span><span class=p>,</span> <span class=n>end</span><span class=o>=</span><span class=s2>&#34;!&#34;</span><span class=p>)</span>  <span class=c1># =&gt; Hello, world!   # 输出后没有换行</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 从控制台获取输入数据的简单方式:</span>
+</span></span><span class=line><span class=cl><span class=n>input_string_var</span> <span class=o>=</span> <span class=nb>input</span><span class=p>(</span><span class=s2>&#34;Enter some data:&#34;</span><span class=p>)</span>  <span class=c1># 以字符串的形式返回输入数据</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Python 中没有变量的声明, 只有赋值.</span>
+</span></span><span class=line><span class=cl><span class=c1># 命名规范是使用小写以及下划线, 就像这样: lower_case_with_underscores</span>
+</span></span><span class=line><span class=cl><span class=n>some_var</span> <span class=o>=</span> <span class=mi>5</span>
+</span></span><span class=line><span class=cl><span class=n>some_var</span>  <span class=c1># =&gt; 5</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 访问一个没有生命的变量是错误的</span>
+</span></span><span class=line><span class=cl><span class=c1># 查看控制流来获取更多异常捕捉信息</span>
+</span></span><span class=line><span class=cl><span class=n>some_unknown_var</span>  <span class=c1># 这是一个一个未定义的变量, 运行时将抛出 NameError 异常</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># if 也可用作一个表达式</span>
+</span></span><span class=line><span class=cl><span class=c1># 等同于 C 语言中的 &#39;?:&#39; 三元运算符</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;yay&#34;</span> <span class=k>if</span> <span class=mi>0</span> <span class=o>&gt;</span> <span class=mi>1</span> <span class=k>else</span> <span class=s2>&#34;nay!&#34;</span>  <span class=c1># =&gt; &#34;nay&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 列表可以存储一个序列, 可以这样定义:</span>
+</span></span><span class=line><span class=cl><span class=n>li</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl><span class=c1># 你可以为其指定初始值</span>
+</span></span><span class=line><span class=cl><span class=n>other_li</span> <span class=o>=</span> <span class=p>[</span><span class=mi>4</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=mi>6</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 append 方法在列表的末尾添加一些什么东西</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>  <span class=c1># 现在 li 的值是 [1]</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=mi>2</span><span class=p>)</span>  <span class=c1># 现在 li 的值是 [1, 2]</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=mi>4</span><span class=p>)</span>  <span class=c1># 现在 li 的值是 [1, 2, 4]</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=mi>3</span><span class=p>)</span>  <span class=c1># 现在 li 的值是 [1, 2, 4, 3]</span>
+</span></span><span class=line><span class=cl><span class=c1># 使用 pop 方法从列表的末尾移除元素</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=o>.</span><span class=n>pop</span><span class=p>()</span>  <span class=c1># 返回 3, 并且现在 li 的值是 [1, 2, 4]</span>
+</span></span><span class=line><span class=cl><span class=c1># 重新将它放回去</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=mi>3</span><span class=p>)</span>  <span class=c1># 现在 li 又变成 [1, 2, 4, 3] 了</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 像访问数组一样访问一个列表</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>  <span class=c1># =&gt; 1</span>
+</span></span><span class=line><span class=cl><span class=c1># 访问列表的最后一个元素</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=p>[</span><span class=o>-</span><span class=mi>1</span><span class=p>]</span>  <span class=c1># =&gt; 3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 如果索引超出界限, 那么会抛出 IndexError 异常</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=p>[</span><span class=mi>4</span><span class=p>]</span>  <span class=c1># 抛出 IndexError 异常</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以使用切片语法来查看一个范围内的元素</span>
+</span></span><span class=line><span class=cl><span class=c1># 起始索引包含在内, 但结束索引不包含在内</span>
+</span></span><span class=line><span class=cl><span class=c1># (对于数学类型来讲, 它是一个 闭/开 区间)</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=p>[</span><span class=mi>1</span><span class=p>:</span><span class=mi>3</span><span class=p>]</span>  <span class=c1># 返回从索引1到3的一个列表 =&gt; [2, 4]</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=p>[</span><span class=mi>2</span><span class=p>:]</span>  <span class=c1># 返回从索引2开始的列表 =&gt; [4, 3]</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=p>[:</span><span class=mi>3</span><span class=p>]</span>  <span class=c1># 返回从开始到索引3的列表 =&gt; [1, 2, 4]</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=p>[::</span><span class=mi>2</span><span class=p>]</span>  <span class=c1># 返回一个每两个元素选择一个的列表 =&gt; [1, 4]</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=p>[::</span><span class=o>-</span><span class=mi>1</span><span class=p>]</span>  <span class=c1># 返回反向排列的列表 =&gt; [3, 4, 2, 1]</span>
+</span></span><span class=line><span class=cl><span class=c1># 使用任意组合来实现高级切片</span>
+</span></span><span class=line><span class=cl><span class=c1># li[起始:结束:步长]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用切片来创建一个单层的深度拷贝</span>
+</span></span><span class=line><span class=cl><span class=n>li2</span> <span class=o>=</span> <span class=n>li</span><span class=p>[:]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 &#34;del&#34; 来删除任意元素</span>
+</span></span><span class=line><span class=cl><span class=k>del</span> <span class=n>li</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span>  <span class=c1># 现在 li 的值是 [1, 2, 3]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 删除第一个匹配值的元素</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=o>.</span><span class=n>remove</span><span class=p>(</span><span class=mi>2</span><span class=p>)</span>  <span class=c1># 现在 li 的值是 [1, 3]</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=o>.</span><span class=n>remove</span><span class=p>(</span><span class=mi>2</span><span class=p>)</span>  <span class=c1># 抛出 ValueError 异常, 2 并不在这个列表中</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在指定索引处插入元素, 列表.insert(索引, 元素)</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=o>.</span><span class=n>insert</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>  <span class=c1># 现在 li 的值又是 [1, 2, 3] 了</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 获取第一个匹配元素的索引</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=o>.</span><span class=n>index</span><span class=p>(</span><span class=mi>2</span><span class=p>)</span>  <span class=c1># =&gt; 1</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=o>.</span><span class=n>index</span><span class=p>(</span><span class=mi>4</span><span class=p>)</span>  <span class=c1># 抛出 ValueError 异常, 4 不在这个列表中</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以将列表相加</span>
+</span></span><span class=line><span class=cl><span class=c1># 提示: values 和 other_li 的值不会被修改</span>
+</span></span><span class=line><span class=cl><span class=n>li</span> <span class=o>+</span> <span class=n>other_li</span>  <span class=c1># =&gt; [1, 2, 3, 4, 5, 6]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 &#34;extend()&#34; 连接列表, extend 的意思是拓展</span>
+</span></span><span class=line><span class=cl><span class=n>li</span><span class=o>.</span><span class=n>extend</span><span class=p>(</span><span class=n>other_li</span><span class=p>)</span>  <span class=c1># 现在 li 的值是 [1, 2, 3, 4, 5, 6]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 &#34;in&#34; 检查元素是否存在于列表中</span>
+</span></span><span class=line><span class=cl><span class=mi>1</span> <span class=ow>in</span> <span class=n>li</span>  <span class=c1># =&gt; True</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 &#34;len()&#34; 检查列表的长度</span>
+</span></span><span class=line><span class=cl><span class=nb>len</span><span class=p>(</span><span class=n>li</span><span class=p>)</span>  <span class=c1># =&gt; 6</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 元组与列表相像, 但是不可更改</span>
+</span></span><span class=line><span class=cl><span class=n>tup</span> <span class=o>=</span> <span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>tup</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>  <span class=c1># =&gt; 1</span>
+</span></span><span class=line><span class=cl><span class=n>tup</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>=</span> <span class=mi>3</span>  <span class=c1># 抛出一个 TypeError</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 提示, 长度为一的元组的最后一个元素必须有一个逗号跟随, 但是</span>
+</span></span><span class=line><span class=cl><span class=c1># 其他长度的元组, 尽管是0, 也不需要</span>
+</span></span><span class=line><span class=cl><span class=nb>type</span><span class=p>((</span><span class=mi>1</span><span class=p>))</span>  <span class=c1># =&gt; &lt;class &#39;int&#39;&gt;</span>
+</span></span><span class=line><span class=cl><span class=nb>type</span><span class=p>((</span><span class=mi>1</span><span class=p>,))</span>  <span class=c1># =&gt; &lt;class &#39;tuple&#39;&gt;</span>
+</span></span><span class=line><span class=cl><span class=nb>type</span><span class=p>(())</span>  <span class=c1># =&gt; &lt;class &#39;tuple&#39;&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 大多数的列表操作符都可以在元组上使用</span>
+</span></span><span class=line><span class=cl><span class=nb>len</span><span class=p>(</span><span class=n>tup</span><span class=p>)</span>  <span class=c1># =&gt; 3</span>
+</span></span><span class=line><span class=cl><span class=n>tup</span> <span class=o>+</span> <span class=p>(</span><span class=mi>4</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=mi>6</span><span class=p>)</span>  <span class=c1># =&gt; (1, 2, 3, 4, 5, 6)</span>
+</span></span><span class=line><span class=cl><span class=n>tup</span><span class=p>[:</span><span class=mi>2</span><span class=p>]</span>  <span class=c1># =&gt; (1, 2)</span>
+</span></span><span class=line><span class=cl><span class=mi>2</span> <span class=ow>in</span> <span class=n>tup</span>  <span class=c1># =&gt; True</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以将元组(或者列表)解包为变量</span>
+</span></span><span class=line><span class=cl><span class=n>a</span><span class=p>,</span> <span class=n>b</span><span class=p>,</span> <span class=n>c</span> <span class=o>=</span> <span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>)</span>  <span class=c1># 现在, a 是 1, b 是 2, c 是 3</span>
+</span></span><span class=line><span class=cl><span class=c1># 你还可以使用拓展解包</span>
+</span></span><span class=line><span class=cl><span class=n>a</span><span class=p>,</span> <span class=o>*</span><span class=n>b</span><span class=p>,</span> <span class=n>c</span> <span class=o>=</span> <span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>)</span>  <span class=c1># 现在, a 是 1, b 是 [2, 3], c 是 4</span>
+</span></span><span class=line><span class=cl><span class=c1># 默认情况下, 即便你忽略括号, 也会创建一个元组</span>
+</span></span><span class=line><span class=cl><span class=n>d</span><span class=p>,</span> <span class=n>e</span><span class=p>,</span> <span class=n>f</span> <span class=o>=</span> <span class=mi>4</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=mi>6</span>  <span class=c1># 元组 4, 5, 6 被解包为变量 d, e, f</span>
+</span></span><span class=line><span class=cl><span class=c1># 变量值分别如下: d = 4, e = 5 以及 f = 6</span>
+</span></span><span class=line><span class=cl><span class=c1># 那么看看交换两个值是多么的简单</span>
+</span></span><span class=line><span class=cl><span class=n>e</span><span class=p>,</span> <span class=n>d</span> <span class=o>=</span> <span class=n>d</span><span class=p>,</span> <span class=n>e</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 字典用于存储从键到值的映射</span>
+</span></span><span class=line><span class=cl><span class=n>empty_dict</span> <span class=o>=</span> <span class=p>{}</span>  <span class=c1># 创建了一个空字典</span>
+</span></span><span class=line><span class=cl><span class=c1># 下面是一个带有初始值的字典</span>
+</span></span><span class=line><span class=cl><span class=n>filled_dict</span> <span class=o>=</span> <span class=p>{</span><span class=s2>&#34;one&#34;</span><span class=p>:</span> <span class=mi>1</span><span class=p>,</span> <span class=s2>&#34;two&#34;</span><span class=p>:</span> <span class=mi>2</span><span class=p>,</span> <span class=s2>&#34;three&#34;</span><span class=p>:</span> <span class=mi>3</span><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 提示: 字典的键必须是不可变的类型.  这是为了确保</span>
+</span></span><span class=line><span class=cl><span class=c1># 键能够转换为用于快速查询的常量哈希值.</span>
+</span></span><span class=line><span class=cl><span class=c1># 不可变类型包含整数, 浮点数, 字符串, 元组</span>
+</span></span><span class=line><span class=cl><span class=n>invalid_dict</span> <span class=o>=</span> <span class=p>{[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>]:</span> <span class=s2>&#34;123&#34;</span><span class=p>}</span>  <span class=c1># 抛出 TypeError: unhashable type: &#39;list&#39; 异常. (类型错误: 无法进行哈希化的类型: &#39;列表&#39;)</span>
+</span></span><span class=line><span class=cl><span class=n>valid_dict</span> <span class=o>=</span> <span class=p>{(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>):</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>]}</span>  <span class=c1># 然而, 值可以是任何类型</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 [] 来查询值</span>
+</span></span><span class=line><span class=cl><span class=n>filled_dict</span><span class=p>[</span><span class=s2>&#34;one&#34;</span><span class=p>]</span>  <span class=c1># =&gt; 1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 &#34;keys()&#34; 来获取所有的键并作为一个可迭代对象返回. 我们需要在 list() 中将调用结果转换</span>
+</span></span><span class=line><span class=cl><span class=c1># 为一个列表. 这个稍后再讲. 提示 - 在 Python 低于 3.7 的版本中</span>
+</span></span><span class=line><span class=cl><span class=c1># 字典键索引的顺序是无法保证的. 你的结果可能不与下面的例子完全相等. 然而, 在 Python 3.7 中, 字典</span>
+</span></span><span class=line><span class=cl><span class=c1># 元素会保持它们被插入到字典的顺序</span>
+</span></span><span class=line><span class=cl><span class=nb>list</span><span class=p>(</span><span class=n>filled_dict</span><span class=o>.</span><span class=n>keys</span><span class=p>())</span>  <span class=c1># =&gt; [&#34;three&#34;, &#34;two&#34;, &#34;one&#34;] 在低于 3.7 的 Python 版本中</span>
+</span></span><span class=line><span class=cl><span class=nb>list</span><span class=p>(</span><span class=n>filled_dict</span><span class=o>.</span><span class=n>keys</span><span class=p>())</span>  <span class=c1># =&gt; [&#34;one&#34;, &#34;two&#34;, &#34;three&#34;] 在 3.7 或更高的 Python 版本中</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 &#34;values()&#34; 来获取所有的值并作为可迭代对象返回. 同样, 我们需要将其在</span>
+</span></span><span class=line><span class=cl><span class=c1># list() 中转换, 以取出这个可迭代对象的值. 提示 - 和上面键的顺序是一样的</span>
+</span></span><span class=line><span class=cl><span class=nb>list</span><span class=p>(</span><span class=n>filled_dict</span><span class=o>.</span><span class=n>values</span><span class=p>())</span>  <span class=c1># =&gt; [3, 2, 1] 在低于 3.7 的 Python 版本中</span>
+</span></span><span class=line><span class=cl><span class=nb>list</span><span class=p>(</span><span class=n>filled_dict</span><span class=o>.</span><span class=n>values</span><span class=p>())</span>  <span class=c1># =&gt; [1, 2, 3] 在 3.7 或更高的 Python 版本中</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 &#34;in&#34; 来检查键是否在字典中</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;one&#34;</span> <span class=ow>in</span> <span class=n>filled_dict</span>  <span class=c1># =&gt; True</span>
+</span></span><span class=line><span class=cl><span class=mi>1</span> <span class=ow>in</span> <span class=n>filled_dict</span>  <span class=c1># =&gt; False</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 通过不存在的键来查找字典, 会抛出 KeyError 异常</span>
+</span></span><span class=line><span class=cl><span class=n>filled_dict</span><span class=p>[</span><span class=s2>&#34;four&#34;</span><span class=p>]</span>  <span class=c1># KeyError</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 &#34;get()&#34; 方法来避免 KeyError 异常</span>
+</span></span><span class=line><span class=cl><span class=n>filled_dict</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s2>&#34;one&#34;</span><span class=p>)</span>  <span class=c1># =&gt; 1</span>
+</span></span><span class=line><span class=cl><span class=n>filled_dict</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s2>&#34;four&#34;</span><span class=p>)</span>  <span class=c1># =&gt; None</span>
+</span></span><span class=line><span class=cl><span class=c1># 这个方法支持当找不到值时返回指定的默认值</span>
+</span></span><span class=line><span class=cl><span class=n>filled_dict</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s2>&#34;one&#34;</span><span class=p>,</span> <span class=mi>4</span><span class=p>)</span>  <span class=c1># =&gt; 1</span>
+</span></span><span class=line><span class=cl><span class=n>filled_dict</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s2>&#34;four&#34;</span><span class=p>,</span> <span class=mi>4</span><span class=p>)</span>  <span class=c1># =&gt; 4</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># &#34;setdefault()&#34; 只有在给定键不存在的时候将值插入到字典</span>
+</span></span><span class=line><span class=cl><span class=n>filled_dict</span><span class=o>.</span><span class=n>setdefault</span><span class=p>(</span><span class=s2>&#34;five&#34;</span><span class=p>,</span> <span class=mi>5</span><span class=p>)</span>  <span class=c1># filled_dict[&#34;five&#34;] 被设置为了 5</span>
+</span></span><span class=line><span class=cl><span class=n>filled_dict</span><span class=o>.</span><span class=n>setdefault</span><span class=p>(</span><span class=s2>&#34;five&#34;</span><span class=p>,</span> <span class=mi>6</span><span class=p>)</span>  <span class=c1># filled_dict[&#34;five&#34;] 仍然是 5</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 向字典中添加内容</span>
+</span></span><span class=line><span class=cl><span class=n>filled_dict</span><span class=o>.</span><span class=n>update</span><span class=p>({</span><span class=s2>&#34;four&#34;</span><span class=p>:</span> <span class=mi>4</span><span class=p>})</span>  <span class=c1># =&gt; {&#34;one&#34;: 1, &#34;two&#34;: 2, &#34;three&#34;: 3, &#34;four&#34;: 4}</span>
+</span></span><span class=line><span class=cl><span class=n>filled_dict</span><span class=p>[</span><span class=s2>&#34;four&#34;</span><span class=p>]</span> <span class=o>=</span> <span class=mi>4</span>  <span class=c1># 向字典中添加的另一种方式</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 自 Python 3.5 以来, 你还可以使用拓展解包选项</span>
+</span></span><span class=line><span class=cl><span class=p>{</span><span class=s1>&#39;a&#39;</span><span class=p>:</span> <span class=mi>1</span><span class=p>,</span> <span class=o>**</span><span class=p>{</span><span class=s1>&#39;b&#39;</span><span class=p>:</span> <span class=mi>2</span><span class=p>}}</span>  <span class=c1># =&gt; {&#39;a&#39;: 1, &#39;b&#39;: 2}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span><span class=s1>&#39;a&#39;</span><span class=p>:</span> <span class=mi>1</span><span class=p>,</span> <span class=o>**</span><span class=p>{</span><span class=s1>&#39;a&#39;</span><span class=p>:</span> <span class=mi>2</span><span class=p>}}</span>  <span class=c1># =&gt; {&#39;a&#39;: 2}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 集合用来存储 ... 额, 集合</span>
+</span></span><span class=line><span class=cl><span class=n>empty_set</span> <span class=o>=</span> <span class=nb>set</span><span class=p>()</span>  <span class=c1># 空集合</span>
+</span></span><span class=line><span class=cl><span class=c1># 用一组值来初始化一个集合, 嗯, 看起来有点像字典, 抱歉</span>
+</span></span><span class=line><span class=cl><span class=n>some_set</span> <span class=o>=</span> <span class=p>{</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>}</span>  <span class=c1># some_set 现在的值是 {1, 2, 3, 4}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 与字典中的键相似, 集合的元素必须是不可变的</span>
+</span></span><span class=line><span class=cl><span class=n>invalid_set</span> <span class=o>=</span> <span class=p>{[</span><span class=mi>1</span><span class=p>],</span> <span class=mi>1</span><span class=p>}</span>  <span class=c1># =&gt; 抛出一个 TypeError: unhashable type: &#39;list&#39; (类型错误: 无法进行哈希化的类型: &#39;列表&#39;)</span>
+</span></span><span class=line><span class=cl><span class=n>valid_set</span> <span class=o>=</span> <span class=p>{(</span><span class=mi>1</span><span class=p>,),</span> <span class=mi>1</span><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 向集合中添加一个或多个条目</span>
+</span></span><span class=line><span class=cl><span class=n>filled_set</span> <span class=o>=</span> <span class=n>some_set</span>
+</span></span><span class=line><span class=cl><span class=n>filled_set</span><span class=o>.</span><span class=n>add</span><span class=p>(</span><span class=mi>5</span><span class=p>)</span>  <span class=c1># filled_set 现在是 {1, 2, 3, 4, 5}</span>
+</span></span><span class=line><span class=cl><span class=c1># 集合是不包含重复元素的</span>
+</span></span><span class=line><span class=cl><span class=n>filled_set</span><span class=o>.</span><span class=n>add</span><span class=p>(</span><span class=mi>5</span><span class=p>)</span>  <span class=c1># 还是与之前一样 {1, 2, 3, 4, 5}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 &amp; 取交集</span>
+</span></span><span class=line><span class=cl><span class=n>other_set</span> <span class=o>=</span> <span class=p>{</span><span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=mi>6</span><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=n>filled_set</span> <span class=o>&amp;</span> <span class=n>other_set</span>  <span class=c1># =&gt; {3, 4, 5}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 | 取并集</span>
+</span></span><span class=line><span class=cl><span class=n>filled_set</span> <span class=o>|</span> <span class=n>other_set</span>  <span class=c1># =&gt; {1, 2, 3, 4, 5, 6}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 - 取差集</span>
+</span></span><span class=line><span class=cl><span class=p>{</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>}</span> <span class=o>-</span> <span class=p>{</span><span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>5</span><span class=p>}</span>  <span class=c1># =&gt; {1, 4}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 ^ 取对称差集</span>
+</span></span><span class=line><span class=cl><span class=p>{</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>}</span> <span class=o>-</span> <span class=p>{</span><span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>5</span><span class=p>}</span>  <span class=c1># =&gt; {1, 4, 5}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 检查左侧的集合是否是右侧集合的超集</span>
+</span></span><span class=line><span class=cl><span class=p>{</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>}</span> <span class=o>&gt;=</span> <span class=p>{</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>}</span>  <span class=c1># =&gt; False</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 检查左侧的集合是否是右侧集合的子集</span>
+</span></span><span class=line><span class=cl><span class=p>{</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>}</span> <span class=o>&lt;=</span> <span class=p>{</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>}</span>  <span class=c1># =&gt; True</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 in 来检查是否存在于集合中</span>
+</span></span><span class=line><span class=cl><span class=mi>2</span> <span class=ow>in</span> <span class=n>filled_set</span>  <span class=c1># =&gt; True</span>
+</span></span><span class=line><span class=cl><span class=mi>10</span> <span class=ow>in</span> <span class=n>filled_set</span>  <span class=c1># =&gt; False</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 生成一个单层的深层副本</span>
+</span></span><span class=line><span class=cl><span class=n>filled_set</span> <span class=o>=</span> <span class=n>some_set</span><span class=o>.</span><span class=n>copy</span><span class=p>()</span>  <span class=c1># filled_set 是 {1, 2, 3, 4, 5}</span>
+</span></span><span class=line><span class=cl><span class=n>filled_set</span> <span class=ow>is</span> <span class=n>some_set</span>  <span class=c1># =&gt; False</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl><span class=c1>## 3. 控制流和可迭代对象</span>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 首先我们声明一个变量</span>
+</span></span><span class=line><span class=cl><span class=n>some_var</span> <span class=o>=</span> <span class=mi>5</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 这是一个 if 语句, 缩进在 Python 中非常重要</span>
+</span></span><span class=line><span class=cl><span class=c1># 约定语法是使用四个空格, 而不是水平制表符(tab)</span>
+</span></span><span class=line><span class=cl><span class=c1># 这个将会打印 &#34;some_var 比 10 小&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=n>some_var</span> <span class=o>&gt;</span> <span class=mi>10</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;some_var 比 10 大&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>elif</span> <span class=n>some_var</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=p>:</span>  <span class=c1># 这个 elif 语句是可选的</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;some_var 比 10 小&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>else</span><span class=p>:</span>  <span class=c1># 这个也是可选的</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;some_var 与 10 相等&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>for 语句用来循环遍历列表
+</span></span></span><span class=line><span class=cl><span class=s2>将会打印:
+</span></span></span><span class=line><span class=cl><span class=s2>    狗是哺乳动物
+</span></span></span><span class=line><span class=cl><span class=s2>    猫是哺乳动物
+</span></span></span><span class=line><span class=cl><span class=s2>    老鼠是哺乳动物
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>animal</span> <span class=ow>in</span> <span class=p>[</span><span class=s2>&#34;狗&#34;</span><span class=p>,</span> <span class=s2>&#34;猫&#34;</span><span class=p>,</span> <span class=s2>&#34;老鼠&#34;</span><span class=p>]:</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 你可以使用 format() 来插入格式化字符串</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;</span><span class=si>{}</span><span class=s2>是哺乳动物&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>animal</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;range(数字)&#34; 返回一个数字的可迭代对象
+</span></span></span><span class=line><span class=cl><span class=s2>从0到给定数字
+</span></span></span><span class=line><span class=cl><span class=s2>将会打印:
+</span></span></span><span class=line><span class=cl><span class=s2>    0
+</span></span></span><span class=line><span class=cl><span class=s2>    1
+</span></span></span><span class=line><span class=cl><span class=s2>    2
+</span></span></span><span class=line><span class=cl><span class=s2>    3
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>4</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>i</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;range(较小的数, 较大的数)&#34; 返回一个数字的可迭代对象
+</span></span></span><span class=line><span class=cl><span class=s2>从较小的数字到较大的数字
+</span></span></span><span class=line><span class=cl><span class=s2>将会打印:
+</span></span></span><span class=line><span class=cl><span class=s2>    4
+</span></span></span><span class=line><span class=cl><span class=s2>    5
+</span></span></span><span class=line><span class=cl><span class=s2>    6
+</span></span></span><span class=line><span class=cl><span class=s2>    7
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>4</span><span class=p>,</span> <span class=mi>8</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>i</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;range(较小的数, 较大的数, 步长)&#34; 返回一个数字的可迭代对象
+</span></span></span><span class=line><span class=cl><span class=s2>从较小的数到较大的数, 以步长未每次增长的值
+</span></span></span><span class=line><span class=cl><span class=s2>如果步长没有指定, 默认值则是 1
+</span></span></span><span class=line><span class=cl><span class=s2>将会打印:
+</span></span></span><span class=line><span class=cl><span class=s2>    4
+</span></span></span><span class=line><span class=cl><span class=s2>    6
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>4</span><span class=p>,</span> <span class=mi>8</span><span class=p>,</span> <span class=mi>2</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>i</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>循环一个列表, 并且同时检索列表中每一个条目的索引和值
+</span></span></span><span class=line><span class=cl><span class=s2>将会打印:
+</span></span></span><span class=line><span class=cl><span class=s2>    0 狗
+</span></span></span><span class=line><span class=cl><span class=s2>    1 猫
+</span></span></span><span class=line><span class=cl><span class=s2>    2 老鼠
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>animals</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;狗&#34;</span><span class=p>,</span> <span class=s2>&#34;猫&#34;</span><span class=p>,</span> <span class=s2>&#34;老鼠&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span><span class=p>,</span> <span class=n>value</span> <span class=ow>in</span> <span class=nb>enumerate</span><span class=p>(</span><span class=n>animals</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>i</span><span class=p>,</span> <span class=n>value</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>while 循环将一直进行到条件不再满足为止
+</span></span></span><span class=line><span class=cl><span class=s2>将会打印:
+</span></span></span><span class=line><span class=cl><span class=s2>    0
+</span></span></span><span class=line><span class=cl><span class=s2>    1
+</span></span></span><span class=line><span class=cl><span class=s2>    2
+</span></span></span><span class=line><span class=cl><span class=s2>    3
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=n>x</span> <span class=o>&lt;</span> <span class=mi>4</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>+=</span> <span class=mi>1</span>  <span class=c1># x = x + 1 的简写</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 try/except 语句块来处理异常</span>
+</span></span><span class=line><span class=cl><span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 使用 &#34;raise&#34; 来抛出异常</span>
+</span></span><span class=line><span class=cl>    <span class=k>raise</span> <span class=ne>IndexError</span><span class=p>(</span><span class=s2>&#34;这是一个索引错误&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>except</span> <span class=ne>IndexError</span> <span class=k>as</span> <span class=n>e</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>pass</span>  <span class=c1># pass 只是一个占位符(不进行任何操作). 通常你需要在这里对异常进行处理</span>
+</span></span><span class=line><span class=cl><span class=k>except</span> <span class=p>(</span><span class=ne>TypeError</span><span class=p>,</span> <span class=ne>NameError</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>pass</span>  <span class=c1># 如果需要, 你可以同时处理多个异常.</span>
+</span></span><span class=line><span class=cl><span class=k>else</span><span class=p>:</span>  <span class=c1># try/except 语句块的可选语句. 必须在所有 except 语句块的后面</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;一切正常!&#34;</span><span class=p>)</span>  <span class=c1># 仅在 try 语句内没有任何异常时运行</span>
+</span></span><span class=line><span class=cl><span class=k>finally</span><span class=p>:</span>  <span class=c1># 在任何情况下都会执行</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;我们可以在这里进行资源清理&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以使用 with 语句代替 try/finally 来清理资源</span>
+</span></span><span class=line><span class=cl><span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=s2>&#34;我的文件.txt&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>f</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>line</span> <span class=ow>in</span> <span class=n>f</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=n>line</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 向文件中写入内容</span>
+</span></span><span class=line><span class=cl><span class=n>contents</span> <span class=o>=</span> <span class=p>{</span><span class=s2>&#34;aa&#34;</span><span class=p>:</span> <span class=mi>12</span><span class=p>,</span> <span class=s2>&#34;bb&#34;</span><span class=p>:</span> <span class=mi>21</span><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=s2>&#34;我的文件1.txt&#34;</span><span class=p>,</span> <span class=s2>&#34;w+&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>file</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=nb>str</span><span class=p>(</span><span class=n>content</span><span class=p>))</span>  <span class=c1># 向文件中写入字符串</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=s2>&#34;我的文件2.txt&#34;</span><span class=p>,</span> <span class=s2>&#34;w+&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>file</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>json</span><span class=o>.</span><span class=n>dumps</span><span class=p>(</span><span class=n>content</span><span class=p>))</span>  <span class=c1># 向文件中写入一个对象</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 从文件中读取</span>
+</span></span><span class=line><span class=cl><span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=s2>&#34;我的文件1.txt&#34;</span><span class=p>,</span> <span class=s2>&#34;r+&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>file</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>contents</span> <span class=o>=</span> <span class=n>file</span><span class=o>.</span><span class=n>read</span><span class=p>()</span>  <span class=c1># 从文件中读取一个字符串</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>contents</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># 打印: {&#34;aa&#34;, 12, &#34;bb&#34;: 21}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=s2>&#34;我的文件2.txt&#34;</span><span class=p>,</span> <span class=s2>&#34;r+&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>file</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>contents</span> <span class=o>=</span> <span class=n>json</span><span class=o>.</span><span class=n>load</span><span class=p>(</span><span class=n>file</span><span class=p>)</span>  <span class=c1># 从文件中读取一个json对象</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>contents</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># print: {&#34;aa&#34;: 12, &#34;bb&#34;: 21}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Python 提供了一个叫做 Iterable(可迭代的) 的基本抽象</span>
+</span></span><span class=line><span class=cl><span class=c1># 一个可迭代对象是一个可视为序列的对象</span>
+</span></span><span class=line><span class=cl><span class=c1># range 函数返回的对象就是一个可迭代对象</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>filled_dict</span> <span class=o>=</span> <span class=p>{</span><span class=s2>&#34;one&#34;</span><span class=p>:</span> <span class=mi>1</span><span class=p>,</span> <span class=s2>&#34;two&#34;</span><span class=p>:</span> <span class=mi>2</span><span class=p>,</span> <span class=s2>&#34;three&#34;</span><span class=p>:</span> <span class=mi>3</span><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=n>our_iterable</span> <span class=o>=</span> <span class=n>filled_dict</span><span class=o>.</span><span class=n>keys</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>our_iterable</span><span class=p>)</span>  <span class=c1># =&gt; dict_keys([&#39;one&#39;, &#39;two&#39;, &#39;three&#39;]). 这是一个实现了 Iterable 接口的对象</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 我们可以检索它</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=n>our_iterable</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>i</span><span class=p>)</span>  <span class=c1># 打印 one, two, three</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 然而, 我们不可以通过索引来找到元素</span>
+</span></span><span class=line><span class=cl><span class=n>our_iterable</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span>  <span class=c1># 抛出 TypeError 异常</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 一个可迭代对象即为能够创建迭代器的对象</span>
+</span></span><span class=line><span class=cl><span class=n>our_iterator</span> <span class=o>=</span> <span class=nb>iter</span><span class=p>(</span><span class=n>our_iterable</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 迭代器是一个能够记住当前通过它迭代状态的对象</span>
+</span></span><span class=line><span class=cl><span class=c1># 我们可以通过 &#34;next()&#34; 来获取下一个对象</span>
+</span></span><span class=line><span class=cl><span class=nb>next</span><span class=p>(</span><span class=n>our_iterator</span><span class=p>)</span>  <span class=c1># =&gt; &#34;one&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 它会保持我们遍历的状态</span>
+</span></span><span class=line><span class=cl><span class=nb>next</span><span class=p>(</span><span class=n>our_iterator</span><span class=p>)</span>  <span class=c1># =&gt; &#34;two&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>next</span><span class=p>(</span><span class=n>our_iterator</span><span class=p>)</span>  <span class=c1># =&gt; &#34;three&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在迭代器已经返回完所有的数据后, 将会抛出 StopIteration 异常</span>
+</span></span><span class=line><span class=cl><span class=nb>next</span><span class=p>(</span><span class=n>our_iterator</span><span class=p>)</span>  <span class=c1># 抛出 StopIteration 异常</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 我们也可以检索它, 事实上, &#34;for&#34; 语句就是隐式的执行了这个操作</span>
+</span></span><span class=line><span class=cl><span class=n>our_iterator</span> <span class=o>=</span> <span class=nb>iter</span><span class=p>(</span><span class=n>our_iterable</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=n>iterator</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>i</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以通过调用 list() 来获取可迭代对象或迭代器的所有元素.</span>
+</span></span><span class=line><span class=cl><span class=nb>list</span><span class=p>(</span><span class=n>our_iterable</span><span class=p>)</span>  <span class=c1># =&gt; 返回 [&#34;one&#34;, &#34;two&#34;, &#34;three&#34;]</span>
+</span></span><span class=line><span class=cl><span class=nb>list</span><span class=p>(</span><span class=n>our_iterator</span><span class=p>)</span>  <span class=c1># =&gt; 返回 [] 因为迭代状态已经被保存下来</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl><span class=c1>## 4. 函数</span>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 &#34;def&#34; 来创建一个新的函数</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>add</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;x 是 </span><span class=si>{}</span><span class=s2> 以及 y is </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>x</span> <span class=o>+</span> <span class=n>y</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 调用带参数的函数</span>
+</span></span><span class=line><span class=cl><span class=n>add</span><span class=p>(</span><span class=mi>5</span><span class=p>,</span> <span class=mi>6</span><span class=p>)</span>  <span class=c1># =&gt; 输出 &#34;x 是 5 以及 y 是 6&#34;, 并返回 11</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 调用函数的另一种方式是带有关键字参数</span>
+</span></span><span class=line><span class=cl><span class=n>add</span><span class=p>(</span><span class=n>y</span><span class=o>=</span><span class=mi>6</span><span class=p>,</span> <span class=n>x</span><span class=o>=</span><span class=mi>5</span><span class=p>)</span>  <span class=c1># 关键字参数可以在任何顺序下正常运行</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以定义接受数量可变的位置参数的函数</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>varargs</span><span class=p>(</span><span class=o>*</span><span class=n>args</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>args</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>varargs</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>)</span>  <span class=c1># =&gt; (1, 2, 3)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 同样, 你可以定义接受数量可变的关键字参数的函数</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>keyword_args</span><span class=p>(</span><span class=o>**</span><span class=n>kwargs</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>kwargs</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 来调用一下, 然后看看会发生什么</span>
+</span></span><span class=line><span class=cl><span class=n>keyword_args</span><span class=p>(</span><span class=n>big</span><span class=o>=</span><span class=s2>&#34;foot&#34;</span><span class=p>,</span> <span class=n>loch</span><span class=o>=</span><span class=s2>&#34;ness&#34;</span><span class=p>)</span>  <span class=c1># =&gt; {&#34;big&#34;: &#34;foot&#34;, &#34;loch&#34;: &#34;ness&#34;}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 只要你想, 你也可以同时使用它们两个</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>all_the_args</span><span class=p>(</span><span class=o>*</span><span class=n>args</span><span class=p>,</span> <span class=o>**</span><span class=n>kwargs</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>args</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>kwargs</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>all_the_args(1, 2, a=3, b=4) 将会打印:
+</span></span></span><span class=line><span class=cl><span class=s2>    (1, 2)
+</span></span></span><span class=line><span class=cl><span class=s2>    {&#34;a&#34;: 3, &#34;b&#34;: 4}
+</span></span></span><span class=line><span class=cl><span class=s2>&#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在调用函数时, 你可以做相反的 args/kwargs!</span>
+</span></span><span class=line><span class=cl><span class=c1># 使用 * 来拓展元组, 以及使用 ** 来拓展 kwargs.</span>
+</span></span><span class=line><span class=cl><span class=n>args</span> <span class=o>=</span> <span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>kwargs</span> <span class=o>=</span> <span class=p>{</span><span class=s2>&#34;a&#34;</span><span class=p>:</span> <span class=mi>3</span><span class=p>,</span> <span class=s2>&#34;b&#34;</span><span class=p>:</span> <span class=mi>4</span><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=n>all_the_args</span><span class=p>(</span><span class=o>*</span><span class=n>args</span><span class=p>)</span>  <span class=c1># 等同于 all_the_args(1, 2, 3, 4)</span>
+</span></span><span class=line><span class=cl><span class=n>all_the_args</span><span class=p>(</span><span class=o>**</span><span class=n>kwargs</span><span class=p>)</span>  <span class=c1># 等同于 all_the_args(a=3, b=4)</span>
+</span></span><span class=line><span class=cl><span class=n>all_the_args</span><span class=p>(</span><span class=o>*</span><span class=n>args</span><span class=p>,</span> <span class=o>**</span><span class=n>kwargs</span><span class=p>)</span>  <span class=c1># 等同于 all_the_args(1, 2, 3, 4, a=3, b=4)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 返回多个值(通过赋值元组)</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>swap</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>y</span><span class=p>,</span> <span class=n>x</span>  <span class=c1># 通过没有括号的元组来返回多个值</span>
+</span></span><span class=line><span class=cl>    <span class=c1># (提示: 括号虽然没有写, 但是也可以添加上)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl><span class=n>y</span> <span class=o>=</span> <span class=mi>2</span>
+</span></span><span class=line><span class=cl><span class=n>x</span><span class=p>,</span> <span class=n>y</span> <span class=o>=</span> <span class=n>swap</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>)</span>  <span class=c1># =&gt; x = 2, y = 1</span>
+</span></span><span class=line><span class=cl><span class=c1># (x, y) = swap(x,y)  # 同样, 括号虽没有写, 但是也可以添加上</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 函数作用域</span>
+</span></span><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=mi>5</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>set_x</span><span class=p>(</span><span class=n>num</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 局部变量 x 与全局变量 x 是不同的</span>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>=</span> <span class=n>num</span>  <span class=c1># =&gt; 43</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>  <span class=c1># =&gt; 43</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>set_global_x</span><span class=p>(</span><span class=n>num</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>global</span> <span class=n>x</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>  <span class=c1># =&gt; 5</span>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>=</span> <span class=n>num</span>  <span class=c1># =&gt; 全局变量 x 现在被设置为 6 了</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>  <span class=c1># =&gt; 6</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>set_x</span><span class=p>(</span><span class=mi>43</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>set_global_x</span><span class=p>(</span><span class=mi>6</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Python 支持本地函数</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>create_adder</span><span class=p>(</span><span class=n>x</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>adder</span><span class=p>(</span><span class=n>y</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>x</span> <span class=o>+</span> <span class=n>y</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>adder</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>add_10</span> <span class=o>=</span> <span class=n>create_adder</span><span class=p>(</span><span class=mi>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>add_10</span><span class=p>(</span><span class=mi>3</span><span class=p>)</span>  <span class=c1># =&gt; 13</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 也支持匿名函数</span>
+</span></span><span class=line><span class=cl><span class=p>(</span><span class=k>lambda</span> <span class=n>x</span><span class=p>:</span> <span class=n>x</span> <span class=o>&gt;</span> <span class=mi>2</span><span class=p>)(</span><span class=mi>3</span><span class=p>)</span>  <span class=c1># =&gt; True</span>
+</span></span><span class=line><span class=cl><span class=p>(</span><span class=k>lambda</span> <span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>:</span> <span class=n>x</span> <span class=o>**</span> <span class=mi>2</span> <span class=o>+</span> <span class=n>y</span> <span class=o>**</span> <span class=mi>2</span><span class=p>)(</span><span class=mi>2</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>  <span class=c1># =&gt; 5</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 下面是一些内置的高阶函数</span>
+</span></span><span class=line><span class=cl><span class=nb>list</span><span class=p>(</span><span class=nb>map</span><span class=p>(</span><span class=n>add_10</span><span class=p>,</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>]))</span>  <span class=c1># =&gt; [11, 12, 13]</span>
+</span></span><span class=line><span class=cl><span class=nb>list</span><span class=p>(</span><span class=nb>map</span><span class=p>(</span><span class=nb>max</span><span class=p>,</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>],</span> <span class=p>[</span><span class=mi>4</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>1</span><span class=p>]))</span>  <span class=c1># =&gt; [4, 2, 3]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>list</span><span class=p>(</span><span class=nb>filter</span><span class=p>(</span><span class=k>lambda</span> <span class=n>x</span><span class=p>:</span> <span class=n>x</span> <span class=o>&gt;</span> <span class=mi>5</span><span class=p>,</span> <span class=p>[</span><span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=mi>6</span><span class=p>,</span> <span class=mi>7</span><span class=p>]))</span>  <span class=c1># =&gt; [6, 7]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以使用列表推导式来实现优秀的映射与过滤</span>
+</span></span><span class=line><span class=cl><span class=c1># 列表推导式存储可嵌套的列表以输出</span>
+</span></span><span class=line><span class=cl><span class=p>[</span><span class=n>add_10</span><span class=p>(</span><span class=n>i</span><span class=p>)</span> <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>3</span><span class=p>]]</span>  <span class=c1># =&gt; [11, 12, 13]</span>
+</span></span><span class=line><span class=cl><span class=p>[</span><span class=n>x</span> <span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=p>[</span><span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=mi>6</span><span class=p>,</span> <span class=mi>7</span><span class=p>]</span> <span class=k>if</span> <span class=n>x</span> <span class=o>&gt;</span> <span class=mi>5</span><span class=p>]</span>  <span class=c1># =&gt; [6, 7]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 同样, 你可以构建集合和字典推导式</span>
+</span></span><span class=line><span class=cl><span class=p>{</span><span class=n>x</span> <span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=s1>&#39;abcddeef&#39;</span> <span class=k>if</span> <span class=n>x</span> <span class=ow>not</span> <span class=ow>in</span> <span class=s1>&#39;abc&#39;</span><span class=p>}</span>  <span class=c1># =&gt; {&#39;d&#39;, &#39;e&#39;, &#39;f&#39;}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span><span class=n>x</span><span class=p>:</span> <span class=n>x</span> <span class=o>**</span> <span class=mi>2</span> <span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>5</span><span class=p>)}</span>  <span class=c1># =&gt; {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl><span class=c1>## 5. 模块</span>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 导入模块, 调用模块中的函数</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>math</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>math</span><span class=o>.</span><span class=n>sqrt</span><span class=p>(</span><span class=mi>16</span><span class=p>))</span>  <span class=c1># =&gt; 返回4.0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以从模块中获取指定的函数</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>math</span> <span class=kn>import</span> <span class=n>ceil</span><span class=p>,</span> <span class=n>floor</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>ceil</span><span class=p>(</span><span class=mf>3.7</span><span class=p>))</span>  <span class=c1># =&gt; 4.0</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>floor</span><span class=p>(</span><span class=mf>4.7</span><span class=p>))</span>  <span class=c1># =&gt; 3.0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以从模块中导入所有函数</span>
+</span></span><span class=line><span class=cl><span class=c1># 警告: 不推荐这么做</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>math</span> <span class=kn>import</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以在导入模块时, 为其起一个别名</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>math</span> <span class=k>as</span> <span class=nn>m</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>math</span><span class=o>.</span><span class=n>sqrt</span><span class=p>(</span><span class=mi>16</span><span class=p>)</span> <span class=o>==</span> <span class=n>m</span><span class=o>.</span><span class=n>sqrt</span><span class=p>(</span><span class=mi>16</span><span class=p>)</span>  <span class=c1># =&gt; True</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Python 模块只是普通的 Python 文件. 你</span>
+</span></span><span class=line><span class=cl><span class=c1># 可以编写你自己的模块, 然后导入它们. 模块</span>
+</span></span><span class=line><span class=cl><span class=c1># 的名字与文件名是相同的</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以查找模块内定义的函数和属性</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>math</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>dir</span><span class=p>(</span><span class=n>math</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 如果有一个名为 math.py 的 Python 脚本与</span>
+</span></span><span class=line><span class=cl><span class=c1># 当前脚本在同一个目录下, 那么这个文件将会</span>
+</span></span><span class=line><span class=cl><span class=c1># 代替 Python 内建模块以加载.</span>
+</span></span><span class=line><span class=cl><span class=c1># 这是因为本地目录有比 Python 的内建库更高</span>
+</span></span><span class=line><span class=cl><span class=c1># 的优先级.</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl><span class=c1>## 6. 类</span>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用 &#34;class&#34; 语句来创建一个类</span>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>Human</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 类的属性. 将在类的所有实例中共享</span>
+</span></span><span class=line><span class=cl>    <span class=n>species</span> <span class=o>=</span> <span class=s2>&#34;SlimeNull&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 基本的初始化器, 这个将会在类实例化时调用</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 提示, 双前置和后置下划线表示 Python 使用</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 的对象或属性, 但是它们存在于用户控制的命名</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 空间. 方法(或者是对象, 属性) 像 __init__, __str__,</span>
+</span></span><span class=line><span class=cl>    <span class=c1># __repr__ 等等, 被称为特殊方法(有时也成为魔法方法)</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 你不应该创建你自己的, 与它们重名的成员</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=fm>__init__</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>name</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 将参数赋值给实例的 name 属性</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>name</span> <span class=o>=</span> <span class=n>name</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># 初始化属性</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>_age</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 实例的方法. 所有的方法都需要使用 &#34;self&#34; 作为第一个参数</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>say</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>msg</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;</span><span class=si>{name}</span><span class=s2>: </span><span class=si>{message}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>name</span><span class=o>=</span><span class=bp>self</span><span class=o>.</span><span class=n>name</span><span class=p>,</span> <span class=n>message</span><span class=o>=</span><span class=n>msg</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># 实例的另一个方法</span>
+</span></span><span class=line><span class=cl>        <span class=k>def</span> <span class=nf>sing</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=s1>&#39;哟... 哟... 麦克风检查... one... one two...&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 类的方法, 所有的实例都能够访问</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 它们被调用时, 调用它的类将作为调用的第一个参数</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@classmethod</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>get_species</span><span class=p>(</span><span class=bp>cls</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=bp>cls</span><span class=o>.</span><span class=n>species</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 静态方法在调用时, 不会有类或实例的引用传入</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@staticmethod</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>grunt</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=s2>&#34;*咕噜咕噜*&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 属性就像一个获取器(getter)</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 它将这个方法 age() 作为一个同名的, 只读的属性返回</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 但是, 在 Python 中不需要写繁琐的获取器和设置器(setter)</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@property</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>age</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=bp>self</span><span class=o>.</span><span class=n>_age</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 这个将允许属性被设置</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@age.setter</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>age</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>age</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>_age</span> <span class=o>=</span> <span class=n>age</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 这个将允许属性被删除</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@age.deleter</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>age</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>del</span> <span class=bp>self</span><span class=o>.</span><span class=n>_age</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 当 Python 解释器读取源文件并执行时</span>
+</span></span><span class=line><span class=cl><span class=c1># __name__ 会确保这个代码块在模块中</span>
+</span></span><span class=line><span class=cl><span class=c1># 是作为主程序执行的</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s1>&#39;__main__&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 实例化类</span>
+</span></span><span class=line><span class=cl>    <span class=n>i</span> <span class=o>=</span> <span class=n>Human</span><span class=p>(</span><span class=n>name</span><span class=o>=</span><span class=s2>&#34;小明&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>i</span><span class=o>.</span><span class=n>say</span><span class=p>(</span><span class=s2>&#34;嗨~&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>j</span> <span class=o>=</span> <span class=n>Human</span><span class=p>(</span><span class=s2>&#34;小红&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>j</span><span class=o>.</span><span class=n>say</span><span class=p>(</span><span class=s2>&#34;你好哇~&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=c1># i 和 j 是类型 Human 的实例, 换句话说, 他们都是 Human 对象</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 调用类的方法</span>
+</span></span><span class=line><span class=cl>    <span class=n>i</span><span class=o>.</span><span class=n>say</span><span class=p>(</span><span class=n>i</span><span class=o>.</span><span class=n>get_species</span><span class=p>())</span>          <span class=c1># =&gt; &#34;小明: SlimeNull&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 更改共享属性</span>
+</span></span><span class=line><span class=cl>    <span class=n>Human</span><span class=o>.</span><span class=n>species</span> <span class=o>=</span> <span class=s2>&#34;Little Wu♂ Fairy&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>i</span><span class=o>.</span><span class=n>say</span><span class=p>(</span><span class=n>i</span><span class=o>.</span><span class=n>get_species</span><span class=p>())</span>          <span class=c1># =&gt; &#34;小明: Little Wu♂ Fairy&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>j</span><span class=o>.</span><span class=n>say</span><span class=p>(</span><span class=n>j</span><span class=o>.</span><span class=n>get_species</span><span class=p>())</span>          <span class=c1># =&gt; &#34;小红: Little Wu♂ Fairy&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 调用静态方法</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>Human</span><span class=o>.</span><span class=n>grunt</span><span class=p>())</span>            <span class=c1># =&gt; &#34;*咕噜咕噜*&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 静态方法也可以通过实例来调用</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>i</span><span class=o>.</span><span class=n>grunt</span><span class=p>())</span>                <span class=c1># =&gt; &#34;*咕噜咕噜*&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 为这个实例更新属性</span>
+</span></span><span class=line><span class=cl>    <span class=n>i</span><span class=o>.</span><span class=n>age</span> <span class=o>=</span> <span class=mi>42</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 获取属性</span>
+</span></span><span class=line><span class=cl>    <span class=n>i</span><span class=o>.</span><span class=n>say</span><span class=p>(</span><span class=n>i</span><span class=o>.</span><span class=n>age</span><span class=p>)</span>                    <span class=c1># =&gt; &#34;小明: 42&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>j</span><span class=o>.</span><span class=n>say</span><span class=p>(</span><span class=n>j</span><span class=o>.</span><span class=n>age</span><span class=p>)</span>                    <span class=c1># =&gt; &#34;小红: 0&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 删除属性</span>
+</span></span><span class=line><span class=cl>    <span class=k>del</span> <span class=n>i</span><span class=o>.</span><span class=n>age</span>
+</span></span><span class=line><span class=cl>    <span class=c1># i.age                         # =&gt; 将会抛出 AttributeError 异常</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl><span class=c1>## 6.1 继承</span>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 继承允许定义的新的子类从父类继承</span>
+</span></span><span class=line><span class=cl><span class=c1># 方法与变量</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 使用上面定义的 Human 类作为基类(父类), 我们可以定义</span>
+</span></span><span class=line><span class=cl><span class=c1># 一个子类, Superhero, 它将继承 Human 类的变量, 例如</span>
+</span></span><span class=line><span class=cl><span class=c1># &#34;species&#34;, &#34;name&#34;, 以及 &#34;age&#34;, 方法也是如此, 例如</span>
+</span></span><span class=line><span class=cl><span class=c1># &#34;sing&#34; 与 &#34;grunt&#34;. 但同时它也可以有自己的特殊属性.</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你可以将上面的类存储到它们自己的文件中来采用模块化文件的优点</span>
+</span></span><span class=line><span class=cl><span class=c1># 命名为, human.py</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 从别的文件中导入函数, 需要使用下面的格式</span>
+</span></span><span class=line><span class=cl><span class=c1># from &#34;没有后缀的文件名&#34; import &#34;函数或者类&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>human</span> <span class=kn>import</span> <span class=n>Human</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在类型定义处以参数的形式指定父类</span>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>Superhero</span><span class=p>(</span><span class=n>Human</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 如果字类仅仅是从父类继承所有定义, 且没有</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 任何更改, 你可以只在这里写一个 &#34;pass&#34; 关键字 (别的不需要写)</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 但在我们这种情况下, pass 就要被注释掉以为 Superhero 类创建</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 它特有的内容</span>
+</span></span><span class=line><span class=cl>    <span class=c1># pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 字类可以覆盖父类的属性</span>
+</span></span><span class=line><span class=cl>    <span class=n>species</span> <span class=o>=</span> <span class=s2>&#34;Superhuman&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 字类会自动的从父类继承构造函数, 包括</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 它的参数, 但是也可以定义另外的参数, 或者定义</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 然后覆盖它的方法, 例如这个类的构造函数</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 这个构造函数从 Human 类继承了 &#34;name&#34; 参数并且</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 添加了 &#34;superpower&#34; 和 &#34;movie&#34; 参数</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=fm>__init__</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>name</span><span class=p>,</span> <span class=n>movie</span><span class=o>=</span><span class=kc>False</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                 <span class=n>superpowers</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;力大无穷&#34;</span><span class=p>,</span> <span class=s2>&#34;金刚不坏之身&#34;</span><span class=p>]):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># 添加额外的类型属性</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>fictional</span> <span class=o>=</span> <span class=kc>True</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>movie</span> <span class=o>=</span> <span class=n>movie</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 注意可变的默认值, 因为它们默认是共享的</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>superpowers</span> <span class=o>=</span> <span class=n>superpowers</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># &#34;super&#34; 函数使你可以访问被字类重写了的</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 父类的方法, 在这里, 我们要使用 &#34;__init__&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 这将会调用父类的构造函数</span>
+</span></span><span class=line><span class=cl>        <span class=nb>super</span><span class=p>()</span><span class=o>.</span><span class=fm>__init__</span><span class=p>(</span><span class=n>name</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 覆盖 sing 方法</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>sing</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=s2>&#34;Dun, dun, DUN!&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 添加附加的实例方法</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>boast</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>power</span> <span class=ow>in</span> <span class=bp>self</span><span class=o>.</span><span class=n>superpowers</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;我有</span><span class=si>{pow}</span><span class=s2>的能力!&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=nb>pow</span><span class=o>=</span><span class=n>power</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s1>&#39;__main__&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>sup</span> <span class=o>=</span> <span class=n>Superhero</span><span class=p>(</span><span class=n>name</span><span class=o>=</span><span class=s2>&#34;蒂克&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 实例类型检查</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=nb>isinstance</span><span class=p>(</span><span class=n>sup</span><span class=p>,</span> <span class=n>Human</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;我是人类&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=nb>type</span><span class=p>(</span><span class=n>sup</span><span class=p>)</span> <span class=ow>is</span> <span class=n>Superhero</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;我是一个超级英雄&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 通过使用 getattr() 和 super() 来获取方法解析搜索顺序</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 这个属性是动态的, 并且可以被更新</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>Superhero</span><span class=o>.</span><span class=vm>__mro__</span><span class=p>)</span>    <span class=c1># =&gt; (&lt;class &#39;__main__.Superhero&#39;&gt;,</span>
+</span></span><span class=line><span class=cl>                                <span class=c1># =&gt; &lt;class &#39;human.Human&#39;&gt;, &lt;class &#39;object&#39;&gt;)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 通过它自己的类型属性来调用父类的方法</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>sup</span><span class=o>.</span><span class=n>get_species</span><span class=p>())</span>    <span class=c1># =&gt; Superhuman</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 调用被重写了的方法</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>sup</span><span class=o>.</span><span class=n>sing</span><span class=p>())</span>           <span class=c1># =&gt; Dun, dun, DUN!</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 调用 Human 的方法</span>
+</span></span><span class=line><span class=cl>    <span class=n>sup</span><span class=o>.</span><span class=n>say</span><span class=p>(</span><span class=s2>&#34;勺子?&#34;</span><span class=p>)</span>             <span class=c1># =&gt; 蒂克: 勺子?</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 调用仅存在于 Superhero 中的方法</span>
+</span></span><span class=line><span class=cl>    <span class=n>sup</span><span class=o>.</span><span class=n>boast</span><span class=p>()</span>                 <span class=c1># =&gt; 我有力大无穷的能力!</span>
+</span></span><span class=line><span class=cl>                                <span class=c1># =&gt; 我有金刚不坏之身的能力!</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 继承的类型属性</span>
+</span></span><span class=line><span class=cl>    <span class=n>sup</span><span class=o>.</span><span class=n>age</span> <span class=o>=</span> <span class=mi>32</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>sup</span><span class=o>.</span><span class=n>age</span><span class=p>)</span>              <span class=c1># =&gt; 32</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 仅在 Superhero 中存在的属性</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s1>&#39;我能获得奥斯卡奖吗?&#39;</span> <span class=o>+</span> <span class=nb>str</span><span class=p>(</span><span class=n>sup</span><span class=o>.</span><span class=n>movie</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl><span class=c1>## 6.2 多重继承</span>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 另一个类的定义</span>
+</span></span><span class=line><span class=cl><span class=c1># bat.py</span>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>Bat</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>species</span> <span class=o>=</span> <span class=s1>&#39;贝蒂&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=fm>__init__</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>can_fly</span><span class=o>=</span><span class=kc>True</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>fly</span> <span class=o>=</span> <span class=n>can_fly</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 这个类也有一个说的方法</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>say</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>msg</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>msg</span> <span class=o>=</span> <span class=s1>&#39;... ... ...&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>msg</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 并且它也有自己的方法</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>sonar</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=s1>&#39;))) ... (((&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s1>&#39;__main__&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>b</span> <span class=o>=</span> <span class=n>Bat</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>b</span><span class=o>.</span><span class=n>say</span><span class=p>(</span><span class=s1>&#39;你好&#39;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>b</span><span class=o>.</span><span class=n>fly</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 然后现在另一个类型定义继承自 Superhero 和 Bat</span>
+</span></span><span class=line><span class=cl><span class=c1># superhero.py</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>superhero</span> <span class=kn>import</span> <span class=n>Superhero</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>bat</span> <span class=kn>import</span> <span class=n>Bat</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 定义 Batman 并同时继承 Superhero 和 Bat</span>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>Batman</span><span class=p>(</span><span class=n>Superhero</span><span class=p>,</span> <span class=n>Bat</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=fm>__init__</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=o>*</span><span class=n>args</span><span class=p>,</span> <span class=o>**</span><span class=n>kwargs</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 继承属性通常需要 super</span>
+</span></span><span class=line><span class=cl>        <span class=c1># super(Batman, self).__init__(*args, **kwargs)</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 然而在这里处理多继承, 所以 super()</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 仅仅适用于 MRO 列表的下一个基类</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 所以, 我们需要为所有父类显式的调用 __init__</span>
+</span></span><span class=line><span class=cl>        <span class=c1># *args 和 **kwargs 允许使用非常简洁的方式传递所有参数,</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 每一个父类都 &#34;给洋葱剥一层皮&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=n>Superhero</span><span class=o>.</span><span class=fm>__init__</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=s1>&#39;anonymous&#39;</span><span class=p>,</span> <span class=n>movie</span><span class=o>=</span><span class=kc>True</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                           <span class=n>superpowers</span><span class=o>=</span><span class=p>[</span><span class=s1>&#39;Wealthy&#39;</span><span class=p>],</span> <span class=o>*</span><span class=n>args</span><span class=p>,</span> <span class=o>**</span><span class=n>kwargs</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>Bat</span><span class=o>.</span><span class=fm>__init__</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=o>*</span><span class=n>args</span><span class=p>,</span> <span class=n>can_fly</span><span class=o>=</span><span class=kc>False</span><span class=p>,</span> <span class=o>**</span><span class=n>kwargs</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 覆盖相同名称的属性的值</span>
+</span></span><span class=line><span class=cl>        <span class=bp>self</span><span class=o>.</span><span class=n>name</span> <span class=o>=</span> <span class=s2>&#34;悲伤的阿弗莱克&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>sing</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=s2>&#34;呐 呐 呐 呐 呐 蝙蝠侠!&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s1>&#39;__main__&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>sup</span> <span class=o>=</span> <span class=n>Batman</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 通过使用 getattr() 和 super() 来获取方法解析搜索顺序</span>
+</span></span><span class=line><span class=cl>    <span class=c1># 这个属性是动态的, 并且可以被更新</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>Batman</span><span class=o>.</span><span class=vm>__mro__</span><span class=p>)</span>       <span class=c1># =&gt; (&lt;class &#39;__main__.Batman&#39;&gt;,</span>
+</span></span><span class=line><span class=cl>                                <span class=c1># =&gt; &lt;class &#39;superhero.Superhero&#39;&gt;,</span>
+</span></span><span class=line><span class=cl>                                <span class=c1># =&gt; &lt;class &#39;human.Human&#39;&gt;,</span>
+</span></span><span class=line><span class=cl>                                <span class=c1># =&gt; &lt;class &#39;bat.Bat&#39;&gt;, &lt;class &#39;object&#39;&gt;)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 通过它自己的类型属性来调用父类的方法</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>sup</span><span class=o>.</span><span class=n>get_species</span><span class=p>())</span>    <span class=c1># =&gt; Superhuman</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 调用被重写了的方法</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>sup</span><span class=o>.</span><span class=n>sing</span><span class=p>())</span>           <span class=c1># =&gt; 呐 呐 呐 呐 呐 蝙蝠侠!</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 调用 Human 的方法, 原因是继承问题</span>
+</span></span><span class=line><span class=cl>    <span class=n>sup</span><span class=o>.</span><span class=n>say</span><span class=p>(</span><span class=s1>&#39;我同意&#39;</span><span class=p>)</span>            <span class=c1># =&gt; 悲伤的阿弗莱克: 我同意</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 调用存在于第二个祖先的方法</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>sup</span><span class=o>.</span><span class=n>sonar</span><span class=p>())</span>          <span class=c1># =&gt; ))) ... (((</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 继承了的类型属性</span>
+</span></span><span class=line><span class=cl>    <span class=n>sup</span><span class=o>.</span><span class=n>age</span> <span class=o>=</span> <span class=mi>100</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>sup</span><span class=o>.</span><span class=n>age</span><span class=p>)</span>              <span class=c1># =&gt; 100</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 从第二个祖先继承的默认值被重写了的属性</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s1>&#39;我能飞吗?&#39;</span> <span class=o>+</span> <span class=nb>str</span><span class=p>(</span><span class=n>sup</span><span class=o>.</span><span class=n>fly</span><span class=p>))</span>  <span class=c1># =&gt; 我能飞吗? 不能</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl><span class=c1>## 7. 高级</span>
+</span></span><span class=line><span class=cl><span class=c1>####################################################</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 生成器可以帮助你写一些更简便的代码 (偷懒)</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>double_numbers</span><span class=p>(</span><span class=n>iterable</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=n>iterable</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>yield</span> <span class=n>i</span> <span class=o>+</span> <span class=n>i</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 生成器是 高效内存 的, 因为它们只加载需要的数据</span>
+</span></span><span class=line><span class=cl><span class=c1># 处理可迭代对象的下一个值, 这使他们可以在非常大</span>
+</span></span><span class=line><span class=cl><span class=c1># 的值域上执行操作.</span>
+</span></span><span class=line><span class=cl><span class=c1># 提示: `range` 在 Python3 中取代了 `xrange`</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=n>double_numbers</span><span class=p>(</span><span class=nb>range</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>900000000</span><span class=p>)):</span>  <span class=c1># `range` 是一个生成器</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>i</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>i</span> <span class=o>&gt;</span> <span class=mi>30</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>break</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 就像你能创建列表推导式一样, 你也可以创建</span>
+</span></span><span class=line><span class=cl><span class=c1># 生成器推导式</span>
+</span></span><span class=line><span class=cl><span class=n>values</span> <span class=o>=</span> <span class=p>(</span><span class=o>-</span><span class=n>x</span> <span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>,</span><span class=mi>3</span><span class=p>,</span><span class=mi>4</span><span class=p>,</span><span class=mi>5</span><span class=p>])</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=n>values</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>x</span><span class=p>)</span>  <span class=c1># 打印 -1 -2 -3 -4 -5 到 控制台/终端</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 你也可以将生成器推导式转换为一个列表</span>
+</span></span><span class=line><span class=cl><span class=n>values</span> <span class=o>=</span> <span class=p>(</span><span class=o>-</span><span class=n>x</span> <span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=p>[</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>,</span><span class=mi>3</span><span class=p>,</span><span class=mi>4</span><span class=p>,</span><span class=mi>5</span><span class=p>])</span>
+</span></span><span class=line><span class=cl><span class=n>gen_to_list</span> <span class=o>=</span> <span class=nb>list</span><span class=p>(</span><span class=n>values</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>gen_to_list</span><span class=p>)</span>  <span class=c1># =&gt; [-1, -2, -3, -4, -5]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 装饰器</span>
+</span></span><span class=line><span class=cl><span class=c1># 在这个例子中, `beg` 与 `say` 交换. 如果 say_please 是 True, 那么它</span>
+</span></span><span class=line><span class=cl><span class=c1># 将会改变返回的消息</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>functools</span> <span class=kn>import</span> <span class=n>wraps</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>beg</span><span class=p>(</span><span class=n>target_function</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=nd>@wraps</span><span class=p>(</span><span class=n>target_function</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>wrapper</span><span class=p>(</span><span class=o>*</span><span class=n>args</span><span class=p>,</span> <span class=o>**</span><span class=n>kwargs</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>msg</span><span class=p>,</span> <span class=n>say_please</span> <span class=o>=</span> <span class=n>target_function</span><span class=p>(</span><span class=o>*</span><span class=n>args</span><span class=p>,</span> <span class=o>**</span><span class=n>kwargs</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>say_please</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=s2>&#34;</span><span class=si>{}</span><span class=s2> </span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>msg</span><span class=p>,</span> <span class=s2>&#34;求你了, 我很穷 :(&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>msg</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>wrapper</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nd>@beg</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>say</span><span class=p>(</span><span class=n>say_please</span><span class=o>=</span><span class=kc>False</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>msg</span> <span class=o>=</span> <span class=s2>&#34;能为我买瓶啤酒吗?&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>msg</span><span class=p>,</span> <span class=n>say_please</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>say</span><span class=p>())</span>                 <span class=c1># 能为我买瓶啤酒吗?</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>say</span><span class=p>(</span><span class=n>say_please</span><span class=o>=</span><span class=kc>True</span><span class=p>))</span>  <span class=c1># 能为我买瓶啤酒吗? 求你了, 我很穷 :(</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/python/>Python</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/20210418110746/><div class=article-details><h2 class=article-title>[C#] C# 与 Java 的一些差异</h2></div></a></article><article><a href=/p/20210319194401/><div class=article-details><h2 class=article-title>[C#] WPF TextBox 在 PreviewDragEnter 中指定 Effect 且指定 Handled 为 true, 仍然无法正常实现拖拽操作.</h2></div></a></article><article><a href=/p/20210307093339/><div class=article-details><h2 class=article-title>[Web前端] 子元素设置高度为100%, 却没有与父元素对齐高度.</h2></div></a></article><article><a href=/p/20210206012402/><div class=article-details><h2 class=article-title>[踩坑记录] C# 源代码被误删, 通过反编译之前编译好的文件来拯救这一切, 三款反编译工具对比</h2></div></a></article><article><a href=/p/20210206002632/><div class=article-details><h2 class=article-title>[踩坑记录] 某功能在C#7.3中不可用,请使用 8.0 或更高的语言版本 (通用解决方案)</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=SlimeNull/slimenull.github.io issue-term=pathname label=BlogComment crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
+2023 -
+2024 SlimeNull Blogs</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.21.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

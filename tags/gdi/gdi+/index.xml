@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Gdi/Gdi+ on SlimeNull Blogs</title><link>https://slimenull.com/tags/gdi/gdi+/</link><description>Recent content in Gdi/Gdi+ on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 21 Feb 2021 23:08:37 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/gdi/gdi+/index.xml" rel="self" type="application/rss+xml"/><item><title>[C#] 就让这张图片来揭露你的本性吧! 老绅士.</title><link>https://slimenull.com/p/20210221230837/</link><pubDate>Sun, 21 Feb 2021 23:08:37 +0800</pubDate><guid>https://slimenull.com/p/20210221230837/</guid><description>&lt;p>&lt;img src="https://slimenull.com/images/20210212012512552.jpg"
+loading="lazy"
+alt="qwq"
+>
+看到上面那幅图了吗? 放大, 放大, 看到了吗? 说的就是你 .&lt;/p>
+&lt;h2 id="淦">淦!&lt;/h2>
+&lt;h4 id="1-正常的">1. 正常的:&lt;/h4>
+&lt;p>简单的, 就是最开始那张图片了, 看起来还彳亍, 对吧&lt;/p>
+&lt;p>好吧, 这种东西, 实现起来也不难, 无非是在图片中写字. 写字你总会吧? 我直接贴 Graphics 元数据:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">namespace&lt;/span> &lt;span class="nn">System.Drawing&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 摘要:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 封装一个 GDI+ 绘图图面。 此类不能被继承。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">sealed&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">Graphics&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">MarshalByRefObject&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IDeviceContext&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IDisposable&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 摘要:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 在指定位置并且用指定的 System.Drawing.Brush 和 System.Drawing.Font 对象绘制指定的文本字符串。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 参数:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// s:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 要绘制的字符串。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// font:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// System.Drawing.Font，它定义字符串的文本格式。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// brush:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// System.Drawing.Brush，它确定所绘制文本的颜色和纹理。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// point:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// System.Drawing.PointF 结构，它指定所绘制文本的左上角。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">//&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 异常:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// T:System.ArgumentNullException:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// brush 为 null。 或 - s 为 null。&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">DrawString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">s&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Font&lt;/span> &lt;span class="n">font&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Brush&lt;/span> &lt;span class="n">brush&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">PointF&lt;/span> &lt;span class="n">point&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>懂了吧? 当然本程序可没那么简单嘿嘿! 我可是还实现了类似于蒙版的东西! (好吧也不是很难)&lt;/p>
+&lt;h5 id="2-难一点的">2. 难一点的:&lt;/h5>
+&lt;p>&lt;img src="https://slimenull.com/images/20210220205921619.jpg"
+loading="lazy"
+>
+看出有什么区别没? 没错! 你发现, 背景变成单色, 而字变成彩色的了!!! 当然 PS 用剪切蒙版很容易实现. 那么, 用 C# 该如何实现呢?&lt;/p>
+&lt;p>首先创建一个位图, 作为我们的临时空间, 背景是黑色, 然后用白色的笔在上面写字. 哦豁, 这不就是一张蒙版吗?&lt;/p>
+&lt;p>我们的源图像跟这个蒙版图是一样大小的, 输出图像当然也同样大小, 然后遍历原图像的像素, 并且判断蒙版图像的颜色, 如果蒙版图像的颜色是白色, 则把这个像素拷贝到输出图像中. 于是于是! 就实现了画彩色的字! (好吧的确有点投机取巧的意味.)&lt;/p>
+&lt;h5 id="3-简单点的">3. 简单点的:&lt;/h5>
+&lt;p>&lt;img src="https://slimenull.com/images/20210221230415739.jpg"
+loading="lazy"
+>
+哈哈哈, 每一个字, 都相当于原图的一个像素, 可不可以说是变相的字符画?&lt;/p>
+&lt;h5 id="完整的内容介绍">完整的内容介绍:&lt;/h5>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">Null.CharImg: 字符图像混合工具
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Null.CharImg &lt;span class="o">[&lt;/span> -&lt;span class="o">{&lt;/span>CharWidth &lt;span class="p">|&lt;/span> CWidth&lt;span class="o">}&lt;/span> 字符占宽 &lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> -&lt;span class="o">{&lt;/span>CharHeight &lt;span class="p">|&lt;/span> CHeight&lt;span class="o">}&lt;/span> 字符占高 &lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> -&lt;span class="o">{&lt;/span>MaxWidth &lt;span class="p">|&lt;/span> MWidth&lt;span class="o">}&lt;/span> 最大宽度 &lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> -&lt;span class="o">{&lt;/span>MaxHeight &lt;span class="p">|&lt;/span> MHeight&lt;span class="o">}&lt;/span> 最大高度 &lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> -&lt;span class="o">{&lt;/span>FontSize &lt;span class="p">|&lt;/span> FSize&lt;span class="o">}&lt;/span> 字体大小 &lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> -&lt;span class="o">{&lt;/span>String &lt;span class="p">|&lt;/span> Str&lt;span class="o">}&lt;/span> 字符串内容 &lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> -&lt;span class="o">{&lt;/span>CorrectRate &lt;span class="p">|&lt;/span> CRate&lt;span class="o">}&lt;/span> 颜色矫正程度&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> -&lt;span class="o">{&lt;/span>BackgroundColor &lt;span class="p">|&lt;/span> BgColor&lt;span class="o">}&lt;/span> 背景颜色 &lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> -&lt;span class="o">{&lt;/span>FontFamily &lt;span class="p">|&lt;/span> Font&lt;span class="o">}&lt;/span> 字体 &lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> /&lt;span class="o">{&lt;/span>FontBold &lt;span class="p">|&lt;/span> Bold&lt;span class="o">}&lt;/span> &lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> /&lt;span class="o">{&lt;/span>Opposite &lt;span class="p">|&lt;/span> Oppo&lt;span class="o">}&lt;/span> &lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> /&lt;span class="o">{&lt;/span>AutoCorrect &lt;span class="p">|&lt;/span> Correct&lt;span class="o">}]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> /&lt;span class="o">{&lt;/span>AutoBackground &lt;span class="p">|&lt;/span> AutoBg&lt;span class="o">}]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[&lt;/span> /&lt;span class="o">{&lt;/span>HighDefinition &lt;span class="p">|&lt;/span> HD&lt;span class="o">}]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -&lt;span class="o">{&lt;/span>Output &lt;span class="p">|&lt;/span> Out&lt;span class="o">}&lt;/span> 输出路径
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> *源文件
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Null.CharImg /&lt;span class="o">{&lt;/span>Help &lt;span class="p">|&lt;/span> H &lt;span class="p">|&lt;/span> ?&lt;span class="o">}&lt;/span> 显示本帮助内容
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 其中参数的概述如下:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 字符占宽, 指图像中, 一个字符独占的宽度, 默认8
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 字符占高, 字符独占的高度, 与字符占宽决定了字符的间距, 默认16
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 最大宽度, 指输出图像中, 横向最多含多少个字符
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 最大高度, 指输出图像中, 纵向最多含多少个字符
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 字体大小, 指字体大小, 单位是像素, 默认16
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 字符串内容, 要显示在图像中的字符, 将逐个显示
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 颜色矫正程度, 指定了自动颜色矫正的程度, 值域是0~100, 默认100
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 背景颜色, 表示图像背景颜色, 使用十六进制代码表示
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 输出路径, 表示输出图像的保存路径
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 字体, 表示图像中字符所使用的字体, 默认是Sans Serif
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> FontBold, 粗体, 表示是否使用粗体
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Opposite, 使背景与前景颜色反转
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> AutoCorrect, 自动矫正颜色
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> AutoBackground, 自动判断背景色
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> HighDefinition, 高分辨率模式
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 关于自动矫正颜色:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 自动矫正颜色旨在尝试调节前景色的色彩, 以做到前景与背景结合时, 颜色
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 趋近于原图, 如果背景颜色指定了亮度较高的颜色, 例如白色, 这个功能会
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 启到很好的作用, 如果你认为颜色矫正有些严重, 可以使用 CorrectRate
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 参数来指定自动调节的力度, 尝试调节为80, 甚至更低的值来适应.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 关于自动判断背景色
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 当启动该功能时, 用户设置的颜色作废, 程序会自动计算整个原图像的平均色
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 作为输出图像的背景色
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 关于高分辨率模式:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 当启用高分辨率时, 图像中的一个字符不再单单是一种颜色, 而是使用彩色,
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 以使输出图像更能趋近于原图的形状与颜色, 同时Opposite也是受支持的
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 关于程序:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 作者: 诺尔, Null&lt;span class="p">;&lt;/span> 擅长:摸鱼
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Github仓库: https://github.com/SlimeNull/Null.CharImg
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;blockquote>
+&lt;p>如果有啥感到迷惑的, 在下方留言噢~&lt;/p>
+&lt;/blockquote></description></item></channel></rss>

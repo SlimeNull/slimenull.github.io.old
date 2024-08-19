@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Asp.net on SlimeNull Blogs</title><link>https://slimenull.com/tags/asp.net/</link><description>Recent content in Asp.net on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 29 Jan 2021 05:07:08 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/asp.net/index.xml" rel="self" type="application/rss+xml"/><item><title>[踩坑记录] ASP.NET Core System.Data.SqlTypes.SqlNullValueException: 数据为空。不能对空值调用此方法</title><link>https://slimenull.com/p/20210129050708/</link><pubDate>Fri, 29 Jan 2021 05:07:08 +0800</pubDate><guid>https://slimenull.com/p/20210129050708/</guid><description>&lt;h2 id="问题是出在这里的">问题是出在这里的:&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="n">SoftwareInfo&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">SoftwareInfo&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="c1">// reader 是 MySqlDataReader 实例&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">7&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ID&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetInt32&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Label&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">2&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Coder&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">3&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">DownloadCount&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetInt32&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">4&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Stars&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetFloat&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">5&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Introduction&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">6&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">return&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="解决方案">解决方案:&lt;/h2>
+&lt;p>&lt;strong>第一种:&lt;/strong> 添加 Null 检查, 在调用 GetString, GetInt32, GetFloat 这类包含具体的类型转换的函数前, 先调用 IsDBNull 检查这条数据是不是 Null.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="n">SoftwareInfo&lt;/span> &lt;span class="n">currentInfo&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">SoftwareInfo&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">7&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ID&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetInt32&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Label&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">IsDBNull&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">2&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="kc">null&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">2&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Coder&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">IsDBNull&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">3&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="kc">null&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">3&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">DownloadCount&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">IsDBNull&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">4&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetInt32&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">4&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Stars&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">IsDBNull&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">5&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">IsDBNull&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">5&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetFloat&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">5&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Introduction&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">IsDBNull&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">6&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="kc">null&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">6&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">return&lt;/span> &lt;span class="n">currentInfo&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>第二种:&lt;/strong> 直接指定数据库的字段不可为 Null, 从根本上杜绝空值&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">alter&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">table&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tablename&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">modify&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">columnname&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">not&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="原因">原因:&lt;/h2>
+&lt;p>如果数据是 Null, 就无法调用包含具体类型的方法, 因为它们内部涉及到类型转换.&lt;/p></description></item></channel></rss>

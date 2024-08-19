@@ -1,0 +1,555 @@
+<!doctype html><html lang=zh-CN dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='在 C# 中, 委托与 Lambda 是最常用的功能之一, 诸如多线程, 可迭代类型的 LINQ 操作, 回调, 都是借助委托完成的. 它在 C 语言对应的是函数指针, 在 C++ 中对应的是 `std::function`'><title>[.NET/C#] 委托与 Lambda 表达式, 语句详解</title>
+<link rel=canonical href=https://slimenull.com/p/20230529214634/><link rel=stylesheet href=/scss/style.min.73438a911857e6d491e39369614d0dd0c0302dcacfb43e15034e0e48cac08c07.css><meta property='og:title' content='[.NET/C#] 委托与 Lambda 表达式, 语句详解'><meta property='og:description' content='在 C# 中, 委托与 Lambda 是最常用的功能之一, 诸如多线程, 可迭代类型的 LINQ 操作, 回调, 都是借助委托完成的. 它在 C 语言对应的是函数指针, 在 C++ 中对应的是 `std::function`'><meta property='og:url' content='https://slimenull.com/p/20230529214634/'><meta property='og:site_name' content='SlimeNull Blogs'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='csharp'><meta property='article:tag' content='dotnet'><meta property='article:published_time' content='2023-05-29T21:46:34+08:00'><meta property='article:modified_time' content='2023-05-29T21:46:34+08:00'><meta name=twitter:title content="[.NET/C#] 委托与 Lambda 表达式, 语句详解"><meta name=twitter:description content="在 C# 中, 委托与 Lambda 是最常用的功能之一, 诸如多线程, 可迭代类型的 LINQ 操作, 回调, 都是借助委托完成的. 它在 C 语言对应的是函数指针, 在 C++ 中对应的是 `std::function`"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu11436448765783238083.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>SlimeNull Blogs</a></h1><h2 class=site-description>为了更好的开源世界~</h2></div></header><ol class=social-menu><li><a href=https://github.com/SlimeNull target=_blank title=GitHub rel=me><!doctype html><svg t="1702542119184" class="icon" viewBox="0 0 1024 1024" p-id="4136" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M692.906667 938.666667A42.666667 42.666667.0 01650.24 896V785.066667A91.733333 91.733333.0 00627.2 714.24a42.666667 42.666667.0 0126.026667-71.253333c104.106666-12.373334 200.106666-45.653334 200.106666-226.133334a170.666667 170.666667.0 00-28.586666-94.72A117.333333 117.333333.0 01807.253333 234.24a158.293333 158.293333.0 000-60.16A326.4 326.4.0 00718.08 220.586667a42.666667 42.666667.0 01-35.84 6.4 433.066667 433.066667.0 00-235.52.0 42.666667 42.666667.0 01-35.84-6.4A315.733333 315.733333.0 00320.853333 174.08a150.186667 150.186667.0 000 60.16 121.173333 121.173333.0 01-18.346666 88.746667A173.653333 173.653333.0 00273.92 418.133333C273.92 584.106666 354.133333 628.48 474.453333 643.84A42.666667 42.666667.0 01509.44 672a42.666667 42.666667.0 01-8.96 42.666667 87.893333 87.893333.0 00-23.466667 66.56V896A42.666667 42.666667.0 01391.68 896v-24.32a256 256 0 01-224.853333-89.173333A166.4 166.4.0 00117.333333 744.96a42.666667 42.666667.0 1121.333334-82.773333A210.346667 210.346667.0 01224 720.213333c42.666667 42.666667 85.333333 80.213333 166.4 64.853334a165.973333 165.973333.0 019.813333-67.413334C312.32 695.466666 186.88 632.32 186.88 418.986667a256 256 0 0142.666667-142.08 36.266667 36.266667.0 005.546666-26.453334 242.773333 242.773333.0 0114.08-136.96 42.666667 42.666667.0 0126.88-24.32c14.506667-4.266667 66.56-12.8 165.12 51.2a518.826667 518.826667.0 01242.773334.0c98.56-64 150.613333-55.893333 164.693333-51.2a42.666667 42.666667.0 0126.88 24.32A243.626667 243.626667.0 01889.6 250.88a32 32 0 004.693333 24.32A256 256 0 01936.96 417.706667c0 216.32-124.586667 279.04-213.333333 298.666666a182.613333 182.613333.0 019.386666 71.253334V896a42.666667 42.666667.0 01-40.106666 42.666667z" fill="#666" p-id="4137"/></svg></a></li><li><a href=https://space.bilibili.com/441842015 target=_blank title=Bilibili rel=me><!doctype html><svg t="1702541966104" class="icon" viewBox="0 0 1024 1024" p-id="16981" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M306.005333 117.632 444.330667 256h135.296l138.368-138.325333A42.666667 42.666667.0 01778.368 178.048L700.330667 256H789.333333A149.333333 149.333333.0 01938.666667 405.333333v341.333334A149.333333 149.333333.0 01789.333333 896H234.666667A149.333333 149.333333.0 0185.333333 746.666667V405.333333A149.333333 149.333333.0 01234.666667 256h88.96L245.632 177.962667a42.666667 42.666667.0 0160.373333-60.373334zm483.328 223.701333H234.666667a64 64 0 00-63.701334 57.856L170.666667 405.333333v341.333334a64 64 0 0057.856 63.701333L234.666667 810.666667h554.666666a64 64 0 0063.701334-57.856L853.333333 746.666667V405.333333a64 64 0 00-64-64zm-448 128A42.666667 42.666667.0 01384 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666666-42.666667zm341.333334.0A42.666667 42.666667.0 01725.333333 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666667-42.666667z" fill="#666" p-id="16982"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>主页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>链接</span></a></li><div class=menu-bottom-section><li id=i18n-switch><svg class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.239 8-5 8"/><path d="M5 9c-.003 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4-9 4 9"/><path d="M19.1 18h-6.2"/></svg>
+<select name=language onchange="window.location.href=this.selectedOptions[0].value"><option value=https://slimenull.com/ selected></option></select></li><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></div></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#委托--delegate>委托 / Delegate</a></li><li><a href=#匿名函数--lambda>匿名函数 / Lambda</a></li><li><a href=#捕获--capture>捕获 / Capture</a></li><li><a href=#使用--usage>使用 / Usage</a></li><li><a href=#编译--compilation>编译 / Compilation</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/dotnet/ style=background-color:#512cd4;color:#fff>.NET
+</a><a href=/categories/note/ style=background-color:#fdf0c4;color:#3d3d3d>笔记</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/20230529214634/>[.NET/C#] 委托与 Lambda 表达式, 语句详解</a></h2><h3 class=article-subtitle>在 C# 中, 委托与 Lambda 是最常用的功能之一, 诸如多线程, 可迭代类型的 LINQ 操作, 回调, 都是借助委托完成的. 它在 C 语言对应的是函数指针, 在 C++ 中对应的是 `std::function`</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 29, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 6 分钟</time></div></footer></div></header><section class=article-content><p>在 C# 中, 委托与 Lambda 是最常用的功能之一, 诸如多线程, 可迭代类型的 LINQ 操作, 回调, 都是借助委托完成的. 它在 C 语言对应的是函数指针, 在 C++ 中对应的是 <code>std::function</code></p><h2 id=委托--delegate>委托 / Delegate</h2><p>在 C# 中, 委托是一种特殊的类型, 它用来存储一段逻辑(可执行的内容). 例如在声明字段或变量的时候, 我们指定类型为委托, 那么这个字段或变量就可以存下一段逻辑. 在你需要的时候, 就可以直接执行它.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=k>void</span> <span class=n>MethodA</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 这是一个方法, 里面包含一些逻辑</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 这个方法没有参数, 也没有返回值</span>
+</span></span><span class=line><span class=cl>    <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=s>&#34;Hello world&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>void</span> <span class=n>MethodB</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 声明一个能存储下一段逻辑的变量</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// Action 表示无参数无返回值的逻辑</span>
+</span></span><span class=line><span class=cl>    <span class=n>Action</span> <span class=n>someLogic</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 为其赋值, 可以直接将方法赋值过去</span>
+</span></span><span class=line><span class=cl>    <span class=n>someLogic</span> <span class=p>=</span> <span class=n>MethodA</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 调用这段逻辑</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 因为它存储的就是 MethodA, 所以等同于调用 MethodA</span>
+</span></span><span class=line><span class=cl>    <span class=n>someLogic</span><span class=p>.</span><span class=n>Invoke</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>事实上, 在使用委托之前, 我们需要定义一个委托类型, 在上述代码中使用的 Action, 就是系统预定义好的一个委托类型. 如果我们需要为带有特定参数, 特定返回值的一段逻辑定义一个类型, 可以使用 <code>delegate</code> 关键字.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=c1>// 定义一个无参数, 无返回值委托类型</span>
+</span></span><span class=line><span class=cl><span class=c1>// 其中, MyDelegate 是委托类型名, public 是访问修饰</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=k>delegate</span> <span class=k>void</span> <span class=n>MyDelegate</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 定义一个带有 int 参数, 返回值为 string 的委托类型</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=k>delegate</span> <span class=kt>string</span> <span class=n>MyDelegate2</span><span class=p>(</span><span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 定义一个带有 int, float 参数, 返回值为 string 的委托类型</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=k>delegate</span> <span class=kt>string</span> <span class=n>MyDelegate3</span><span class=p>(</span><span class=kt>int</span><span class=p>,</span> <span class=kt>float</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 如果你想, 你也可以为委托类型定义中的参数写上名字</span>
+</span></span><span class=line><span class=cl><span class=c1>// 这个名字也只是为了可读性, 让用户知道这个参数是做什么用的</span>
+</span></span><span class=line><span class=cl><span class=c1>// 除此之外, 就么有什么别的用处了</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=k>delegate</span> <span class=kt>string</span> <span class=n>MyDelegate4</span><span class=p>(</span><span class=kt>int</span> <span class=n>value1</span><span class=p>,</span> <span class=kt>float</span> <span class=n>value2</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>要使用定义好的委托类型, 和最开始给出的示例代码一样, 只需要把他当成一个普通类型直接使用即可.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=c1>// 定义一个 someLogic 变量, 类型为 MyDelegate</span>
+</span></span><span class=line><span class=cl><span class=c1>// 同时, 为其赋初始值 MethodA</span>
+</span></span><span class=line><span class=cl><span class=n>MyDelegate</span> <span class=n>someLogic</span> <span class=p>=</span> <span class=n>MethodA</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><p>你可以通过委托类型来存下任何你想要存下的逻辑, 只要类型和对应逻辑的参数返回值是匹配的即可. 下面是定义一个委托类型, 然后将 <code>Console.WriteLine</code> 这个方法存入变量的完整示例代码.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=k>namespace</span> <span class=nn>TestConsole</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>class</span> <span class=nc>Program</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 定义参数为 string, 无返回值的委托类型</span>
+</span></span><span class=line><span class=cl>        <span class=k>delegate</span> <span class=k>void</span> <span class=n>MyDelegate</span><span class=p>(</span><span class=kt>string</span> <span class=n>text</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=kd>static</span> <span class=k>void</span> <span class=n>Main</span><span class=p>(</span><span class=kt>string</span><span class=p>[]</span> <span class=n>args</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=c1>// 定义变量</span>
+</span></span><span class=line><span class=cl>            <span class=n>MyDelegate</span> <span class=n>someLogic</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            
+</span></span><span class=line><span class=cl>            <span class=c1>// 为其赋值</span>
+</span></span><span class=line><span class=cl>            <span class=c1>// 因为 Console.WriteLine 有匹配的重载, 所以可以存入</span>
+</span></span><span class=line><span class=cl>            <span class=n>someLogic</span> <span class=p>=</span> <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>不仅是诸如 <code>Console.WriteLine</code> 的静态方法可以存入, 非静态的方法也是可以存入的. 下面是一段将实例方法存入变量的完整示例代码.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=k>namespace</span> <span class=nn>TestConsole</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>class</span> <span class=nc>TestClass</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=k>void</span> <span class=n>TestMethod</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kt>var</span> <span class=n>x</span> <span class=p>=</span> <span class=m>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kt>var</span> <span class=n>y</span> <span class=p>=</span> <span class=m>2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kt>var</span> <span class=n>z</span> <span class=p>=</span> <span class=n>x</span> <span class=p>+</span> <span class=n>y</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>System</span><span class=p>.</span><span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>z</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>delegate</span> <span class=k>void</span> <span class=n>TestDelegate</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>class</span> <span class=nc>Program</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>static</span> <span class=k>void</span> <span class=n>Main</span><span class=p>(</span><span class=kt>string</span><span class=p>[]</span> <span class=n>args</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=c1>// 创建类型的实例</span>
+</span></span><span class=line><span class=cl>            <span class=n>TestClass</span> <span class=n>ins</span> <span class=p>=</span> <span class=k>new</span> <span class=n>TestClass</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1>// 定义委托变量</span>
+</span></span><span class=line><span class=cl>            <span class=n>TestDelegate</span> <span class=n>someLogic</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1>// 将实例的方法存入到委托变量</span>
+</span></span><span class=line><span class=cl>            <span class=n>someLogic</span> <span class=p>=</span> <span class=n>ins</span><span class=p>.</span><span class=n>TestMethod</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=匿名函数--lambda>匿名函数 / Lambda</h2><p>在上面的例子中, 我们将方法存入了委托变量中, 但如果每一段逻辑都需要定义一个方法, 那就太麻烦了. 使用 Lambda 表达式就是一个很不错的选择.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=n>Action</span> <span class=n>someLogic</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>someLogic</span> <span class=p>=</span> <span class=p>()</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=s>&#34;Hello world&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>在上面的代码中, 我们定义了一个无参无返回值的委托变量, 并使用了一个奇怪的语法为其赋值. 这个语法, 就是 Lambda 表达式. 其中括号表示参数, <code>=></code> 是 lambda 的符号, 后面的大括号是逻辑的内容. 因为无参数, 所以括号内是空的.</p><p>Lambda 语句的标准语法如下:</p><blockquote><p>(输入参数) => { &lt;多条语句> }</p></blockquote><p>下面我们以一个执行加法计算的 Lambda 语句为例, 了解 Lambda 语句的具体写法.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=c1>// 定义一个传入两个 int 参数, 返回一个 int 结果的委托变量</span>
+</span></span><span class=line><span class=cl><span class=n>Func</span><span class=p>&lt;</span><span class=kt>int</span><span class=p>,</span> <span class=kt>int</span><span class=p>,</span> <span class=kt>int</span><span class=p>&gt;</span> <span class=n>someLogic</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 为委托变量赋值</span>
+</span></span><span class=line><span class=cl><span class=n>someLogic</span> <span class=p>=</span> <span class=p>(</span><span class=kt>int</span> <span class=n>a</span><span class=p>,</span> <span class=kt>int</span> <span class=n>b</span><span class=p>)</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>a</span> <span class=p>+</span> <span class=n>b</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 执行委托, 并打印返回值</span>
+</span></span><span class=line><span class=cl><span class=c1>// 输出内容是 114514</span>
+</span></span><span class=line><span class=cl><span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>someLogic</span><span class=p>.</span><span class=n>Invoke</span><span class=p>(</span><span class=m>114000</span><span class=p>,</span> <span class=m>514</span><span class=p>));</span>
+</span></span></code></pre></td></tr></table></div></div><p>Lambda 语句可以理解为一个没有名字的方法, 在上面的代码中, 我们所写的 Lambda 表达式传入两个 <code>int</code>, 并使用 <code>return</code> 返回他们的相加结果. 这个 Lambda 语句直接被赋值到 someLogic 变量中, 并在后续的代码中, 通过 someLogic 调用刚刚缩写的逻辑.</p><p>事实上, 因为编译器知道 someLogic 的委托类型需要传入两个 <code>int</code>, 所以在后面直接赋值的 Lambda 语句中, 参数的类型是可以省略的. 编译器会自动推导他们的类型.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=c1>// 省略参数的类型, 直接写参数名</span>
+</span></span><span class=line><span class=cl><span class=n>someLogic</span> <span class=p>=</span> <span class=p>(</span><span class=n>a</span><span class=p>,</span> <span class=n>b</span><span class=p>)</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>a</span> <span class=p>+</span> <span class=n>b</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>如果 Lambda 语句的传入参数只有一个, 那么括号也是可以被省略的.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=c1>// 定义一个传入参数为 int, 无返回值的委托变量</span>
+</span></span><span class=line><span class=cl><span class=n>Action</span><span class=p>&lt;</span><span class=kt>int</span><span class=p>&gt;</span> <span class=n>someLogic</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 为其赋值</span>
+</span></span><span class=line><span class=cl><span class=n>someLogic</span> <span class=p>=</span> <span class=n>integer</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>integer</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>如果你不需要使用传入的参数, 可以使用 <code>_</code> 将其丢弃:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=c1>// 定义一个传入参数为 int, 无返回值的委托变量</span>
+</span></span><span class=line><span class=cl><span class=n>Action</span><span class=p>&lt;</span><span class=kt>int</span><span class=p>&gt;</span> <span class=n>someLogic</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 为其赋值</span>
+</span></span><span class=line><span class=cl><span class=c1>// 这里的表达式没有使用传入的参数</span>
+</span></span><span class=line><span class=cl><span class=n>someLogic</span> <span class=p>=</span> <span class=n>_</span> <span class=p>=&gt;</span> <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=s>&#34;Hello world&#34;</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>如果 Lambda 语句的方法体只有一个语句, 那么大括号是可以被省略的. 此时 Lambda 语句就叫做 Lambda 表达式了.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=c1>// 定义一个传入参数为 int, 无返回值的委托变量</span>
+</span></span><span class=line><span class=cl><span class=n>Action</span><span class=p>&lt;</span><span class=kt>int</span><span class=p>&gt;</span> <span class=n>someLogic</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 为其赋值</span>
+</span></span><span class=line><span class=cl><span class=n>someLogic</span> <span class=p>=</span> <span class=n>integer</span> <span class=p>=&gt;</span> <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>integer</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>如果你要在 Lambda 中使用 await, 可以在 Lambda 前添加 async 关键字, 使用方式和普通的方法是一样的.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=c1>// 定义一个无传入参数, 返回值为 Task&lt;int&gt; 的委托变量</span>
+</span></span><span class=line><span class=cl><span class=n>Func</span><span class=p>&lt;</span><span class=n>Task</span><span class=p>&lt;</span><span class=kt>int</span><span class=p>&gt;&gt;</span> <span class=n>someLogic</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 为其赋值, 并使用 async Lambda</span>
+</span></span><span class=line><span class=cl><span class=n>someLogic</span> <span class=p>=</span> <span class=kd>async</span> <span class=p>()</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 延时 1s</span>
+</span></span><span class=line><span class=cl>    <span class=k>await</span> <span class=n>Task</span><span class=p>.</span><span class=n>Delay</span><span class=p>(</span><span class=m>1000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 返回值</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>114514</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>如果只是单纯调用一个委托, 那么也可以不需要使用 <code>Invoke</code>, 直接把他当成方法, 后跟括号和参数即可.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=n>Action</span><span class=p>&lt;</span><span class=kt>string</span><span class=p>&gt;</span> <span class=n>someLogic</span> <span class=p>=</span> <span class=n>str</span> <span class=p>=&gt;</span> <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>str</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>someLogic</span><span class=p>.</span><span class=n>Invoke</span><span class=p>(</span><span class=s>&#34;Hello world&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 等同于上面的 Invoke</span>
+</span></span><span class=line><span class=cl><span class=n>someLogic</span><span class=p>(</span><span class=s>&#34;Hello world&#34;</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=捕获--capture>捕获 / Capture</h2><p>在使用 Lambda 语句/表达式的时候, Lambda 可以捕获到外部的变量, 字段, 或属性, 简单来讲就是, 你可以直接在 Lambda 内使用 Lambda 外的任何东西.</p><p>读取 Lambda 外的值, 并且 Lambda 能感知到外部对值的变更.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kt>int</span> <span class=n>num</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=n>Action</span> <span class=n>action</span> <span class=p>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>num</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 输出 0</span>
+</span></span><span class=line><span class=cl><span class=n>action</span><span class=p>.</span><span class=n>Invoke</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>num</span> <span class=p>+=</span> <span class=m>123</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 输出 123 (外部对变量变更时, lambda 仍然能输出正确的值)</span>
+</span></span><span class=line><span class=cl><span class=n>action</span><span class=p>.</span><span class=n>Invoke</span><span class=p>();</span>
+</span></span></code></pre></td></tr></table></div></div><p>对 Lamda 外部的值进行更改.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kt>int</span> <span class=n>num</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=n>Action</span> <span class=n>action</span> <span class=p>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=n>num</span><span class=p>++;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span> <span class=n>i</span> <span class=p>&lt;</span> <span class=m>3</span><span class=p>;</span> <span class=n>i</span><span class=p>++)</span>
+</span></span><span class=line><span class=cl>    <span class=n>action</span><span class=p>.</span><span class=n>Invoke</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 输出 3</span>
+</span></span><span class=line><span class=cl><span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>num</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=使用--usage>使用 / Usage</h2><p>下面列举几种使用 Lambda 语句/表达式的例子.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=c1>// 一句话启动新线程</span>
+</span></span><span class=line><span class=cl><span class=k>new</span> <span class=n>Thread</span><span class=p>(()</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>i</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=p>(</span><span class=kc>true</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>i</span><span class=p>++);</span>
+</span></span><span class=line><span class=cl>        <span class=n>Thread</span><span class=p>.</span><span class=n>Sleep</span><span class=p>(</span><span class=m>1000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}).</span><span class=n>Start</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 一句话启动新任务</span>
+</span></span><span class=line><span class=cl><span class=n>Task</span><span class=p>.</span><span class=n>Run</span><span class=p>(</span><span class=kd>async</span> <span class=p>()</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>i</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=p>(</span><span class=kc>true</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>i</span><span class=p>++);</span>
+</span></span><span class=line><span class=cl>        <span class=k>await</span> <span class=n>Task</span><span class=p>.</span><span class=n>Delay</span><span class=p>(</span><span class=m>1000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 生成 10 个随机数</span>
+</span></span><span class=line><span class=cl><span class=n>List</span><span class=p>&lt;</span><span class=kt>int</span><span class=p>&gt;</span> <span class=n>numbers</span> <span class=p>=</span> <span class=n>Enumerable</span><span class=p>.</span><span class=n>Range</span><span class=p>(</span><span class=m>0</span><span class=p>,</span> <span class=m>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=n>Select</span><span class=p>(</span><span class=n>_</span> <span class=p>=&gt;</span> <span class=n>Random</span><span class=p>.</span><span class=n>Shared</span><span class=p>.</span><span class=n>Next</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=n>ToList</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 筛选上面随机数中大于 100 的</span>
+</span></span><span class=line><span class=cl><span class=n>List</span><span class=p>&lt;</span><span class=kt>int</span><span class=p>&gt;</span> <span class=n>filteredNumbers</span> <span class=p>=</span> <span class=n>numbers</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=n>Where</span><span class=p>(</span><span class=n>num</span> <span class=p>=&gt;</span> <span class=n>num</span> <span class=p>&gt;</span> <span class=m>100</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>.</span><span class=n>ToList</span><span class=p>();</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=编译--compilation>编译 / Compilation</h2><p>Lambda 本质上是一个语法糖, 在编译时, Lambda 会被编译成方法, 或者一个类, 然后其中包含的一个方法.</p><blockquote><p>以下实例, 为了可读性, 均在编译器编译后结果的基础上进行了命名上的优化, 以方便理解.</p></blockquote><hr><p><a class=link href="https://sharplab.io/#v2:EYLgtghglgdgNAExAagD4AEBMBGAsAKHQGYACLM7AdhIG8CSGKA2MgFhIFloYAKdbAAwBtALokIAJwDmAZwCUteo2WwALiRgBXMCQC8JAQG4lyhv0ziAxqqgB7GHpI8FugHwUAnDy1g5x/CamAPRBJIDJ8YBfigaByhDWdjAAdACSMAButgDWAKbO/jGMPiTI+tiYRPn4powh4VFlpDyAaJqAFwmAn9qAG8qA84kdgC9mgG+mcCQANhBgwAgQJICzcoBsjoC/AZGAxtaAdh6AIW6APApyBQxxNvYp6Vm5foEAvgRnQA=" target=_blank rel=noopener>示例一:捕获局部变量</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=k>using</span> <span class=nn>System</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=k>class</span> <span class=nc>Program</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>static</span> <span class=k>void</span> <span class=n>Main</span><span class=p>(</span><span class=kt>string</span><span class=p>[]</span> <span class=n>args</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kt>int</span> <span class=n>num</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>Action</span> <span class=n>action</span> <span class=p>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>num</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 输出 0</span>
+</span></span><span class=line><span class=cl>        <span class=n>action</span><span class=p>.</span><span class=n>Invoke</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>num</span> <span class=p>+=</span> <span class=m>123</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 输出 123 (外部对变量变更时, lambda 仍然能输出正确的值)</span>
+</span></span><span class=line><span class=cl>        <span class=n>action</span><span class=p>.</span><span class=n>Invoke</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>编译后源码:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>public class Program
+</span></span><span class=line><span class=cl>{
+</span></span><span class=line><span class=cl>    [CompilerGenerated]
+</span></span><span class=line><span class=cl>    private sealed class LambdaClass
+</span></span><span class=line><span class=cl>    {
+</span></span><span class=line><span class=cl>        public int num;
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        internal void LambdaMethod()
+</span></span><span class=line><span class=cl>        {
+</span></span><span class=line><span class=cl>            Console.WriteLine(num);
+</span></span><span class=line><span class=cl>        }
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    private static void Main(string[] args)
+</span></span><span class=line><span class=cl>    {
+</span></span><span class=line><span class=cl>        LambdaClass lambdaInstance = new LambdaClass();
+</span></span><span class=line><span class=cl>        lambdaInstance.num = 0;
+</span></span><span class=line><span class=cl>        Action action = new Action(lambdaInstance.LambdaMethod);
+</span></span><span class=line><span class=cl>        action();
+</span></span><span class=line><span class=cl>        lambdaInstance.num += 123;
+</span></span><span class=line><span class=cl>        action();
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></td></tr></table></div></div><p>可以看到, 在上面的示例中, Lambda 表达式被编译成了一个类, 并且捕获到的局部变量均变成了类的字段. 而不再是存储在栈上.</p><p>由此, 就诞生了一个问题, 当你尝试对一个被捕获的局部变量取地址的时候, 就会报错. 我们没办法取一个位于堆上的对象中. 堆上的对象会被 GC 移动. 或者说, 如果一个局部变量被取地址, 就意味着它需要在栈上, 而存储在栈上的值, 没办法被 Lambda 所捕获.</p><hr><p><a class=link href="https://sharplab.io/#v2:EYLgtghglgdgNAExAagD4AEBMBGAsAKHQGYACLM7AdhIG8CSGTYAXEmAVzBIF4SAGANz1GwhugAsJAMoB7MAFMAsvOYALGQgAU6bHwDaAXRIQATgHMAzgEpaoxmOyZjAY2ZQZMHiU03uAPgoATk0OMCshfDt7AHpokkBk+MAvxX4oxghXdxgAOgBJGAA3GQBreR8I1IZQkmReRyJy/HsYuKSSOu9ANE1AC4TAT+1ADeVAecS+wBezQDfTOBIAGwgwYAQIEkBZuUA2R0BfgKTAY2tAOw9AELdAHgUrCpc3D1yC4tLwuwBfAmugA==" target=_blank rel=noopener>示例二:捕获实例字段</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=k>using</span> <span class=nn>System</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=k>class</span> <span class=nc>Program</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>num</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>void</span> <span class=n>SomeMethod</span><span class=p>(</span><span class=kt>string</span><span class=p>[]</span> <span class=n>args</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>Action</span> <span class=n>action</span> <span class=p>=</span> <span class=p>()</span> <span class=p>=&gt;</span> <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>num</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 输出 0</span>
+</span></span><span class=line><span class=cl>        <span class=n>action</span><span class=p>.</span><span class=n>Invoke</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>num</span> <span class=p>+=</span> <span class=m>123</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 输出 123 (外部对变量变更时, lambda 仍然能输出正确的值)</span>
+</span></span><span class=line><span class=cl>        <span class=n>action</span><span class=p>.</span><span class=n>Invoke</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>编译后源码:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>public</span> <span class=k>class</span> <span class=nc>Program</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kt>int</span> <span class=n>num</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=k>void</span> <span class=n>SomeMethod</span><span class=p>(</span><span class=kt>string</span><span class=p>[]</span> <span class=n>args</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>Action</span> <span class=n>action</span> <span class=p>=</span> <span class=k>new</span> <span class=n>Action</span><span class=p>(</span><span class=n>LambdaMethod</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>action</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>num</span> <span class=p>+=</span> <span class=m>123</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>action</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>    [CompilerGenerated]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=k>void</span> <span class=n>LambdaMethod</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>num</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/csharp/>Csharp</a>
+<a href=/tags/dotnet/>Dotnet</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/20210219152833/><div class=article-details><h2 class=article-title>[C#] IEnumerable拼接! 将枚举器串起来~</h2></div></a></article><article><a href=/p/20210219070741/><div class=article-details><h2 class=article-title>[C#] Range函数, 好用就完事儿了!</h2></div></a></article><article><a href=/p/20240117143332/><div class=article-details><h2 class=article-title>[.NET] 查询当前已安装所有 Win32 与 UWP 应用</h2></div></a></article><article><a href=/p/20231208192209/><div class=article-details><h2 class=article-title>[C#] 基于 yield 语句的迭代器逻辑懒执行</h2></div></a></article><article><a href=/p/20230818143649/><div class=article-details><h2 class=article-title>[.NET/WPF] CommunityToolkit.Mvvm 异步指令</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=SlimeNull/slimenull.github.io issue-term=pathname label=BlogComment crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
+2023 -
+2024 SlimeNull Blogs</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.21.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

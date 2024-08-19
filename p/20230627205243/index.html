@@ -1,0 +1,329 @@
+<!doctype html><html lang=zh-CN dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='使用 ReadConsoleInput, 需要手动启用鼠标输入, 关闭快速编辑模式, 并删去任何读取标准输入的逻辑, 只使用 ReadConsoleInput'><title>[C#] 使用 ReadConsoleInput 所需要注意的问题.</title>
+<link rel=canonical href=https://slimenull.com/p/20230627205243/><link rel=stylesheet href=/scss/style.min.73438a911857e6d491e39369614d0dd0c0302dcacfb43e15034e0e48cac08c07.css><meta property='og:title' content='[C#] 使用 ReadConsoleInput 所需要注意的问题.'><meta property='og:description' content='使用 ReadConsoleInput, 需要手动启用鼠标输入, 关闭快速编辑模式, 并删去任何读取标准输入的逻辑, 只使用 ReadConsoleInput'><meta property='og:url' content='https://slimenull.com/p/20230627205243/'><meta property='og:site_name' content='SlimeNull Blogs'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='csharp'><meta property='article:published_time' content='2023-06-27T20:52:43+08:00'><meta property='article:modified_time' content='2023-06-27T20:52:43+08:00'><meta name=twitter:title content="[C#] 使用 ReadConsoleInput 所需要注意的问题."><meta name=twitter:description content="使用 ReadConsoleInput, 需要手动启用鼠标输入, 关闭快速编辑模式, 并删去任何读取标准输入的逻辑, 只使用 ReadConsoleInput"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu11436448765783238083.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>SlimeNull Blogs</a></h1><h2 class=site-description>为了更好的开源世界~</h2></div></header><ol class=social-menu><li><a href=https://github.com/SlimeNull target=_blank title=GitHub rel=me><!doctype html><svg t="1702542119184" class="icon" viewBox="0 0 1024 1024" p-id="4136" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M692.906667 938.666667A42.666667 42.666667.0 01650.24 896V785.066667A91.733333 91.733333.0 00627.2 714.24a42.666667 42.666667.0 0126.026667-71.253333c104.106666-12.373334 200.106666-45.653334 200.106666-226.133334a170.666667 170.666667.0 00-28.586666-94.72A117.333333 117.333333.0 01807.253333 234.24a158.293333 158.293333.0 000-60.16A326.4 326.4.0 00718.08 220.586667a42.666667 42.666667.0 01-35.84 6.4 433.066667 433.066667.0 00-235.52.0 42.666667 42.666667.0 01-35.84-6.4A315.733333 315.733333.0 00320.853333 174.08a150.186667 150.186667.0 000 60.16 121.173333 121.173333.0 01-18.346666 88.746667A173.653333 173.653333.0 00273.92 418.133333C273.92 584.106666 354.133333 628.48 474.453333 643.84A42.666667 42.666667.0 01509.44 672a42.666667 42.666667.0 01-8.96 42.666667 87.893333 87.893333.0 00-23.466667 66.56V896A42.666667 42.666667.0 01391.68 896v-24.32a256 256 0 01-224.853333-89.173333A166.4 166.4.0 00117.333333 744.96a42.666667 42.666667.0 1121.333334-82.773333A210.346667 210.346667.0 01224 720.213333c42.666667 42.666667 85.333333 80.213333 166.4 64.853334a165.973333 165.973333.0 019.813333-67.413334C312.32 695.466666 186.88 632.32 186.88 418.986667a256 256 0 0142.666667-142.08 36.266667 36.266667.0 005.546666-26.453334 242.773333 242.773333.0 0114.08-136.96 42.666667 42.666667.0 0126.88-24.32c14.506667-4.266667 66.56-12.8 165.12 51.2a518.826667 518.826667.0 01242.773334.0c98.56-64 150.613333-55.893333 164.693333-51.2a42.666667 42.666667.0 0126.88 24.32A243.626667 243.626667.0 01889.6 250.88a32 32 0 004.693333 24.32A256 256 0 01936.96 417.706667c0 216.32-124.586667 279.04-213.333333 298.666666a182.613333 182.613333.0 019.386666 71.253334V896a42.666667 42.666667.0 01-40.106666 42.666667z" fill="#666" p-id="4137"/></svg></a></li><li><a href=https://space.bilibili.com/441842015 target=_blank title=Bilibili rel=me><!doctype html><svg t="1702541966104" class="icon" viewBox="0 0 1024 1024" p-id="16981" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M306.005333 117.632 444.330667 256h135.296l138.368-138.325333A42.666667 42.666667.0 01778.368 178.048L700.330667 256H789.333333A149.333333 149.333333.0 01938.666667 405.333333v341.333334A149.333333 149.333333.0 01789.333333 896H234.666667A149.333333 149.333333.0 0185.333333 746.666667V405.333333A149.333333 149.333333.0 01234.666667 256h88.96L245.632 177.962667a42.666667 42.666667.0 0160.373333-60.373334zm483.328 223.701333H234.666667a64 64 0 00-63.701334 57.856L170.666667 405.333333v341.333334a64 64 0 0057.856 63.701333L234.666667 810.666667h554.666666a64 64 0 0063.701334-57.856L853.333333 746.666667V405.333333a64 64 0 00-64-64zm-448 128A42.666667 42.666667.0 01384 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666666-42.666667zm341.333334.0A42.666667 42.666667.0 01725.333333 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666667-42.666667z" fill="#666" p-id="16982"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>主页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>链接</span></a></li><div class=menu-bottom-section><li id=i18n-switch><svg class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.239 8-5 8"/><path d="M5 9c-.003 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4-9 4 9"/><path d="M19.1 18h-6.2"/></svg>
+<select name=language onchange="window.location.href=this.selectedOptions[0].value"><option value=https://slimenull.com/ selected></option></select></li><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></div></ol></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/dotnet/ style=background-color:#512cd4;color:#fff>.NET
+</a><a href=/categories/%E6%8E%A7%E5%88%B6%E5%8F%B0/>控制台
+</a><a href=/categories/note/ style=background-color:#fdf0c4;color:#3d3d3d>笔记</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/20230627205243/>[C#] 使用 ReadConsoleInput 所需要注意的问题.</a></h2><h3 class=article-subtitle>使用 ReadConsoleInput, 需要手动启用鼠标输入, 关闭快速编辑模式, 并删去任何读取标准输入的逻辑, 只使用 ReadConsoleInput</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jun 27, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 2 分钟</time></div></footer></div></header><section class=article-content><p>如果要使用鼠标输入, 那么需要:</p><ol><li>启用鼠标输入, 只有启用之后, 才能接收到鼠标事件</li><li>关闭控制台的快速编辑模式, 很多人的控制台都启用了快速编辑模式, 它会导致鼠标输入无效</li></ol><p>任何情况下, 都需要:</p><ul><li>不使用除 ReadConsoleInput 之外的任何输入方法, 因为它们会和你争抢 ReadConsoleInput 的使用.</li></ul><p>引用:</p><ul><li><a class=link href=https://learn.microsoft.com/zh-cn/windows/console/getstdhandle target=_blank rel=noopener>GetStdHandle 函数</a></li><li><a class=link href=https://learn.microsoft.com/zh-cn/windows/console/getconsolemode target=_blank rel=noopener>GetConsoleMode 函数</a></li><li><a class=link href=https://learn.microsoft.com/zh-cn/windows/console/setconsolemode target=_blank rel=noopener>SetConsoleMode 函数</a></li><li><a class=link href=https://learn.microsoft.com/zh-cn/windows/console/readconsoleinput target=_blank rel=noopener>ReadConsoleInput 函数</a></li></ul><p>参考代码:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=kd>internal</span> <span class=k>class</span> <span class=nc>NativeApi</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>const</span> <span class=kt>int</span> <span class=n>STD_OUTPUT_HANDLE</span> <span class=p>=</span> <span class=p>-</span><span class=m>11</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>const</span> <span class=kt>uint</span> <span class=n>ENABLE_VIRTUAL_TERMINAL_PROCESSING</span> <span class=p>=</span> <span class=m>0x0004</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>const</span> <span class=kt>uint</span> <span class=n>ENABLE_MOUSE_INPUT</span> <span class=p>=</span> <span class=m>0x0010</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>const</span> <span class=kt>int</span> <span class=n>STD_INPUT_HANDLE</span> <span class=p>=</span> <span class=p>-</span><span class=m>10</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>const</span> <span class=kt>uint</span> <span class=n>ENABLE_QUICK_EDIT_MODE</span> <span class=p>=</span> <span class=m>0x0040</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>    [DllImport(&#34;kernel32.dll&#34;, SetLastError = true)]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=kd>extern</span> <span class=n>IntPtr</span> <span class=n>GetStdHandle</span><span class=p>(</span><span class=kt>int</span> <span class=n>nStdHandle</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>    [DllImport(&#34;kernel32.dll&#34;)]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=kd>extern</span> <span class=kt>bool</span> <span class=n>GetConsoleMode</span><span class=p>(</span><span class=n>IntPtr</span> <span class=n>hConsoleHandle</span><span class=p>,</span> <span class=k>out</span> <span class=kt>uint</span> <span class=n>lpMode</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>    [DllImport(&#34;kernel32.dll&#34;)]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=kd>extern</span> <span class=kt>bool</span> <span class=n>SetConsoleMode</span><span class=p>(</span><span class=n>IntPtr</span> <span class=n>hConsoleHandle</span><span class=p>,</span> <span class=kt>uint</span> <span class=n>dwMode</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=k>void</span> <span class=n>EnableANSI</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kt>var</span> <span class=n>handle</span> <span class=p>=</span> <span class=n>GetStdHandle</span><span class=p>(</span><span class=n>STD_OUTPUT_HANDLE</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>GetConsoleMode</span><span class=p>(</span><span class=n>handle</span><span class=p>,</span> <span class=k>out</span> <span class=kt>var</span> <span class=n>mode</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>mode</span> <span class=p>|=</span> <span class=n>ENABLE_VIRTUAL_TERMINAL_PROCESSING</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>SetConsoleMode</span><span class=p>(</span><span class=n>handle</span><span class=p>,</span> <span class=n>mode</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=k>void</span> <span class=n>EnableMouseInput</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kt>var</span> <span class=n>handle</span> <span class=p>=</span> <span class=n>GetStdHandle</span><span class=p>(</span><span class=n>STD_INPUT_HANDLE</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>GetConsoleMode</span><span class=p>(</span><span class=n>handle</span><span class=p>,</span> <span class=k>out</span> <span class=kt>var</span> <span class=n>mode</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>mode</span> <span class=p>|=</span> <span class=n>ENABLE_MOUSE_INPUT</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>mode</span> <span class=p>&amp;=</span> <span class=p>~</span><span class=n>ENABLE_QUICK_EDIT_MODE</span><span class=p>;</span> <span class=c1>//关闭快速编辑</span>
+</span></span><span class=line><span class=cl>        <span class=n>SetConsoleMode</span><span class=p>(</span><span class=n>handle</span><span class=p>,</span> <span class=n>mode</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=na>    [DllImport(&#34;kernel32.dll&#34;, CharSet = CharSet.Unicode, SetLastError = true, EntryPoint = &#34;ReadConsoleInputW&#34;)]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=kd>extern</span> <span class=kt>bool</span> <span class=n>ReadConsoleInput</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=n>IntPtr</span> <span class=n>hConsoleInput</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=na>    [Out]</span> <span class=n>INPUT_RECORD</span><span class=p>[]</span> <span class=n>lpBuffer</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=kt>uint</span> <span class=n>nLength</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=k>out</span> <span class=kt>uint</span> <span class=n>lpNumberOfEventsRead</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>enum</span> <span class=n>InputRecordEventType</span> <span class=p>:</span> <span class=kt>uint</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>KEY_EVENT</span> <span class=p>=</span> <span class=m>0x1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>MOUSE_EVENT</span> <span class=p>=</span> <span class=m>0x2</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>WINDOW_BUFFER_SIZE_EVENT</span> <span class=p>=</span> <span class=m>0x4</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>MENU_EVENT</span> <span class=p>=</span> <span class=m>0x8</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>FOCUS_EVENT</span> <span class=p>=</span> <span class=m>0x10</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>    [StructLayout(LayoutKind.Explicit)]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=k>struct</span> <span class=nc>INPUT_RECORD</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=na>        [FieldOffset(0)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>InputRecordEventType</span> <span class=n>EventType</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>        [FieldOffset(4)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>KEY_EVENT_RECORD</span> <span class=n>KeyEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>        [FieldOffset(4)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>MOUSE_EVENT_RECORD</span> <span class=n>MouseEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>        [FieldOffset(4)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>WINDOW_BUFFER_SIZE_RECORD</span> <span class=n>WindowBufferSizeEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>        [FieldOffset(4)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>MENU_EVENT_RECORD</span> <span class=n>MenuEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>        [FieldOffset(4)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>FOCUS_EVENT_RECORD</span> <span class=n>FocusEvent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=na>    [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Unicode)]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=k>struct</span> <span class=nc>KEY_EVENT_RECORD</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=na>        [FieldOffset(0), MarshalAs(UnmanagedType.Bool)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>bool</span> <span class=n>bKeyDown</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>        [FieldOffset(4), MarshalAs(UnmanagedType.U2)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>ushort</span> <span class=n>wRepeatCount</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// ConsoleKey</span>
+</span></span><span class=line><span class=cl><span class=na>        [FieldOffset(6), MarshalAs(UnmanagedType.U2)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>ushort</span> <span class=n>wVirtualKeyCode</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>        [FieldOffset(8), MarshalAs(UnmanagedType.U2)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>ushort</span> <span class=n>wVirtualScanCode</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>        [FieldOffset(10)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>char</span> <span class=n>UnicodeChar</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>        [FieldOffset(12), MarshalAs(UnmanagedType.U4)]</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>ControlKeyState</span> <span class=n>dwControlKeyState</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// dwControlKeyState bitmask</span>
+</span></span><span class=line><span class=cl><span class=na>    [Flags]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>enum</span> <span class=n>ControlKeyState</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>RIGHT_ALT_PRESSED</span> <span class=p>=</span> <span class=m>0x1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>LEFT_ALT_PRESSED</span> <span class=p>=</span> <span class=m>0x2</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>RIGHT_CTRL_PRESSED</span> <span class=p>=</span> <span class=m>0x4</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>LEFT_CTRL_PRESSED</span> <span class=p>=</span> <span class=m>0x8</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>SHIFT_PRESSED</span> <span class=p>=</span> <span class=m>0x10</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>NUMLOCK_ON</span> <span class=p>=</span> <span class=m>0x20</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>SCROLLLOCK_ON</span> <span class=p>=</span> <span class=m>0x40</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>CAPSLOCK_ON</span> <span class=p>=</span> <span class=m>0x80</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>ENHANCED_KEY</span> <span class=p>=</span> <span class=m>0x100</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=na>    [StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=k>struct</span> <span class=nc>MOUSE_EVENT_RECORD</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>COORD</span> <span class=n>dwMousePosition</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>MouseButtonState</span> <span class=n>dwButtonState</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>short</span> <span class=n>MouseDelta</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>ControlKeyState</span> <span class=n>dwControlKeyState</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>MouseEventFlags</span> <span class=n>dwEventFlags</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>    [Flags]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>enum</span> <span class=n>MouseButtonState</span> <span class=p>:</span> <span class=kt>short</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>FROM_LEFT_1ST_BUTTON_PRESSED</span> <span class=p>=</span> <span class=m>0x1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>RIGHTMOST_BUTTON_PRESSED</span> <span class=p>=</span> <span class=m>0x2</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>FROM_LEFT_2ND_BUTTON_PRESSED</span> <span class=p>=</span> <span class=m>0x4</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>FROM_LEFT_3RD_BUTTON_PRESSED</span> <span class=p>=</span> <span class=m>0x8</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>FROM_LEFT_4TH_BUTTON_PRESSED</span> <span class=p>=</span> <span class=m>0x10</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=na>    [StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=k>struct</span> <span class=nc>COORD</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>short</span> <span class=n>X</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>short</span> <span class=n>Y</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>COORD</span><span class=p>(</span><span class=kt>short</span> <span class=n>X</span><span class=p>,</span> <span class=kt>short</span> <span class=n>Y</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>this</span><span class=p>.</span><span class=n>X</span> <span class=p>=</span> <span class=n>X</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=k>this</span><span class=p>.</span><span class=n>Y</span> <span class=p>=</span> <span class=n>Y</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=na>    [Flags]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>enum</span> <span class=n>MouseEventFlags</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>MOUSE_MOVED</span> <span class=p>=</span> <span class=m>0x1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>DOUBLE_CLICK</span> <span class=p>=</span> <span class=m>0x2</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>MOUSE_WHEELED</span> <span class=p>=</span> <span class=m>0x4</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>MOUSE_HWHEELED</span> <span class=p>=</span> <span class=m>0x8</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=k>struct</span> <span class=nc>WINDOW_BUFFER_SIZE_RECORD</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>COORD</span> <span class=n>dwSize</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=n>WINDOW_BUFFER_SIZE_RECORD</span><span class=p>(</span><span class=kt>short</span> <span class=n>x</span><span class=p>,</span> <span class=kt>short</span> <span class=n>y</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>dwSize</span> <span class=p>=</span> <span class=k>new</span> <span class=n>COORD</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=na>    [StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=k>struct</span> <span class=nc>MENU_EVENT_RECORD</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>uint</span> <span class=n>dwCommandId</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=na>    [StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=k>struct</span> <span class=nc>FOCUS_EVENT_RECORD</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>uint</span> <span class=n>bSetFocus</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/csharp/>Csharp</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/20221107060011/><div class=article-details><h2 class=article-title>[C#, 笔记] 启用虚拟终端处理 (使用 ANSI 转义序列前需启用)</h2></div></a></article><article><a href=/p/20210221230837/><div class=article-details><h2 class=article-title>[C#] 就让这张图片来揭露你的本性吧! 老绅士.</h2></div></a></article><article><a href=/p/20210219152833/><div class=article-details><h2 class=article-title>[C#] IEnumerable拼接! 将枚举器串起来~</h2></div></a></article><article><a href=/p/20210219070741/><div class=article-details><h2 class=article-title>[C#] Range函数, 好用就完事儿了!</h2></div></a></article><article><a href=/p/20240117143332/><div class=article-details><h2 class=article-title>[.NET] 查询当前已安装所有 Win32 与 UWP 应用</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=SlimeNull/slimenull.github.io issue-term=pathname label=BlogComment crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
+2023 -
+2024 SlimeNull Blogs</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.21.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>可视化 on SlimeNull Blogs</title><link>https://slimenull.com/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/</link><description>Recent content in 可视化 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 09 May 2021 23:49:18 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/index.xml" rel="self" type="application/rss+xml"/><item><title>[C#] 使用 NAudio 实现音频可视化</title><link>https://slimenull.com/p/20210509234918/</link><pubDate>Sun, 09 May 2021 23:49:18 +0800</pubDate><guid>https://slimenull.com/p/20210509234918/</guid><description>&lt;h2 id="预览">预览:&lt;/h2>
+&lt;p>最初版本:
+&lt;img src="https://slimenull.com/images/20210509234816552.gif"
+loading="lazy"
+alt="preview"
+>
+更新:
+&lt;a href="https://sm.ms/image/TCABEJvFoDMrnaf" target="_blank">&lt;img src="https://i.loli.net/2021/06/25/TCABEJvFoDMrnaf.gif" >&lt;/a>&lt;/p>
+&lt;p>再次更新 (这次优化了算法):&lt;/p>
+&lt;p>[video(video-meXn8OHU-1667173967679)(type-bilibili)(url-https://player.bilibili.com/player.html?aid=902039129)(image-https://img-blog.csdnimg.cn/img_convert/86ebcb2e350f1bce9383f671951f1fb7.jpeg)(title-[演示] C# NAudio Direct2D 音频可视化)]&lt;/p>
+&lt;h2 id="捕捉声卡输出">捕捉声卡输出:&lt;/h2>
+&lt;p>实现音频可视化, 第一步就是获得音频采样, 这里我们选择使用计算机正在播放的音频作为采样源进行处理:&lt;/p>
+&lt;p>NAudio 中, 可以借助 WasapiLoopbackCapture 来进行捕捉:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="n">WasapiLoopbackCapture&lt;/span> &lt;span class="n">cap&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">WasapiLoopbackCapture&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">cap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DataAvailable&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="c1">// 录制数据可用时触发此事件, 参数中包含音频数据&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">allSamples&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Enumerable&lt;/span> &lt;span class="c1">// 提取数据中的采样&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BytesRecorded&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="m">4&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 除以四是因为, 缓冲区内每 4 个字节构成一个浮点数, 一个浮点数是一个采样&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">BitConverter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToSingle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">e&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Buffer&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="m">4&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="c1">// 转换为 float&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 转换为数组&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 获取采样后, 在这里进行详细处理&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">cap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">StartRecording&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 开始录制&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="分离左右通道">分离左右通道:&lt;/h2>
+&lt;p>获取完采样后, 我们还需要对采样进行一点小处理, 因为捕获的数据是分通道的, 一般是左右声道:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 设定我们已经将刚刚的采样保存到了变量 AllSamples 中, 类型为 float[]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">channelCount&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">cap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WaveFormat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Channels&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// WasapiLoopbackCapture 的 WaveFormat 指定了当前声音的波形格式, 其中包含就通道数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">float&lt;/span>&lt;span class="p">[][]&lt;/span> &lt;span class="n">channelSamples&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Enumerable&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">channelCount&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">channel&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">Enumerable&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">AllSamples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="n">channelCount&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">AllSamples&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">channel&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">channelCount&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="取通道平均值">取通道平均值&lt;/h2>
+&lt;p>将采样分为一个个通道的采样后, 我们可以将其合并, 取平均值, 以便于绘制:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 设定我们已经将分开了的采样保存到了变量 ChannelSamples 中, 类型为 float[][]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 例如通道数为2, 那么左声道的采样为 ChannelSamples[0], 右声道为 ChannelSamples[1]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">averageSamples&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Enumerable&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">AllSamples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="n">channelCount&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">index&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">Enumerable&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">channelCount&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">channel&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">ChannelSamples&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">channel&lt;/span>&lt;span class="p">][&lt;/span>&lt;span class="n">index&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Average&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="绘制时域图象">绘制时域图象:&lt;/h2>
+&lt;p>处理刚刚的采样后, 你可以直接将其作为数据绘制到窗口中, 这即是时域图象, 这里使用最简单的折线绘制.&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 设定 g 为窗口的 Graphics 对象, windowHeight 为窗口的显示区域高度&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 设定通道采样平均值为 AverageSamples, 类型为 float[]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Point&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">points&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">AverageSamples&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">windowHeight&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 将数据转换为一个个的坐标点&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">g&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DrawLines&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Pens&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Black&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">points&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 连接这些点, 画线&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="傅里叶变换">傅里叶变换:&lt;/h2>
+&lt;p>NAudio 中还提供了快速傅里叶变换的方法, 通过傅里叶变换, 可以将时域数据转换为频域数据, 也就是我们所说的频谱&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 我们将对 AverageSamples 进行傅里叶变换, 得到一个复数数组&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 因为对于快速傅里叶变换算法, 需要数据长度为 2 的 n 次方, 这里进行&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">float&lt;/span> &lt;span class="n">log&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Ceiling&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">AverageSamples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">));&lt;/span> &lt;span class="c1">// 取对数并向上取整&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">newLen&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Pow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">log&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 计算新长度&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">filledSamples&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="kt">float&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">newLen&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Array&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Copy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">AverageSamples&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">filledSamples&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">AverageSamples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 拷贝到新数组&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Complex&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">complexSrc&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">filledSamples&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Complex&lt;/span>&lt;span class="p">(){&lt;/span> &lt;span class="n">X&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">v&lt;/span> &lt;span class="p">})&lt;/span> &lt;span class="c1">// 将采样转换为复数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">FastFourierTransform&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">log&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">complexSrc&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 进行傅里叶变换&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 变换之后, complexSrc 则已经被处理过, 其中存储了频域信息&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="分析频域信息">分析频域信息:&lt;/h2>
+&lt;p>对于傅里叶变换的频域信息, 需要稍加处理才可以方便的使用, 首先是提取有用的信息:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// NAudio 的傅里叶变换结果中, 似乎不存在直流分量(这使我们的处理更加方便了), 但它也是有共轭什么的(也就是数据左右对称, 只有一半是有用的)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 仍然使用刚刚的 complexSrc 作为变换结果, 它的类型是 Complex[]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Complex&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">halfData&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">complexSrc&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Take&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">complexSrc&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 一半的数据&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">dftData&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">halfData&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Sqrt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="c1">// 取复数的模&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 将复数结果转换为我们所需要的频率幅度&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 其实, 到这里你完全可以把这些数据绘制到窗口上, 这已经算是频域图象了, 但是对于音乐可视化来讲, 某些频率的数据我们完全不需要&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 例如 10000Hz 的频率, 我们完全没必要去绘制它, 取 最小频率 ~ 2500Hz 足矣&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 对于变换结果, 每两个数据之间所差的频率计算公式为 采样率/采样数, 那么我们要取的个数也可以由 2500 / (采样率 / 采样数) 来得出&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">count&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">2500&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">cap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WaveFormat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SampleRate&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="n">filledSamples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">finalData&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">dftData&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Take&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">count&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="绘制频域图象">绘制频域图象:&lt;/h2>
+&lt;p>得到上面分析后的 finalData 后, 我们就可以直接绘制出来了, 这次使用柔和的曲线绘制&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 设定 g 为窗口的 Graphics 对象, height 为窗口高度&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">PointF&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">points&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">finalData&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">PointF&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">height&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">g&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DrawCurve&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Pens&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Purple&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">points&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// Graphics 可以直接绘制曲线&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="更优的绘制">更优的绘制:&lt;/h2>
+&lt;p>上面的时域和频域图象, 我们都是一股脑的将数据的索引作为 X 坐标, 窗口高度减去数据值作为 Y 坐标, 有两个突出的问题:&lt;/p>
+&lt;ol>
+&lt;li>数据可能无法填满窗口的宽度或者超出窗口的宽度范围&lt;/li>
+&lt;li>数据太大时, 也会导致绘制的线条超出窗口高度&lt;/li>
+&lt;/ol>
+&lt;p>第一个问题好解决, 直接使索引所占数据长度的百分比恰好等于 X 坐标相对于窗口宽度的百分比即可:
+$$
+x = index \div dataLength * windowWidth
+$$
+对于第二个问题, 有两个解决方案, 一是直接为数据加权重, 例如统一乘 0.5, 使数据减小一节, 二就是套一个函数, 例如 log 函数, 毕竟 log 函数在较高自变量的情况下, 因变量的变化趋势越来越小, 我们只需要对这个 log 函数进行稍加处理, 就可以直接应用到数据变换数据上, 使其不超出窗口绘图区域&lt;/p>
+&lt;p>另外, 我们也可以平滑频谱显示(指动画变换), 它的原理大概是这样:&lt;/p>
+&lt;blockquote>
+&lt;ol>
+&lt;li>
+&lt;p>例如这次进行傅里叶变换的结果是: &lt;code>{0, 100, 50}&lt;/code>,&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>下一次傅里叶变换的结果是: &lt;code>{100, 0, 0}&lt;/code>,&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>可以得出, 增量为: &lt;code>{100, -100, -50}&lt;/code>,&lt;/p>
+&lt;p>在更新变换结果时, 我们不再直接将新的结果替换旧的结果, 而是在旧的结果的基础上, 加上增量×权重&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>例如权重是 &lt;code>0.5&lt;/code> 时, 那么实际增量是: &lt;code>{50, -50, -25}&lt;/code>,&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>那么实际新的值是: &lt;code>{50, 50, 25}&lt;/code>,&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>如果下一次变换的结果还是 &lt;code>{100, 0, 0}&lt;/code>, 那我们再次从 &lt;code>{50, 50, 25}&lt;/code> 向新值逼近, 权重仍然是 &lt;code>0.5&lt;/code>, 那么实际增量是: &lt;code>{25, -25, -12.5}&lt;/code>,&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>注意到了吗? 这次的增量是上次增量的一半, 这正好是一个减速运动, 而且新值与旧值的差越大, 变化的就越快, 而它们会不断重合, 因而速度不断变慢, 形成减速运动的频谱图.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="更多内容">更多内容:&lt;/h2>
+&lt;p>更多关于 NAudio 的使用, 可以看这篇文章: &lt;a class="link" href="https://slimenull.com/p/20210506194904/" >[C#] NAudio 的各种常见使用方式 播放 录制 转码 音频可视化&lt;/a>&lt;/p>
+&lt;h2 id="项目已开源">项目已开源:&lt;/h2>
+&lt;p>关于本文章涉及的大部分内容, 均在 &lt;a class="link" href="https://github.com/SlimeNull/AudioTest" target="_blank" rel="noopener"
+>github.com/SlimeNull/AudioTest&lt;/a> 仓库中的 Null.AudioVisualizer 项目中有写. (注释妥当了)&lt;/p>
+&lt;p>如果是之后更新过的, 优化了算法的,可以在 &lt;a class="link" href="https://github.com/SlimeNull/AudioVisualizer" target="_blank" rel="noopener"
+>github.com/SlimeNull/AudioVisualizer&lt;/a> 仓库查看源代码. (注释妥当了)&lt;/p>
+&lt;hr>
+&lt;p>其实音频可视化我老早就想做了, 但是本人数学不是非常的好, 不过最后总算是坚持下来了, 弄出来了啊, 心情老激动了&lt;/p>
+&lt;div align="right">求个赞, 求个评论~&lt;/div></description></item><item><title>[C#] NAudio 各种常见使用方式 播放 录制 转码 音频可视化</title><link>https://slimenull.com/p/20210506194904/</link><pubDate>Thu, 06 May 2021 19:49:04 +0800</pubDate><guid>https://slimenull.com/p/20210506194904/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+&lt;p>在 NAudio 中, 常用类型有 WaveIn, WaveOut, WaveStream, WaveFileWriter, WaveFileReader, AudioFileReader 以及接口: IWaveProvider, ISampleProvider, IWaveIn, IWavePlayer&lt;/p>
+&lt;ol>
+&lt;li>WaveIn 表示波形输入, 继承了 IWaveIn, 例如麦克风输入, 或者计算机正在播放的音频流.&lt;/li>
+&lt;li>WaveOut 表示波形输出, 继承了 IWavePlayer, 用来播放波形音乐, 以 IWaveProvider 作为播放源播放音频, 通过拓展方法也支持以 ISampleProvider 作为播放源播放音频&lt;/li>
+&lt;li>WaveStream 表示波形流, 它继承了 IWaveProvider, 可以用来作为播放源.&lt;/li>
+&lt;li>WaveFileReader 继承了 WaveStream, 用来读取波形文件&lt;/li>
+&lt;li>WaveFileWriter 继承了Stream, 用来写入文件, 常用于保存音频录制的数据.&lt;/li>
+&lt;li>AudioFileReader 通用的音频文件读取器, 可以读取波形文件, 也可以读取其他类型的音频文件例如 Aiff, MP3&lt;/li>
+&lt;li>IWaveProvider 波形提供者, 上面已经提到, 是音频播放的提供者, 通过拓展方法可以转换为 ISampleProvider&lt;/li>
+&lt;li>ISampleProvider 采样提供者, 上面已经提到, 通过拓展方法可以作为 WaveOut 的播放源&lt;/li>
+&lt;/ol>
+&lt;h2 id="播放音频">播放音频&lt;/h2>
+&lt;p>常用的播放音频方式有两种, 播放波形音乐, 以及播放 MP3 音乐&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>播放波形音乐:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// NAudio 中, 通过 WaveFileReader 来读取波形数据, 在实例化时, 你可以指定文件名或者是输入流, 这意味着你可以读取内存流中的音频数据&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 但是需要注意的是, 不可以读取来自网络流的音频, 因为网络流不可以进行 Seek 操作.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 此处, 假设 ms 为一个 MemoryStream, 内存有音频数据.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">WaveFileReader&lt;/span> &lt;span class="n">reader&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">WaveFileReader&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ms&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">WaveOut&lt;/span> &lt;span class="n">wout&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">WaveOut&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">wout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">reader&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 通过 IWaveProvider 为音频输出初始化&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">wout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Play&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 至此, wout 将从指定的 reader 中提供的数据进行播放&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>播放 MP3 音乐:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 播放 MP3 音乐其实与播放波形音乐没有太大区别, 只不过将 WaveFileReader 换成了 Mp3FileReader 罢了&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 另外, 也可以使用通用的 Reader, MediaFoundationReader, 它既可以读取波形音乐, 也可以读取 MP3&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 此处, 假设 ms 为一个 MemoryStream, 内存有音频数据.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Mp3FileReader&lt;/span> &lt;span class="n">reader&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Mp3FileReader&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ms&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">WaveOut&lt;/span> &lt;span class="n">wout&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">WaveOut&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">wout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Init&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">reader&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">wout&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Play&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;h2 id="音频录制">音频录制&lt;/h2>
+&lt;ol>
+&lt;li>
+&lt;p>录制麦克风输入&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 借助 WaveIn 类, 我们可以轻易的捕获麦克风输入, 在每一次录制到数据时, 将数据写入到文件或其他流, 这就实现了保存录音&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 在保存波形文件时需要借助 WaveFileWriter, 当然, 如果你想保存为其他格式, 也可以使用其它的 Writer, 例如 CurWaveFileWriter 以及&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// AiffFileWriter, 美中不足的是没有直接写入到 MP3 的 FileWriter&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 需要注意的是, 如果你是用的桌面程序, 那么你可以直接使用 WaveIn, 其回调基于 Windows 消息, 所以无法在控制台应用中使用 WaveIn&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 如果要在控制台应用中实现录音, 只需要使用 WaveInEvent, 它的回调基于事件而不是 Windows 消息, 所以可以通用&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">WaveIn&lt;/span> &lt;span class="n">cap&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">WaveIn&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// cap, capture&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">WaveFileWriter&lt;/span> &lt;span class="n">writer&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">WaveFileWriter&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">cap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DataAvailable&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">s&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">writer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Write&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Buffer&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BytesRecorded&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 订阅事件&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">cap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">StartRecording&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 开始录制&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 结束录制时:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">cap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">StopRecording&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 停止录制&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">writer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Close&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 关闭 FileWriter, 保存数据&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 另外, 除了使用 WaveIn, 你还可以使用 WasapiCapture, 它与 WaveIn 的使用方式是一致的, 可以用来录制麦克风&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Wasapi 全称 Windows Audio Session Application Programming Interface (Windows音频会话应用编程接口)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 具体 WaveIn, WaveInEvent, WasapiCapture 的性能, 笔者还没有测试过, 但估计不会有太大差异.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 提示: WasapiCapture 和 WasapiLoopbackCapture 位于 NAudio.Wave 命名空间下&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>录制声卡输出&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 录制声卡输出, 也就是录制计算机正在播放的声音, 借助 WasapiLoopbackCapture 即可简单实现, 使用方式与 WasapiCapture 无异&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">WasapiLoopbackCapture&lt;/span> &lt;span class="n">cap&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">WasapiLoopbackCapture&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">WaveFileWriter&lt;/span> &lt;span class="n">writer&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">WaveFileWriter&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">cap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DataAvailable&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">s&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">writer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Write&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Buffer&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BytesRecorded&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">cap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">StartRecording&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;h2 id="高级应用">高级应用&lt;/h2>
+&lt;ol>
+&lt;li>
+&lt;p>获取计算机实时播放音量大小&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 其实这个是基于刚刚的录制声卡输出的, 录制时的回调中, Buffer, BytesRecorded 指定了此次录制的数据 (缓冲区和数据长度)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 而这些数据, 其实是计算机对声音的采样(Sample), 具体的采样格式可以查看 WasapiLoopbackCapture 实例的 WaveForamt&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 波形格式中的 Encoding 与 BitsPerSample 是我们所需要的. 一般默认的 Encoding 是 IeeeFloat, 也就是每一个采样都是&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 一个浮点数, 而 BitsPerSample 也就是 32 了. 通过 BitConverter.ToSingle() 我们可以从缓冲区中取得浮点数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 遍历, 每 32 位一个浮点数, 最终取最大值, 这就是我们所需要的音量了&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">float&lt;/span> &lt;span class="n">volume&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">WasapiLoopbackCapture&lt;/span> &lt;span class="n">cap&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">WasapiLoopbackCapture&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">cap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DataAvailable&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">s&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">volume&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Enumerable&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BytesRecorded&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="m">4&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 每一个采样的位置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">BitConverter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToSingle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Buffer&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="m">4&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="c1">// 获取每一个采样&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Aggregate&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">v1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">v2&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">v1&lt;/span> &lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">v2&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="n">v1&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">v2&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 找到值最大的采样&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>实现音乐可视化
+完整版 NAudio 实现音乐可视化: &lt;a class="link" href="https://slimenull.com/p/20210509234918/" >[C#] 使用 NAudio 实现音频可视化&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 既然我们已经知道了, 那些数据都是一个个的采样, 自然也可以通过它们来绘制频谱, 只需要进行快速傅里叶变换即可&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 而且有意思的是, NAudio 也为我们准备好了快速傅里叶变换的方法, 位于 NAudio.Dsp 命名空间下&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 提示: 进行傅里叶变换所需要的复数(Complex)类也位于 NAudio.Dsp 命名空间, 它有两个字段, X(实部) 与 Y(虚部)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 下面给出在 IeeeFloat 格式下的音乐可视化的简单示例:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">WasapiLoopbackCapture&lt;/span> &lt;span class="n">cap&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">WasapiLoopbackCapture&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">cap&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">DataAvailable&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">s&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">samples&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Enumerable&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BytesRecorded&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="m">4&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">BitConverter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToSingle&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">args&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Buffer&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="m">4&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 获取采样&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">log&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Ceiling&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">samples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">float&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">filledSamples&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="kt">float&lt;/span>&lt;span class="p">[(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Pow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">log&lt;/span>&lt;span class="p">)];&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Array&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Copy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">samples&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">filledSamples&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">samples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 填充数据&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">sampleRate&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">s&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">WasapiLoopbackCapture&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">WaveFormat&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SampleRate&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 获取采样率&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Complex&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">complexSrc&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">filledSamples&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span> &lt;span class="n">deg&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">sampleRate&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PI&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 获取当前采样率在圆上对应的角度 (弧度制)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Complex&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">X&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Cos&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">deg&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Y&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Sin&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">deg&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}).&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 将采样转换为对应的复数 (缠绕到圆)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">FastFourierTransform&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FFT&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">log&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">complexSrc&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 进行傅里叶变换&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">complexSrc&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Select&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Sqrt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span>&lt;span class="p">)).&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 取得结果&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>音频格式转换&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 对于 Wave, CueWave, Aiff, 这些格式都有其对应的 FileWriter, 我们可以直接调用其 Writer 的 Create***File 来&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 从 IWaveProvider 创建对应格式的文件. 对于 MP3 这类没有 FileWriter 的格式, 可以调用 MediaFoundationEncoder&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 例如一个文件, &amp;#34;./Disconnected.mp3&amp;#34;, 我们要将它转换为 wav 格式, 只需要使用下面的代码, CurWave 与 Aiff 同理&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">using&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Mp3FileReader&lt;/span> &lt;span class="n">reader&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Mp3FileReader&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;./Disconnected.mp3&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">WaveFileWriter&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CreateWaveFile&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;./Disconnected.wav&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">reader&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 从 IWaveProvider 创建 MP3 文件, 假如一个 WaveFileReader 为 src&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">MediaFoundationEncoder&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">EncodeToMp3&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">src&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;./NewMp3.mp3&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;h2 id="提示">提示&lt;/h2>
+&lt;p>对于刚刚所说的音频录制, 采样的格式有一点需要注意, 将数据转换为一个 float 数组后, 其中还需要区分音频通道, 例如一般音乐是双通道, WaveFormat 的 Channel 为 2, 那么在 float 数组中, 每两个采样为一组, 一组采样中每一个采样都是一个通道在当前时间内的采样.&lt;/p>
+&lt;p>以双通道距离, 下图中, 采样数据中每一个圆圈都表示一个 float 值, 那么每两个采样时间点相同, 而各个通道的采样就是每一组中每一个采样&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/d150eb7b73e62b2aed07a68442f51525.png"
+loading="lazy"
+alt="image"
+>&lt;/p>
+&lt;p>所以对于我们刚刚进行的音乐可视化, 严格意义上来讲, 还需要区分通道&lt;/p>
+&lt;h2 id="示例">示例&lt;/h2>
+&lt;p>本文提到的部分内容在 &lt;a class="link" href="https://github.com/SlimeNull/AudioTest" target="_blank" rel="noopener"
+>github.com/SlimeNull/AudioTest&lt;/a> 仓库中有示例, 例如音频可视化, 音频录制, 以及其他零星的示例&lt;/p>
+&lt;hr>
+&lt;p>如有错误, 还请指出&lt;/p></description></item></channel></rss>

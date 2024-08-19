@@ -1,0 +1,996 @@
+<!doctype html><html lang=zh-CN dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='Rust 是一个无运行时的强类型语言, 包含很多高级特性, 例如泛型, lambda 等. 又因为其独有的所有权机制, 所以 Rust 的内存安全要比 C++ 完善许多.'><title>[Rust] 快速基础入门教程</title>
+<link rel=canonical href=https://slimenull.com/p/20231130141912/><link rel=stylesheet href=/scss/style.min.73438a911857e6d491e39369614d0dd0c0302dcacfb43e15034e0e48cac08c07.css><meta property='og:title' content='[Rust] 快速基础入门教程'><meta property='og:description' content='Rust 是一个无运行时的强类型语言, 包含很多高级特性, 例如泛型, lambda 等. 又因为其独有的所有权机制, 所以 Rust 的内存安全要比 C++ 完善许多.'><meta property='og:url' content='https://slimenull.com/p/20231130141912/'><meta property='og:site_name' content='SlimeNull Blogs'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='rust'><meta property='article:tag' content='开发语言'><meta property='article:published_time' content='2023-11-30T14:19:12+08:00'><meta property='article:modified_time' content='2023-11-30T14:19:12+08:00'><meta name=twitter:title content="[Rust] 快速基础入门教程"><meta name=twitter:description content="Rust 是一个无运行时的强类型语言, 包含很多高级特性, 例如泛型, lambda 等. 又因为其独有的所有权机制, 所以 Rust 的内存安全要比 C++ 完善许多."><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu11436448765783238083.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>SlimeNull Blogs</a></h1><h2 class=site-description>为了更好的开源世界~</h2></div></header><ol class=social-menu><li><a href=https://github.com/SlimeNull target=_blank title=GitHub rel=me><!doctype html><svg t="1702542119184" class="icon" viewBox="0 0 1024 1024" p-id="4136" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M692.906667 938.666667A42.666667 42.666667.0 01650.24 896V785.066667A91.733333 91.733333.0 00627.2 714.24a42.666667 42.666667.0 0126.026667-71.253333c104.106666-12.373334 200.106666-45.653334 200.106666-226.133334a170.666667 170.666667.0 00-28.586666-94.72A117.333333 117.333333.0 01807.253333 234.24a158.293333 158.293333.0 000-60.16A326.4 326.4.0 00718.08 220.586667a42.666667 42.666667.0 01-35.84 6.4 433.066667 433.066667.0 00-235.52.0 42.666667 42.666667.0 01-35.84-6.4A315.733333 315.733333.0 00320.853333 174.08a150.186667 150.186667.0 000 60.16 121.173333 121.173333.0 01-18.346666 88.746667A173.653333 173.653333.0 00273.92 418.133333C273.92 584.106666 354.133333 628.48 474.453333 643.84A42.666667 42.666667.0 01509.44 672a42.666667 42.666667.0 01-8.96 42.666667 87.893333 87.893333.0 00-23.466667 66.56V896A42.666667 42.666667.0 01391.68 896v-24.32a256 256 0 01-224.853333-89.173333A166.4 166.4.0 00117.333333 744.96a42.666667 42.666667.0 1121.333334-82.773333A210.346667 210.346667.0 01224 720.213333c42.666667 42.666667 85.333333 80.213333 166.4 64.853334a165.973333 165.973333.0 019.813333-67.413334C312.32 695.466666 186.88 632.32 186.88 418.986667a256 256 0 0142.666667-142.08 36.266667 36.266667.0 005.546666-26.453334 242.773333 242.773333.0 0114.08-136.96 42.666667 42.666667.0 0126.88-24.32c14.506667-4.266667 66.56-12.8 165.12 51.2a518.826667 518.826667.0 01242.773334.0c98.56-64 150.613333-55.893333 164.693333-51.2a42.666667 42.666667.0 0126.88 24.32A243.626667 243.626667.0 01889.6 250.88a32 32 0 004.693333 24.32A256 256 0 01936.96 417.706667c0 216.32-124.586667 279.04-213.333333 298.666666a182.613333 182.613333.0 019.386666 71.253334V896a42.666667 42.666667.0 01-40.106666 42.666667z" fill="#666" p-id="4137"/></svg></a></li><li><a href=https://space.bilibili.com/441842015 target=_blank title=Bilibili rel=me><!doctype html><svg t="1702541966104" class="icon" viewBox="0 0 1024 1024" p-id="16981" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M306.005333 117.632 444.330667 256h135.296l138.368-138.325333A42.666667 42.666667.0 01778.368 178.048L700.330667 256H789.333333A149.333333 149.333333.0 01938.666667 405.333333v341.333334A149.333333 149.333333.0 01789.333333 896H234.666667A149.333333 149.333333.0 0185.333333 746.666667V405.333333A149.333333 149.333333.0 01234.666667 256h88.96L245.632 177.962667a42.666667 42.666667.0 0160.373333-60.373334zm483.328 223.701333H234.666667a64 64 0 00-63.701334 57.856L170.666667 405.333333v341.333334a64 64 0 0057.856 63.701333L234.666667 810.666667h554.666666a64 64 0 0063.701334-57.856L853.333333 746.666667V405.333333a64 64 0 00-64-64zm-448 128A42.666667 42.666667.0 01384 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666666-42.666667zm341.333334.0A42.666667 42.666667.0 01725.333333 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666667-42.666667z" fill="#666" p-id="16982"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>主页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>链接</span></a></li><div class=menu-bottom-section><li id=i18n-switch><svg class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.239 8-5 8"/><path d="M5 9c-.003 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4-9 4 9"/><path d="M19.1 18h-6.2"/></svg>
+<select name=language onchange="window.location.href=this.selectedOptions[0].value"><option value=https://slimenull.com/ selected></option></select></li><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></div></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#风格>风格</a></li><li><a href=#基本结构>基本结构</a></li><li><a href=#基本类型>基本类型</a></li><li><a href=#函数声明>函数声明</a></li><li><a href=#变量声明>变量声明</a></li><li><a href=#流程控制>流程控制</a></li><li><a href=#字符串--strings>字符串 / Strings</a></li><li><a href=#数组--arrays>数组 / Arrays</a></li><li><a href=#容器--collections>容器 / Collections</a></li><li><a href=#结构--structures>结构 / Structures</a></li><li><a href=#特征--traits>特征 / Traits</a></li><li><a href=#特性--attributes>特性 / Attributes</a></li><li><a href=#枚举--enumerations>枚举 / Enumerations</a></li><li><a href=#泛型--generic>泛型 / Generic</a></li><li><a href=#所有权--ownership>所有权 / Ownership</a></li><li><a href=#错误处理>错误处理</a></li><li><a href=#模块>模块</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/rust/ style=background-color:#c97402;color:#fff>Rust
+</a><a href=/categories/note/ style=background-color:#fdf0c4;color:#3d3d3d>笔记</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/20231130141912/>[Rust] 快速基础入门教程</a></h2><h3 class=article-subtitle>Rust 是一个无运行时的强类型语言, 包含很多高级特性, 例如泛型, lambda 等. 又因为其独有的所有权机制, 所以 Rust 的内存安全要比 C++ 完善许多.</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Nov 30, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 16 分钟</time></div></footer></div></header><section class=article-content><p>Rust 是一个无运行时的强类型语言, 包含很多高级特性, 例如泛型, lambda 等. 又因为其独有的所有权机制, 所以 Rust 的内存安全要比 C++ 完善许多.</p><br><h2 id=风格>风格</h2><p>Rust 与 C 族语言不一样, C 族语言在定义方法, 变量时, 都是 <code>类型 关键字</code> 这样的格式, 也就是类型前置. Rust 采用的是类型后置的风格, 即 <code>关键字: 类型</code></p><br><h2 id=基本结构>基本结构</h2><p>Rust 的结构与 C++ 是差不多的, 一个文件的顶部写要引入的内容, 下面是结构, 函数, 特征的声明.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>use</span><span class=w> </span><span class=n>std</span>::<span class=n>io</span>::<span class=n>stdout</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>use</span><span class=w> </span><span class=n>std</span>::<span class=n>io</span>::<span class=n>Write</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>fn</span> <span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>hello_str</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;Hello world&#34;</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>bytes</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>hello_str</span><span class=p>.</span><span class=n>as_bytes</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>stdout</span><span class=p>().</span><span class=n>write_all</span><span class=p>(</span><span class=n>bytes</span><span class=p>).</span><span class=n>unwrap</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在上面代码中, <code>std::io::stdout</code> 与 <code>std::io::Write</code> 都是在 <code>std::io</code> 下, 它们可以通过花括号合并为以下语句:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>use</span><span class=w> </span><span class=n>std</span>::<span class=n>io</span>::<span class=p>{</span><span class=n>Write</span><span class=p>,</span><span class=w> </span><span class=n>stdout</span><span class=p>};</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><br><h2 id=基本类型>基本类型</h2><p>数字类型</p><div class=table-wrapper><table><thead><tr><th>长度</th><th>有符号</th><th>无符号</th></tr></thead><tbody><tr><td>8 位</td><td>i8</td><td>u8</td></tr><tr><td>16 位</td><td>i16</td><td>u16</td></tr><tr><td>32 位</td><td>i32</td><td>u32</td></tr><tr><td>64 位</td><td>i64</td><td>u64</td></tr><tr><td>128 位</td><td>i128</td><td>u128</td></tr><tr><td>平台大小</td><td>isize</td><td>usize</td></tr></tbody></table></div><p>以及三十二位浮点数 <code>f32</code> 与六十四位浮点数 <code>f64</code></p><p>布尔(逻辑)值 <code>bool</code>, 字符(Unicode)值 <code>char</code>.</p><blockquote><p>Rust 中, 一个字符占四个字节, 可以表达任何 Unicode 字符, 包含 Emoji 表情.</p></blockquote><br><h2 id=函数声明>函数声明</h2><p>使用 <code>fn</code> 关键字来声明一个函数.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>fn</span> <span class=nf>test1</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;hello&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果要带参数, 直接按照类型后置风格在括号内写明.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>fn</span> <span class=nf>test2</span><span class=p>(</span><span class=n>number</span>: <span class=kt>i32</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;number: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>number</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果要带返回值, 直接使用箭头 <code>-></code> 来指定.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>fn</span> <span class=nf>test3</span><span class=p>(</span><span class=n>num1</span>: <span class=kt>i32</span><span class=p>,</span><span class=w> </span><span class=n>num2</span>: <span class=kt>i32</span><span class=p>)</span><span class=w> </span>-&gt; <span class=kt>i32</span> <span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>return</span><span class=w> </span><span class=n>num1</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>num2</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>当返回值是最后一行的时候, 你可以省略 return 和结尾的分号, 直接将表达式作为返回值返回.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>fn</span> <span class=nf>test3</span><span class=p>(</span><span class=n>num1</span>: <span class=kt>i32</span><span class=p>,</span><span class=w> </span><span class=n>num2</span>: <span class=kt>i32</span><span class=p>)</span><span class=w> </span>-&gt; <span class=kt>i32</span> <span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>num1</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>num2</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果参数或者返回值是函数类型, 使用 <code>fn</code> 关键字即可, 下面的例子中, resolver 是一个函数, 这个函数有两个 <code>i32</code> 参数, 返回值是 <code>i32</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>fn</span> <span class=nf>test4</span><span class=p>(</span><span class=n>num1</span>: <span class=kt>i32</span><span class=p>,</span><span class=w> </span><span class=n>num2</span>: <span class=kt>i32</span><span class=p>,</span><span class=w> </span><span class=n>resolver</span>: <span class=nc>fn</span><span class=p>(</span><span class=kt>i32</span><span class=p>,</span><span class=w> </span><span class=kt>i32</span><span class=p>)</span><span class=w> </span>-&gt; <span class=kt>i32</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;</span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>resolver</span><span class=p>(</span><span class=n>num1</span><span class=p>,</span><span class=w> </span><span class=n>num2</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><br><h2 id=变量声明>变量声明</h2><p>使用 <code>let</code> 声明一个变量.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>num</span>: <span class=kt>i32</span> <span class=o>=</span><span class=w> </span><span class=mi>114514</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>大部分情况, 你都可以省略掉类型标记, Rust 会自动推导它的类型.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>num</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>114514</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>上面声明的变量, 是不可变的. 如果你希望声明可变的变量, 需要使用 <code>mut</code> 关键字.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>num</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>114514</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 更改其值
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>num</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>666</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><br><h2 id=流程控制>流程控制</h2><p>Rust 中的 <code>if</code> 不使用括号, 直接跟表达式以及语句即可.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>num</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>114514</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>if</span><span class=w> </span><span class=n>num</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>114514</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;value is 114514&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>同样, Rust 中也有 <code>else</code>, <code>else if</code> 可用, 和 C 族语言类似, 只不过是少了括号.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=n>num</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>114514</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;value is 114514&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=k>if</span><span class=w> </span><span class=n>num</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>1919810</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;value is 1919810&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;invalid value&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>Rust 中的 <code>if</code> 也可以实现根据条件返回特定值的需求.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>num</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>114514</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>tip</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>if</span><span class=w> </span><span class=n>num</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>114514</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;哼哼哼&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;啊啊啊&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>};</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在上面的例子中, 对 <code>num</code> 进行判断, 如果值为 114514, tip 的值会是 &ldquo;哼哼哼&rdquo;, 否则为 &ldquo;啊啊啊&rdquo;. 需要注意的是, 当你希望 <code>if</code> 语句将语句作为结果返回时, 不要在语句末尾添加分号.</p><p>Rust 中的 <code>for</code> 用来对一个实例进行迭代. 使用 <code>起始值..结束值</code> 这样的语法可以创建简单的数值范围. 搭配 <code>for</code> 即可实现简单的数值循环.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=n>i</span><span class=w> </span><span class=k>in</span><span class=w> </span><span class=mi>0</span><span class=o>..</span><span class=mi>10</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;current value: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>i</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>同样的, Rust 中, <code>continue</code> 和 <code>break</code> 也可用.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=n>i</span><span class=w> </span><span class=k>in</span><span class=w> </span><span class=mi>0</span><span class=o>..</span><span class=mi>10</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;current value: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>i</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=n>i</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>3</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>continue</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=n>i</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>7</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>break</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>值得一提的是, Rust 在循环时, 是允许对集合元素进行修改的. 只需要将迭代变量使用 <code>mut</code> 修饰.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>arr</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=p>[</span><span class=mi>1</span><span class=p>,</span><span class=w> </span><span class=mi>2</span><span class=p>,</span><span class=w> </span><span class=mi>3</span><span class=p>,</span><span class=w> </span><span class=mi>4</span><span class=p>];</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>for</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>ele</span><span class=w> </span><span class=k>in</span><span class=w> </span><span class=n>arr</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>ele</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>ele</span><span class=w> </span><span class=o>*</span><span class=w> </span><span class=mi>2</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果你需要一个 &lsquo;死循环&rsquo;, 可以直接使用 <code>loop</code> 语句.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>i</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>0</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>loop</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;current value: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>i</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=n>i</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>3</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>continue</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=n>i</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>10</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>break</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>Rust 的 <code>loop</code> 还支持给循环语句加上标签, 然后在内部循环中直接中断指定标签的循环.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=na>&#39;loop_out</span>: <span class=nc>loop</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>loop</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=c1>// 在内部循环直接中断最外部循环
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>        </span><span class=k>break</span><span class=w> </span><span class=nl>&#39;loop_out</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>Rust 的 <code>loop</code> 还可以作为一个带返回值的表达式使用. 只需要在 break 的时候提供返回值即可.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>0</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>result</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>loop</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value</span><span class=w> </span><span class=o>+=</span><span class=w> </span><span class=mi>1</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=n>value</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=mi>10</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>break</span><span class=w> </span><span class=n>value</span><span class=w> </span><span class=o>*</span><span class=w> </span><span class=mi>2</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>};</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>Rust 的 <code>match</code> 语句可以近似理解为 <code>if</code> 的高级语法. 传入一个值, 以及匹配条件和语句, 可以执行对应语句.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>num</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>114514</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>match</span><span class=w> </span><span class=n>num</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=mi>114514</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;hello&#34;</span><span class=p>),</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=mi>1919810</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;world&#34;</span><span class=p>),</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>_</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在上面的例子中, 会对 num 进行匹配, 并且在值为 114514 和 1919810 时执行不同的语句, 如果所有条件都没有匹配到, 则会使用 <code>_ => { }</code> 表示的默认情况, 在这里是空语句, 也就是什么也不执行.</p><p>同时, Rust 的 <code>match</code> 语句也可以作为表达式返回一个值, 只需要 <code>match</code> 内的语句是有返回值的表达式即可.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>result</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>match</span><span class=w> </span><span class=n>num</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=mi>114514</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=s>&#34;hello&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=mi>1919810</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=s>&#34;world&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>_</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=s>&#34;&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>};</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在上面的示例中, <code>match</code> 对 num 进行匹配, 并且在值为 114514 和 1919810 的时候返回不同的字符串, 最终赋值给 result. 如果没有匹配到指定条件, 则是使用默认语句 <code>_ => ""</code> 返回一个空的字符串.</p><blockquote><p>需要注意的是, 在 <code>match</code> 语句中, 使用的是 <code>=></code> 而不是 <code>-></code>.</p></blockquote><br><h2 id=字符串--strings>字符串 / Strings</h2><p>在 Rust 中, 字符串分两种, 一种是 <code>str</code>, 它表示字符串本身, 不可变.
+由于 <code>str</code> 作为字符串本身, 其大小是不确定的, 所以它无法作为本地变量存储. 我们在使用时, 使用的都是 <code>&amp;str</code>, 也就是 <code>str</code> 的引用.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>hello1</span><span class=w> </span>: <span class=kp>&amp;</span><span class=kt>str</span> <span class=o>=</span><span class=w> </span><span class=s>&#34;你好世界&#34;</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>另一种是 <code>String</code>, 本质是数组的包装, 它是可变的. 你可以对其进行更改. 你可以将它理解为其他语言中常见的 <code>StringBuilder</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>hello2</span><span class=w> </span>: <span class=nb>String</span> <span class=o>=</span><span class=w> </span><span class=nb>String</span>::<span class=n>new</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>hello2</span><span class=p>.</span><span class=n>add</span><span class=p>(</span><span class=s>&#34;向字符串中添加一些内容&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>hello2</span><span class=p>.</span><span class=n>add</span><span class=p>(</span><span class=s>&#34;, 你好吗?&#34;</span><span class=p>)</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果你需要将字符串编码为字节数组, 可以直接使用 <code>as_bytes</code> 函数</p><p>由于 Rust 中字符串使用 UTF-8 存储, 所以该函数的结果即为字符串使用 UTF-8 编码后的结果.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>tip</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;hello world&#34;</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>bytes</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>tip</span><span class=p>.</span><span class=n>as_bytes</span><span class=p>();</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果希望从 UTF-8 转为 Rust 字符串, 可以使用 <code>std::str::from_utf8</code> 函数进行转换.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// bytes 为需要解码的数据
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>let</span><span class=w> </span><span class=n>bytes</span><span class=w> </span>: <span class=kp>&amp;</span><span class=p>[</span><span class=kt>u8</span><span class=p>];</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>some_str</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>std</span>::<span class=kt>str</span>::<span class=n>from_utf8</span><span class=p>(</span><span class=n>bytes</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><br><h2 id=数组--arrays>数组 / Arrays</h2><p>在 Rust 中, 数组是长度不可变的容器, 并且其大小必须在编译时确定. 其类型表达为: <code>[类型; 长度]</code>.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>arr</span><span class=w> </span>: <span class=p>[</span><span class=kt>i32</span><span class=p>;</span><span class=w> </span><span class=mi>4</span><span class=p>];</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在使用这个数组之前, 我们还需要对其进行初始化, 可以使用中括号指定其每一个元素的值.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>arr</span><span class=w> </span>: <span class=p>[</span><span class=kt>i32</span><span class=p>;</span><span class=w> </span><span class=mi>4</span><span class=p>]</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=p>[</span><span class=mi>1</span><span class=p>,</span><span class=w> </span><span class=mi>2</span><span class=p>,</span><span class=w> </span><span class=mi>3</span><span class=p>,</span><span class=w> </span><span class=mi>4</span><span class=p>];</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>当然, 这里的数组类型也可以被省略掉.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>arr</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=p>[</span><span class=mi>1</span><span class=p>,</span><span class=w> </span><span class=mi>2</span><span class=p>,</span><span class=w> </span><span class=mi>3</span><span class=p>,</span><span class=w> </span><span class=mi>4</span><span class=p>];</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果你希望直接初始化一个指定长度的数组, 可以使用中括号以及分号. 就像数组的类型表示.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>arr</span><span class=w> </span>: <span class=p>[</span><span class=kt>i32</span><span class=p>;</span><span class=w> </span><span class=mi>4</span><span class=p>]</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=p>[</span><span class=mi>0</span><span class=p>;</span><span class=w> </span><span class=mi>4</span><span class=p>];</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>arr</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=p>[</span><span class=mi>0</span><span class=p>;</span><span class=w> </span><span class=mi>4</span><span class=p>];</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><br><h2 id=容器--collections>容器 / Collections</h2><p>如果你需要可变的容器, 可以使用 <code>Vec&lt;T></code>, 当然, 只有在声明时使用 <code>mut</code> 关键字, 它才可变.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>v</span><span class=w> </span>: <span class=nb>Vec</span><span class=o>&lt;</span><span class=kt>i32</span><span class=o>&gt;</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=nb>Vec</span>::<span class=o>&lt;</span><span class=kt>i32</span><span class=o>&gt;</span>::<span class=n>new</span><span class=p>();</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>你可以将它简写为这样:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 指定变量类型, Vec 的泛型参数会自动推导
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>v</span><span class=w> </span>: <span class=nb>Vec</span><span class=o>&lt;</span><span class=kt>i32</span><span class=o>&gt;</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=nb>Vec</span>::<span class=n>new</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 指定泛型参数, 变量的类型会自动推导.
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>v</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=nb>Vec</span>::<span class=o>&lt;</span><span class=kt>i32</span><span class=o>&gt;</span>::<span class=n>new</span><span class=p>();</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>使用 <code>len</code> 函数获取其长度:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>len</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>v</span><span class=p>.</span><span class=n>len</span><span class=p>();</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>用 <code>push</code> 和 <code>pop</code> 方法可以在 <code>Vec&lt;T></code> 的结尾增删元素.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=n>v</span><span class=p>.</span><span class=n>push</span><span class=p>(</span><span class=mi>114514</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>v</span><span class=p>.</span><span class=n>pop</span><span class=p>();</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>使用 <code>insert</code> 和 <code>remove</code> 可以在指定位置增删元素.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=n>v</span><span class=p>.</span><span class=n>insert</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=w> </span><span class=mi>114514</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>v</span><span class=p>.</span><span class=n>remove</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>哈希映射(HashMap)用于存储基于哈希值的键值映射, 像是其他语言中的 &ldquo;Dictionary&rdquo; 或者 &ldquo;Hashtable&rdquo;,</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>hm</span><span class=w> </span>: <span class=nc>HashMap</span><span class=o>&lt;&amp;</span><span class=kt>str</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=kt>str</span><span class=o>&gt;</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>HashMap</span>::<span class=o>&lt;&amp;</span><span class=kt>str</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=kt>str</span><span class=o>&gt;</span>::<span class=n>new</span><span class=p>();</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>简写:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>hm</span><span class=w> </span>: <span class=nc>HashMap</span><span class=o>&lt;&amp;</span><span class=kt>str</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=kt>str</span><span class=o>&gt;</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>HashMap</span>::<span class=n>new</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>hm</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>HashMap</span>::<span class=o>&lt;&amp;</span><span class=kt>str</span><span class=p>,</span><span class=w> </span><span class=o>&amp;</span><span class=kt>str</span><span class=o>&gt;</span>::<span class=n>new</span><span class=p>();</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>使用 <code>len</code> 函数获取其长度:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>len</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>hm</span><span class=p>.</span><span class=n>len</span><span class=p>();</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>insert() 方法用于插入或更新一个键值对到哈希映射中, 如果键已经存在, 则更新为新的键值对, 并则返回旧的值. 如果键不存在则执行插入操作并返回 None.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=n>hm</span><span class=p>.</span><span class=n>insert</span><span class=p>(</span><span class=s>&#34;qwq&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;awa&#34;</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>从哈希映射中获取和删除值.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>valueOption</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>hm</span><span class=p>.</span><span class=n>get</span><span class=p>(</span><span class=o>&amp;</span><span class=s>&#34;qwq&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>valueOption</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>hm</span><span class=p>.</span><span class=n>remove</span><span class=p>(</span><span class=o>&amp;</span><span class=s>&#34;qwq&#34;</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>也可以使用 <code>for</code> 对哈希映射进行循环:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>for</span><span class=w> </span><span class=p>(</span><span class=n>k</span><span class=p>,</span><span class=w> </span><span class=n>v</span><span class=p>)</span><span class=w> </span><span class=k>in</span><span class=w> </span><span class=n>hm</span><span class=w> </span><span class=p>{</span><span class=w> 
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;Key: </span><span class=si>{}</span><span class=s>, Value: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>k</span><span class=p>,</span><span class=w> </span><span class=n>v</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>哈希集合是基于哈希值的元素不重复容器, 常用于去重或快速查找元素是否存在.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>hs</span>: <span class=nc>HashSet</span><span class=o>&lt;</span><span class=kt>i32</span><span class=o>&gt;</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>HashSet</span>::<span class=n>new</span><span class=p>();</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>获取长度, 插入数据, 删除数据, 判断数据是否已经存在:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>len</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>hs</span><span class=p>.</span><span class=n>len</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>result</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>hs</span><span class=p>.</span><span class=n>insert</span><span class=p>(</span><span class=mi>123</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>result</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>hs</span><span class=p>.</span><span class=n>remove</span><span class=p>(</span><span class=o>&amp;</span><span class=mi>123</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>result</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>hs</span><span class=p>.</span><span class=n>contains</span><span class=p>(</span><span class=o>&amp;</span><span class=mi>123</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><br><h2 id=结构--structures>结构 / Structures</h2><p>使用 <code>struct</code> 关键字可以创建一个结构体.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>struct</span> <span class=nc>Point</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>x</span>: <span class=kt>i32</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>y</span>: <span class=kt>i32</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在使用结构体类型的变量时, 该变量必须被初始化.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>p</span><span class=w> </span>: <span class=nc>Point</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Point</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>x</span>: <span class=mi>1</span><span class=p>,</span><span class=w> </span><span class=n>y</span>: <span class=mi>3</span><span class=w> </span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>p</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Point</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>x</span>: <span class=mi>1</span><span class=p>,</span><span class=w> </span><span class=n>y</span>: <span class=mi>3</span><span class=w> </span><span class=p>};</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>你可以对它的成员进行赋值, 取值.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=n>p</span><span class=p>.</span><span class=n>x</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>114514</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>x</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>p</span><span class=p>.</span><span class=n>x</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果需要为该类型添加一些方法, 使用 <code>impl</code> 关键字.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>impl</span><span class=w> </span><span class=n>Point</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>new</span><span class=p>(</span><span class=n>x</span>: <span class=kt>i32</span><span class=p>,</span><span class=w> </span><span class=n>y</span>: <span class=kt>i32</span><span class=p>)</span><span class=w> </span>-&gt; <span class=nc>Point</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>Point</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>x</span>: <span class=nc>x</span><span class=p>,</span><span class=w> </span><span class=n>y</span>: <span class=nc>y</span><span class=w> </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>现在, 你可以使用 <code>Point::new</code> 来创建一个 <code>Point</code> 了.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>p</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Point</span>::<span class=n>new</span><span class=p>(</span><span class=mi>123</span><span class=p>,</span><span class=w> </span><span class=mi>456</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果你要为该类型的实例创建一些函数, 只需要在编写函数时, 将第一个参数声明为 <code>self</code> 即可.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>impl</span><span class=w> </span><span class=n>Point</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>output</span><span class=p>(</span><span class=bp>self</span>: <span class=kp>&amp;</span><span class=nc>Self</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;Point, x: </span><span class=si>{}</span><span class=s>, y: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>x</span><span class=p>,</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>y</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>现在你可以通过一个 <code>Point</code> 实例来调用 <code>output</code> 函数进行输出了.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=n>p</span><span class=p>.</span><span class=n>output</span><span class=p>();</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在上述代码中, <code>self</code> 关键字表示当前实例, <code>Self</code> 关键字表示当前类型, 当然, 你也可以将它写成具体的类型. 下面的代码都是有效的实例函数定义:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>impl</span><span class=w> </span><span class=n>Point</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 不使用 Self 关键字, 而是使用具体的 Point 类型
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>    </span><span class=k>fn</span> <span class=nf>output1</span><span class=p>(</span><span class=bp>self</span>: <span class=kp>&amp;</span><span class=nc>Point</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 不使用 Self 关键字, 而是让其自动推导类型
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>    </span><span class=k>fn</span> <span class=nf>output2</span><span class=p>(</span><span class=o>&amp;</span><span class=bp>self</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><br><h2 id=特征--traits>特征 / Traits</h2><p>在 Rust 中, <code>trait</code> 表示某种特征. 例如 &ldquo;可迭代&rdquo;, &ldquo;可显示&rdquo;, &ldquo;可调试&rdquo;. 它类似于其他编程语言的接口. 使用 <code>trait</code> 关键字创建一个特征.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>trait</span><span class=w> </span><span class=n>TestTrait</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>some_func</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在上面的例子中, 我们创建了一个名为 <code>TestTrait</code> 的 <code>trait</code>, 它规定, 需要有一个名为 <code>some_func</code> 的无参无返回值函数.</p><p>要使某个结构实现一个 <code>trait</code>, 使用 <code>impl ... for ...</code> 语法.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>impl</span><span class=w> </span><span class=n>TestTrait</span><span class=w> </span><span class=k>for</span><span class=w> </span><span class=n>Point</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>some_func</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;hello world from struct Point&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p><code>trait</code> 主要是与泛型搭配使用. 同时和其他编程语言不一样的是, <code>trait</code> 无法直接作为一个函数的参数类型. 你需要使用泛型, 然后指定泛型需要实现某 <code>trait</code>, 然后将该泛型作为函数的参数类型使用.</p><p><code>trait</code> 可以用内置的实现, 在这方面, 它又像其他语言的抽象类. 例如, 某个 <code>trait</code> 需要类型实现函数 A, 而函数 B 由该 <code>trait</code> 自己实现, 内部逻辑依赖于函数 A. 这时, 只要某个类型实现了这个 trait 并编写函数 A 的实现, 他就可以直接使用 <code>trait</code> 内的函数 B.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>trait</span><span class=w> </span><span class=n>TestTrait</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>get_string</span><span class=p>(</span><span class=o>&amp;</span><span class=bp>self</span><span class=p>)</span><span class=w> </span>-&gt; <span class=nb>String</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>print_string</span><span class=p>(</span><span class=o>&amp;</span><span class=bp>self</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;</span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>get_string</span><span class=p>());</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>impl</span><span class=w> </span><span class=n>TestTrait</span><span class=w> </span><span class=k>for</span><span class=w> </span><span class=n>Point</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>get_string</span><span class=p>(</span><span class=o>&amp;</span><span class=bp>self</span><span class=p>)</span><span class=w> </span>-&gt; <span class=nb>String</span> <span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=fm>format!</span><span class=p>(</span><span class=s>&#34;Point, x: </span><span class=si>{}</span><span class=s>, y: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>x</span><span class=p>,</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>y</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>p</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Point</span>::<span class=n>new</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span><span class=w> </span><span class=mi>2</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>p</span><span class=p>.</span><span class=n>print_string</span><span class=p>();</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><br><h2 id=特性--attributes>特性 / Attributes</h2><p>Rust 中的特性(Attribute)是一种标记. 类似于 C# 的 <code>Attribute</code> 或者 Python 中的 <code>Decorators</code>, 在做上标记后, 即可拥有某种行为.</p><p>下面使用 <code>derive</code> 特性演示特性的使用.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=cp>#[derive(PartialEq, Eq)]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>struct</span> <span class=nc>Point</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>x</span>: <span class=kt>i32</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>y</span>: <span class=kt>i32</span>
+</span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在以上代码中, 我们为 Point 结构添加了 derive 特性, 这个特性用于自动实现指定的 <code>trait</code>, 在这里, 我们指定了 <code>PartialEq</code> 和 <code>Eq</code>.</p><p>在实现了 <code>PartialEq</code> 和 <code>Eq</code> 后, 我们的 Point 结构现在可以使用 <code>==</code> 和 <code>!=</code> 运算符了.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>p1</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Point</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>x</span>: <span class=mi>123</span><span class=p>,</span><span class=w> </span><span class=n>y</span>: <span class=mi>456</span><span class=w> </span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>p2</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Point</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>x</span>: <span class=mi>345</span><span class=p>,</span><span class=w> </span><span class=n>y</span>: <span class=mi>829</span><span class=w> </span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>if</span><span class=w> </span><span class=n>p1</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=n>p2</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;两点相等&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><br><h2 id=枚举--enumerations>枚举 / Enumerations</h2><p>Rust 中的枚举和其他语言中的枚举有很大不同. 它枚举可理解为 &ldquo;情况&rdquo;, 既可以作为类似于 C# 中的纯值类型使用, 也可以像 Java 的枚举一样在枚举中存储数据.</p><p>Rust 对于枚举的优化是很好的, 不像 Java 一般是基于堆中存储的.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>enum</span> <span class=nc>ColorChannel</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>Red</span><span class=p>,</span><span class=w> </span><span class=n>Green</span><span class=p>,</span><span class=w> </span><span class=n>Blue</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在以上的例子中, 我们声明了一个最简单的枚举, 这个枚举仅包含三种情况, 即 &lsquo;红&rsquo;, &lsquo;绿&rsquo;, &lsquo;蓝&rsquo;. 在这种情况下, 你可以理解为我们定义了三个数字值常量, 通过 <code>ColorChannel</code> 可以访问它们.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>color_channel1</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>ColorChannel</span>::<span class=n>Red</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>color_channel2</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>ColorChannel</span>::<span class=n>Green</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>color_channel3</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>ColorChannel</span>::<span class=n>Blue</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>然后使用模式匹配进行判断.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>match</span><span class=w> </span><span class=n>color_channel1</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>ColorChannel</span>::<span class=n>Red</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;is red&#34;</span><span class=p>),</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>_</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=p>{}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在这里我们不能使用 <code>if</code> 语句进行判断, 因为我们定义的枚举没有实现名为 <code>PartialEq</code> 的 <code>trait</code>, 这是内置于 <code>rust</code> 的 <code>trait</code>, 用于重载 <code>==</code> 和 <code>!=</code> 运算符.</p><p>下面我们将以一个不同情况的颜色讲述 Rust 中枚举存储值的用法.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>enum</span> <span class=nc>Color</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>Rgb</span><span class=p>(</span><span class=kt>u8</span><span class=p>,</span><span class=w> </span><span class=kt>u8</span><span class=p>,</span><span class=w> </span><span class=kt>u8</span><span class=p>),</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>Channel</span><span class=p>(</span><span class=n>ColorChannel</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在上面的示例中, <code>Color</code> 分成了两种情况, 一种是 <code>Rgb</code>, 一种是 <code>Channel</code>. 当是 <code>Rgb</code> 的时候, 它存储三个无符号八位整数, 当是 <code>Channel</code> 的时候, 它存储一个 <code>ColorChannel</code> 枚举.</p><p>我们可以这样使用它:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>color</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Color</span>::<span class=n>Rgb</span><span class=p>(</span><span class=mi>89</span><span class=p>,</span><span class=w> </span><span class=mi>43</span><span class=p>,</span><span class=w> </span><span class=mi>233</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>match</span><span class=w> </span><span class=n>color</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>Color</span>::<span class=n>Rgb</span><span class=p>(</span><span class=n>r</span><span class=p>,</span><span class=w> </span><span class=n>g</span><span class=p>,</span><span class=w> </span><span class=n>b</span><span class=p>)</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;颜色是 RGB 值. R: </span><span class=si>{}</span><span class=s>, G: </span><span class=si>{}</span><span class=s>, B: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>r</span><span class=p>,</span><span class=w> </span><span class=n>g</span><span class=p>,</span><span class=w> </span><span class=n>b</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>},</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>Color</span>::<span class=n>Channel</span><span class=p>(</span><span class=n>channel</span><span class=p>)</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;颜色是通道, </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>channel</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><blockquote><p>注意, 因为这里需要将 <code>ColorChannel</code> 打印输出, 所以 <code>ColorChannel</code> 需要实现名为 <code>Display</code> 的 <code>trait</code>.</p></blockquote><p>在这种有存储值的情况下, 我们也可以使用 <code>if let</code> 的语句对其进行判断:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=kd>let</span><span class=w> </span><span class=n>Color</span>::<span class=n>Rgb</span><span class=p>(</span><span class=n>r</span><span class=p>,</span><span class=w> </span><span class=n>g</span><span class=p>,</span><span class=w> </span><span class=n>b</span><span class=p>)</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>color</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;颜色是 RGB 值. R: </span><span class=si>{}</span><span class=s>, G: </span><span class=si>{}</span><span class=s>, B: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>r</span><span class=p>,</span><span class=w> </span><span class=n>g</span><span class=p>,</span><span class=w> </span><span class=n>b</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>我们还可以为枚举中的值命名, 这样就可以:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>enum</span> <span class=nc>Color</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>Rgb</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>r</span>: <span class=kt>u8</span><span class=p>,</span><span class=w> </span><span class=n>g</span>: <span class=kt>u8</span><span class=p>,</span><span class=w> </span><span class=n>b</span>:<span class=kt>u8</span> <span class=p>},</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>Channel</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>channel</span>: <span class=nc>ColorChannel</span><span class=w> </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>不过这样的话, 使用方式也需要做些改动:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>color</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Color</span>::<span class=n>Rgb</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>r</span>: <span class=mi>23</span><span class=p>,</span><span class=w> </span><span class=n>g</span>: <span class=mi>12</span><span class=p>,</span><span class=w> </span><span class=n>b</span>: <span class=mi>129</span><span class=w> </span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>match</span><span class=w> </span><span class=n>color</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>Color</span>::<span class=n>Rgb</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>r</span><span class=p>,</span><span class=w> </span><span class=n>g</span><span class=p>,</span><span class=w> </span><span class=n>b</span><span class=w> </span><span class=p>}</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;颜色是 RGB 值. R: </span><span class=si>{}</span><span class=s>, G: </span><span class=si>{}</span><span class=s>, B: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>r</span><span class=p>,</span><span class=w> </span><span class=n>g</span><span class=p>,</span><span class=w> </span><span class=n>b</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>},</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>Color</span>::<span class=n>Channel</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>channel</span><span class=w> </span><span class=p>}</span><span class=o>=&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;颜色是通道, </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>channel</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>if</span><span class=w> </span><span class=kd>let</span><span class=w> </span><span class=n>Color</span>::<span class=n>Rgb</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>r</span><span class=p>,</span><span class=w> </span><span class=n>g</span><span class=p>,</span><span class=w> </span><span class=n>b</span><span class=w> </span><span class=p>}</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>color</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;颜色是 RGB 值. R: </span><span class=si>{}</span><span class=s>, G: </span><span class=si>{}</span><span class=s>, B: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>r</span><span class=p>,</span><span class=w> </span><span class=n>g</span><span class=p>,</span><span class=w> </span><span class=n>b</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><br><h2 id=泛型--generic>泛型 / Generic</h2><p>泛型是编程语言中极重要的一个概念. 通过使用泛型, 可以实现一些逻辑的复用. 例如, 当我们自定义的结构实现 Rust 内置的某些 <code>trait</code> 时, 我们也可以使用 Rust 内的某些函数.</p><p>下面我们将自己定义一个简单的 <code>trait</code> 和一个简单的泛型函数.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>trait</span><span class=w> </span><span class=n>I32Printer</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>print</span><span class=p>(</span><span class=o>&amp;</span><span class=bp>self</span><span class=p>,</span><span class=w> </span><span class=n>value</span>: <span class=kt>i32</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>fn</span> <span class=nf>print_i32</span><span class=o>&lt;</span><span class=n>Printer</span>: <span class=nc>I32Printer</span><span class=o>&gt;</span><span class=p>(</span><span class=n>value</span>: <span class=kt>i32</span><span class=p>,</span><span class=w> </span><span class=n>printer</span>: <span class=nc>Printer</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>printer</span><span class=p>.</span><span class=n>print</span><span class=p>(</span><span class=n>value</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在上面的逻辑中, 我们在 <code>print_i32</code> 后添加了尖括号, 尖括号中, 冒号的前半部分表示需要使用的泛型类型, 冒号后面是对泛型类型的约束, 表示该泛型类型必须实现 <code>I32Printer</code> 这个 <code>trait</code>.</p><p>在参数列表中, 我们定义了 <code>printer</code> 参数, 指定其类型为我们定义的泛型类型. 这样, 它就可以接受任何实现了 <code>I32Printer</code> 的类型.</p><p>接下来我们定义两个结构, 实现 <code>I32Printer</code>, 编写不同的打印逻辑.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>struct</span> <span class=nc>SimpleI32Printer</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>struct</span> <span class=nc>AnotherI32Printer</span><span class=o>&lt;</span><span class=na>&#39;a</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>prompt</span>: <span class=kp>&amp;</span><span class=na>&#39;a</span> <span class=kt>str</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>impl</span><span class=w> </span><span class=n>I32Printer</span><span class=w> </span><span class=k>for</span><span class=w> </span><span class=n>SimpleI32Printer</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>print</span><span class=p>(</span><span class=o>&amp;</span><span class=bp>self</span><span class=p>,</span><span class=w> </span><span class=n>value</span>: <span class=kt>i32</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;</span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>impl</span><span class=w> </span><span class=n>I32Printer</span><span class=w> </span><span class=k>for</span><span class=w> </span><span class=n>AnotherI32Printer</span><span class=o>&lt;</span><span class=nb>&#39;_</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>print</span><span class=p>(</span><span class=o>&amp;</span><span class=bp>self</span><span class=p>,</span><span class=w> </span><span class=n>value</span>: <span class=kt>i32</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;</span><span class=si>{}</span><span class=s>: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>prompt</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在上面的例子中, 我们定义了 <code>SimpleI32Printer</code> 和 <code>AnotherI32Printer</code> 两个结构, 并且都为它们实现了 <code>I32Printer</code> 的 <code>trait</code>.</p><p>现在, 可以调用方法, 传入不同的 printer, 然后查看运行结果了.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>printer1</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>SimpleI32Printer</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>printer2</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>AnotherI32Printer</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>prompt</span>: <span class=s>&#34;Number:&#34;</span><span class=w> </span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>print_i32</span>::<span class=o>&lt;</span><span class=n>SimpleI32Printer</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>114514</span><span class=p>,</span><span class=w> </span><span class=n>printer1</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>print_i32</span>::<span class=o>&lt;</span><span class=n>AnotherI32Printer</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>1919810</span><span class=p>,</span><span class=w> </span><span class=n>printer2</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>可以看到, 它根据我们传入的不同类型实例, 有了不同的行为.</p><blockquote><p>在其他语言, 例如 C# 和 Java 中, 你可以直接将接口作为参数类型指定. 但是在 Rust 中, 你必须创建一个泛型参数来做这样的逻辑.
+Rust 中, 一切参数, 变量的大小都应该是固定的. 倘若我们允许 <code>trait</code> 作为参数类型, 那么类型的大小将不再确定. 而泛型则类似于 C++ 的模板, 在编译时, Rust 编译器会对其做处理, 生成能使用多个类型进行调用的函数.</p></blockquote><p>接下来就是泛型类型了, 在定义类型的时候, 我们也可以使用泛型.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>struct</span> <span class=nc>TwoValues</span><span class=o>&lt;</span><span class=n>T1</span><span class=p>,</span><span class=w> </span><span class=n>T2</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value1</span>: <span class=nc>T1</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value2</span>: <span class=nc>T2</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>使用起来也很简单:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>two_values</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>TwoValues</span>::<span class=o>&lt;</span><span class=kt>i32</span><span class=p>,</span><span class=w> </span><span class=kt>u8</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value1</span>: <span class=mi>123</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value2</span>: <span class=mi>123</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 或者
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>let</span><span class=w> </span><span class=n>two_values</span><span class=w> </span>: <span class=nc>TwoValues</span><span class=o>&lt;</span><span class=kt>i32</span><span class=p>,</span><span class=w> </span><span class=kt>u8</span><span class=o>&gt;</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>TwoValues</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value1</span>: <span class=mi>123</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value2</span>: <span class=mi>123</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 也可以自动推导类型, 这里将会被推导为 TwoValues&lt;i32, i32&gt;
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>let</span><span class=w> </span><span class=n>two_values</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>TwoValues</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value1</span>: <span class=mi>123</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value2</span>: <span class=mi>123</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>};</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>为泛型类型实现方法, 需要这样写:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>impl</span><span class=o>&lt;</span><span class=n>T1</span><span class=p>,</span><span class=w> </span><span class=n>T2</span><span class=o>&gt;</span><span class=w> </span><span class=n>TwoValues</span><span class=o>&lt;</span><span class=n>T1</span><span class=p>,</span><span class=w> </span><span class=n>T2</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>common_fn</span><span class=p>(</span><span class=o>&amp;</span><span class=bp>self</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;common func&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在上面的例子中, 由于我们不知道泛型类型具体类型, 所以在 <code>impl</code> 语句后还是需要声明两个泛型类型, 然后传入到类型.</p><p>但如果你希望为带有指定泛型参数的泛型类型定义一些函数, 可以这样写:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>impl</span><span class=w> </span><span class=n>TwoValues</span><span class=o>&lt;&amp;</span><span class=kt>str</span><span class=p>,</span><span class=w> </span><span class=kt>i32</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>test_output</span><span class=p>(</span><span class=o>&amp;</span><span class=bp>self</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;</span><span class=si>{}</span><span class=s>: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>value1</span><span class=p>,</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>value2</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在上面的例子中, 因为我们只想为泛型类型参数为 <code>&amp;str</code> 和 <code>i32</code> 的 <code>TwoValues</code> 定义函数, 泛型类型已知, 所以不必再定义泛型类型.</p><p>下面还有个例子可供参考, 第一个泛型类型参数我们指定为 <code>&amp;str</code>, 第二个指定为实现了 <code>Display</code> 的泛型类型.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>impl</span><span class=o>&lt;</span><span class=n>T</span>: <span class=nc>Display</span><span class=o>&gt;</span><span class=w> </span><span class=n>TwoValues</span><span class=o>&lt;&amp;</span><span class=kt>str</span><span class=p>,</span><span class=w> </span><span class=n>T</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>fn</span> <span class=nf>test_output2</span><span class=p>(</span><span class=o>&amp;</span><span class=bp>self</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;</span><span class=si>{}</span><span class=s>: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>value1</span><span class=p>,</span><span class=w> </span><span class=bp>self</span><span class=p>.</span><span class=n>value2</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>需要注意的是, 与其他语言不一样, Rust 在构造类型实例或者调用泛型函数的时候, 需要使用两个冒号以及尖括号来指定泛型类型参数.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 正确使用
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>let</span><span class=w> </span><span class=n>two_values</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>TwoValues</span>::<span class=o>&lt;&amp;</span><span class=kt>str</span><span class=p>,</span><span class=w> </span><span class=kt>i32</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value1</span>: <span class=s>&#34;Tip&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value2</span>: <span class=mi>10</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>print_i32</span>::<span class=o>&lt;</span><span class=n>SimpleI32Printer</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>114514</span><span class=p>,</span><span class=w> </span><span class=n>printer1</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 错误使用
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>let</span><span class=w> </span><span class=n>two_values</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>TwoValues</span><span class=o>&lt;&amp;</span><span class=kt>str</span><span class=p>,</span><span class=w> </span><span class=kt>i32</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value1</span>: <span class=s>&#34;Tip&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value2</span>: <span class=mi>10</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=n>print_i32</span><span class=o>&lt;</span><span class=n>SimpleI32Printer</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>114514</span><span class=p>,</span><span class=w> </span><span class=n>printer1</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>之所以强调这点, 是因为其他语言, 诸如 C#, Java, Kotlin, 它们在构造类型实例和调用泛型方法的时候, 都是直接使用尖括号来指定泛型类型参数的. Rust 需要多加两个冒号, 初学者可能会忘记这点.</p><br><h2 id=所有权--ownership>所有权 / Ownership</h2><p>为了保证内存安全, Rust 引入了 &lsquo;所有权&rsquo; 的概念. 其大概思想为:</p><ol><li>一个类型实例有唯一的作用域, 当离开其作用域时, 该实例会被销毁
+这个作用域称为它的 &lsquo;所有者&rsquo;, 该作用域持有该实例的 &lsquo;所有权&rsquo;</li><li>所有权可以转交给另一个作用域, 转交后, 当前作用域将无法继续使用该实例</li><li>所有权可以借用, 并且指定一定的访问权限, 当前作用域仍持有该实例的 &lsquo;所有权&rsquo;</li></ol><p>大多数编程语言都有作用域的概念, 离开作用域后, 值将作废:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>if</span><span class=w> </span><span class=kc>true</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>some_integer</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>114514</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 这里将报错, 因为已经脱离了 some_integer 的作用域
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;value: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>some_integer</span><span class=p>);</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>当一个值直接传入到另外一个函数中, 那么这个值的所有权也将转交到另外一个函数中:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>struct</span> <span class=nc>MyValue</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value</span>: <span class=kt>i32</span>
+</span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>fn</span> <span class=nf>print_value</span><span class=p>(</span><span class=n>value</span>: <span class=nc>MyValue</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;value: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=p>.</span><span class=n>value</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>fn</span> <span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>my_value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>MyValue</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>value</span>: <span class=mi>114514</span><span class=w> </span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>print_value</span><span class=p>(</span><span class=n>my_value</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 这里将报错, 因为在执行 print_value 的时候, 所有权已经被转让
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>    </span><span class=c1>// 当前作用域不再持有 my_value, 也就无法再使用它
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;value: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>my_value</span><span class=p>.</span><span class=n>value</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果希望函数不转让传入参数的所有权, 可以将参数类型定义为 &lsquo;引用&rsquo;. 你可以将其理解为其他语言中的 &lsquo;指针&rsquo;. 只需要在类型前加 <code>&</code> 符号即可.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>struct</span> <span class=nc>MyValue</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>value</span>: <span class=kt>i32</span>
+</span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>fn</span> <span class=nf>print_value</span><span class=p>(</span><span class=n>value</span>: <span class=kp>&amp;</span><span class=nc>MyValue</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;value: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=p>.</span><span class=n>value</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>fn</span> <span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>my_value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>MyValue</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>value</span>: <span class=mi>114514</span><span class=w> </span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>print_value</span><span class=p>(</span><span class=o>&amp;</span><span class=n>my_value</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// 这时, 你仍然可以使用 my_value
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>    </span><span class=c1>// 因为当前作用域持有 my_value 的所有权
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;value: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>my_value</span><span class=p>.</span><span class=n>value</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>虽然我们将值借给了 <code>print_value</code>, 但在 <code>print_value</code> 内部, 它只能读取参数的值, 而不能对参数进行修改. 如果你希望它能够修改该实例的值, 需要在类型前添加 <code>mut</code> 关键字.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>fn</span> <span class=nf>change_value</span><span class=p>(</span><span class=n>value</span>: <span class=kp>&amp;</span><span class=nc>mut</span><span class=w> </span><span class=n>MyValue</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=n>value</span><span class=p>.</span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>123123</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在调用时也应该使用 <code>&amp;mut xxx</code> 来获取该实例的可修改引用.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>fn</span> <span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>my_value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>MyValue</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=n>value</span>: <span class=mi>114514</span><span class=w> </span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>change_value</span><span class=p>(</span><span class=o>&amp;</span><span class=k>mut</span><span class=w> </span><span class=n>my_value</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果你需要一个能够对值本身进行更改, 那么在赋值时, 需要在变量名前添加 <code>*</code> 符号.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>fn</span> <span class=nf>change_int_value</span><span class=p>(</span><span class=n>value</span>: <span class=kp>&amp;</span><span class=nc>mut</span><span class=w> </span><span class=kt>i32</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=o>*</span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=mi>114514</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><br><h2 id=错误处理>错误处理</h2><p>在 Rust 中, 错误分为两种: 可恢复的错误以及不可恢复的错误. 例如, 在将字符串解析为数字时, 如果数字格式不正确, 所引发的错误是程序逻辑上可以处理的. 而类似于内存访问冲突, 栈溢出这种, 就是无法恢复的错误.</p><p>不可恢复的错误会直接导致程序崩溃. 你可以使用 <code>panic</code> 宏手动引发错误.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=fm>panic!</span><span class=p>(</span><span class=s>&#34;oops&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;test&#34;</span><span class=p>);</span><span class=w>   </span><span class=c1>// 这里代码不会被执行, 因为程序已经崩了
+</span></span></span></code></pre></td></tr></table></div></div><p>而对于可恢复的错误, Rust 中的函数都会返回一个 <code>Result&lt;T, E></code> 来表示可能包含错误值的返回值. 它是一个枚举, 包含两种取值: <code>Ok(T)</code> 与 <code>Err(E)</code>, 我们可以通过 <code>match</code> 语句对其两种情况分别进行处理.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>origin_str</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;123&#34;</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>parse_result</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>origin_str</span><span class=p>.</span><span class=n>parse</span>::<span class=o>&lt;</span><span class=kt>i32</span><span class=o>&gt;</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>match</span><span class=w> </span><span class=n>parse_result</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nb>Ok</span><span class=p>(</span><span class=n>value</span><span class=p>)</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;Value is: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>value</span><span class=p>),</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nb>Err</span><span class=p>(</span><span class=n>err</span><span class=p>)</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;Error: </span><span class=si>{}</span><span class=s>&#34;</span><span class=p>,</span><span class=w> </span><span class=n>err</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果你确定该方法的执行不会出现错误, 也可以使用 <code>unwrap</code> 函数直接取得正确的值.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>origin_str</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;123&#34;</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>parsed_value</span><span class=w> </span>: <span class=kt>i32</span> <span class=o>=</span><span class=w> </span><span class=n>origin_str</span><span class=p>.</span><span class=n>parse</span><span class=p>().</span><span class=n>unwrap</span><span class=p>();</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>但是如果尝试对一个错误值使用 <code>unwrap</code>, 就会引发 <code>panic</code> 了.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=kd>let</span><span class=w> </span><span class=n>origin_str</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;不是数字&#34;</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>let</span><span class=w> </span><span class=n>parsed_value</span>: <span class=kt>i32</span> <span class=o>=</span><span class=w> </span><span class=n>origin_str</span><span class=p>.</span><span class=n>parse</span><span class=p>().</span><span class=n>unwrap</span><span class=p>();</span><span class=w>   </span><span class=c1>// 这里会直接崩溃, 因为解析是失败的, 无法取得结果值
+</span></span></span></code></pre></td></tr></table></div></div><p>Rust 还提供了一个 <code>?</code> 操作符用于简化异常处理. 下面的代码是不使用 <code>?</code> 的.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>fn</span> <span class=nf>mul_input_with_10</span><span class=p>()</span><span class=w> </span>-&gt; <span class=nb>Result</span><span class=o>&lt;</span><span class=kt>i32</span><span class=p>,</span><span class=w> </span><span class=n>ParseIntError</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>input</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=nb>String</span>::<span class=n>new</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>std</span>::<span class=n>io</span>::<span class=n>stdin</span><span class=p>().</span><span class=n>read_line</span><span class=p>(</span><span class=o>&amp;</span><span class=k>mut</span><span class=w> </span><span class=n>input</span><span class=p>).</span><span class=n>unwrap</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>valueResult</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>input</span><span class=p>.</span><span class=n>parse</span>::<span class=o>&lt;</span><span class=kt>i32</span><span class=o>&gt;</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>match</span><span class=w> </span><span class=n>valueResult</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nb>Ok</span><span class=p>(</span><span class=n>value</span><span class=p>)</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=nb>Ok</span><span class=p>(</span><span class=n>value</span><span class=w> </span><span class=o>*</span><span class=w> </span><span class=mi>10</span><span class=p>),</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nb>Err</span><span class=p>(</span><span class=n>err</span><span class=p>)</span><span class=w> </span><span class=o>=&gt;</span><span class=w> </span><span class=nb>Err</span><span class=p>(</span><span class=n>err</span><span class=p>),</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果使用 <code>?</code> 的话, 则是这样. 当结果为 <code>Err(E)</code> 的时候, 会直接将结果作为当前函数的返回值返回, 表达式的结果则是正确的值.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>fn</span> <span class=nf>mul_input_with_10</span><span class=p>()</span><span class=w> </span>-&gt; <span class=nb>Result</span><span class=o>&lt;</span><span class=kt>i32</span><span class=p>,</span><span class=w> </span><span class=n>ParseIntError</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=k>mut</span><span class=w> </span><span class=n>input</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=nb>String</span>::<span class=n>new</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>std</span>::<span class=n>io</span>::<span class=n>stdin</span><span class=p>().</span><span class=n>read_line</span><span class=p>(</span><span class=o>&amp;</span><span class=k>mut</span><span class=w> </span><span class=n>input</span><span class=p>).</span><span class=n>unwrap</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nb>Ok</span><span class=p>(</span><span class=n>input</span><span class=p>.</span><span class=n>parse</span>::<span class=o>&lt;</span><span class=kt>i32</span><span class=o>&gt;</span><span class=p>()</span><span class=o>?</span><span class=w> </span><span class=o>*</span><span class=w> </span><span class=mi>10</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><br><h2 id=模块>模块</h2><p>模块是 Rust 中组织源代码的方式. 在 Rust 中, 一个文件或者文件夹都可以叫做一个 &ldquo;模块&rdquo;.</p><p>例如, 当我有一个 <code>main.rs</code>, 我希望在里面使用 <code>test.rs</code> 的成员时:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 这里是 test.rs 的内容
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 公开一个函数
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>pub</span><span class=w> </span><span class=k>fn</span> <span class=nf>test_fn</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;test fn&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>下面是 <code>main.rs</code>, 使用 <code>mod</code> 语句引入模块, 然后使用 <code>use</code> 语句使用模块中的成员:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 引入 test 模块
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>mod</span> <span class=nn>test</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 使用模块中的成员
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>use</span><span class=w> </span><span class=n>test</span>::<span class=n>test_fn</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>fn</span> <span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>test_fn</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果希望将一个文件夹暴露为一个模块的话, 你需要先创建一个文件夹, 然后在文件夹下创建 <code>mod.rs</code>, 然后编写内容. 在该文件下向外暴露的成员, 即为该模块的成员.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 这里是 test2/mod.rs 的内容
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 公开一个函数
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>pub</span><span class=w> </span><span class=k>fn</span> <span class=nf>test_fn</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;test fn&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>引用的时候和之前的代码一样, 只需要使用 <code>mod test2</code> 即可引入 <code>test2</code> 模块.</p><p>如果你希望在 <code>test2</code> 文件夹下编写更多的文件, 并向外暴露:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-txt data-lang=txt><span class=line><span class=cl>|- test2
+</span></span><span class=line><span class=cl>|  |- another.rs
+</span></span><span class=line><span class=cl>|  -- mod.rs
+</span></span><span class=line><span class=cl>|
+</span></span><span class=line><span class=cl>-- main.rs
+</span></span></code></pre></td></tr></table></div></div><p>那么任何你想要向外暴露的内容, 都应该在 <code>test2/mod.rs</code> 下声明好.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 这里是 test2/another.rs 的内容
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 公开一个结构
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>pub</span><span class=w> </span><span class=k>struct</span> <span class=nc>AnotherStruct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在 <code>test2/mod.rs</code> 中, 你需要导入并公开 <code>another</code> 这个模块.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 这里是 test2/mod.rs 的内容
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 导入并公开 another 模块
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>pub</span><span class=w> </span><span class=k>mod</span> <span class=nn>another</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 公开属于 test2 的成员
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>pub</span><span class=w> </span><span class=k>fn</span> <span class=nf>test_fn</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=fm>println!</span><span class=p>(</span><span class=s>&#34;test fn&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>于是, 你就可以在 <code>main.rs</code> 中, 使用 <code>AnotherStruct</code> 这个类型了.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 导入 test2 模块
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>mod</span> <span class=nn>test2</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 使用 test2/another 中的 AnotherStruct
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>use</span><span class=w> </span><span class=n>test2</span>::<span class=n>another</span>::<span class=n>AnotherStruct</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>fn</span> <span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>AnotherStruct</span><span class=w> </span><span class=p>{};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>但是, 如果你希望在使用 <code>AnotherStruct</code> 时, 直接通过 <code>test2::AnotherStruct</code> 导入, 也可以在 <code>mod.rs</code> 这样向外公开:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 这里是 test/mod.rs 的内容
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 导入 another 模块, 但是不公开
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>mod</span> <span class=nn>another</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 使用并公开 another 下的结构
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>pub</span><span class=w> </span><span class=k>use</span><span class=w> </span><span class=n>another</span>::<span class=n>AnotherStruct</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>这样 <code>AnotherStruct</code> 可以通过 <code>use</code> 语句直接向外暴露, 使用时就可以直接 <code>use test2::AnotherStruct</code> 了</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=c1>// 导入 test2 模块
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>mod</span> <span class=nn>test2</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 使用 test2 直接暴露的 AnotherStruct
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>use</span><span class=w> </span><span class=n>test2</span>::<span class=n>AnotherStruct</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>fn</span> <span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>AnotherStruct</span><span class=w> </span><span class=p>{};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>方便起见, 你也可以直接用 <code>*</code> 在 <code>mod.rs</code> 直接向外暴露某个模块的所以成员:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>mod</span> <span class=nn>another</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 向外暴露 another 中的所有成员
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>pub</span><span class=w> </span><span class=k>use</span><span class=w> </span><span class=n>another</span>::<span class=o>*</span><span class=p>;</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果你在使用多个模块时, 它们的类型名称相同, 你可以在 <code>use</code> 的使用, 使用 <code>as</code> 为其取别名:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=k>mod</span> <span class=nn>test2</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>use</span><span class=w> </span><span class=n>test2</span>::<span class=n>AnotherStruct</span><span class=w> </span><span class=k>as</span><span class=w> </span><span class=n>qwq</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>fn</span> <span class=nf>main</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>value</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>qwq</span><span class=w> </span><span class=p>{};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/rust/>Rust</a>
+<a href=/tags/%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80/>开发语言</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/20231203202048/><div class=article-details><h2 class=article-title>[Rust] 可迭代类型, 迭代器, 如何正确的创建自定义可迭代类型</h2></div></a></article><article><a href=/p/20221107060011/><div class=article-details><h2 class=article-title>[C#, 笔记] 启用虚拟终端处理 (使用 ANSI 转义序列前需启用)</h2></div></a></article><article><a href=/p/20221025074833/><div class=article-details><h2 class=article-title>[C#,笔记] NAudio 傅里叶变换的 forward 参数与 m 参数</h2></div></a></article><article><a href=/p/20240202221535/><div class=article-details><h2 class=article-title>摘要, 加密, 数字签名, 数字证书以及加密通信简要介绍</h2></div></a></article><article><a href=/p/20240117143332/><div class=article-details><h2 class=article-title>[.NET] 查询当前已安装所有 Win32 与 UWP 应用</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=SlimeNull/slimenull.github.io issue-term=pathname label=BlogComment crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
+2023 -
+2024 SlimeNull Blogs</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.21.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

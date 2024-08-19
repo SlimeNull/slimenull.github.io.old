@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Visual Studio on SlimeNull Blogs</title><link>https://slimenull.com/tags/visual-studio/</link><description>Recent content in Visual Studio on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sat, 06 Feb 2021 00:26:32 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/visual-studio/index.xml" rel="self" type="application/rss+xml"/><item><title>[踩坑记录] 某功能在C#7.3中不可用,请使用 8.0 或更高的语言版本 (通用解决方案)</title><link>https://slimenull.com/p/20210206002632/</link><pubDate>Sat, 06 Feb 2021 00:26:32 +0800</pubDate><guid>https://slimenull.com/p/20210206002632/</guid><description>&lt;h2 id="问题">问题:&lt;/h2>
+&lt;p>正如标题描述, 是某个语法在低版本中不受支持, 只需要升级到高版本即可.&lt;/p>
+&lt;h2 id="步骤">步骤:&lt;/h2>
+&lt;h4 id="-第一种-">&lt;strong>&amp;gt; 第一种 :&lt;/strong>&lt;/h4>
+&lt;ol>
+&lt;li>使用快捷键 Alt + Enter 或点击黄色的的提示调出快速操作&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://slimenull.com/images/20200917143210762.png"
+loading="lazy"
+>
+2. 选择 将该项目升级为 C# 语言版本 &amp;ldquo;8.0&amp;rdquo;
+&amp;gt; 如果没有这一选项, 继续看第二种.&lt;/p>
+&lt;h4 id="-第二种-">&lt;strong>&amp;gt; 第二种 :&lt;/strong>&lt;/h4>
+&lt;ol>
+&lt;li>打开项目所在目录并打开项目文件.&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://slimenull.com/images/20210206001925422.png"
+loading="lazy"
+>
+2. 在 PropertyGroup 节点下添加 LangVersion, 如图:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/20210206002242856.png"
+loading="lazy"
+>&lt;/p>
+&lt;blockquote>
+&lt;p>第二种其实就是通过更改 csproj 文件内容来置顶所使用的语言版本, 某些时候可能在这个文件中没有 LangVerison 节点, 就导致了快速操作中没有 &amp;ldquo;升级项目版本&amp;rdquo; 的选项, 这时就需要手动改文件了&lt;/p>
+&lt;/blockquote>
+&lt;h4 id="-第三种-">&lt;strong>&amp;gt; 第三种 :&lt;/strong>&lt;/h4>
+&lt;ol>
+&lt;li>在 Visual Studio 中右击你的项目, 选择 &amp;lsquo;卸载项目&amp;rsquo;&lt;/li>
+&lt;li>右击项目, 点击 &amp;lsquo;编辑项目文件&amp;rsquo;&lt;/li>
+&lt;li>然后按照第二种方式, 直接在 PropertyGroup 下面添加 LangVersion 为 latest&lt;/li>
+&lt;li>编辑完之后, 右击项目, 点击 &amp;lsquo;重新加载项目&amp;rsquo;&lt;/li>
+&lt;/ol>
+&lt;h3 id="温馨提示">温馨提示&lt;/h3>
+&lt;ol start="0">
+&lt;li>Visual Studio 的项目默认存储目录是: %UserProfile%\source\repos, 直接在文件资源管理器的路径栏输入这个就可以跳转, 如果你不知道 %UserProfile% 是什么意思, 你可以在网上搜索 &amp;lsquo;Windows 环境变量&amp;rsquo;, 或者如果想看我写的文章, 在评论区评论就彳亍咯&lt;/li>
+&lt;li>在 Visual Studio 中, 右击项目, 可以打开项目所在文件夹, &amp;lsquo;在 Explorer 中打开目录&amp;rsquo; 或者 &amp;lsquo;在文件资源管理器中打开目录&amp;rsquo;, 所以不要再问我找不到该怎么办啦&lt;/li>
+&lt;li>有的项目中可能你并不能找到 PropertyGroup, 没关系, 自己添加一个也彳亍, 反正 Visual Studio 都能正常读取的, 但你得保证 PropertyGroup 是在最外层的噢&lt;/li>
+&lt;/ol>
+&lt;p>&lt;br/>&lt;br/>&lt;br/>&lt;br/>
+如果还是没能解决你的问题, 麻烦在下面评论下, 这样我可以搜寻更多答案以修改这边文章.
+如果解决了, 就点个赞吧 (卑微ovo)&lt;/p></description></item><item><title>[C#] 单文件编译 - 编译时嵌入dll</title><link>https://slimenull.com/p/20210203065600/</link><pubDate>Wed, 03 Feb 2021 06:56:00 +0800</pubDate><guid>https://slimenull.com/p/20210203065600/</guid><description>&lt;h3 id="1打开-nuget-包管理器">1.打开 NuGet 包管理器&lt;/h3>
+&lt;p>位于 工具 -&amp;gt; NuGet 包管理器 -&amp;gt; 管理解决方案的 NuGet 程序包&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/20210203064653427.png"
+loading="lazy"
+alt="打开NuGet包管理器"
+>&lt;/p>
+&lt;h3 id="2-安装">2. 安装&lt;/h3>
+&lt;p>搜索 Costura.Fody 并将其安装到你的项目
+&lt;img src="https://slimenull.com/images/20210203065115536.png"
+loading="lazy"
+alt="安装Costura.Fody"
+>&lt;/p>
+&lt;h3 id="3-起飞">3. 起飞&lt;/h3>
+&lt;p>然后, 进行编译, 你就会发现! 所有的dll全部被打包进exe中啦~~~
+&lt;img src="https://slimenull.com/images/20210203065438794.png"
+loading="lazy"
+alt="但文件发布"
+>&lt;/p></description></item></channel></rss>

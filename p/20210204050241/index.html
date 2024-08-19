@@ -1,0 +1,434 @@
+<!doctype html><html lang=zh-CN dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='关于:程序是借助API的(废话), 所以在无网络时, 没办法使用. 成品下载地址在文章末.准备工作:导入库, request(发送请求) 和 json(解析返回数据).开搞:首先, 是找到我们所需要的API, 瞧瞧这个链接: 有道翻译体验虽说是体验, 但是我都用了巨长一段时间却没有任何问题, 看来这个API至少短时间内不会有任何变更了~然后就是破解API的请求内容了. 打开浏览器调试, 转到网络选项卡, 然后重新翻译一下, 好的, 结果很明显, 芜湖 ????post请求, 3个参数,'><title>[项目实例] 手把手教你使用Python写一个功能非常强大的翻译程序</title>
+<link rel=canonical href=https://slimenull.com/p/20210204050241/><link rel=stylesheet href=/scss/style.min.73438a911857e6d491e39369614d0dd0c0302dcacfb43e15034e0e48cac08c07.css><meta property='og:title' content='[项目实例] 手把手教你使用Python写一个功能非常强大的翻译程序'><meta property='og:description' content='关于:程序是借助API的(废话), 所以在无网络时, 没办法使用. 成品下载地址在文章末.准备工作:导入库, request(发送请求) 和 json(解析返回数据).开搞:首先, 是找到我们所需要的API, 瞧瞧这个链接: 有道翻译体验虽说是体验, 但是我都用了巨长一段时间却没有任何问题, 看来这个API至少短时间内不会有任何变更了~然后就是破解API的请求内容了. 打开浏览器调试, 转到网络选项卡, 然后重新翻译一下, 好的, 结果很明显, 芜湖 ????post请求, 3个参数,'><meta property='og:url' content='https://slimenull.com/p/20210204050241/'><meta property='og:site_name' content='SlimeNull Blogs'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='python'><meta property='article:tag' content='web'><meta property='article:tag' content='json'><meta property='article:published_time' content='2021-02-04T05:02:41+08:00'><meta property='article:modified_time' content='2021-02-04T05:02:41+08:00'><meta name=twitter:title content="[项目实例] 手把手教你使用Python写一个功能非常强大的翻译程序"><meta name=twitter:description content="关于:程序是借助API的(废话), 所以在无网络时, 没办法使用. 成品下载地址在文章末.准备工作:导入库, request(发送请求) 和 json(解析返回数据).开搞:首先, 是找到我们所需要的API, 瞧瞧这个链接: 有道翻译体验虽说是体验, 但是我都用了巨长一段时间却没有任何问题, 看来这个API至少短时间内不会有任何变更了~然后就是破解API的请求内容了. 打开浏览器调试, 转到网络选项卡, 然后重新翻译一下, 好的, 结果很明显, 芜湖 ????post请求, 3个参数,"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu11436448765783238083.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>SlimeNull Blogs</a></h1><h2 class=site-description>为了更好的开源世界~</h2></div></header><ol class=social-menu><li><a href=https://github.com/SlimeNull target=_blank title=GitHub rel=me><!doctype html><svg t="1702542119184" class="icon" viewBox="0 0 1024 1024" p-id="4136" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M692.906667 938.666667A42.666667 42.666667.0 01650.24 896V785.066667A91.733333 91.733333.0 00627.2 714.24a42.666667 42.666667.0 0126.026667-71.253333c104.106666-12.373334 200.106666-45.653334 200.106666-226.133334a170.666667 170.666667.0 00-28.586666-94.72A117.333333 117.333333.0 01807.253333 234.24a158.293333 158.293333.0 000-60.16A326.4 326.4.0 00718.08 220.586667a42.666667 42.666667.0 01-35.84 6.4 433.066667 433.066667.0 00-235.52.0 42.666667 42.666667.0 01-35.84-6.4A315.733333 315.733333.0 00320.853333 174.08a150.186667 150.186667.0 000 60.16 121.173333 121.173333.0 01-18.346666 88.746667A173.653333 173.653333.0 00273.92 418.133333C273.92 584.106666 354.133333 628.48 474.453333 643.84A42.666667 42.666667.0 01509.44 672a42.666667 42.666667.0 01-8.96 42.666667 87.893333 87.893333.0 00-23.466667 66.56V896A42.666667 42.666667.0 01391.68 896v-24.32a256 256 0 01-224.853333-89.173333A166.4 166.4.0 00117.333333 744.96a42.666667 42.666667.0 1121.333334-82.773333A210.346667 210.346667.0 01224 720.213333c42.666667 42.666667 85.333333 80.213333 166.4 64.853334a165.973333 165.973333.0 019.813333-67.413334C312.32 695.466666 186.88 632.32 186.88 418.986667a256 256 0 0142.666667-142.08 36.266667 36.266667.0 005.546666-26.453334 242.773333 242.773333.0 0114.08-136.96 42.666667 42.666667.0 0126.88-24.32c14.506667-4.266667 66.56-12.8 165.12 51.2a518.826667 518.826667.0 01242.773334.0c98.56-64 150.613333-55.893333 164.693333-51.2a42.666667 42.666667.0 0126.88 24.32A243.626667 243.626667.0 01889.6 250.88a32 32 0 004.693333 24.32A256 256 0 01936.96 417.706667c0 216.32-124.586667 279.04-213.333333 298.666666a182.613333 182.613333.0 019.386666 71.253334V896a42.666667 42.666667.0 01-40.106666 42.666667z" fill="#666" p-id="4137"/></svg></a></li><li><a href=https://space.bilibili.com/441842015 target=_blank title=Bilibili rel=me><!doctype html><svg t="1702541966104" class="icon" viewBox="0 0 1024 1024" p-id="16981" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M306.005333 117.632 444.330667 256h135.296l138.368-138.325333A42.666667 42.666667.0 01778.368 178.048L700.330667 256H789.333333A149.333333 149.333333.0 01938.666667 405.333333v341.333334A149.333333 149.333333.0 01789.333333 896H234.666667A149.333333 149.333333.0 0185.333333 746.666667V405.333333A149.333333 149.333333.0 01234.666667 256h88.96L245.632 177.962667a42.666667 42.666667.0 0160.373333-60.373334zm483.328 223.701333H234.666667a64 64 0 00-63.701334 57.856L170.666667 405.333333v341.333334a64 64 0 0057.856 63.701333L234.666667 810.666667h554.666666a64 64 0 0063.701334-57.856L853.333333 746.666667V405.333333a64 64 0 00-64-64zm-448 128A42.666667 42.666667.0 01384 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666666-42.666667zm341.333334.0A42.666667 42.666667.0 01725.333333 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666667-42.666667z" fill="#666" p-id="16982"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>主页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>链接</span></a></li><div class=menu-bottom-section><li id=i18n-switch><svg class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.239 8-5 8"/><path d="M5 9c-.003 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4-9 4 9"/><path d="M19.1 18h-6.2"/></svg>
+<select name=language onchange="window.location.href=this.selectedOptions[0].value"><option value=https://slimenull.com/ selected></option></select></li><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></div></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#关于>关于:</a><ol><li><a href=#准备工作>准备工作:</a></li><li><a href=#开搞>开搞:</a></li><li><a href=#下载链接>下载链接:</a></li><li><a href=#预告>预告:</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/%E6%88%90%E9%95%BF%E8%AE%B0%E5%BD%95/>成长记录
+</a><a href=/categories/%E6%8E%A7%E5%88%B6%E5%8F%B0/>控制台
+</a><a href=/categories/%E7%BD%91%E7%BB%9C/>网络</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/20210204050241/>[项目实例] 手把手教你使用Python写一个功能非常强大的翻译程序</a></h2><h3 class=article-subtitle>关于:程序是借助API的(废话), 所以在无网络时, 没办法使用. 成品下载地址在文章末.准备工作:导入库, request(发送请求) 和 json(解析返回数据).开搞:首先, 是找到我们所需要的API, 瞧瞧这个链接: 有道翻译体验虽说是体验, 但是我都用了巨长一段时间却没有任何问题, 看来这个API至少短时间内不会有任何变更了~然后就是破解API的请求内容了. 打开浏览器调试, 转到网络选项卡, 然后重新翻译一下, 好的, 结果很明显, 芜湖 ????post请求, 3个参数,</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Feb 04, 2021</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 5 分钟</time></div></footer></div></header><section class=article-content><h2 id=关于>关于:</h2><p>程序是借助API的(废话), 所以在无网络时, 没办法使用. 成品下载地址在文章末.</p><p><img src=/images/20210204040516540.png loading=lazy alt=成果></p><h3 id=准备工作>准备工作:</h3><p>导入库, request(发送请求) 和 json(解析返回数据).</p><h3 id=开搞>开搞:</h3><p>首先, 是找到我们所需要的API, 瞧瞧这个链接: <a class=link href=https://ai.youdao.com/product-fanyi-text.s target=_blank rel=noopener>有道翻译体验</a></p><p><img src=/images/20210204040735158.png loading=lazy alt=有道翻译体验>
+虽说是体验, 但是我都用了巨长一段时间却没有任何问题, 看来这个API至少短时间内不会有任何变更了~</p><p>然后就是破解API的请求内容了. 打开浏览器调试, 转到网络选项卡, 然后重新翻译一下, 好的, 结果很明显, 芜湖 :-D
+<img src=/images/20210204041108490.png loading=lazy alt=破解API>
+post请求, 3个参数, q是翻译内容, from和to表示翻译的语言, 那么, 试着换一下语言吧.
+<img src=/images/20210204041301694.png loading=lazy alt=中文翻译为日文>
+哦, 我们得到了中文与日文的对应数据, zh-CHS 和 ja, 还有更多语言呢, 看看HTML节点吧
+<img src=/images/20210204041441767.png loading=lazy alt=看看英文>
+<img src=/images/20210204041544186.png loading=lazy alt=结果>
+哦豁, 比想象中的要简单! 2就是to的意思, 那么, 我们能得到所有的语言对应参数值了!
+<img src=/images/20210204041758373.png loading=lazy alt=HTML节点很清晰啊>
+记录下来吧~</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-txt data-lang=txt><span class=line><span class=cl> 参数: q:翻译文本   from:从语言   to:至语言
+</span></span><span class=line><span class=cl> 语言支持的值: 中文:zh-CHS, 英语:en, 日语:ja, 韩语:ko, 法语:fr, 俄语:ru, 
+</span></span><span class=line><span class=cl>     西班牙语:es, 葡萄牙语:pt, 越南语:vi, 德语:de, 印尼语:id
+</span></span><span class=line><span class=cl>     阿拉伯语:ar
+</span></span></code></pre></td></tr></table></div></div><p>接下来, 就是对网页中, 源代码的进一步分析了, 检查"翻译"按钮的节点, 然后查看click事件监听代码.
+<img src=/images/20210204042129770.png loading=lazy alt=检查按钮>
+<img src=/images/20210204042414558.png loading=lazy alt=代码找到>
+<img src=/images/20210204042519905.png loading=lazy alt=源代码>
+<img src=/images/20210204042621283.png loading=lazy alt=返回值描述到手>
+然后, 回到刚刚的网络选项卡, 然后重新翻译一下, 查看返回值.
+<img src=/images/20210204042857110.png loading=lazy alt=返回值>
+弄到 Visual Studio Code里面, 保存为json文件, 然后格式化文档.
+<img src=/images/20210204043152952.png loading=lazy alt=格式化文档>
+<img src=/images/20210204043225607.png loading=lazy alt=翻译结果到手>
+但是, 不止如此, 我们再尝试翻译一些, 词, 例如 sugar, 然后看看返回值, 不出所料, 果然!
+<img src=/images/20210204043446223.png loading=lazy alt=暗藏玄机>
+返回值里面包含的内容不是一般的多啊, 甚至还有音标, hhh</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;returnPhrase&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;sugar&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;query&#34;</span><span class=p>:</span> <span class=s2>&#34;sugar\n&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;errorCode&#34;</span><span class=p>:</span> <span class=s2>&#34;0&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;l&#34;</span><span class=p>:</span> <span class=s2>&#34;en2zh-CHS&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;tSpeakUrl&#34;</span><span class=p>:</span> <span class=s2>&#34;http://openapi.youdao.com/ttsapi?q=%E7%B3%96&amp;langType=zh-CHS&amp;sign=B212B7714049BBB65257DC9D64234EA0&amp;salt=1612384414308&amp;voice=4&amp;format=mp3&amp;appKey=2423360539ba5632&amp;ttsVoiceStrict=false&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;web&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;value&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;糖&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;食糖&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;白糖&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;糖分&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=p>],</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;key&#34;</span><span class=p>:</span> <span class=s2>&#34;Sugar&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=p>},</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;value&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;红糖&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;黄糖&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=p>],</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;key&#34;</span><span class=p>:</span> <span class=s2>&#34;brown sugar&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=p>},</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;value&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;糖用甜菜&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;甜菜&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;糖甜菜&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;糖料甜菜&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=p>],</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;key&#34;</span><span class=p>:</span> <span class=s2>&#34;Sugar beet&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;requestId&#34;</span><span class=p>:</span> <span class=s2>&#34;f54b0c24-4818-4d7e-ab04-8123adec8671&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;translation&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;糖&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;dict&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;url&#34;</span><span class=p>:</span> <span class=s2>&#34;yddict://m.youdao.com/dict?le=eng&amp;q=sugar%0A&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;webdict&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;url&#34;</span><span class=p>:</span> <span class=s2>&#34;http://m.youdao.com/dict?le=eng&amp;q=sugar%0A&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;basic&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;exam_type&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;初中&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;高中&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;CET4&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;CET6&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;考研&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;SAT&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=p>],</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;us-phonetic&#34;</span><span class=p>:</span> <span class=s2>&#34;ˈʃʊɡər&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;phonetic&#34;</span><span class=p>:</span> <span class=s2>&#34;ˈʃʊɡə(r)&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;uk-phonetic&#34;</span><span class=p>:</span> <span class=s2>&#34;ˈʃʊɡə(r)&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;wfs&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&#34;wf&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;复数&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&#34;value&#34;</span><span class=p>:</span> <span class=s2>&#34;sugars&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&#34;wf&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;过去式&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&#34;value&#34;</span><span class=p>:</span> <span class=s2>&#34;sugared&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&#34;wf&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;过去分词&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&#34;value&#34;</span><span class=p>:</span> <span class=s2>&#34;sugared&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&#34;wf&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;现在分词&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&#34;value&#34;</span><span class=p>:</span> <span class=s2>&#34;sugaring&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&#34;wf&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;第三人称单数&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&#34;value&#34;</span><span class=p>:</span> <span class=s2>&#34;sugars&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>],</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;uk-speech&#34;</span><span class=p>:</span> <span class=s2>&#34;http://openapi.youdao.com/ttsapi?q=sugar%0A&amp;langType=en&amp;sign=C668ACDF9C58F3D76BADC5B54F1BDEE7&amp;salt=1612384414308&amp;voice=5&amp;format=mp3&amp;appKey=2423360539ba5632&amp;ttsVoiceStrict=false&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;explains&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;n. 糖；食糖；甜言蜜语&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;vt. 加糖于；粉饰&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;vi. 形成糖&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=s2>&#34;n. (Sugar)人名；(英)休格&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=p>],</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;us-speech&#34;</span><span class=p>:</span> <span class=s2>&#34;http://openapi.youdao.com/ttsapi?q=sugar%0A&amp;langType=en&amp;sign=C668ACDF9C58F3D76BADC5B54F1BDEE7&amp;salt=1612384414308&amp;voice=6&amp;format=mp3&amp;appKey=2423360539ba5632&amp;ttsVoiceStrict=false&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;isWord&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;speakUrl&#34;</span><span class=p>:</span> <span class=s2>&#34;http://openapi.youdao.com/ttsapi?q=sugar%0A&amp;langType=en&amp;sign=C668ACDF9C58F3D76BADC5B54F1BDEE7&amp;salt=1612384414308&amp;voice=4&amp;format=mp3&amp;appKey=2423360539ba5632&amp;ttsVoiceStrict=false&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>是不是已经有些感到兴奋了呢? 现在, 开始正式Coding吧!</p><p>先是以自动识别语言开始吧. 那么, 首先是最基本的导库与定义:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>requests</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>json</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>url</span> <span class=o>=</span> <span class=s1>&#39;https://aidemo.youdao.com/trans&#39;</span>
+</span></span><span class=line><span class=cl><span class=s1>&#39;&#39;&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>有道翻译API, 支持get与post
+</span></span></span><span class=line><span class=cl><span class=s1>参数: q:翻译文本   from:从语言   to:至语言
+</span></span></span><span class=line><span class=cl><span class=s1> 语言支持的值: 中文:zh-CHS, 英语:en, 日语:ja, 韩语:ko, 法语:fr, 俄语:ru, 
+</span></span></span><span class=line><span class=cl><span class=s1>     西班牙语:es, 葡萄牙语:pt, 越南语:vi, 德语:de, 印尼语:id
+</span></span></span><span class=line><span class=cl><span class=s1>     阿拉伯语:ar
+</span></span></span><span class=line><span class=cl><span class=s1> 错误码: 411:过于频繁   413:访问上限   103:字符太长   410:过于频繁
+</span></span></span><span class=line><span class=cl><span class=s1>&#39;&#39;&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p>然后是请求</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>translate</span><span class=p>(</span><span class=n>text</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>data</span> <span class=o>=</span> <span class=p>{</span><span class=s2>&#34;q&#34;</span><span class=p>:</span> <span class=n>text</span><span class=p>,</span> <span class=s2>&#34;from&#34;</span><span class=p>:</span> <span class=s2>&#34;auto&#34;</span><span class=p>,</span> <span class=s2>&#34;to&#34;</span><span class=p>:</span> <span class=s2>&#34;auto&#34;</span><span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>resp</span> <span class=o>=</span> <span class=n>requests</span><span class=o>.</span><span class=n>post</span><span class=p>(</span><span class=n>url</span><span class=p>,</span> <span class=n>data</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>except</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=kc>None</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>resp</span>
+</span></span></code></pre></td></tr></table></div></div><p>然后是打印翻译结果:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>advancedmode</span> <span class=o>=</span> <span class=kc>False</span>      <span class=c1># 默认状态下, 不展示所有信息, 当advancedMode为True时, 展示更多内容</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>listPrint</span><span class=p>(</span><span class=n>obj</span><span class=p>,</span> <span class=n>iden</span><span class=p>,</span> <span class=n>ps</span> <span class=o>=</span> <span class=s1>&#39;&#39;</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=s1>&#39; &#39;</span> <span class=o>*</span> <span class=n>iden</span> <span class=o>+</span> <span class=n>ps</span> <span class=o>+</span> <span class=nb>str</span><span class=p>(</span><span class=n>i</span><span class=p>)</span> <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=n>obj</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>printrst</span><span class=p>(</span><span class=n>resp</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>resp</span> <span class=ow>is</span> <span class=ow>not</span> <span class=kc>None</span> <span class=ow>and</span> <span class=n>resp</span><span class=o>.</span><span class=n>status_code</span> <span class=o>==</span> <span class=mi>200</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>respJson</span> <span class=o>=</span> <span class=n>json</span><span class=o>.</span><span class=n>loads</span><span class=p>(</span><span class=n>resp</span><span class=o>.</span><span class=n>text</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>advancedmode</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=s2>&#34; &lt;0&gt; Result:&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=s2>&#34;translation&#34;</span> <span class=ow>in</span> <span class=n>respJson</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;       Normal:&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>listPrint</span><span class=p>(</span><span class=n>respJson</span><span class=p>[</span><span class=s2>&#34;translation&#34;</span><span class=p>],</span> <span class=mi>9</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=s2>&#34;basic&#34;</span> <span class=ow>in</span> <span class=n>respJson</span> <span class=ow>and</span> <span class=s2>&#34;explains&#34;</span> <span class=ow>in</span> <span class=n>respJson</span><span class=p>[</span><span class=s2>&#34;basic&#34;</span><span class=p>]:</span>
+</span></span><span class=line><span class=cl>                <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;       Basic:&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>listPrint</span><span class=p>(</span><span class=n>respJson</span><span class=p>[</span><span class=s2>&#34;basic&#34;</span><span class=p>][</span><span class=s2>&#34;explains&#34;</span><span class=p>],</span> <span class=mi>9</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=s2>&#34;web&#34;</span> <span class=ow>in</span> <span class=n>respJson</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;       From web:&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>index</span> <span class=o>=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>                <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=n>respJson</span><span class=p>[</span><span class=s2>&#34;web&#34;</span><span class=p>]:</span>
+</span></span><span class=line><span class=cl>                    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;         </span><span class=si>%d</span><span class=s2>. </span><span class=si>%s</span><span class=s2>:&#34;</span> <span class=o>%</span> <span class=p>(</span><span class=n>index</span><span class=p>,</span> <span class=n>i</span><span class=p>[</span><span class=s2>&#34;key&#34;</span><span class=p>]))</span>
+</span></span><span class=line><span class=cl>                    <span class=n>listPrint</span><span class=p>(</span><span class=n>i</span><span class=p>[</span><span class=s2>&#34;value&#34;</span><span class=p>],</span> <span class=mi>14</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                    <span class=n>index</span> <span class=o>+=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>            <span class=c1># print</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=s2>&#34; &lt;0&gt; Result:&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>listPrint</span><span class=p>(</span><span class=n>respJson</span><span class=p>[</span><span class=s2>&#34;translation&#34;</span><span class=p>],</span> <span class=mi>7</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Request error, status code: </span><span class=si>%s</span><span class=s2>&#34;</span> <span class=o>%</span> <span class=p>(</span><span class=n>resp</span><span class=o>.</span><span class=n>status_code</span> <span class=k>if</span> <span class=n>resp</span> <span class=o>!=</span> <span class=kc>None</span> <span class=k>else</span> <span class=s2>&#34;???&#34;</span><span class=p>))</span>
+</span></span></code></pre></td></tr></table></div></div><p>既然都有advancedMode了, 所以得让用户有办法打开关闭它, 模拟简单的命令行吧, 如果输入的内容是以 $ 开头的, 则判定为命令, 并运行这个命令</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>runcmd</span><span class=p>(</span><span class=n>cmd</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>cmdline</span> <span class=o>=</span> <span class=n>cmd</span><span class=o>.</span><span class=n>split</span><span class=p>(</span><span class=s1>&#39; &#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>cmdname</span> <span class=o>=</span> <span class=n>cmdline</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>lower</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>cmdname</span> <span class=o>==</span> <span class=s1>&#39;$&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>global</span> <span class=n>advancedmode</span>
+</span></span><span class=line><span class=cl>        <span class=n>advancedmode</span> <span class=o>=</span> <span class=ow>not</span> <span class=n>advancedmode</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34; &lt;$&gt; AdvancedMode: </span><span class=si>%s</span><span class=s2>&#34;</span> <span class=o>%</span> <span class=n>advancedmode</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>elif</span> <span class=n>cmdname</span> <span class=o>==</span> <span class=s1>&#39;$help&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>cmdline</span><span class=p>)</span> <span class=o>==</span> <span class=mi>1</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=s2>&#34; &lt;$&gt; Help document, type &#39;$help command&#39; for more information.&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>listPrint</span><span class=p>((</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;$      : Switch Advanced Mode.&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;$help  : Display help document.&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=p>),</span> <span class=mi>7</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>elif</span> <span class=nb>len</span><span class=p>(</span><span class=n>cmdline</span><span class=p>)</span> <span class=o>==</span> <span class=mi>2</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>cmdline</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=o>==</span> <span class=s1>&#39;$&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=nb>print</span><span class=p>(</span><span class=s2>&#34; &lt;$&gt; Switch Advanced Mode.&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>listPrint</span><span class=p>((</span>
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;Advanced Mode: </span><span class=si>%s</span><span class=s2>&#34;</span> <span class=o>%</span> <span class=n>advancedmode</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                    <span class=s2>&#34;If advanced mode is enabled, more information will be shown. default value is disabled.&#34;</span>
+</span></span><span class=line><span class=cl>                <span class=p>),</span> <span class=mi>7</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=nb>print</span><span class=p>(</span><span class=s2>&#34; &lt;$&gt; Help document: unknown command.&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=s2>&#34; &lt;$&gt; Help document: unknown usage.&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=s2>&#34; &lt;$&gt; Unknown command.&#34;</span><span class=p>)</span>   <span class=c1># 更多指令, 你来添加吧, 例如切换语言</span>
+</span></span></code></pre></td></tr></table></div></div><p>最后是主程序</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Null.Translator, by Null, type &#39;$help&#39; for help. ref: Youdao AI translation api.&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=kc>True</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>text</span> <span class=o>=</span> <span class=nb>input</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>&gt;&gt;&gt; &#34;</span><span class=p>)</span>   <span class=c1># 模拟像Python那样的提示符, 很酷炫的有木有</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>text</span> <span class=o>!=</span> <span class=s1>&#39;&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>text</span><span class=o>.</span><span class=n>startswith</span><span class=p>(</span><span class=s1>&#39;$&#39;</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>                <span class=n>runcmd</span><span class=p>(</span><span class=n>text</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=n>resp</span> <span class=o>=</span> <span class=n>translate</span><span class=p>(</span><span class=n>text</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>printrst</span><span class=p>(</span><span class=n>resp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>exit</span><span class=p>()</span>     <span class=c1># 如果输入为空, 则退出, 方便退出程序. (表示懒得挪鼠标 滑稽)</span>
+</span></span></code></pre></td></tr></table></div></div><p>(最后, 上面所有的代码片, 拼在一起, 就能运行, 懒得拼的话, 就点击下面的下载链接下载吧)</p><p>再多说一句, 那个API返回的数据辣么多, 想实现什么功能自己随便实现啦~</p><h3 id=下载链接>下载链接:</h3><p>CSDN站内下载: <a class=link href=https://download.csdn.net/download/m0_46555380/15031403 target=_blank rel=noopener>Null.Translator</a></p><p><br><br><br><br></p><h3 id=预告>预告:</h3><p>这可不就是一个文本转语音API嘛! 薅有道羊毛真不戳
+<img src=/images/20210204050132590.png loading=lazy alt=哈哈></p></section><footer class=article-footer><section class=article-tags><a href=/tags/python/>Python</a>
+<a href=/tags/web/>Web</a>
+<a href=/tags/json/>Json</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/20210105173252/><div class=article-details><h2 class=article-title>[Web] 浅谈 Get 与 Post 请求</h2></div></a></article><article><a href=/p/20200406034849/><div class=article-details><h2 class=article-title>C# 动态输入</h2></div></a></article><article><a href=/p/20210505184421/><div class=article-details><h2 class=article-title>[教程] 在 Y 分钟内学会 Python</h2></div></a></article><article><a href=/p/20210319184242/><div class=article-details><h2 class=article-title>[Python] 巧用! 局域网传输文件! 还可以这么玩!!!</h2></div></a></article><article><a href=/p/20210203064309/><div class=article-details><h2 class=article-title>[项目实例] 使用 IronPython 库来创建一个支持使用Python脚本操作的简易文本编辑器</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=SlimeNull/slimenull.github.io issue-term=pathname label=BlogComment crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
+2023 -
+2024 SlimeNull Blogs</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.21.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

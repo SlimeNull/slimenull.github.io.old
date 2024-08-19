@@ -1,0 +1,1245 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>算法 on SlimeNull Blogs</title><link>https://slimenull.com/tags/%E7%AE%97%E6%B3%95/</link><description>Recent content in 算法 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 31 Jan 2023 21:36:23 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml"/><item><title>[笔记] 关于通过鼠标滚轮设置缩放的技巧</title><link>https://slimenull.com/p/20230131213623/</link><pubDate>Tue, 31 Jan 2023 21:36:23 +0800</pubDate><guid>https://slimenull.com/p/20230131213623/</guid><description>&lt;p>鼠标正向滚动的时候, 拿到的滚动数据是大于 0 的, 反之, 小于 0.&lt;/p>
+&lt;p>Pow 函数在 x 为正数的时候, 返回值是大于 1 的, x 为负数的时候, 返回值是小于 1 的, 可以直接设置这样的一个逻辑:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">缩放系数 = 缩放系数 * Pow(10, 鼠标滚动数据 / 减少滚动速度);
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这样就能做一个简单的鼠标缩放了&lt;/p></description></item><item><title>[C#] 使用 NullLib.TickAnimation.Drawing 实现 WinForm 过渡动画</title><link>https://slimenull.com/p/20210630024505/</link><pubDate>Wed, 30 Jun 2021 02:45:05 +0800</pubDate><guid>https://slimenull.com/p/20210630024505/</guid><description>&lt;p>NullLib.TickAnimation 用于实现对一个对象的属性(Property), 以指定的计时函数, 在一定时间内从一个值, 平滑的过渡到另一个值. NullLib.TickAnimation.Drawing 基于 NullLib.TickAnimation, 并提供了关于绘画类型的过渡动画, 例如 点, 尺寸, 矩形区域, 颜色&lt;/p>
+&lt;p>例如你可以使用它将一个 WinForm 窗体的 Bounds 从一个值过渡到另一个值以实现窗体位置与尺寸的过渡动画. 下面是一个简单示例:&lt;/p>
+&lt;div align="center">
+&lt;a href="https://www.picbed.cn/images/2021/06/30/nMsu3Dxxpt.gif" target="_blank">
+&lt;img src="https://www.picbed.cn/images/2021/06/30/nMsu3Dxxpt.gif" alt="点击此处跳转到图片源页面"/>
+&lt;/a>
+&lt;/div>
+&lt;h2 id="快速开始">快速开始&lt;/h2>
+&lt;ol>
+&lt;li>
+&lt;p>首先, 创建一个 WinForm 项目用于测试, 向主窗体中添加一个按钮, 并为按钮的点击事件添加事件处理器&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在解决方案管理器中右击项目, 选择 &amp;ldquo;管理 nuget 程序包&amp;rdquo;, 然后安装 NullLib.TickAnimation.Drawing (它会自动安装依赖项 NullLib.TickAnimation)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>转到主窗体的代码, 在 using 部分添加 &lt;code>using NullLib.TickAnimation&lt;/code>, 这样我们就可以直接使用关于动画的一些类了&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>编辑刚刚添加的按钮的点击事件处理器代码, 添加以下内容:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Rectangle&lt;/span> &lt;span class="n">workingArea&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Screen&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PrimaryScreen&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WorkingArea&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 获取主屏幕的工作区矩形&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">DrawingTickAnimator&lt;/span> &lt;span class="n">animator&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">DrawingTickAnimator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">SineTicker&lt;/span>&lt;span class="p">(),&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">nameof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Bounds&lt;/span>&lt;span class="p">));&lt;/span> &lt;span class="c1">// 创建动画控制器实例&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">animator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SetPropertySetter&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">setAction&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">Invoke&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">setAction&lt;/span>&lt;span class="p">));&lt;/span> &lt;span class="c1">// 解决窗体程序的跨线程资源访问问题&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">animator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SetTickDelay&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 在每一帧后进行 1ms 的延时&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">animator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Animate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">workingArea&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">200&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 进行动画, 时间是 200ms&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>运行程序, 点击按钮, 查看效果&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>本库已在 GitHub 开源, &lt;a class="link" href="https://github.com/SlimeNull/NullLib.TickAnimation" target="_blank" rel="noopener"
+>github.com/SlimeNull/NullLib.TickAnimation&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="基本原理">基本原理&lt;/h2>
+&lt;p>在 NullLib.TickAnimator 中, ITickAnimator 是最基本的, 用于运行动画的接口, 它依赖于 ITicker 来提供计时函数, ITIcker 可表示运动曲线, 不同的类有不同的特征, 例如使用 BackTicker 的 ITickAnimator 进行动画时将具有回弹效果, 使用 BounceTicker 的 ITickAnimator 进行动画时将具有弹跳效果.&lt;/p>
+&lt;p>其中的技术细节, 可参考 CSS3 过渡中的 timing-function, WPF 窗体程序中的 EasingFunction. 另外, 也推荐对贝塞尔曲线作基本了解, 这样, 你可以通过库中提供的 CubicBezierTicker 来创建自定义的三次贝塞尔曲线计时函数, 进而实现自定义动画效果.&lt;/p>
+&lt;blockquote>
+&lt;p>推荐的在线三次贝塞尔曲线编辑工具: &lt;a class="link" href="https://cubic-bezier.com/" target="_blank" rel="noopener"
+>Cubic-Bezier&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="类型">类型&lt;/h2>
+&lt;h3 id="--iticker">- ITicker&lt;/h3>
+&lt;p>ITicker 是动画计时函数, 它分为两种, 贝塞尔曲线函数以及原生函数, 其中贝塞尔曲线是可以由用户指定控制点从而控制曲线形状的, 原生函数是一些定义好的, 遵循 ITicker 接口的函数&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>贝塞尔曲线函数: 分两种, 三次贝塞尔曲线(CubicBezierTicker)与二次贝塞尔曲线(QuadraticBezierTicker), 你可以手动指定控制点, 也可以使用默认提供的一些曲线, 例如 Ease, EaseIn, EaseOut, EaseInOut, InSine, OutSine 等.&lt;/p>
+&lt;p>指定 EaseInOut 的方式是: 指定 CubicBezierCurve.Ease 与 EasingMode.EaseInOut, 同理, 指定 InOutBack 的方式是: CubicBezierCurve.Back 与 EasingMode.EaseInOut, 需要知道的是, 这些曲线都是源自于 CSS3 内置曲线(Ease, EaseIn, EaseOut, EaseInOut, Linear) 以及 Microsoft Edge 浏览器调试工具中的预设曲线(InSIne, OutSine, InOutSine, InBack, OutBack, &amp;hellip;&amp;hellip;)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>原生函数: 它们都是从 WPF 中移植过来的, 例如 BounceTicker, 它来自 WPF 中的 BounceEase, 并且与它算法完全一致, 关于它们的使用, 我建议查阅 WPF 动画缓动函数的相关文档.&lt;/p>
+&lt;p>最简单的, 使用 BackTicker 函数就是直接实例化一个对象, 在这里需要提到的是, 关于 BackTicker 实例的属性默认值也是与 WPF 一致的, 虽然 BackTicker 和 CubicBezierCurve.Back 都是表示带有回弹效果的曲线, 但是两者并不相等, 贝塞尔曲线函数和原生函数是截然不同的.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>关于 ITicker 的更多信息, 我建议查阅源码, 或者在 Visual Studio 中使用对象浏览器概览所有类型.&lt;/p>
+&lt;h3 id="--itickanimator">- ITickAnimator&lt;/h3>
+&lt;p>ITickAnimator 是驱动动画的最主要的类, 默认包含的 TickAnimator 中支持 double float int 三种数字类型的动画处理, 它其中还包括了对于动画同时进行时的中断处理, 当然, 如果你要使用针对于绘画的动画处理, 例如点, 尺寸, 矩形区域, 颜色这类, 可以使用 DrawingTickAnimator (nuget包: NullLib.TickAnimator.Drawing, 命名空间: NullLib.TickAnimator)&lt;/p>
+&lt;blockquote>
+&lt;p>TickAnimator 的动画处理中包含这样一点: 当一个动画还未结束就启动另一个动画, 那么第一个动画会自动停止以保证不会造成冲突, 这是因为一个 TickAnimator 应该针对于唯一一个属性, 但针对同一个属性的两个动画同时启动, 将会造成严重的冲突问题. (这里需要提一下, 如果你要同时对一个控件进行位置过渡和尺寸过渡, 我不推荐你为 Location 和 Size 属性分别创建一个 ITickAnimator 实例, WinForm 的内部实现问题仍然会导致冲突, 更安全的做法是为 Bounds 属性创建 ITickAnimator 并且使用针对 Rectangle 的过渡)&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="--tickanimationproc">- TickAnimationProc&lt;/h3>
+&lt;p>TickAnimationProc 是 NullLib.TickAnimation 中对于动画驱动的最核心部分, 它提供了最为基本的动画实现方式, 通过指定 ITicker(计时函数), Fucn&amp;lt;double, T&amp;gt;(tick picker用于从动画进度中取得对应类型的值), TimeSpan(动画的时间间隔), Func&amp;lt;T, bool&amp;gt;(动画每一帧的回调函数, 返回值表示动画是否应该继续进行), 这四个参数来运行最基本的动画. 但是一般的不推荐使用这个, 因为其中没有像 TickAnimator 的互斥措施.&lt;/p>
+&lt;h3 id="--tickanimatorbase">- TickAnimatorBase&lt;/h3>
+&lt;p>TickAnimator 的基类, 其中包含了 TickAnimator 基础功能的实现, 例如对于值过渡的方法封装&lt;/p>
+&lt;h2 id="自定义类型">自定义类型&lt;/h2>
+&lt;p>如果你要自定义 ITicker 实现类或者 ITickAnimator 实现类, 则需要遵守下面的一些规范:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>对于 ITicker 的实现, 必须保证对于方法 CalcTick(double x), x 从 0 到 1 时, 返回值也是从 0 到 1, 即: CalcTick(0) 应该返回 0, CalcTick(1) 应该返回 1.&lt;/p>
+&lt;p>并且, 如果你要创建更高阶的贝塞尔曲线函数, 建议继承 BezierTickerBase, 如果你要创建一些遵循 WPF 原生过渡函数规则的自定义函数, 必须继承 FuncTickerBase 并在字类中重写 CalcInTick(double x) 方法.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>对于 ITickAnimator 的实现, 推荐的方式是直接继承 TickAnimator, 并且在实现 Animate 和 SyncAnimate 方法时, 应该通过调用 TickAnimatorBase 的 Animate 和 SyncAnimate 方法来实现动画, 而获取对应属性的当前值, 不应该使用 prop.GetValue 方法, 而是使用 TickAnimatorBase 的 GetPropertyValue 方法. 下面是 TickAnimator 中 double 的动画实现:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="n">Task&lt;/span> &lt;span class="n">Animate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span> &lt;span class="n">start&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">end&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">dur&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span> &lt;span class="n">diff&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">end&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">start&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">Animate&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">t&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="n">start&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">diff&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">t&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">TimeSpan&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FromMilliseconds&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dur&lt;/span>&lt;span class="p">));&lt;/span> &lt;span class="c1">// 内部调用基类 TickAnimatorBase 的方法&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="n">Task&lt;/span> &lt;span class="n">Animate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span> &lt;span class="n">end&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">dur&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">Animate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">GetPropertyValue&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="p">&amp;gt;(),&lt;/span> &lt;span class="n">end&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">dur&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 从当前值开始执行动画, 按照规&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="n">ITickAnimator&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">SyncAnimate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span> &lt;span class="n">start&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">end&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">dur&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 范, 使用 GetPropertyValue 方法&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span> &lt;span class="n">diff&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">end&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">start&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">SyncAnimate&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">t&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="n">start&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">diff&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">t&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">TimeSpan&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FromMilliseconds&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dur&lt;/span>&lt;span class="p">));&lt;/span> &lt;span class="c1">// SyncAnimate 也一样&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="n">ITickAnimator&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">SyncAnimate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span> &lt;span class="n">end&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">dur&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">SyncAnimate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">GetPropertyValue&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="p">&amp;gt;(),&lt;/span> &lt;span class="n">end&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">dur&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 一致&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ol></description></item><item><title>[C#] 运算包含数学表达式的字符串</title><link>https://slimenull.com/p/20201029114122/</link><pubDate>Thu, 29 Oct 2020 11:41:22 +0800</pubDate><guid>https://slimenull.com/p/20201029114122/</guid><description>&lt;h2 id="关于">关于:&lt;/h2>
+&lt;ol start="0">
+&lt;li>
+&lt;h6 id="原理讲解">原理讲解&lt;/h6>
+&lt;/li>
+&lt;li>代码示例&lt;/li>
+&lt;li>完整程序源码下载&lt;/li>
+&lt;/ol>
+&lt;h2 id="适用于">适用于:&lt;/h2>
+&lt;ol start="0">
+&lt;li>实例代码适用于: .NET Framework &amp;amp; .NET Core&lt;/li>
+&lt;li>算法通用. 只要你能够找到与算法对应的实现方式.&lt;/li>
+&lt;/ol>
+&lt;h2 id="将要实现">将要实现:&lt;/h2>
+&lt;ol start="0">
+&lt;li>分析表达式&lt;/li>
+&lt;li>实现所有的通用运算符&lt;/li>
+&lt;li>实现三元运算符&lt;/li>
+&lt;li>支持嵌套的括号&lt;/li>
+&lt;/ol>
+&lt;h2 id="原理">原理:&lt;/h2>
+&lt;ol start="0">
+&lt;li>使用&amp;quot;状态机&amp;quot;算法分析表达式&lt;/li>
+&lt;li>根据运算符优先级, 不断尝试运算, 最终得到结果&lt;/li>
+&lt;/ol>
+&lt;h2 id="详解">详解:&lt;/h2>
+&lt;ol start="0">
+&lt;li>第一步, 我们需要将运算表达式分成一个个节点(token), 这个节点可能是一个数字, 可能是一个运算符, 至于表达式里的括号, 我们会使用递归来进行运算. 我们使用下面的class来表示这个token.&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">enum&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 规定枚举所对应的int为2的倍数是为了后面方便识别&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">None&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Number&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Operator&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">2&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">enum&lt;/span> &lt;span class="n">CalcOperator&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">None&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Add&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// +&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Sub&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// -&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Mul&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// *&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Div&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">8&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// /&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Mod&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">16&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// %&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Pow&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">32&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// **&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Lss&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">64&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// &amp;lt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Gtr&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">128&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// &amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Leq&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">256&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// &amp;lt;=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Geq&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">512&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// &amp;gt;=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Equ&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">1024&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// =&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Neq&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">2048&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// !=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Not&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">4096&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// !&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">And&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">8192&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// &amp;amp;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Or&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">16384&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// |&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">If&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">32768&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 三元表达式中的 &amp;#39;?&amp;#39; 符号&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Witch&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">65536&lt;/span> &lt;span class="c1">// 三元表达式中的 &amp;#39;:&amp;#39; 符号&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">CalcToken&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">CalcToken&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcTokenType&lt;/span> &lt;span class="n">type&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">object&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Type&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">type&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Content&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">content&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">CalcTokenType&lt;/span> &lt;span class="n">Type&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">object&lt;/span> &lt;span class="n">Content&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// Content, 当Type是None时, 值应该是null&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 当Type是Number时, 值应该是double&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 当Type是Operator时, 值应该是CalcOperator枚举变量&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol>
+&lt;li>继续, 那么, 先是如何分析一个简单的表达式, 例如下面的:&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>11+1&lt;/p>
+&lt;/blockquote>
+&lt;ol start="2">
+&lt;li>分析这个表达式, 我们首先定义一些字符串常量, 如下:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">char&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">OperatorChars&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;+-*/&amp;lt;&amp;gt;!=&amp;amp;|?:&amp;#34;&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 表示操作符的字符&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">char&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">NumberChars&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;0123456789.&amp;#34;&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 表示数字的字符&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">char&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">EmptyChars&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34; \t&amp;#34;&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 表示空字符&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol start="3">
+&lt;li>我们将逐字符对其分析(有限状态机): 使用List&amp;lt;CalcToken&amp;gt; tokens来保存分析出的token&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;ol>
+&lt;li>当开始时, 我们取到一个字符'1&amp;rsquo;, 现在我们还不是在分析任何类型, 但是经过定义的字符集常量的Contains判断, 我们发现它是属于数字的, 那么我们知道, 现在我们正在分析数字.&lt;/li>
+&lt;li>存储下来这个字符'1&amp;rsquo;, 用什么, 你应该知道吧? 要么是List&lt;char>, 要么是StringBuilder. 并且, 记录下我们现在的状态, 我们分析到了数字&lt;/li>
+&lt;li>到分析到第二个数字时, 我们当前的状态是正在分析数字, 那么在这个状态下, 如果我们又取到一个数字, 那么我们需要存储下这个数字, 并且当前状态不变, 如果我们取到一个操作符字符, 那么代表现在这个数字结束了, 使用double.Parse将已保存的字符串(一个或多个由数字字符组成的), 转换为double类型, 然后存储下这个token, 并且清空存储的字符, 将当前取到的字符存进去, 然后改变当前状态到&amp;quot;正在分析操作符&amp;quot;.&lt;/li>
+&lt;li>我们的表达式是&amp;quot;11+1&amp;quot;, 第二个字符是一个数字字符, 也就是说, 我们应存下这个字符, 且状态不变. 于是, 我们已经存储下了两个字符{&amp;lsquo;1&amp;rsquo;, &amp;lsquo;1&amp;rsquo;}, 当前状态是数字&lt;/li>
+&lt;li>到第三个字符了, 我们发现它不是一个数字字符, 而是一个操作符字符, 于是, 将已保存的字符串转换为double, 并添加到tokens, 当前状态是:正在分析操作符&lt;/li>
+&lt;li>到第四个字符, 它又不是一个操作符字符了, 它现在是一个数字, 所以, 将已存储的操作符字符保存&lt;/li>
+&lt;li>到最后, 分析结束, 但临时存储的部分还有一个字符'1&amp;rsquo;, 将其转换为double, 然后存储到tokens, 于是, 我们成功完成了对表达式的分词, 至此, 基本原理已经讲清, 尝试理解下面的函数&lt;/li>
+&lt;/ol>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 下面是分词核心, 这里面包含对括号的分析&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// bool inner表示这个函数是否是被另一个分词函数调用的, 也就是说是否在递归状态, 如果是, 则表示在分析一个括号内的表达式, 碰到&amp;#39;)&amp;#39;的时候立即return;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">bool&lt;/span> &lt;span class="n">TryParseCalcTokens&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="kt">char&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">ref&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">offset&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">CalcToken&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">bool&lt;/span> &lt;span class="n">inner&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">level&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">CalcToken&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(;&lt;/span> &lt;span class="n">offset&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">offset&lt;/span>&lt;span class="p">++)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">EmptyChars&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Contains&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">offset&lt;/span>&lt;span class="p">]))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">continue&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">offset&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="sc">&amp;#39;(&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">offset&lt;/span>&lt;span class="p">++;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TryParseCalcTokens&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">ref&lt;/span> &lt;span class="n">offset&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">CalcToken&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">newrst&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">level&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">CalcToken&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">newrst&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;Error when parsing inner expression. Level:{level};&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">offset&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="sc">&amp;#39;)&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TryParseToken&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">ref&lt;/span> &lt;span class="n">offset&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="n">CalcToken&lt;/span> &lt;span class="n">newcctk&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">newcctk&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 这里是将分析好的token添加到tokens&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;Error when parsing expression token. Level:{level};&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol start="4">
+&lt;li>开始运算表达式: (最简单的方法)&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>遍历我们的tokens, 第一次遍历, 查找优先级最高的操作符并运算结果, 第二次遍历查找优先级略次的操作符并运算结果, 如此往复, 查找完所有的表达式&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt"> 10
+&lt;/span>&lt;span class="lnt"> 11
+&lt;/span>&lt;span class="lnt"> 12
+&lt;/span>&lt;span class="lnt"> 13
+&lt;/span>&lt;span class="lnt"> 14
+&lt;/span>&lt;span class="lnt"> 15
+&lt;/span>&lt;span class="lnt"> 16
+&lt;/span>&lt;span class="lnt"> 17
+&lt;/span>&lt;span class="lnt"> 18
+&lt;/span>&lt;span class="lnt"> 19
+&lt;/span>&lt;span class="lnt"> 20
+&lt;/span>&lt;span class="lnt"> 21
+&lt;/span>&lt;span class="lnt"> 22
+&lt;/span>&lt;span class="lnt"> 23
+&lt;/span>&lt;span class="lnt"> 24
+&lt;/span>&lt;span class="lnt"> 25
+&lt;/span>&lt;span class="lnt"> 26
+&lt;/span>&lt;span class="lnt"> 27
+&lt;/span>&lt;span class="lnt"> 28
+&lt;/span>&lt;span class="lnt"> 29
+&lt;/span>&lt;span class="lnt"> 30
+&lt;/span>&lt;span class="lnt"> 31
+&lt;/span>&lt;span class="lnt"> 32
+&lt;/span>&lt;span class="lnt"> 33
+&lt;/span>&lt;span class="lnt"> 34
+&lt;/span>&lt;span class="lnt"> 35
+&lt;/span>&lt;span class="lnt"> 36
+&lt;/span>&lt;span class="lnt"> 37
+&lt;/span>&lt;span class="lnt"> 38
+&lt;/span>&lt;span class="lnt"> 39
+&lt;/span>&lt;span class="lnt"> 40
+&lt;/span>&lt;span class="lnt"> 41
+&lt;/span>&lt;span class="lnt"> 42
+&lt;/span>&lt;span class="lnt"> 43
+&lt;/span>&lt;span class="lnt"> 44
+&lt;/span>&lt;span class="lnt"> 45
+&lt;/span>&lt;span class="lnt"> 46
+&lt;/span>&lt;span class="lnt"> 47
+&lt;/span>&lt;span class="lnt"> 48
+&lt;/span>&lt;span class="lnt"> 49
+&lt;/span>&lt;span class="lnt"> 50
+&lt;/span>&lt;span class="lnt"> 51
+&lt;/span>&lt;span class="lnt"> 52
+&lt;/span>&lt;span class="lnt"> 53
+&lt;/span>&lt;span class="lnt"> 54
+&lt;/span>&lt;span class="lnt"> 55
+&lt;/span>&lt;span class="lnt"> 56
+&lt;/span>&lt;span class="lnt"> 57
+&lt;/span>&lt;span class="lnt"> 58
+&lt;/span>&lt;span class="lnt"> 59
+&lt;/span>&lt;span class="lnt"> 60
+&lt;/span>&lt;span class="lnt"> 61
+&lt;/span>&lt;span class="lnt"> 62
+&lt;/span>&lt;span class="lnt"> 63
+&lt;/span>&lt;span class="lnt"> 64
+&lt;/span>&lt;span class="lnt"> 65
+&lt;/span>&lt;span class="lnt"> 66
+&lt;/span>&lt;span class="lnt"> 67
+&lt;/span>&lt;span class="lnt"> 68
+&lt;/span>&lt;span class="lnt"> 69
+&lt;/span>&lt;span class="lnt"> 70
+&lt;/span>&lt;span class="lnt"> 71
+&lt;/span>&lt;span class="lnt"> 72
+&lt;/span>&lt;span class="lnt"> 73
+&lt;/span>&lt;span class="lnt"> 74
+&lt;/span>&lt;span class="lnt"> 75
+&lt;/span>&lt;span class="lnt"> 76
+&lt;/span>&lt;span class="lnt"> 77
+&lt;/span>&lt;span class="lnt"> 78
+&lt;/span>&lt;span class="lnt"> 79
+&lt;/span>&lt;span class="lnt"> 80
+&lt;/span>&lt;span class="lnt"> 81
+&lt;/span>&lt;span class="lnt"> 82
+&lt;/span>&lt;span class="lnt"> 83
+&lt;/span>&lt;span class="lnt"> 84
+&lt;/span>&lt;span class="lnt"> 85
+&lt;/span>&lt;span class="lnt"> 86
+&lt;/span>&lt;span class="lnt"> 87
+&lt;/span>&lt;span class="lnt"> 88
+&lt;/span>&lt;span class="lnt"> 89
+&lt;/span>&lt;span class="lnt"> 90
+&lt;/span>&lt;span class="lnt"> 91
+&lt;/span>&lt;span class="lnt"> 92
+&lt;/span>&lt;span class="lnt"> 93
+&lt;/span>&lt;span class="lnt"> 94
+&lt;/span>&lt;span class="lnt"> 95
+&lt;/span>&lt;span class="lnt"> 96
+&lt;/span>&lt;span class="lnt"> 97
+&lt;/span>&lt;span class="lnt"> 98
+&lt;/span>&lt;span class="lnt"> 99
+&lt;/span>&lt;span class="lnt">100
+&lt;/span>&lt;span class="lnt">101
+&lt;/span>&lt;span class="lnt">102
+&lt;/span>&lt;span class="lnt">103
+&lt;/span>&lt;span class="lnt">104
+&lt;/span>&lt;span class="lnt">105
+&lt;/span>&lt;span class="lnt">106
+&lt;/span>&lt;span class="lnt">107
+&lt;/span>&lt;span class="lnt">108
+&lt;/span>&lt;span class="lnt">109
+&lt;/span>&lt;span class="lnt">110
+&lt;/span>&lt;span class="lnt">111
+&lt;/span>&lt;span class="lnt">112
+&lt;/span>&lt;span class="lnt">113
+&lt;/span>&lt;span class="lnt">114
+&lt;/span>&lt;span class="lnt">115
+&lt;/span>&lt;span class="lnt">116
+&lt;/span>&lt;span class="lnt">117
+&lt;/span>&lt;span class="lnt">118
+&lt;/span>&lt;span class="lnt">119
+&lt;/span>&lt;span class="lnt">120
+&lt;/span>&lt;span class="lnt">121
+&lt;/span>&lt;span class="lnt">122
+&lt;/span>&lt;span class="lnt">123
+&lt;/span>&lt;span class="lnt">124
+&lt;/span>&lt;span class="lnt">125
+&lt;/span>&lt;span class="lnt">126
+&lt;/span>&lt;span class="lnt">127
+&lt;/span>&lt;span class="lnt">128
+&lt;/span>&lt;span class="lnt">129
+&lt;/span>&lt;span class="lnt">130
+&lt;/span>&lt;span class="lnt">131
+&lt;/span>&lt;span class="lnt">132
+&lt;/span>&lt;span class="lnt">133
+&lt;/span>&lt;span class="lnt">134
+&lt;/span>&lt;span class="lnt">135
+&lt;/span>&lt;span class="lnt">136
+&lt;/span>&lt;span class="lnt">137
+&lt;/span>&lt;span class="lnt">138
+&lt;/span>&lt;span class="lnt">139
+&lt;/span>&lt;span class="lnt">140
+&lt;/span>&lt;span class="lnt">141
+&lt;/span>&lt;span class="lnt">142
+&lt;/span>&lt;span class="lnt">143
+&lt;/span>&lt;span class="lnt">144
+&lt;/span>&lt;span class="lnt">145
+&lt;/span>&lt;span class="lnt">146
+&lt;/span>&lt;span class="lnt">147
+&lt;/span>&lt;span class="lnt">148
+&lt;/span>&lt;span class="lnt">149
+&lt;/span>&lt;span class="lnt">150
+&lt;/span>&lt;span class="lnt">151
+&lt;/span>&lt;span class="lnt">152
+&lt;/span>&lt;span class="lnt">153
+&lt;/span>&lt;span class="lnt">154
+&lt;/span>&lt;span class="lnt">155
+&lt;/span>&lt;span class="lnt">156
+&lt;/span>&lt;span class="lnt">157
+&lt;/span>&lt;span class="lnt">158
+&lt;/span>&lt;span class="lnt">159
+&lt;/span>&lt;span class="lnt">160
+&lt;/span>&lt;span class="lnt">161
+&lt;/span>&lt;span class="lnt">162
+&lt;/span>&lt;span class="lnt">163
+&lt;/span>&lt;span class="lnt">164
+&lt;/span>&lt;span class="lnt">165
+&lt;/span>&lt;span class="lnt">166
+&lt;/span>&lt;span class="lnt">167
+&lt;/span>&lt;span class="lnt">168
+&lt;/span>&lt;span class="lnt">169
+&lt;/span>&lt;span class="lnt">170
+&lt;/span>&lt;span class="lnt">171
+&lt;/span>&lt;span class="lnt">172
+&lt;/span>&lt;span class="lnt">173
+&lt;/span>&lt;span class="lnt">174
+&lt;/span>&lt;span class="lnt">175
+&lt;/span>&lt;span class="lnt">176
+&lt;/span>&lt;span class="lnt">177
+&lt;/span>&lt;span class="lnt">178
+&lt;/span>&lt;span class="lnt">179
+&lt;/span>&lt;span class="lnt">180
+&lt;/span>&lt;span class="lnt">181
+&lt;/span>&lt;span class="lnt">182
+&lt;/span>&lt;span class="lnt">183
+&lt;/span>&lt;span class="lnt">184
+&lt;/span>&lt;span class="lnt">185
+&lt;/span>&lt;span class="lnt">186
+&lt;/span>&lt;span class="lnt">187
+&lt;/span>&lt;span class="lnt">188
+&lt;/span>&lt;span class="lnt">189
+&lt;/span>&lt;span class="lnt">190
+&lt;/span>&lt;span class="lnt">191
+&lt;/span>&lt;span class="lnt">192
+&lt;/span>&lt;span class="lnt">193
+&lt;/span>&lt;span class="lnt">194
+&lt;/span>&lt;span class="lnt">195
+&lt;/span>&lt;span class="lnt">196
+&lt;/span>&lt;span class="lnt">197
+&lt;/span>&lt;span class="lnt">198
+&lt;/span>&lt;span class="lnt">199
+&lt;/span>&lt;span class="lnt">200
+&lt;/span>&lt;span class="lnt">201
+&lt;/span>&lt;span class="lnt">202
+&lt;/span>&lt;span class="lnt">203
+&lt;/span>&lt;span class="lnt">204
+&lt;/span>&lt;span class="lnt">205
+&lt;/span>&lt;span class="lnt">206
+&lt;/span>&lt;span class="lnt">207
+&lt;/span>&lt;span class="lnt">208
+&lt;/span>&lt;span class="lnt">209
+&lt;/span>&lt;span class="lnt">210
+&lt;/span>&lt;span class="lnt">211
+&lt;/span>&lt;span class="lnt">212
+&lt;/span>&lt;span class="lnt">213
+&lt;/span>&lt;span class="lnt">214
+&lt;/span>&lt;span class="lnt">215
+&lt;/span>&lt;span class="lnt">216
+&lt;/span>&lt;span class="lnt">217
+&lt;/span>&lt;span class="lnt">218
+&lt;/span>&lt;span class="lnt">219
+&lt;/span>&lt;span class="lnt">220
+&lt;/span>&lt;span class="lnt">221
+&lt;/span>&lt;span class="lnt">222
+&lt;/span>&lt;span class="lnt">223
+&lt;/span>&lt;span class="lnt">224
+&lt;/span>&lt;span class="lnt">225
+&lt;/span>&lt;span class="lnt">226
+&lt;/span>&lt;span class="lnt">227
+&lt;/span>&lt;span class="lnt">228
+&lt;/span>&lt;span class="lnt">229
+&lt;/span>&lt;span class="lnt">230
+&lt;/span>&lt;span class="lnt">231
+&lt;/span>&lt;span class="lnt">232
+&lt;/span>&lt;span class="lnt">233
+&lt;/span>&lt;span class="lnt">234
+&lt;/span>&lt;span class="lnt">235
+&lt;/span>&lt;span class="lnt">236
+&lt;/span>&lt;span class="lnt">237
+&lt;/span>&lt;span class="lnt">238
+&lt;/span>&lt;span class="lnt">239
+&lt;/span>&lt;span class="lnt">240
+&lt;/span>&lt;span class="lnt">241
+&lt;/span>&lt;span class="lnt">242
+&lt;/span>&lt;span class="lnt">243
+&lt;/span>&lt;span class="lnt">244
+&lt;/span>&lt;span class="lnt">245
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 下面是运算核心&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">bool&lt;/span> &lt;span class="n">TryCalculateTokens&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">CalcToken&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Count&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">++)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Type&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Operator&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckOperator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Mul&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Div&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Mod&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Pow&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">-&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">leftnum&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">switch&lt;/span> &lt;span class="p">((&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Mul&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Div&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">/&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Mod&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">%&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Pow&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Math&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Pow&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">leftnum&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">default&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Exception&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CalcToken&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">tmpnum&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">RemoveRange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">i&lt;/span>&lt;span class="p">--;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;Cannot get the value of token when calculate &amp;#39;{source[i].Content}&amp;#39;;&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="c1">// * / % **&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Count&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">++)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Type&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Operator&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckOperator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Sub&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">-&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">leftnum&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">switch&lt;/span> &lt;span class="p">((&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Sub&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">default&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Exception&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CalcToken&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">tmpnum&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">RemoveRange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">i&lt;/span>&lt;span class="p">--;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;Cannot get the value of token when calculate &amp;#39;{source[i].Content}&amp;#39;;&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">switch&lt;/span> &lt;span class="p">((&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Sub&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">default&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Exception&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CalcToken&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">tmpnum&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">RemoveRange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;Cannot get the value of token when calculate &amp;#39;{source[i].Content}&amp;#39;;&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="c1">// + -&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Count&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">++)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Type&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Operator&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckOperator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Gtr&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Lss&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Geq&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Leq&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">-&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">leftnum&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">switch&lt;/span> &lt;span class="p">((&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Gtr&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">rightnum&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Lss&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">rightnum&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Geq&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">&amp;gt;=&lt;/span> &lt;span class="n">rightnum&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Leq&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">&amp;lt;=&lt;/span> &lt;span class="n">rightnum&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">default&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Exception&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CalcToken&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">tmpnum&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">RemoveRange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">i&lt;/span>&lt;span class="p">--;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;Cannot get the value of token when calculate &amp;#39;{source[i].Content}&amp;#39;;&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="c1">// &amp;gt; &amp;lt; &amp;gt;= &amp;lt;=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Count&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">++)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Type&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Operator&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckOperator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Equ&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Neq&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">-&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">leftnum&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">switch&lt;/span> &lt;span class="p">((&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Equ&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">rightnum&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Neq&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="n">rightnum&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">default&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Exception&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CalcToken&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">tmpnum&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">RemoveRange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">i&lt;/span>&lt;span class="p">--;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;Cannot get the value of token when calculate &amp;#39;{source[i].Content}&amp;#39;;&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="c1">// == !=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Count&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">++)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Type&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Operator&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckOperator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Or&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">-&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">leftnum&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">switch&lt;/span> &lt;span class="p">((&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">rightnum&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Or&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="p">||&lt;/span> &lt;span class="n">rightnum&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="p">?&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">break&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">default&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Exception&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CalcToken&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">tmpnum&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">RemoveRange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">i&lt;/span>&lt;span class="p">--;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;Cannot get the value of token when calculate &amp;#39;{source[i].Content}&amp;#39;;&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="c1">// &amp;amp; |&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Count&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">++)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Type&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Operator&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckOperator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">If&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">-&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Operator&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckType&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Expression&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">3&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">CheckOperator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Witch&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">CalcOperator&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">basic&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">basic&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">leftnum&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">leftnum&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;Cannot get the value of token when calculate &amp;#39;{source[i].Content}&amp;#39;;&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">TryGetTokenValue&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="n">errors&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">3&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmpnum&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">rightnum&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;Cannot get the value of token when calculate &amp;#39;{source[i].Content}&amp;#39;;&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CalcToken&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">tmpnum&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">RemoveRange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">4&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">i&lt;/span>&lt;span class="p">--;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;Cannot get the value of token when calculate &amp;#39;{source[i].Content}&amp;#39;;&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="c1">// 三元表达式&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Count&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="m">1&lt;/span> &lt;span class="p">&amp;amp;&amp;amp;&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Type&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">CalcTokenType&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Number&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Content&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">errors&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;Final result after calculate is not a single number. &amp;#39;{string.Join(&amp;#34;&lt;/span> &lt;span class="s">&amp;#34;, source)}&amp;#39;;&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;br />&lt;/p>
+&lt;ul>
+&lt;li>完整源代码:&lt;a href="https://github.com/SlimeNull/CalculatorPlus">Github仓库&lt;/a>
+最新版本已经使用了逆波兰表达式&lt;/li>
+&lt;/ul></description></item><item><title>数组去重: 超高速字符串去重 (含保留原顺序的方法)</title><link>https://slimenull.com/p/20200627054332/</link><pubDate>Sat, 27 Jun 2020 05:43:32 +0800</pubDate><guid>https://slimenull.com/p/20200627054332/</guid><description>&lt;h2 id="1-你需要知道这些">1. 你需要知道这些&lt;/h2>
+&lt;h5 id="代码适用于">代码适用于:&lt;/h5>
+&lt;ol start="0">
+&lt;li>将字符串数组中的重复元素去除, 仅留下一个&lt;/li>
+&lt;/ol>
+&lt;h5 id="应用场景">应用场景:&lt;/h5>
+&lt;ol start="0">
+&lt;li>你有一个超级长的文本文件, 这里面每一行都是一条数据, 例如这些数据是用爬虫获取的搜索关键字, 但可能含有重复, 你现在需要将它们去重. 这个算法可以帮助你快速完成去重的工作&lt;/li>
+&lt;/ol>
+&lt;h5 id="局限性">局限性:&lt;/h5>
+&lt;ol start="0">
+&lt;li>下面将介绍两种算法&lt;/li>
+&lt;li>一种是先进行排序, 这时, 相同的元素都在一起了, 然后再进行一次遍历去重, 那么除了排序的时间, 仅进行一次遍历就可以去重, 速度很快, 但原有顺序改变了.&lt;/li>
+&lt;li>第二种算法是较为特殊的算法, 借助了引用类型这个特性, 可以保证原有顺序不变, 但需要定义字典和列表, 也就是说要多需要一些内存.&lt;/li>
+&lt;/ol>
+&lt;h2 id="2-算法的主要内容">2. 算法的主要内容&lt;/h2>
+&lt;h5 id="主要原理">主要原理&lt;/h5>
+&lt;ol>
+&lt;li>通过排序, 将相同的元素凑到一起, 那么只需要比对当前元素和一个相邻元素就可以得出该元素是否是重复的. 那么只需要遍历一次就可以做到去重.&lt;/li>
+&lt;li>在此基础上, 用Dictionary的根据键可以快速访问值得特性, 将原字符串数组的元素索引与元素引用保存到Dictionary中, 就可以通过索引将字符串数组还原到原来的顺序, 详细还请看代码&lt;/li>
+&lt;/ol>
+&lt;h5 id="实例代码">实例代码&lt;/h5>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">string&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">RemoveSameElement&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToList&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">;)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">result&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">RemoveAt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">i&lt;/span>&lt;span class="p">++;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">string&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">RemoveSameElement&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Dictionary&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">StringInfo&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">d&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Dictionary&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">StringInfo&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">StringInfo&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">temp&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">StringInfo&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">++)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">d&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">StringInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">temp&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">d&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">temp&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Sort&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">temp&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Count&lt;/span>&lt;span class="p">;)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">temp&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">temp&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">RemoveAt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">i&lt;/span>&lt;span class="p">++;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">foreach&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">StringInfo&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">temp&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Value&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 通过这个StringInfo类来实现对string的引用&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">StringInfo&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">IComparable&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">StringInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="k">value&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Value&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">value&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">Value&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">CompareTo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">obj&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">obj&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetType&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">GetType&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">Value&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CompareTo&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">obj&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">StringInfo&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Value&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ArgumentException&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;参数必须为StringInfo类型&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="end">End&lt;/h2>
+&lt;h6 id="1-这个算法只是偶然间想到的-不喜勿喷-也请多多指教">1. 这个算法只是偶然间想到的, 不喜勿喷, 也请多多指教.&lt;/h6>
+&lt;h6 id="2-算法作为一个功能嵌入到我的一个文本处理小工具中">2. 算法作为一个功能嵌入到我的一个文本处理小工具中&lt;/h6>
+&lt;ol start="0">
+&lt;li>(对文本文件的每一行进行特定处理), 这个工具包含以下功能&lt;/li>
+&lt;li>&amp;lsquo;在行首行末随机插入特定的内容&amp;rsquo;,&lt;/li>
+&lt;li>&amp;lsquo;在行首行末依照自己定义好的一个字符串序列,按顺序一个个插入到行首或行末&amp;rsquo;,&lt;/li>
+&lt;li>&amp;lsquo;以一定初值,一定增量, 在行首或行末插入数字&amp;rsquo;,&lt;/li>
+&lt;li>&amp;lsquo;根据每一行的字符串长度排序&amp;rsquo;&lt;/li>
+&lt;li>&amp;lsquo;根据每一行的字符串内容排序&amp;rsquo;&lt;/li>
+&lt;li>&amp;lsquo;去除功能(去除空行,去除重复行, 去除行首行末指定字符,去除包含关键字的行 等等)&amp;rsquo;
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.&lt;/li>
+&lt;/ol>
+&lt;h6 id="想恰饭-д">想恰饭 (;´༎ຶД༎ຶ`)&lt;/h6>
+&lt;ol start="0">
+&lt;li>上面所说的小工具是帮人代写的, 如果你需要它并且懒得写代码, 我很乐意将他出售给你. 之前没有排序功能的时候, 原售价是50￥ (老板给了这么多)&lt;/li>
+&lt;li>欲购买的话&amp;hellip; 私聊就好 (虽然这的确是一个没有什么技术含量的东西)&lt;/li>
+&lt;/ol></description></item><item><title>排序算法: 超高速根据字符串长度排序的算法</title><link>https://slimenull.com/p/20200626020405/</link><pubDate>Fri, 26 Jun 2020 02:04:05 +0800</pubDate><guid>https://slimenull.com/p/20200626020405/</guid><description>&lt;h2 id="1-你需要知道这些">1. 你需要知道这些:&lt;/h2>
+&lt;h5 id="代码适用于">代码适用于:&lt;/h5>
+&lt;ol start="0">
+&lt;li>适用于字符串数组的元素长度变化量较小的, 比如字符串的长度普遍在1~2000, 那么此时, 这个算法将有超高的性能, 测试结果是 10万条数据排序所需时间为91ms(你没看错).&lt;/li>
+&lt;/ol>
+&lt;h5 id="应用场景">应用场景:&lt;/h5>
+&lt;ol start="0">
+&lt;li>你有一个超级长的文本文件, 这里面每一行都是一条数据, 例如这些数据是用爬虫获取的搜索关键字, 你现在需要将它们排序, 别犹豫, 我认为这个算法非常适合你.&lt;/li>
+&lt;/ol>
+&lt;h5 id="局限性">局限性&lt;/h5>
+&lt;ol start="0">
+&lt;li>字符串数组的元素长度变化量越大, 该算法效率可能会越低,因为里面包含了对字符串长度变化量排序的过程,这个过程是使用的选择排序法。（选择排序法的所需时间与数据长度不成正比,不多赘述）&lt;/li>
+&lt;/ol>
+&lt;h2 id="2算法的主要内容">2.算法的主要内容&lt;/h2>
+&lt;h5 id="主要原理">主要原理:&lt;/h5>
+&lt;ol>
+&lt;li>定义一个字典, 键是int, 值是可变的字符串列表, 定义一个可变的字符串列表作为存储结果的容器&lt;/li>
+&lt;li>循环源字符串数组, 将一切可能的长度作为int, 一个新的字符串列表作为值, 添加到上面所说的字典里面&lt;/li>
+&lt;li>第二次循环源字符串数组, 将迭代到的字符串的长度作为键, 在字典中键所对应的字符串列表中添加这个字符串&lt;/li>
+&lt;li>排序字典的键, 循环排序后的所有键, 将键对应的字符串列表的每一个字符串添加到结果中&lt;/li>
+&lt;li>排序结束&lt;/li>
+&lt;/ol>
+&lt;h5 id="示例代码">示例代码:&lt;/h5>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 这是C#代码&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Dictionary 与 List 位于 System.Collections.Generic 命名空间下&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">string&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">StringSort&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">sortKeys&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 这里是用于排序字典的键的&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">most&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">mostIndex&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">temp&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">src&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span> &lt;span class="p">&amp;gt;&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">++)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">most&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">j&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">j&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">j&lt;/span>&lt;span class="p">++)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">src&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">j&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">most&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">most&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">j&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">mostIndex&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">j&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">most&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">src&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">mostIndex&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">src&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">most&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">src&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Dictionary&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">&amp;gt;&amp;gt;&lt;/span> &lt;span class="n">firstSortedString&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Dictionary&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">&amp;gt;&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">foreach&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(!&lt;/span>&lt;span class="n">firstSortedString&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ContainsKey&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">firstSortedString&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">string&lt;/span>&lt;span class="p">&amp;gt;());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">foreach&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">source&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">firstSortedString&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">foreach&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">sortKeys&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">firstSortedString&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Keys&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">()))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">foreach&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">j&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="n">firstSortedString&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">j&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToArray&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="end">End&lt;/h2>
+&lt;h6 id="1-这个算法只是偶然间想到的-不喜勿喷-也请多多指教">1. 这个算法只是偶然间想到的, 不喜勿喷, 也请多多指教.&lt;/h6>
+&lt;h6 id="2-算法作为一个功能嵌入到我的一个文本处理小工具中">2. 算法作为一个功能嵌入到我的一个文本处理小工具中&lt;/h6>
+&lt;ol start="0">
+&lt;li>(对文本文件的每一行进行特定处理), 这个工具包含以下功能&lt;/li>
+&lt;li>&amp;lsquo;在行首行末随机插入特定的内容&amp;rsquo;,&lt;/li>
+&lt;li>&amp;lsquo;在行首行末依照自己定义好的一个字符串序列,按顺序一个个插入到行首或行末&amp;rsquo;,&lt;/li>
+&lt;li>&amp;lsquo;以一定初值,一定增量, 在行首或行末插入数字&amp;rsquo;,&lt;/li>
+&lt;li>&amp;lsquo;根据每一行的字符串长度排序&amp;rsquo;&lt;/li>
+&lt;li>&amp;lsquo;根据每一行的字符串内容排序&amp;rsquo;&lt;/li>
+&lt;li>&amp;lsquo;去除功能(去除空行,去除重复行, 去除行首行末指定字符,去除包含关键字的行 等等)&amp;rsquo;
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.&lt;/li>
+&lt;/ol>
+&lt;h6 id="想恰饭-д">想恰饭 (;´༎ຶД༎ຶ`)&lt;/h6>
+&lt;ol start="0">
+&lt;li>上面所说的小工具是帮人代写的, 如果你需要它并且懒得写代码, 我很乐意将他出售给你. 之前没有排序功能的时候, 原售价是50￥ (老板给了这么多)&lt;/li>
+&lt;li>欲购买的话&amp;hellip; 私聊就好 (虽然这的确是一个没有什么技术含量的东西)&lt;/li>
+&lt;/ol></description></item></channel></rss>

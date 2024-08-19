@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>电脑硬件 on SlimeNull Blogs</title><link>https://slimenull.com/tags/%E7%94%B5%E8%84%91%E7%A1%AC%E4%BB%B6/</link><description>Recent content in 电脑硬件 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sat, 12 Dec 2020 23:33:09 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/%E7%94%B5%E8%84%91%E7%A1%AC%E4%BB%B6/index.xml" rel="self" type="application/rss+xml"/><item><title>[电脑小白入门] 如何进入启动配置 (BIOS/UEFI配置)</title><link>https://slimenull.com/p/20201212233309/</link><pubDate>Sat, 12 Dec 2020 23:33:09 +0800</pubDate><guid>https://slimenull.com/p/20201212233309/</guid><description>&lt;blockquote>
+&lt;ul>
+&lt;li>电脑启动时，需要读取最基本的配置，然后才进入系统，这个配置就是 &lt;em>启动配置&lt;/em> 。旧时的启动配置即BIOS配置，但如今UEFI即将取代BIOS配置，我们应该使用 &lt;em>启动配置&lt;/em> 这个名称，否则就可能闹出将UEFI称为BIOS的尴尬场面。&lt;/li>
+&lt;li>这个启动配置，是可以被我们调整的，在启动配置页面，我们可以调整风扇转速，系统时间，设备电压，以及其他更高深的东西，不过最常用的，还是&lt;strong>引导优先级&lt;/strong>。因为一个电脑，可以有多个操作系统，引导优先级则是控制启动系统的配置项。&lt;/li>
+&lt;li>不同的主板，是有不同的进入按键的，例如Dell电脑，是&lt;kbd>F2&lt;/kbd>进入启动配置。&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;p>那么， 下一步就是在网上查找你的设备对应的按键了, 搜索近似于 ‘设备名 BIOS/UEFI 按键’ 的内容以尝试检索出你所需要的按键。下面的步骤以 &lt;kbd>F2&lt;/kbd>作为示例。&lt;/p>
+&lt;ol>
+&lt;li>按下开机键后，狂按&lt;kbd>F2&lt;/kbd>, 直到进入配置页面。（它可能是纯英文界面&lt;/li>
+&lt;li>如果是国内主板，或者说支持多语言的配置页，你可以尝试找下 ‘Language’ 配置以调整显示语言&lt;/li>
+&lt;/ol>
+&lt;p>启动时，还有一些其他的按键，例如 &lt;em>Windows启动高级选项&lt;/em> 的按键是&lt;kbd>F8&lt;/kbd>，Dell电脑的引导选择的快捷键是&lt;kbd>F12&lt;/kbd>, 如果你只是希望在本次进入系统时从其他设备进入，使用&lt;kbd>F12&lt;/kbd>更简便些。当然，即便是这个，在不同主板中也是不同的，例如我那个台式机就是&lt;kbd>F11&lt;/kbd>。&lt;/p>
+&lt;p>对于想要通过介质安装系统的朋友呢，在开机时狂按&lt;kbd>F12&lt;/kbd>进入引导选择页面，选择带有USB字样的选项并按&lt;kbd>Enter&lt;/kbd>即可进入安装程序。&lt;/p></description></item></channel></rss>

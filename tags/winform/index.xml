@@ -1,0 +1,1220 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>WinForm on SlimeNull Blogs</title><link>https://slimenull.com/tags/winform/</link><description>Recent content in WinForm on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 30 Jun 2021 02:45:05 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/winform/index.xml" rel="self" type="application/rss+xml"/><item><title>[C#] 使用 NullLib.TickAnimation.Drawing 实现 WinForm 过渡动画</title><link>https://slimenull.com/p/20210630024505/</link><pubDate>Wed, 30 Jun 2021 02:45:05 +0800</pubDate><guid>https://slimenull.com/p/20210630024505/</guid><description>&lt;p>NullLib.TickAnimation 用于实现对一个对象的属性(Property), 以指定的计时函数, 在一定时间内从一个值, 平滑的过渡到另一个值. NullLib.TickAnimation.Drawing 基于 NullLib.TickAnimation, 并提供了关于绘画类型的过渡动画, 例如 点, 尺寸, 矩形区域, 颜色&lt;/p>
+&lt;p>例如你可以使用它将一个 WinForm 窗体的 Bounds 从一个值过渡到另一个值以实现窗体位置与尺寸的过渡动画. 下面是一个简单示例:&lt;/p>
+&lt;div align="center">
+&lt;a href="https://www.picbed.cn/images/2021/06/30/nMsu3Dxxpt.gif" target="_blank">
+&lt;img src="https://www.picbed.cn/images/2021/06/30/nMsu3Dxxpt.gif" alt="点击此处跳转到图片源页面"/>
+&lt;/a>
+&lt;/div>
+&lt;h2 id="快速开始">快速开始&lt;/h2>
+&lt;ol>
+&lt;li>
+&lt;p>首先, 创建一个 WinForm 项目用于测试, 向主窗体中添加一个按钮, 并为按钮的点击事件添加事件处理器&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在解决方案管理器中右击项目, 选择 &amp;ldquo;管理 nuget 程序包&amp;rdquo;, 然后安装 NullLib.TickAnimation.Drawing (它会自动安装依赖项 NullLib.TickAnimation)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>转到主窗体的代码, 在 using 部分添加 &lt;code>using NullLib.TickAnimation&lt;/code>, 这样我们就可以直接使用关于动画的一些类了&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>编辑刚刚添加的按钮的点击事件处理器代码, 添加以下内容:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Rectangle&lt;/span> &lt;span class="n">workingArea&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Screen&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PrimaryScreen&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WorkingArea&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 获取主屏幕的工作区矩形&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">DrawingTickAnimator&lt;/span> &lt;span class="n">animator&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">DrawingTickAnimator&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">SineTicker&lt;/span>&lt;span class="p">(),&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">nameof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Bounds&lt;/span>&lt;span class="p">));&lt;/span> &lt;span class="c1">// 创建动画控制器实例&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">animator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SetPropertySetter&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">setAction&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">Invoke&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">setAction&lt;/span>&lt;span class="p">));&lt;/span> &lt;span class="c1">// 解决窗体程序的跨线程资源访问问题&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">animator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SetTickDelay&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 在每一帧后进行 1ms 的延时&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">animator&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Animate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">workingArea&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">200&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 进行动画, 时间是 200ms&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>运行程序, 点击按钮, 查看效果&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>本库已在 GitHub 开源, &lt;a class="link" href="https://github.com/SlimeNull/NullLib.TickAnimation" target="_blank" rel="noopener"
+>github.com/SlimeNull/NullLib.TickAnimation&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="基本原理">基本原理&lt;/h2>
+&lt;p>在 NullLib.TickAnimator 中, ITickAnimator 是最基本的, 用于运行动画的接口, 它依赖于 ITicker 来提供计时函数, ITIcker 可表示运动曲线, 不同的类有不同的特征, 例如使用 BackTicker 的 ITickAnimator 进行动画时将具有回弹效果, 使用 BounceTicker 的 ITickAnimator 进行动画时将具有弹跳效果.&lt;/p>
+&lt;p>其中的技术细节, 可参考 CSS3 过渡中的 timing-function, WPF 窗体程序中的 EasingFunction. 另外, 也推荐对贝塞尔曲线作基本了解, 这样, 你可以通过库中提供的 CubicBezierTicker 来创建自定义的三次贝塞尔曲线计时函数, 进而实现自定义动画效果.&lt;/p>
+&lt;blockquote>
+&lt;p>推荐的在线三次贝塞尔曲线编辑工具: &lt;a class="link" href="https://cubic-bezier.com/" target="_blank" rel="noopener"
+>Cubic-Bezier&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="类型">类型&lt;/h2>
+&lt;h3 id="--iticker">- ITicker&lt;/h3>
+&lt;p>ITicker 是动画计时函数, 它分为两种, 贝塞尔曲线函数以及原生函数, 其中贝塞尔曲线是可以由用户指定控制点从而控制曲线形状的, 原生函数是一些定义好的, 遵循 ITicker 接口的函数&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>贝塞尔曲线函数: 分两种, 三次贝塞尔曲线(CubicBezierTicker)与二次贝塞尔曲线(QuadraticBezierTicker), 你可以手动指定控制点, 也可以使用默认提供的一些曲线, 例如 Ease, EaseIn, EaseOut, EaseInOut, InSine, OutSine 等.&lt;/p>
+&lt;p>指定 EaseInOut 的方式是: 指定 CubicBezierCurve.Ease 与 EasingMode.EaseInOut, 同理, 指定 InOutBack 的方式是: CubicBezierCurve.Back 与 EasingMode.EaseInOut, 需要知道的是, 这些曲线都是源自于 CSS3 内置曲线(Ease, EaseIn, EaseOut, EaseInOut, Linear) 以及 Microsoft Edge 浏览器调试工具中的预设曲线(InSIne, OutSine, InOutSine, InBack, OutBack, &amp;hellip;&amp;hellip;)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>原生函数: 它们都是从 WPF 中移植过来的, 例如 BounceTicker, 它来自 WPF 中的 BounceEase, 并且与它算法完全一致, 关于它们的使用, 我建议查阅 WPF 动画缓动函数的相关文档.&lt;/p>
+&lt;p>最简单的, 使用 BackTicker 函数就是直接实例化一个对象, 在这里需要提到的是, 关于 BackTicker 实例的属性默认值也是与 WPF 一致的, 虽然 BackTicker 和 CubicBezierCurve.Back 都是表示带有回弹效果的曲线, 但是两者并不相等, 贝塞尔曲线函数和原生函数是截然不同的.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>关于 ITicker 的更多信息, 我建议查阅源码, 或者在 Visual Studio 中使用对象浏览器概览所有类型.&lt;/p>
+&lt;h3 id="--itickanimator">- ITickAnimator&lt;/h3>
+&lt;p>ITickAnimator 是驱动动画的最主要的类, 默认包含的 TickAnimator 中支持 double float int 三种数字类型的动画处理, 它其中还包括了对于动画同时进行时的中断处理, 当然, 如果你要使用针对于绘画的动画处理, 例如点, 尺寸, 矩形区域, 颜色这类, 可以使用 DrawingTickAnimator (nuget包: NullLib.TickAnimator.Drawing, 命名空间: NullLib.TickAnimator)&lt;/p>
+&lt;blockquote>
+&lt;p>TickAnimator 的动画处理中包含这样一点: 当一个动画还未结束就启动另一个动画, 那么第一个动画会自动停止以保证不会造成冲突, 这是因为一个 TickAnimator 应该针对于唯一一个属性, 但针对同一个属性的两个动画同时启动, 将会造成严重的冲突问题. (这里需要提一下, 如果你要同时对一个控件进行位置过渡和尺寸过渡, 我不推荐你为 Location 和 Size 属性分别创建一个 ITickAnimator 实例, WinForm 的内部实现问题仍然会导致冲突, 更安全的做法是为 Bounds 属性创建 ITickAnimator 并且使用针对 Rectangle 的过渡)&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="--tickanimationproc">- TickAnimationProc&lt;/h3>
+&lt;p>TickAnimationProc 是 NullLib.TickAnimation 中对于动画驱动的最核心部分, 它提供了最为基本的动画实现方式, 通过指定 ITicker(计时函数), Fucn&amp;lt;double, T&amp;gt;(tick picker用于从动画进度中取得对应类型的值), TimeSpan(动画的时间间隔), Func&amp;lt;T, bool&amp;gt;(动画每一帧的回调函数, 返回值表示动画是否应该继续进行), 这四个参数来运行最基本的动画. 但是一般的不推荐使用这个, 因为其中没有像 TickAnimator 的互斥措施.&lt;/p>
+&lt;h3 id="--tickanimatorbase">- TickAnimatorBase&lt;/h3>
+&lt;p>TickAnimator 的基类, 其中包含了 TickAnimator 基础功能的实现, 例如对于值过渡的方法封装&lt;/p>
+&lt;h2 id="自定义类型">自定义类型&lt;/h2>
+&lt;p>如果你要自定义 ITicker 实现类或者 ITickAnimator 实现类, 则需要遵守下面的一些规范:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>对于 ITicker 的实现, 必须保证对于方法 CalcTick(double x), x 从 0 到 1 时, 返回值也是从 0 到 1, 即: CalcTick(0) 应该返回 0, CalcTick(1) 应该返回 1.&lt;/p>
+&lt;p>并且, 如果你要创建更高阶的贝塞尔曲线函数, 建议继承 BezierTickerBase, 如果你要创建一些遵循 WPF 原生过渡函数规则的自定义函数, 必须继承 FuncTickerBase 并在字类中重写 CalcInTick(double x) 方法.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>对于 ITickAnimator 的实现, 推荐的方式是直接继承 TickAnimator, 并且在实现 Animate 和 SyncAnimate 方法时, 应该通过调用 TickAnimatorBase 的 Animate 和 SyncAnimate 方法来实现动画, 而获取对应属性的当前值, 不应该使用 prop.GetValue 方法, 而是使用 TickAnimatorBase 的 GetPropertyValue 方法. 下面是 TickAnimator 中 double 的动画实现:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="n">Task&lt;/span> &lt;span class="n">Animate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span> &lt;span class="n">start&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">float&lt;/span> &lt;span class="n">end&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">dur&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span> &lt;span class="n">diff&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">end&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">start&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">Animate&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">t&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">float&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="n">start&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">diff&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">t&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">TimeSpan&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FromMilliseconds&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dur&lt;/span>&lt;span class="p">));&lt;/span> &lt;span class="c1">// 内部调用基类 TickAnimatorBase 的方法&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="n">Task&lt;/span> &lt;span class="n">Animate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span> &lt;span class="n">end&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">dur&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">Animate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">GetPropertyValue&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="p">&amp;gt;(),&lt;/span> &lt;span class="n">end&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">dur&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 从当前值开始执行动画, 按照规&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="n">ITickAnimator&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">SyncAnimate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span> &lt;span class="n">start&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">double&lt;/span> &lt;span class="n">end&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">dur&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">// 范, 使用 GetPropertyValue 方法&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">double&lt;/span> &lt;span class="n">diff&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">end&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">start&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">SyncAnimate&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">t&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="p">)(&lt;/span>&lt;span class="n">start&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">diff&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="n">t&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">TimeSpan&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FromMilliseconds&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dur&lt;/span>&lt;span class="p">));&lt;/span> &lt;span class="c1">// SyncAnimate 也一样&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="n">ITickAnimator&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">SyncAnimate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">double&lt;/span> &lt;span class="n">end&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">dur&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">SyncAnimate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">GetPropertyValue&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="kt">double&lt;/span>&lt;span class="p">&amp;gt;(),&lt;/span> &lt;span class="n">end&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">dur&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 一致&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ol></description></item><item><title>[C#] 音乐播放 3 种方式 Demo 与 MCI 音乐播放器封装类.</title><link>https://slimenull.com/p/20210211104239/</link><pubDate>Thu, 11 Feb 2021 10:42:39 +0800</pubDate><guid>https://slimenull.com/p/20210211104239/</guid><description>&lt;h2 id="淦">淦!&lt;/h2>
+&lt;p>首先代码是不完整的, 我还是没能成功设置音量, 除此之外, 别的倒是挺顺利的, 当前实现的功能如下:&lt;/p>
+&lt;blockquote>
+&lt;p>播放 暂停 还原 停止 获取进度 获取长度 设置进度 获取播放状态&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="内容">内容:&lt;/h2>
+&lt;ul>
+&lt;li>本项目的仓库在: &lt;a id="download_link" href="https://github.com/SlimeNull/AudioTest">SlimeNull/AudioTest&lt;/a>, 在这里下载哦, 别忘了还原 nuget 包, 因为用了 NAudio 库.&lt;/li>
+&lt;/ul>
+&lt;h4 id="-音乐播放-demo">&amp;gt; 音乐播放 Demo:&lt;/h4>
+&lt;ul>
+&lt;li>先放图吧:&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://slimenull.com/images/20210211102257257.png"
+loading="lazy"
+>&lt;/p>
+&lt;blockquote>
+&lt;p>首先左上角是打开文件的, 然后 PlayType 是播放方式, 我现在让它支持 3 种, 一种是SoundPlayer, 然后是 MCI, 然后是 NAudio 库.
+ 
+实现了播放, 暂停, 停止, 移除, 进度调整到开头, 进度调整(就那个track bar), 同步播放(如果点了这个, UI线程会阻塞的哦), 获取音乐长度, 获取播放状态, 获取播放位置, 重复播放.
+ 
+不同的功能对不同的播放种类支持性不同, 所以, 如果你按下了按钮, 没反应, 也没报错, 那就是它不支持这个功能(也就是代码里没有写)'&lt;/p>
+&lt;/blockquote>
+&lt;p>下载代码, 请看前面的链接.&lt;a class="link" href="#download_link" >↑跳转↑&lt;/a>&lt;/p>
+&lt;h4 id="-mci-播放器封装">&amp;gt; MCI 播放器封装:&lt;/h4>
+&lt;ul>
+&lt;li>上边的窗体程序就体现了封装类所实现的所有功能喔, 所以试试吧, 你也可以直接粘贴下面的代码, 但是cs文件的名称, 如果可以的话, 我希望你命名为 &amp;ldquo;Null.MciPlayer&amp;rdquo; &lt;sub>(没错就是我的名字&lt;/sub>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt"> 10
+&lt;/span>&lt;span class="lnt"> 11
+&lt;/span>&lt;span class="lnt"> 12
+&lt;/span>&lt;span class="lnt"> 13
+&lt;/span>&lt;span class="lnt"> 14
+&lt;/span>&lt;span class="lnt"> 15
+&lt;/span>&lt;span class="lnt"> 16
+&lt;/span>&lt;span class="lnt"> 17
+&lt;/span>&lt;span class="lnt"> 18
+&lt;/span>&lt;span class="lnt"> 19
+&lt;/span>&lt;span class="lnt"> 20
+&lt;/span>&lt;span class="lnt"> 21
+&lt;/span>&lt;span class="lnt"> 22
+&lt;/span>&lt;span class="lnt"> 23
+&lt;/span>&lt;span class="lnt"> 24
+&lt;/span>&lt;span class="lnt"> 25
+&lt;/span>&lt;span class="lnt"> 26
+&lt;/span>&lt;span class="lnt"> 27
+&lt;/span>&lt;span class="lnt"> 28
+&lt;/span>&lt;span class="lnt"> 29
+&lt;/span>&lt;span class="lnt"> 30
+&lt;/span>&lt;span class="lnt"> 31
+&lt;/span>&lt;span class="lnt"> 32
+&lt;/span>&lt;span class="lnt"> 33
+&lt;/span>&lt;span class="lnt"> 34
+&lt;/span>&lt;span class="lnt"> 35
+&lt;/span>&lt;span class="lnt"> 36
+&lt;/span>&lt;span class="lnt"> 37
+&lt;/span>&lt;span class="lnt"> 38
+&lt;/span>&lt;span class="lnt"> 39
+&lt;/span>&lt;span class="lnt"> 40
+&lt;/span>&lt;span class="lnt"> 41
+&lt;/span>&lt;span class="lnt"> 42
+&lt;/span>&lt;span class="lnt"> 43
+&lt;/span>&lt;span class="lnt"> 44
+&lt;/span>&lt;span class="lnt"> 45
+&lt;/span>&lt;span class="lnt"> 46
+&lt;/span>&lt;span class="lnt"> 47
+&lt;/span>&lt;span class="lnt"> 48
+&lt;/span>&lt;span class="lnt"> 49
+&lt;/span>&lt;span class="lnt"> 50
+&lt;/span>&lt;span class="lnt"> 51
+&lt;/span>&lt;span class="lnt"> 52
+&lt;/span>&lt;span class="lnt"> 53
+&lt;/span>&lt;span class="lnt"> 54
+&lt;/span>&lt;span class="lnt"> 55
+&lt;/span>&lt;span class="lnt"> 56
+&lt;/span>&lt;span class="lnt"> 57
+&lt;/span>&lt;span class="lnt"> 58
+&lt;/span>&lt;span class="lnt"> 59
+&lt;/span>&lt;span class="lnt"> 60
+&lt;/span>&lt;span class="lnt"> 61
+&lt;/span>&lt;span class="lnt"> 62
+&lt;/span>&lt;span class="lnt"> 63
+&lt;/span>&lt;span class="lnt"> 64
+&lt;/span>&lt;span class="lnt"> 65
+&lt;/span>&lt;span class="lnt"> 66
+&lt;/span>&lt;span class="lnt"> 67
+&lt;/span>&lt;span class="lnt"> 68
+&lt;/span>&lt;span class="lnt"> 69
+&lt;/span>&lt;span class="lnt"> 70
+&lt;/span>&lt;span class="lnt"> 71
+&lt;/span>&lt;span class="lnt"> 72
+&lt;/span>&lt;span class="lnt"> 73
+&lt;/span>&lt;span class="lnt"> 74
+&lt;/span>&lt;span class="lnt"> 75
+&lt;/span>&lt;span class="lnt"> 76
+&lt;/span>&lt;span class="lnt"> 77
+&lt;/span>&lt;span class="lnt"> 78
+&lt;/span>&lt;span class="lnt"> 79
+&lt;/span>&lt;span class="lnt"> 80
+&lt;/span>&lt;span class="lnt"> 81
+&lt;/span>&lt;span class="lnt"> 82
+&lt;/span>&lt;span class="lnt"> 83
+&lt;/span>&lt;span class="lnt"> 84
+&lt;/span>&lt;span class="lnt"> 85
+&lt;/span>&lt;span class="lnt"> 86
+&lt;/span>&lt;span class="lnt"> 87
+&lt;/span>&lt;span class="lnt"> 88
+&lt;/span>&lt;span class="lnt"> 89
+&lt;/span>&lt;span class="lnt"> 90
+&lt;/span>&lt;span class="lnt"> 91
+&lt;/span>&lt;span class="lnt"> 92
+&lt;/span>&lt;span class="lnt"> 93
+&lt;/span>&lt;span class="lnt"> 94
+&lt;/span>&lt;span class="lnt"> 95
+&lt;/span>&lt;span class="lnt"> 96
+&lt;/span>&lt;span class="lnt"> 97
+&lt;/span>&lt;span class="lnt"> 98
+&lt;/span>&lt;span class="lnt"> 99
+&lt;/span>&lt;span class="lnt">100
+&lt;/span>&lt;span class="lnt">101
+&lt;/span>&lt;span class="lnt">102
+&lt;/span>&lt;span class="lnt">103
+&lt;/span>&lt;span class="lnt">104
+&lt;/span>&lt;span class="lnt">105
+&lt;/span>&lt;span class="lnt">106
+&lt;/span>&lt;span class="lnt">107
+&lt;/span>&lt;span class="lnt">108
+&lt;/span>&lt;span class="lnt">109
+&lt;/span>&lt;span class="lnt">110
+&lt;/span>&lt;span class="lnt">111
+&lt;/span>&lt;span class="lnt">112
+&lt;/span>&lt;span class="lnt">113
+&lt;/span>&lt;span class="lnt">114
+&lt;/span>&lt;span class="lnt">115
+&lt;/span>&lt;span class="lnt">116
+&lt;/span>&lt;span class="lnt">117
+&lt;/span>&lt;span class="lnt">118
+&lt;/span>&lt;span class="lnt">119
+&lt;/span>&lt;span class="lnt">120
+&lt;/span>&lt;span class="lnt">121
+&lt;/span>&lt;span class="lnt">122
+&lt;/span>&lt;span class="lnt">123
+&lt;/span>&lt;span class="lnt">124
+&lt;/span>&lt;span class="lnt">125
+&lt;/span>&lt;span class="lnt">126
+&lt;/span>&lt;span class="lnt">127
+&lt;/span>&lt;span class="lnt">128
+&lt;/span>&lt;span class="lnt">129
+&lt;/span>&lt;span class="lnt">130
+&lt;/span>&lt;span class="lnt">131
+&lt;/span>&lt;span class="lnt">132
+&lt;/span>&lt;span class="lnt">133
+&lt;/span>&lt;span class="lnt">134
+&lt;/span>&lt;span class="lnt">135
+&lt;/span>&lt;span class="lnt">136
+&lt;/span>&lt;span class="lnt">137
+&lt;/span>&lt;span class="lnt">138
+&lt;/span>&lt;span class="lnt">139
+&lt;/span>&lt;span class="lnt">140
+&lt;/span>&lt;span class="lnt">141
+&lt;/span>&lt;span class="lnt">142
+&lt;/span>&lt;span class="lnt">143
+&lt;/span>&lt;span class="lnt">144
+&lt;/span>&lt;span class="lnt">145
+&lt;/span>&lt;span class="lnt">146
+&lt;/span>&lt;span class="lnt">147
+&lt;/span>&lt;span class="lnt">148
+&lt;/span>&lt;span class="lnt">149
+&lt;/span>&lt;span class="lnt">150
+&lt;/span>&lt;span class="lnt">151
+&lt;/span>&lt;span class="lnt">152
+&lt;/span>&lt;span class="lnt">153
+&lt;/span>&lt;span class="lnt">154
+&lt;/span>&lt;span class="lnt">155
+&lt;/span>&lt;span class="lnt">156
+&lt;/span>&lt;span class="lnt">157
+&lt;/span>&lt;span class="lnt">158
+&lt;/span>&lt;span class="lnt">159
+&lt;/span>&lt;span class="lnt">160
+&lt;/span>&lt;span class="lnt">161
+&lt;/span>&lt;span class="lnt">162
+&lt;/span>&lt;span class="lnt">163
+&lt;/span>&lt;span class="lnt">164
+&lt;/span>&lt;span class="lnt">165
+&lt;/span>&lt;span class="lnt">166
+&lt;/span>&lt;span class="lnt">167
+&lt;/span>&lt;span class="lnt">168
+&lt;/span>&lt;span class="lnt">169
+&lt;/span>&lt;span class="lnt">170
+&lt;/span>&lt;span class="lnt">171
+&lt;/span>&lt;span class="lnt">172
+&lt;/span>&lt;span class="lnt">173
+&lt;/span>&lt;span class="lnt">174
+&lt;/span>&lt;span class="lnt">175
+&lt;/span>&lt;span class="lnt">176
+&lt;/span>&lt;span class="lnt">177
+&lt;/span>&lt;span class="lnt">178
+&lt;/span>&lt;span class="lnt">179
+&lt;/span>&lt;span class="lnt">180
+&lt;/span>&lt;span class="lnt">181
+&lt;/span>&lt;span class="lnt">182
+&lt;/span>&lt;span class="lnt">183
+&lt;/span>&lt;span class="lnt">184
+&lt;/span>&lt;span class="lnt">185
+&lt;/span>&lt;span class="lnt">186
+&lt;/span>&lt;span class="lnt">187
+&lt;/span>&lt;span class="lnt">188
+&lt;/span>&lt;span class="lnt">189
+&lt;/span>&lt;span class="lnt">190
+&lt;/span>&lt;span class="lnt">191
+&lt;/span>&lt;span class="lnt">192
+&lt;/span>&lt;span class="lnt">193
+&lt;/span>&lt;span class="lnt">194
+&lt;/span>&lt;span class="lnt">195
+&lt;/span>&lt;span class="lnt">196
+&lt;/span>&lt;span class="lnt">197
+&lt;/span>&lt;span class="lnt">198
+&lt;/span>&lt;span class="lnt">199
+&lt;/span>&lt;span class="lnt">200
+&lt;/span>&lt;span class="lnt">201
+&lt;/span>&lt;span class="lnt">202
+&lt;/span>&lt;span class="lnt">203
+&lt;/span>&lt;span class="lnt">204
+&lt;/span>&lt;span class="lnt">205
+&lt;/span>&lt;span class="lnt">206
+&lt;/span>&lt;span class="lnt">207
+&lt;/span>&lt;span class="lnt">208
+&lt;/span>&lt;span class="lnt">209
+&lt;/span>&lt;span class="lnt">210
+&lt;/span>&lt;span class="lnt">211
+&lt;/span>&lt;span class="lnt">212
+&lt;/span>&lt;span class="lnt">213
+&lt;/span>&lt;span class="lnt">214
+&lt;/span>&lt;span class="lnt">215
+&lt;/span>&lt;span class="lnt">216
+&lt;/span>&lt;span class="lnt">217
+&lt;/span>&lt;span class="lnt">218
+&lt;/span>&lt;span class="lnt">219
+&lt;/span>&lt;span class="lnt">220
+&lt;/span>&lt;span class="lnt">221
+&lt;/span>&lt;span class="lnt">222
+&lt;/span>&lt;span class="lnt">223
+&lt;/span>&lt;span class="lnt">224
+&lt;/span>&lt;span class="lnt">225
+&lt;/span>&lt;span class="lnt">226
+&lt;/span>&lt;span class="lnt">227
+&lt;/span>&lt;span class="lnt">228
+&lt;/span>&lt;span class="lnt">229
+&lt;/span>&lt;span class="lnt">230
+&lt;/span>&lt;span class="lnt">231
+&lt;/span>&lt;span class="lnt">232
+&lt;/span>&lt;span class="lnt">233
+&lt;/span>&lt;span class="lnt">234
+&lt;/span>&lt;span class="lnt">235
+&lt;/span>&lt;span class="lnt">236
+&lt;/span>&lt;span class="lnt">237
+&lt;/span>&lt;span class="lnt">238
+&lt;/span>&lt;span class="lnt">239
+&lt;/span>&lt;span class="lnt">240
+&lt;/span>&lt;span class="lnt">241
+&lt;/span>&lt;span class="lnt">242
+&lt;/span>&lt;span class="lnt">243
+&lt;/span>&lt;span class="lnt">244
+&lt;/span>&lt;span class="lnt">245
+&lt;/span>&lt;span class="lnt">246
+&lt;/span>&lt;span class="lnt">247
+&lt;/span>&lt;span class="lnt">248
+&lt;/span>&lt;span class="lnt">249
+&lt;/span>&lt;span class="lnt">250
+&lt;/span>&lt;span class="lnt">251
+&lt;/span>&lt;span class="lnt">252
+&lt;/span>&lt;span class="lnt">253
+&lt;/span>&lt;span class="lnt">254
+&lt;/span>&lt;span class="lnt">255
+&lt;/span>&lt;span class="lnt">256
+&lt;/span>&lt;span class="lnt">257
+&lt;/span>&lt;span class="lnt">258
+&lt;/span>&lt;span class="lnt">259
+&lt;/span>&lt;span class="lnt">260
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">using&lt;/span> &lt;span class="nn">System&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">using&lt;/span> &lt;span class="nn">System.IO&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">using&lt;/span> &lt;span class="nn">System.Runtime.InteropServices&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">namespace&lt;/span> &lt;span class="nn">Null.MciPlayer&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">MciPlayer&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">IDisposable&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na"> [DllImport(&amp;#34;kernel32.dll&amp;#34;, EntryPoint = &amp;#34;GetShortPathNameW&amp;#34;, CharSet = CharSet.Unicode)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">extern&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">short&lt;/span> &lt;span class="n">GetShortPath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">longPath&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">buffer&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">bufferSize&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na"> [DllImport(&amp;#34;winmm.dll&amp;#34;, EntryPoint = &amp;#34;mciSendString&amp;#34;, CharSet = CharSet.Unicode)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">extern&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">MciSendString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">command&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">buffer&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">bufferSize&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span> &lt;span class="n">callback&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">bool&lt;/span> &lt;span class="n">TryGetShortPath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">longPath&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">shortPath&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">shortPath&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">short&lt;/span> &lt;span class="n">reqLen&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">GetShortPath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">longPath&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 指定 null与0, 则返回需要的长度&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">reqLen&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">shortPath&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="kt">string&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sc">&amp;#39;\0&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">reqLen&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 声明缓冲&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">short&lt;/span> &lt;span class="n">rstLen&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">GetShortPath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">longPath&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">shortPath&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">reqLen&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 转换&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">rstLen&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="p">||&lt;/span> &lt;span class="n">rstLen&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">reqLen&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">shortPath&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">shortPath&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TrimEnd&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sc">&amp;#39;\0&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">longpath&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">shortName&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">aliasName&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">MciPlayer&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">MciPlayer&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">path&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(!&lt;/span>&lt;span class="n">File&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Exists&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">path&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">FileNotFoundException&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;File not exist.&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">path&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">longpath&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">path&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">void&lt;/span> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">command&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">buffer&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">bufferSize&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span> &lt;span class="n">callback&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">err&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">MciSendString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">command&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">buffer&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">bufferSize&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">callback&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">err&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">MciException&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">err&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">string&lt;/span> &lt;span class="n">StatusInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">info&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">string&lt;/span> &lt;span class="n">buffer&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="kt">string&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sc">&amp;#39;\0&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">32&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;status {aliasName} {info}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">buffer&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">32&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Zero&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">buffer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TrimEnd&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sc">&amp;#39;\0&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">DevicePath&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">longpath&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">DeviceShortPath&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">shortName&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">AliasName&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">aliasName&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">bool&lt;/span> &lt;span class="n">SetDevicePath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">longpath&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">aliasName&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">longpath&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">longpath&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Open&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(!&lt;/span>&lt;span class="n">TryGetShortPath&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">longpath&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="n">shortName&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Exception&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Get short path faield when initializing.&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">aliasName&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">$&amp;#34;nmci{DateTime.Now.Ticks}&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;open {shortName} alias {aliasName}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Zero&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Close&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;close {aliasName}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Zero&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">aliasName&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Play&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;play {aliasName}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Zero&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Resume&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;resume {aliasName}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Zero&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Pause&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;pause {aliasName}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Zero&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Stop&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;stop {aliasName}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Zero&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">GetPosition&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Parse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">StatusInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;position&amp;#34;&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">GetLength&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Parse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">StatusInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;length&amp;#34;&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">PlaybackState&lt;/span> &lt;span class="n">GetState&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">switch&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">StatusInfo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;mode&amp;#34;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">ToLower&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="s">&amp;#34;playing&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">PlaybackState&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Playing&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="s">&amp;#34;paused&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">PlaybackState&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Paused&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="s">&amp;#34;stopped&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">PlaybackState&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Stopped&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">default&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">PlaybackState&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Invalid&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">PlayWait&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;play {aliasName} wait&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Zero&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">PlayRepeat&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;play {aliasName} repeat&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Zero&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Seek&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">position&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;seek {aliasName} to {position}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Zero&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">SeekToStart&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;seek {aliasName} to start&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Zero&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">SetSeekMode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">bool&lt;/span> &lt;span class="n">fExact&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MciSendStringWithCheck&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;set {aliasName} seek exactly {(fExact ? &amp;#34;&lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="s">&amp;#34; : &amp;#34;&lt;/span>&lt;span class="n">off&lt;/span>&lt;span class="s">&amp;#34;)}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Zero&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Dispose&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">aliasName&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Close&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">enum&lt;/span> &lt;span class="n">PlaybackState&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Stopped&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Playing&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Paused&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Invalid&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">-&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">class&lt;/span> &lt;span class="nc">MciException&lt;/span> &lt;span class="p">:&lt;/span> &lt;span class="n">Exception&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="n">MciError&lt;/span> &lt;span class="n">err&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">ErrorId&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">err&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">ErrorName&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">err&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">ToString&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">override&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">Message&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">get&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="n">ErrorName&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">MciException&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">MciException&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">errorId&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Enum&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">IsDefined&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">typeof&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MciError&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">errorId&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">err&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">MciError&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="n">errorId&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ArgumentOutOfRangeException&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;不是正确的错误ID&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">MciException&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">errorName&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(!&lt;/span>&lt;span class="n">Enum&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">TryParse&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">MciError&lt;/span>&lt;span class="p">&amp;gt;(&lt;/span>&lt;span class="n">errorName&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="n">err&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ArgumentOutOfRangeException&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;不是正确的错误ID&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">enum&lt;/span> &lt;span class="n">MciError&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_NO_ERROR&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_INVALID_DEVICE_ID&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">257&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_UNRECOGNIZED_KEYWORD&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">259&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_UNRECOGNIZED_COMMAND&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">261&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_HARDWARE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">262&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_INVALID_DEVICE_NAME&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">263&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_OUT_OF_MEMORY&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">264&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_DEVICE_OPEN&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">265&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_CANNOT_LOAD_DRIVER&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">266&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_MISSING_COMMAND_STRING&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">267&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_PARAM_OVERFLOW&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">268&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_MISSING_STRING_ARGUMENT&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">269&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_BAD_INTEGER&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">270&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_PARSER_INTERNAL&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">271&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_DRIVER_INTERNAL&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">272&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_MISSING_PARAMETER&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">273&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_UNSUPPORTED_FUNCTION&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">274&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_FILE_NOT_FOUND&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">275&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_DEVICE_NOT_READY&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">276&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_INTERNAL&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">277&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_DRIVER&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">278&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_CANNOT_USE_ALL&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">279&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_MULTIPLE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">280&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_EXTENSION_NOT_FOUND&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">281&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_OUTOFRANGE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">282&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_FLAGS_NOT_COMPATIBLE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">284&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_FILE_NOT_SAVED&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">286&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_DEVICE_TYPE_REQUIRED&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">287&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_DEVICE_LOCKED&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">288&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_DUPLICATE_ALIAS&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">289&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_BAD_CONSTANT&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">290&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_MUST_USE_SHAREABLE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">291&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_MISSING_DEVICE_NAME&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">292&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_BAD_TIME_FORMAT&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">293&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_NO_CLOSING_QUOTE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">294&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_DUPLICATE_FLAGS&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">295&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_INVALID_FILE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">296&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_NULL_PARAMETER_BLOCK&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">297&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_UNNAMED_RESOURCE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">298&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_NEW_REQUIRES_ALIAS&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">299&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_NOTIFY_ON_AUTO_OPEN&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">300&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_NO_ELEMENT_ALLOWED&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">301&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_NONAPPLICABLE_FUNCTION&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">302&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_ILLEGAL_FOR_AUTO_OPEN&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">303&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_FILENAME_REQUIRED&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">304&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_EXTRA_CHARACTERS&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">305&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_DEVICE_NOT_INSTALLED&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">306&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_GET_CD&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">307&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_SET_CD&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">308&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_SET_DRIVE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">309&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_DEVICE_LENGTH&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">310&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_DEVICE_ORD_LENGTH&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">311&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_NO_INTEGER&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">312&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_WAVE_OUTPUTSINUSE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">320&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_WAVE_SETOUTPUTINUSE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">321&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_WAVE_INPUTSINUSE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">322&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_WAVE_SETINPUTINUSE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">323&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_WAVE_OUTPUTUNSPECIFIED&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">324&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_WAVE_INPUTUNSPECIFIED&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">325&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_WAVE_OUTPUTSUNSUITABLE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">326&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_WAVE_SETOUTPUTUNSUITABLE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">327&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_WAVE_INPUTSUNSUITABLE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">328&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_WAVE_SETINPUTUNSUITABLE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">329&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_SEQ_DIV_INCOMPATIBLE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">336&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_SEQ_PORT_INUSE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">337&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_SEQ_PORT_NONEXISTENT&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">338&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_SEQ_PORT_MAPNODEVICE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">339&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_SEQ_PORT_MISCERROR&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">340&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_SEQ_TIMER&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">341&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_SEQ_PORTUNSPECIFIED&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">342&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_SEQ_NOMIDIPRESENT&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">343&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_NO_WINDOW&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">346&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_CREATEWINDOW&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">347&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_FILE_READ&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">348&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_FILE_WRITE&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">349&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MCIERR_NO_IDENTITY&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">350&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;p>&lt;br/>&lt;br/>&lt;br/>&lt;br/>&lt;br/>
+如果有什么建议或者这个类有可改进的地方, 欢迎留言哦~ n(*≧▽≦*)n&lt;/p></description></item><item><title>[C#] WinForm 与 WPF 获取命令行参数</title><link>https://slimenull.com/p/20210209030419/</link><pubDate>Tue, 09 Feb 2021 03:04:19 +0800</pubDate><guid>https://slimenull.com/p/20210209030419/</guid><description>&lt;h3 id="推荐方法">推荐方法:&lt;/h3>
+&lt;h4 id="1-environmentgetcommandlineargs">1. Environment.GetCommandLineArgs();&lt;/h4>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">using&lt;/span> &lt;span class="nn">System&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Environment&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetCommandLineArgs&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 返回 string[]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>注意, 与控制台程序入口处的string[] args相比较, 这个函数返回的结果是完整的命令行, 也就是包含程序自身路径. 例如我一个没有传递任何参数的程序:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/20210209030243165.png"
+loading="lazy"
+>
+所以注意区分哦.&lt;/p>
+&lt;h4 id="heading">&lt;/h4>
+&lt;h3 id="其他">其他:&lt;/h3>
+&lt;ul>
+&lt;li>WinForm
+在 Program.cs 的 Main 入口参数处添加 string[] args, 然后你可以更改窗体的构造函数, 使其能够接收这个args.&lt;/li>
+&lt;li>WPF
+暂时不知道.&lt;/li>
+&lt;/ul></description></item><item><title>[C#] 鼠标拖动实现控件移动 - 一个类实现对多个控件与窗体的鼠标拖动移动操作</title><link>https://slimenull.com/p/20200706065250/</link><pubDate>Mon, 06 Jul 2020 06:52:50 +0800</pubDate><guid>https://slimenull.com/p/20200706065250/</guid><description>&lt;h2 id="关于文章">关于文章:&lt;/h2>
+&lt;ol start="0">
+&lt;li>
+&lt;h6 id="文章包含以下部分">文章包含以下部分:&lt;/h6>
+&lt;/li>
+&lt;li>对鼠标拖动实现控件移动的原理详解&lt;/li>
+&lt;li>使用类将功能封装&lt;/li>
+&lt;/ol>
+&lt;h2 id="适用于">适用于:&lt;/h2>
+&lt;ol start="0">
+&lt;li>C# WinForm&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>更新日志: 2020-07-07 9:05AM 更改了多控件实现的算法, 使其能够支持移动窗体&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="原理">原理:&lt;/h2>
+&lt;ol start="0">
+&lt;li>每当鼠标移动时, 根据鼠标坐标计算出控件应处于的位置并将控件移动到计算出的位置, 另外, 为了标识是否正在拖动控件, 还需要订阅控件的MouseDown和MouseUp事件.&lt;/li>
+&lt;li>当MouseDown事件触发时, 标识是否正在拖动控件的布尔变量设置为true, 当MouseUp事件触发时, 标识是否正在拖动控件的布尔变量设置为false; 在鼠标移动时, 会判断这个变量的值以决定是否应该移动控件.&lt;/li>
+&lt;li>为了保证鼠标相对控件的位置是不变的, 所以还需要一个Point类型的变量来标识鼠标按下控件时, 鼠标相对控件的相对位置.&lt;/li>
+&lt;/ol>
+&lt;h2 id="一些资料">一些资料:&lt;/h2>
+&lt;ol start="0">
+&lt;li>获取鼠标相对屏幕的坐标 : Control.MousePosition;&lt;/li>
+&lt;li>获取一个 相对于屏幕的坐标 相对某个控件的相对坐标 : 控件.PointToClient(一个相对于屏幕的坐标);&lt;/li>
+&lt;li>
+&lt;h6 id="下面是方便初学者的">下面是方便初学者的:&lt;/h6>
+&lt;/li>
+&lt;li>as运算符, 将某个实例作为某种类型使用, 例如:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// obj是一个Button转换为object类型的按钮&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 那么, (obj as Button).Text = &amp;#34;新的文本&amp;#34;; 是可用的, 它将为控件指定一个新的文本&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">(&lt;/span>&lt;span class="n">obj&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Button&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Text&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;新的文本&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 注意, as运算符的优先级低于.运算符, 所以括号不可以省去&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="单控件实现">单控件实现:&lt;/h2>
+&lt;ol start="0">
+&lt;li>新建项目, 项目类型是WinForm.&lt;/li>
+&lt;li>添加控件 (我这里将控件的Name设置为了ExempleButton)&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>浓浓的Chinglish味道, 哈哈哈&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;img src="https://slimenull.com/images/20200706052109567.png"
+loading="lazy"
+alt="添加按钮控件"
+>
+3. 添加相关事件(MouseDown, MouseMove, MouseUp):&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/20200706052323882.png"
+loading="lazy"
+alt="添加相关事件"
+>
+4. 转到代码, 添加相关变量.&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/20200706052556910.png"
+loading="lazy"
+alt="添加相关变量"
+>
+5. 添加关键代码:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/20200706054641301.png"
+loading="lazy"
+alt="代码图片"
+>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">bool&lt;/span> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 标识是否在拖动控件&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Point&lt;/span> &lt;span class="n">MouseFirstLocation&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 鼠标按下时, 相对于控件的坐标&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">ExempleButton_MouseDown&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 表示进入拖动控件的状态&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">MousePoint&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MousePosition&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 获取鼠标相对屏幕的坐标&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MouseFirstLocation&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ExempleButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PointToClient&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MousePoint&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 获取坐标相对于控件的相对坐标并赋值给MouseFirstLocation&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">ExempleButton_MouseMove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Moving&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">MousePoint&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MousePosition&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 获取鼠标相对屏幕的坐标&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">MousePointToContainer&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ExempleButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Parent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PointToClient&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MousePoint&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 获取鼠标相对控件父容器的坐标&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">ControlNewLocation&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MousePointToContainer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">MouseFirstLocation&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MousePointToContainer&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">MouseFirstLocation&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 计算控件应处于的, 新的坐标&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ExempleButton&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ControlNewLocation&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 移动控件&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">ExempleButton_MouseUp&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 脱离拖动控件的状态&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>可以使用了~&lt;/li>
+&lt;/ul>
+&lt;h2 id="多控件实现">多控件实现:&lt;/h2>
+&lt;ul>
+&lt;li>使用类封装功能, 类的AddControl(Control control)方法来快捷使某个控件支持鼠标拖动移动位置.&lt;/li>
+&lt;li>这里的原理与前面的单控件实现有些出入, 但也是通过初始鼠标坐标(这里是相对父容器而不是移动的控件)与初始坐标计算出的&lt;/li>
+&lt;li>这个类不仅支持窗体内的控件, 而且还支持窗体 (没有直接使用WindowsAPI)&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt"> 10
+&lt;/span>&lt;span class="lnt"> 11
+&lt;/span>&lt;span class="lnt"> 12
+&lt;/span>&lt;span class="lnt"> 13
+&lt;/span>&lt;span class="lnt"> 14
+&lt;/span>&lt;span class="lnt"> 15
+&lt;/span>&lt;span class="lnt"> 16
+&lt;/span>&lt;span class="lnt"> 17
+&lt;/span>&lt;span class="lnt"> 18
+&lt;/span>&lt;span class="lnt"> 19
+&lt;/span>&lt;span class="lnt"> 20
+&lt;/span>&lt;span class="lnt"> 21
+&lt;/span>&lt;span class="lnt"> 22
+&lt;/span>&lt;span class="lnt"> 23
+&lt;/span>&lt;span class="lnt"> 24
+&lt;/span>&lt;span class="lnt"> 25
+&lt;/span>&lt;span class="lnt"> 26
+&lt;/span>&lt;span class="lnt"> 27
+&lt;/span>&lt;span class="lnt"> 28
+&lt;/span>&lt;span class="lnt"> 29
+&lt;/span>&lt;span class="lnt"> 30
+&lt;/span>&lt;span class="lnt"> 31
+&lt;/span>&lt;span class="lnt"> 32
+&lt;/span>&lt;span class="lnt"> 33
+&lt;/span>&lt;span class="lnt"> 34
+&lt;/span>&lt;span class="lnt"> 35
+&lt;/span>&lt;span class="lnt"> 36
+&lt;/span>&lt;span class="lnt"> 37
+&lt;/span>&lt;span class="lnt"> 38
+&lt;/span>&lt;span class="lnt"> 39
+&lt;/span>&lt;span class="lnt"> 40
+&lt;/span>&lt;span class="lnt"> 41
+&lt;/span>&lt;span class="lnt"> 42
+&lt;/span>&lt;span class="lnt"> 43
+&lt;/span>&lt;span class="lnt"> 44
+&lt;/span>&lt;span class="lnt"> 45
+&lt;/span>&lt;span class="lnt"> 46
+&lt;/span>&lt;span class="lnt"> 47
+&lt;/span>&lt;span class="lnt"> 48
+&lt;/span>&lt;span class="lnt"> 49
+&lt;/span>&lt;span class="lnt"> 50
+&lt;/span>&lt;span class="lnt"> 51
+&lt;/span>&lt;span class="lnt"> 52
+&lt;/span>&lt;span class="lnt"> 53
+&lt;/span>&lt;span class="lnt"> 54
+&lt;/span>&lt;span class="lnt"> 55
+&lt;/span>&lt;span class="lnt"> 56
+&lt;/span>&lt;span class="lnt"> 57
+&lt;/span>&lt;span class="lnt"> 58
+&lt;/span>&lt;span class="lnt"> 59
+&lt;/span>&lt;span class="lnt"> 60
+&lt;/span>&lt;span class="lnt"> 61
+&lt;/span>&lt;span class="lnt"> 62
+&lt;/span>&lt;span class="lnt"> 63
+&lt;/span>&lt;span class="lnt"> 64
+&lt;/span>&lt;span class="lnt"> 65
+&lt;/span>&lt;span class="lnt"> 66
+&lt;/span>&lt;span class="lnt"> 67
+&lt;/span>&lt;span class="lnt"> 68
+&lt;/span>&lt;span class="lnt"> 69
+&lt;/span>&lt;span class="lnt"> 70
+&lt;/span>&lt;span class="lnt"> 71
+&lt;/span>&lt;span class="lnt"> 72
+&lt;/span>&lt;span class="lnt"> 73
+&lt;/span>&lt;span class="lnt"> 74
+&lt;/span>&lt;span class="lnt"> 75
+&lt;/span>&lt;span class="lnt"> 76
+&lt;/span>&lt;span class="lnt"> 77
+&lt;/span>&lt;span class="lnt"> 78
+&lt;/span>&lt;span class="lnt"> 79
+&lt;/span>&lt;span class="lnt"> 80
+&lt;/span>&lt;span class="lnt"> 81
+&lt;/span>&lt;span class="lnt"> 82
+&lt;/span>&lt;span class="lnt"> 83
+&lt;/span>&lt;span class="lnt"> 84
+&lt;/span>&lt;span class="lnt"> 85
+&lt;/span>&lt;span class="lnt"> 86
+&lt;/span>&lt;span class="lnt"> 87
+&lt;/span>&lt;span class="lnt"> 88
+&lt;/span>&lt;span class="lnt"> 89
+&lt;/span>&lt;span class="lnt"> 90
+&lt;/span>&lt;span class="lnt"> 91
+&lt;/span>&lt;span class="lnt"> 92
+&lt;/span>&lt;span class="lnt"> 93
+&lt;/span>&lt;span class="lnt"> 94
+&lt;/span>&lt;span class="lnt"> 95
+&lt;/span>&lt;span class="lnt"> 96
+&lt;/span>&lt;span class="lnt"> 97
+&lt;/span>&lt;span class="lnt"> 98
+&lt;/span>&lt;span class="lnt"> 99
+&lt;/span>&lt;span class="lnt">100
+&lt;/span>&lt;span class="lnt">101
+&lt;/span>&lt;span class="lnt">102
+&lt;/span>&lt;span class="lnt">103
+&lt;/span>&lt;span class="lnt">104
+&lt;/span>&lt;span class="lnt">105
+&lt;/span>&lt;span class="lnt">106
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">DragMove&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">DragMove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MouseButtons&lt;/span> &lt;span class="n">MouseButton&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseButton&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">MouseButton&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">DragMove&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">AllMouseButton&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">object&lt;/span> &lt;span class="n">AboutControl&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 表示当前移动控件操作是针对哪个控件的&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">bool&lt;/span> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 表示是否正在移动控件&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">bool&lt;/span> &lt;span class="n">AllMouseButton&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 表示是否处理所有按钮&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">ControlStartLocation&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 表示移动操作时, 控件的初始位置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">MouseFirstLocationAboutParent&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 表示移动操作时, 鼠标的初始位置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MouseButtons&lt;/span> &lt;span class="n">MouseButton&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Control&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> &lt;span class="n">AddedControls&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">List&lt;/span>&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="n">Control&lt;/span>&lt;span class="p">&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">void&lt;/span> &lt;span class="n">MouseDownEvent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">((&lt;/span>&lt;span class="n">e&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Button&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">MouseButton&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">||&lt;/span> &lt;span class="n">AllMouseButton&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">AboutControl&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ControlStartLocation&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Location&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="k">is&lt;/span> &lt;span class="n">Form&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MouseFirstLocationAboutParent&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MousePosition&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MouseFirstLocationAboutParent&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Parent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PointToClient&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MousePosition&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">void&lt;/span> &lt;span class="n">MouseMoveEvent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">AboutControl&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Moving&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">MouseLocationNow&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="k">is&lt;/span> &lt;span class="n">Form&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MouseLocationNow&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MousePosition&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MouseLocationNow&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Parent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">PointToClient&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MousePosition&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Point&lt;/span> &lt;span class="n">ControlNewLocation&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MouseLocationNow&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">MouseFirstLocationAboutParent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">ControlStartLocation&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseLocationNow&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">MouseFirstLocationAboutParent&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">ControlStartLocation&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ControlNewLocation&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Moving&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">(&lt;/span>&lt;span class="n">AboutControl&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ControlStartLocation&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">void&lt;/span> &lt;span class="n">MouseUpEvent&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">object&lt;/span> &lt;span class="n">sender&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MouseEventArgs&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">sender&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="n">AboutControl&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Moving&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">(&lt;/span>&lt;span class="n">AboutControl&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">Control&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ControlStartLocation&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Moving&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">bool&lt;/span> &lt;span class="n">AddControl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Control&lt;/span> &lt;span class="n">control&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">AddedControls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Contains&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">control&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseDown&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="n">MouseDownEvent&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseMove&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="n">MouseMoveEvent&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseUp&lt;/span> &lt;span class="p">+=&lt;/span> &lt;span class="n">MouseUpEvent&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">AddedControls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">control&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">bool&lt;/span> &lt;span class="n">RemoveControl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Control&lt;/span> &lt;span class="n">control&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">AddedControls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Contains&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">control&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseDown&lt;/span> &lt;span class="p">-=&lt;/span> &lt;span class="n">MouseDownEvent&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseMove&lt;/span> &lt;span class="p">-=&lt;/span> &lt;span class="n">MouseMoveEvent&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">control&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MouseUp&lt;/span> &lt;span class="p">-=&lt;/span> &lt;span class="n">MouseUpEvent&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">AddedControls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Remove&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">control&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>这个类包含了判断鼠标按键的功能, 比如只允许右键拖动控件, 也有一些预防措施, 保证类能够正常工作的一些措施(判断控件), 也支持添加与移除控件&lt;/li>
+&lt;/ul></description></item><item><title>[C#] 简易的聊天气泡(很简单的实现)</title><link>https://slimenull.com/p/20200422081050/</link><pubDate>Wed, 22 Apr 2020 08:10:50 +0800</pubDate><guid>https://slimenull.com/p/20200422081050/</guid><description>&lt;h2 id="效果图">效果图&lt;/h2>
+&lt;h5 id="能满足我自己的需求了">能满足我自己的需求了&lt;/h5>
+&lt;p>&lt;img src="https://slimenull.com/images/20200422080806892.png"
+loading="lazy"
+alt="效果预览"
+>&lt;/p>
+&lt;h2 id="直接看代码吧">直接看代码吧&lt;/h2>
+&lt;h5 id="真的很简单">真的很简单&amp;hellip;&lt;/h5>
+&lt;p>这是一个类,直接复制粘贴过去就好,不需要什么引用&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">ChatBubble&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">ChatBubble&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Panel&lt;/span> &lt;span class="n">panel&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Font&lt;/span> &lt;span class="n">font&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">panel&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Controls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Count&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Exception&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;指定Panel控件不为空!&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ChatPlace&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">panel&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">BubbleFont&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">font&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">MsgMaxLength&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">panel&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Width&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="m">6&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="m">4&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">35&lt;/span> &lt;span class="p">*&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 其中, 四个6为 图片与(容器以及消息文本框)的距离 ,两个35为两侧图片的大小.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">readonly&lt;/span> &lt;span class="n">Panel&lt;/span> &lt;span class="n">ChatPlace&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">readonly&lt;/span> &lt;span class="n">Font&lt;/span> &lt;span class="n">BubbleFont&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">NowY&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">7&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">readonly&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">MsgMaxLength&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">enum&lt;/span> &lt;span class="n">MsgPlace&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Left&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Right&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="c1">// 气泡创建的位置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">AddMsg&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Image&lt;/span> &lt;span class="n">Photo&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">Text&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">MsgPlace&lt;/span> &lt;span class="n">Place&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">Name&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">ChatPlace&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Controls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Count&lt;/span> &lt;span class="p">!=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="n">NowY&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">ChatPlace&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Controls&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">ChatPlace&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Controls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Count&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Location&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Y&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">ChatPlace&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Controls&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">ChatPlace&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Controls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Count&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="n">Height&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">7&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">PictureBox&lt;/span> &lt;span class="n">photo&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">PictureBox&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 头像&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Label&lt;/span> &lt;span class="n">nickname&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Label&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 昵称&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Label&lt;/span> &lt;span class="n">msg&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Label&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">// 消息内容&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">photo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Size&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Size&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">35&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">35&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">photo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">SizeMode&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">PictureBoxSizeMode&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">StretchImage&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">photo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Image&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Photo&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">nickname&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">AutoSize&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">nickname&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MaximumSize&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Size&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">nickname&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Font&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">BubbleFont&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">nickname&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Text&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Name&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">msg&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">AutoSize&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">msg&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Font&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">BubbleFont&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">msg&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">MaximumSize&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Size&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">MsgMaxLength&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">msg&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Text&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Text&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">msg&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">BorderStyle&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">BorderStyle&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">FixedSingle&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ChatPlace&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Controls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">nickname&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ChatPlace&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Controls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">photo&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ChatPlace&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Controls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">msg&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">Place&lt;/span> &lt;span class="p">==&lt;/span> &lt;span class="n">MsgPlace&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Left&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">photo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">7&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">NowY&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">nickname&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">photo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Location&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">photo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Width&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="m">6&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">NowY&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">msg&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">nickname&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Location&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">NowY&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">nickname&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Size&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Height&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">photo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">ChatPlace&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Width&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">7&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">35&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">17&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">NowY&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">nickname&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">photo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Location&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">7&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">nickname&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Width&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">17&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">NowY&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">msg&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Location&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Point&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">photo&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Location&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">X&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">7&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="n">msg&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Width&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">17&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">NowY&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">nickname&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Size&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Height&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 这里的减去17是除去滚动条的宽度&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="c1">// 简易聊天气泡&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>使用这个类时,是需要提供一个Panel控件对象作为气泡创建的位置.&lt;/p>
+&lt;p>可以添加两种消息,左侧或者右侧.&lt;/p>
+&lt;p>最重要的原理就是Label的AutoSize,通过这个,我们就可以省去很多麻烦,然后再计算一个气泡最大的宽度可以是多少,设置Label的最大宽度,于是又实现了自动换行.&lt;/p>
+&lt;h5 id="使用方式">使用方式:&lt;/h5>
+&lt;p>在自己的项目中添加这个类,之后实例化
+实例化时需要提供一个panel控件实例来作为气泡创建的容器
+之后要添加消息的时候直接使用实例的方法 AddMsg即可,参数中已经包含了用户头像(Photo),消息内容(Text),消息位置(Place),发消息的用户(Name).&lt;/p>
+&lt;h2 id="你可能也需要这个">你可能也需要这个&lt;/h2>
+&lt;h5 id="-不一定与上面的代码有关但与聊天气泡有关">. 不一定与上面的代码有关,但与聊天气泡有关&lt;/h5>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="n">TestBox&lt;/span> &lt;span class="n">textBox1&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">TextBox&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">Lines&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">textBox1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetLineFromCharIndex&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">textBox1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Text&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//Lines即为textBox1中文本的行数(包括自动换行)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

@@ -1,0 +1,279 @@
+<!doctype html><html lang=zh-CN dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='P/Invoke 实现, DllImport 使用及成员变量概述, 字符串传值方式, 托管字符串对于不同字符集函数字符串的封送方式, 指针参数的正确声明姿势, DllImport 搜找入口点的大概逻辑'><title>[.NET] 平台调用(P/Invoke) 与 DllImport 使用的相关讲解与注意事项,</title>
+<link rel=canonical href=https://slimenull.com/p/20230106035930/><link rel=stylesheet href=/scss/style.min.73438a911857e6d491e39369614d0dd0c0302dcacfb43e15034e0e48cac08c07.css><meta property='og:title' content='[.NET] 平台调用(P/Invoke) 与 DllImport 使用的相关讲解与注意事项,'><meta property='og:description' content='P/Invoke 实现, DllImport 使用及成员变量概述, 字符串传值方式, 托管字符串对于不同字符集函数字符串的封送方式, 指针参数的正确声明姿势, DllImport 搜找入口点的大概逻辑'><meta property='og:url' content='https://slimenull.com/p/20230106035930/'><meta property='og:site_name' content='SlimeNull Blogs'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='dotnet'><meta property='article:tag' content='csharp'><meta property='article:tag' content='microsoft'><meta property='article:published_time' content='2023-01-06T03:59:30+08:00'><meta property='article:modified_time' content='2023-01-06T03:59:30+08:00'><meta name=twitter:title content="[.NET] 平台调用(P/Invoke) 与 DllImport 使用的相关讲解与注意事项,"><meta name=twitter:description content="P/Invoke 实现, DllImport 使用及成员变量概述, 字符串传值方式, 托管字符串对于不同字符集函数字符串的封送方式, 指针参数的正确声明姿势, DllImport 搜找入口点的大概逻辑"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu11436448765783238083.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>SlimeNull Blogs</a></h1><h2 class=site-description>为了更好的开源世界~</h2></div></header><ol class=social-menu><li><a href=https://github.com/SlimeNull target=_blank title=GitHub rel=me><!doctype html><svg t="1702542119184" class="icon" viewBox="0 0 1024 1024" p-id="4136" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M692.906667 938.666667A42.666667 42.666667.0 01650.24 896V785.066667A91.733333 91.733333.0 00627.2 714.24a42.666667 42.666667.0 0126.026667-71.253333c104.106666-12.373334 200.106666-45.653334 200.106666-226.133334a170.666667 170.666667.0 00-28.586666-94.72A117.333333 117.333333.0 01807.253333 234.24a158.293333 158.293333.0 000-60.16A326.4 326.4.0 00718.08 220.586667a42.666667 42.666667.0 01-35.84 6.4 433.066667 433.066667.0 00-235.52.0 42.666667 42.666667.0 01-35.84-6.4A315.733333 315.733333.0 00320.853333 174.08a150.186667 150.186667.0 000 60.16 121.173333 121.173333.0 01-18.346666 88.746667A173.653333 173.653333.0 00273.92 418.133333C273.92 584.106666 354.133333 628.48 474.453333 643.84A42.666667 42.666667.0 01509.44 672a42.666667 42.666667.0 01-8.96 42.666667 87.893333 87.893333.0 00-23.466667 66.56V896A42.666667 42.666667.0 01391.68 896v-24.32a256 256 0 01-224.853333-89.173333A166.4 166.4.0 00117.333333 744.96a42.666667 42.666667.0 1121.333334-82.773333A210.346667 210.346667.0 01224 720.213333c42.666667 42.666667 85.333333 80.213333 166.4 64.853334a165.973333 165.973333.0 019.813333-67.413334C312.32 695.466666 186.88 632.32 186.88 418.986667a256 256 0 0142.666667-142.08 36.266667 36.266667.0 005.546666-26.453334 242.773333 242.773333.0 0114.08-136.96 42.666667 42.666667.0 0126.88-24.32c14.506667-4.266667 66.56-12.8 165.12 51.2a518.826667 518.826667.0 01242.773334.0c98.56-64 150.613333-55.893333 164.693333-51.2a42.666667 42.666667.0 0126.88 24.32A243.626667 243.626667.0 01889.6 250.88a32 32 0 004.693333 24.32A256 256 0 01936.96 417.706667c0 216.32-124.586667 279.04-213.333333 298.666666a182.613333 182.613333.0 019.386666 71.253334V896a42.666667 42.666667.0 01-40.106666 42.666667z" fill="#666" p-id="4137"/></svg></a></li><li><a href=https://space.bilibili.com/441842015 target=_blank title=Bilibili rel=me><!doctype html><svg t="1702541966104" class="icon" viewBox="0 0 1024 1024" p-id="16981" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M306.005333 117.632 444.330667 256h135.296l138.368-138.325333A42.666667 42.666667.0 01778.368 178.048L700.330667 256H789.333333A149.333333 149.333333.0 01938.666667 405.333333v341.333334A149.333333 149.333333.0 01789.333333 896H234.666667A149.333333 149.333333.0 0185.333333 746.666667V405.333333A149.333333 149.333333.0 01234.666667 256h88.96L245.632 177.962667a42.666667 42.666667.0 0160.373333-60.373334zm483.328 223.701333H234.666667a64 64 0 00-63.701334 57.856L170.666667 405.333333v341.333334a64 64 0 0057.856 63.701333L234.666667 810.666667h554.666666a64 64 0 0063.701334-57.856L853.333333 746.666667V405.333333a64 64 0 00-64-64zm-448 128A42.666667 42.666667.0 01384 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666666-42.666667zm341.333334.0A42.666667 42.666667.0 01725.333333 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666667-42.666667z" fill="#666" p-id="16982"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>主页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>链接</span></a></li><div class=menu-bottom-section><li id=i18n-switch><svg class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.239 8-5 8"/><path d="M5 9c-.003 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4-9 4 9"/><path d="M19.1 18h-6.2"/></svg>
+<select name=language onchange="window.location.href=this.selectedOptions[0].value"><option value=https://slimenull.com/ selected></option></select></li><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></div></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#基本使用>基本使用:</a></li><li><a href=#dllimport-特性成员字段>DllImport 特性成员字段</a><ol><li><ol><li><a href=#1-entrypoint-入口点>1. EntryPoint (入口点)</a></li><li><a href=#2-charset-字符集>2. CharSet (字符集)</a></li><li><a href=#3-setlasterror-设置最后一个错误>3. SetLastError (设置最后一个错误)</a></li><li><a href=#4-extractspelling-精准拼写>4. ExtractSpelling (精准拼写)</a></li><li><a href=#5-callingconvertion-调用约定>5. CallingConvertion (调用约定)</a></li><li><a href=#6-bestfitmapping-最合适映射>6. BestFitMapping (最合适映射)</a></li><li><a href=#7-preservesig>7. PreserveSig</a></li><li><a href=#8-throwonunmappablechar>8. ThrowOnUnmappableChar</a></li></ol></li></ol></li><li><a href=#对于字符串的处理>对于字符串的处理</a><ol><li><ol><li><a href=#1-传入字符串-但不更改>1. 传入字符串, 但不更改.</a></li><li><a href=#2-传入字符串并做更改>2. 传入字符串并做更改</a></li><li><a href=#3-我应该使用哪种方式传字符串>3. 我应该使用哪种方式传字符串?</a></li><li><a href=#4-关于字符串拷贝>4. 关于字符串拷贝</a></li><li><a href=#5-我应该使用哪个字符集的函数>5. 我应该使用哪个字符集的函数?</a></li><li><a href=#注意>注意:</a></li></ol></li></ol></li><li><a href=#对于指针的处理>对于指针的处理</a></li><li><a href=#对于结构体的处理>对于结构体的处理</a></li><li><a href=#入口点查找大概逻辑>入口点查找大概逻辑</a></li><li><a href=#注解>注解</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/dotnet/ style=background-color:#512cd4;color:#fff>.NET
+</a><a href=/categories/c++/>C++
+</a><a href=/categories/%E6%88%90%E9%95%BF%E8%AE%B0%E5%BD%95/>成长记录</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/20230106035930/>[.NET] 平台调用(P/Invoke) 与 DllImport 使用的相关讲解与注意事项,</a></h2><h3 class=article-subtitle>P/Invoke 实现, DllImport 使用及成员变量概述, 字符串传值方式, 托管字符串对于不同字符集函数字符串的封送方式, 指针参数的正确声明姿势, DllImport 搜找入口点的大概逻辑</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jan 06, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 8 分钟</time></div></footer></div></header><section class=article-content><p>通过对静态外部方法标记 <code>DllImport</code> 特性, 我们可以实现使用 C# 调用非托管动态链接库的函数, 这种使用方式就叫做平台调用(Platform Invoke, 或 P/Invoke)</p><h2 id=基本使用>基本使用:</h2><p>下面, 我们通过一个获取控制台窗口句柄的函数来演示最基本的平台调用</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=k>using</span> <span class=nn>System.Runtime.InteropServices</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>[DllImport(&#34;kernel32.dll&#34;)]</span>                <span class=err>#</span> <span class=n>DllImport</span> <span class=err>特性与函数所在链接库</span>
+</span></span><span class=line><span class=cl><span class=kd>static</span> <span class=kd>extern</span> <span class=n>IntPtr</span> <span class=n>GetConsoleWindow</span><span class=p>();</span>   <span class=err>#</span> <span class=err>方法基本声明</span> <span class=p>(</span><span class=err>静态外部方法</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>IntPtr</span> <span class=n>currentConsoleWindow</span> <span class=p>=</span> <span class=n>GetConsoleWindow</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=s>$&#34;当前控制台的窗口句柄是: 0x{currentConsoleWindow:X}&#34;</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=dllimport-特性成员字段>DllImport 特性成员字段</h2><h4 id=1-entrypoint-入口点>1. EntryPoint (入口点)</h4><p>指示要调用的 DLL 入口点的名称或序号。</p><p>可以指定入口点函数名称, 也可以按入口点序号标识入口点. 序号的前缀为 # 符号，例如 #1。 如果省略此字段, CLR 会使用标记了当前 <code>DllImport</code> 特性的方法名称作为入口点名称</p><h4 id=2-charset-字符集>2. CharSet (字符集)</h4><p>指示方法调用时要使用的字符集, CLR 会将传入的字符串参数按照指定字符集封送到对应函数.</p><p>将此字段与枚举的成员 <code>CharSet</code> 一起使用, 可以指定字符串参数的封送处理行为, 并指定要调用的入口点名称 (给定的确切名称或以“A”或“W”为后缀的名称). C# 和 Visual Basic 的默认枚举成员是 <code>CharSet.Ansi</code> , C++ 的默认枚举成员是 <code>CharSet.None</code>, 这等效于 <code>CharSet.Ansi</code>. 在 Visual Basic 中, 使用 <code>Declare</code> 语句指定 <code>CharSet</code> 字段.</p><blockquote><p>举个例子, 当你入口点名称为 GetWindowText 并且 CharSet 为 Unicode 时, 实际调用的方法是 GetWindowTextW.
+(因为虽然不存在 GetWindowText 函数, 但 CLR 搜索到了 GetWindowTextW 函数, 所以就会调用它)</p></blockquote><h4 id=3-setlasterror-设置最后一个错误>3. SetLastError (设置最后一个错误)</h4><p>指定调用方在返回之前是否设置一个错误(在 Windows 上调用 <code>SetLastError</code> 或者其他平台上调用 <code>errno</code>).</p><p>如果这个字段设置为 <code>true</code>, 运行时的<a class=link href=#ex1>封送拆收器^1^</a>会调用 <code>GetLastError</code> 或 <code>errno</code> 并缓存返回值以避免它被其他的 API 调用覆盖. 你可以在 .NET 6.0 及以上版本中调用 <code>GetLastPInvokeError</code> 或在 .NET 5 及以下版本与 .NET Framework 中调用 <code>GetLastWin32Error</code> 来接收错误码.</p><p>在 .NET 中, 当这个字段设置为 <code>true</code> 时, 错误信息在调用被调用方之前会被清除(设置为0). 但在 .NET Framework 中, 错误信息则不会被清除. 这意味着由 <code>GetLastPInvokeError</code> 和 <code>GetLastWin32Error</code> 返回的错误信息, 在 .NET 中只表示上一个拥有 <code>DllImportAttribute.SetLastError</code> 值设定为 <code>true</code> 的 <code>DlllImport</code> 特性的平台调用的错误信息. 而在 .NET Framework 中, 这个错误信息可以由一个平台调用保留到下一个.</p><h4 id=4-extractspelling-精准拼写>4. ExtractSpelling (精准拼写)</h4><p>控制 CLR 是否根据 CharSet 字段的值来在非托管 DLL 中搜索入口点名称, 或直接使用指定的入口点名称.</p><p>当值为 false, 且在找不到指定入口点名称的函数时, CLR 会根据 <code>CharSet</code> 字段的值来搜索入口点名称. 此时, 当 <code>CharSet</code> 为 <code>CharSet.Ansi</code> 时, 会尝试调用尾部追加字母 &lsquo;A&rsquo; 的入口点名称, 当 <code>CharSet</code> 为 <code>CharSet.Unicode</code> 时, 则会尝试调用尾部追加字母 &lsquo;W&rsquo; 的入口点名称. 通常, 托管编译器会设定这个字段的值.</p><p>在 VB 以及 C# 和 C++ 中, ExactSpelling 的值会根据 CharSet 的值有不同的表现.</p><div class=table-wrapper><table><thead><tr><th>语言</th><th>ANSI</th><th>Unicode</th><th>Auto</th></tr></thead><tbody><tr><td>Visual Basic</td><td>ExactSpelling := True</td><td>ExactSpelling := True</td><td>ExactSpelling := False</td></tr><tr><td>C#</td><td>ExactSpelling = false</td><td>ExactSpelling = false</td><td>ExactSpelling = false</td></tr><tr><td>C++</td><td>ExactSpelling = false</td><td>ExactSpelling = false</td><td>ExactSpelling = false</td></tr></tbody></table></div><p>也就是说, 在 VB 中, 如果你将 CharSet 设置为确切的字符集, ANSI 或者 Unicode 时, ExactSpelling 会是 True, CLR 不会再去搜索与字符集匹配的名称, 而是直接使用你匹配的名称. 而在 C# 和 C++ 中, 即便你指定了确切的字符集, CLR 也会在找不到你指定的入口点名称时, 尝试搜索与字符集相匹配的函数.</p><h4 id=5-callingconvertion-调用约定>5. CallingConvertion (调用约定)</h4><p>指定入口点的<a class=link href=#ex2>调用约定^2^</a></p><p>你可以将它设置为 <code>CallingConvertion</code> 枚举的一个成员. 这个 <code>CallingConvertion</code> 字段的默认值是 <code>Winapi</code>, 它默认在 Windows 平台上是 <code>StdCall</code> 约定, 并且其他所有平台上是 <code>Cdecl</code> 约定.</p><h4 id=6-bestfitmapping-最合适映射>6. BestFitMapping (最合适映射)</h4><p>将 Unicode 字符转换为 ANSI 字符时, 启用或禁用最佳映射行为.</p><h4 id=7-preservesig>7. PreserveSig</h4><p>指示是否直接转换具有 <code>HRESULT</code> 返回值的非托管方法，或者 <code>HRESULT</code> 是否自动将返回值转换为异常.</p><h4 id=8-throwonunmappablechar>8. ThrowOnUnmappableChar</h4><p>启用或禁用在遇到已被转换为 ANSI &ldquo;?&rdquo; 字符的无法映射的 Unicode 字符时引发异常.</p><hr><h2 id=对于字符串的处理>对于字符串的处理</h2><h4 id=1-传入字符串-但不更改>1. 传入字符串, 但不更改.</h4><p>例如我的动态链接库中有以下函数:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;windows.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=k>extern</span> <span class=s>&#34;C&#34;</span> <span class=kr>__declspec</span><span class=p>(</span><span class=n>dllexport</span><span class=p>)</span> <span class=kt>void</span> <span class=n>PrintW</span><span class=p>(</span><span class=kt>wchar_t</span><span class=o>*</span> <span class=n>lpstr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>wprintf</span><span class=p>(</span><span class=sa>L</span><span class=s>&#34;%s</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>lpstr</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>它接收一个宽字符串指针, 并将它打印到标准输出流中. 下面列举常用的字符串传值方式</p><ol><li>直接传 string<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[DllImport(&#34;test.dll&#34;, EntryPoint = &#34;PrintW&#34;, CharSet = CharSet.Unicode)]</span>
+</span></span><span class=line><span class=cl><span class=kd>extern</span> <span class=kd>static</span> <span class=k>void</span> <span class=n>Print1</span><span class=p>(</span><span class=kt>string</span> <span class=n>str</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div></li><li>传 StringBuilder<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[DllImport(&#34;test.dll&#34;, EntryPoint = &#34;PrintW&#34;, CharSet = CharSet.Unicode)]</span>
+</span></span><span class=line><span class=cl><span class=kd>extern</span> <span class=kd>static</span> <span class=k>void</span> <span class=n>Print1</span><span class=p>(</span><span class=n>StringBuilder</span> <span class=n>str</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div></li><li>传 char 数组<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[DllImport(&#34;test.dll&#34;, EntryPoint = &#34;PrintW&#34;, CharSet = CharSet.Unicode)]</span>
+</span></span><span class=line><span class=cl><span class=kd>extern</span> <span class=kd>static</span> <span class=k>void</span> <span class=n>Print1</span><span class=p>(</span><span class=kt>char</span><span class=p>[]</span> <span class=n>str</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div></li><li>传 char 指针<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[DllImport(&#34;test.dll&#34;, EntryPoint = &#34;PrintW&#34;, CharSet = CharSet.Unicode)]</span>
+</span></span><span class=line><span class=cl><span class=kd>extern</span> <span class=kd>static</span> <span class=k>void</span> <span class=n>Print1</span><span class=p>(</span><span class=kt>char</span><span class=p>*</span> <span class=n>str</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div></li></ol><h4 id=2-传入字符串并做更改>2. 传入字符串并做更改</h4><p>注意, 如果在函数中<strong>有对字符串更改</strong>, 那么, 你需要注意, 传入的 <code>string</code> 可能会被更改. 例如我们有以下函数:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=cp>#define _CRT_SECURE_NO_WARNINGS
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;stdlib.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;windows.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=k>extern</span> <span class=s>&#34;C&#34;</span> <span class=kr>__declspec</span><span class=p>(</span><span class=n>dllexport</span><span class=p>)</span> <span class=kt>void</span> <span class=n>FuckYouWorldW</span><span class=p>(</span><span class=kt>wchar_t</span><span class=o>*</span> <span class=n>lpstr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>wsprintf</span><span class=p>(</span><span class=n>lpstr</span><span class=p>,</span> <span class=sa>L</span><span class=s>&#34;Fuck you world, 撒比世界&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>extern</span> <span class=s>&#34;C&#34;</span> <span class=kr>__declspec</span><span class=p>(</span><span class=n>dllexport</span><span class=p>)</span> <span class=kt>void</span> <span class=n>FuckYouWorldA</span><span class=p>(</span><span class=kt>char</span><span class=o>*</span> <span class=n>lpstr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>sprintf</span><span class=p>(</span><span class=n>lpstr</span><span class=p>,</span> <span class=s>&#34;Fuck you world, 撒比世界&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><ol><li>当使用 Unicode 所对应的函数时, string 会被更改:<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[DllImport(&#34;test.dll&#34;, EntryPoint = &#34;FuckYouWorldW&#34;,CharSet = CharSet.Unicode)]</span>
+</span></span><span class=line><span class=cl><span class=kd>extern</span> <span class=kd>static</span> <span class=k>void</span> <span class=n>FuckYouWorldW</span><span class=p>(</span><span class=kt>string</span> <span class=n>str</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>string</span> <span class=n>buf</span> <span class=p>=</span> <span class=k>new</span> <span class=kt>string</span><span class=p>(</span><span class=sc>&#39;\0&#39;</span><span class=p>,</span> <span class=m>32</span><span class=p>);</span>   <span class=c1>// 声明一个长度为 32 的字符串</span>
+</span></span><span class=line><span class=cl><span class=n>FuckYouWorldW</span><span class=p>(</span><span class=n>buf</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>buf</span><span class=p>);</span>              <span class=c1>// 你会得到一个 &#34;Fuck you world, 撒比世界&#34;</span>
+</span></span><span class=line><span class=cl>                                     <span class=c1>// 但是注意, buf 字符串后面还是有很多 \0 的, 只是没打印出来</span>
+</span></span></code></pre></td></tr></table></div></div></li><li>但是当你使用 ANSI 所对应的函数时, 传入的 string 即便被更改了, 也不会体现出来:<div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[DllImport(&#34;test.dll&#34;, EntryPoint = &#34;FuckYouWorldA&#34;,CharSet = CharSet.Ansi)]</span>
+</span></span><span class=line><span class=cl><span class=kd>extern</span> <span class=kd>static</span> <span class=k>void</span> <span class=n>FuckYouWorldA</span><span class=p>(</span><span class=kt>string</span> <span class=n>str</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>string</span> <span class=n>buf</span> <span class=p>=</span> <span class=k>new</span> <span class=kt>string</span><span class=p>(</span><span class=sc>&#39;\0&#39;</span><span class=p>,</span> <span class=m>32</span><span class=p>);</span>   <span class=c1>// 声明一个长度为 32 的字符串</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 在传入 buf 时, Marshaler 会帮我们将字符串转为 ANSI 字符串, 并传入指针</span>
+</span></span><span class=line><span class=cl><span class=n>FuckYouWorldA</span><span class=p>(</span><span class=n>buf</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=c1>// 这导致, 虽然函数变更了指针指向的字符串值, 但没有对我们原来的字符串有任何更改</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>Console</span><span class=p>.</span><span class=n>WriteLine</span><span class=p>(</span><span class=n>buf</span><span class=p>);</span>              <span class=c1>// 你什么也看不到</span>
+</span></span></code></pre></td></tr></table></div></div></li><li>如果你使用 <code>StringBuilder</code> 的时候, 无论是 Unicode 还是 ANSI 方法, 你都能看到函数对字符串的更改, Marshal 会帮助我们处理 Unicode 字符串与 ANSI 字符串的转换, 并且处理字符串变更后的结果, 所以你无论如何都能看到变更后的字符串.</li><li>如果你使用 <code>char[]</code>, 它的表现和 <code>string</code> 一样, 能否看到结果取决于你使用的字符集</li><li>如果你使用 <code>char*</code>, 虽然原始的指针会直接传进去, 但是如果你在使用 ANSI 的函数, 那么肯定的, 你得到的更改后的字符串并不会正常显示. 因为它是 ANSI 格式的, 而 C# 按照 Unicode 来解码字符串.</li></ol><blockquote><p>参考: <a class=link href=https://blog.csdn.net/EricChina/article/details/5265991 target=_blank rel=noopener>Marshaling between Managed and Unmanaged Code</a>
+原文似乎找不到了, 只有 CSDN 的转载</p></blockquote><h4 id=3-我应该使用哪种方式传字符串>3. 我应该使用哪种方式传字符串?</h4><p>当你需要向函数传入字符串, 并且这个字符串不会被函数更改时, 我建议你直接传入 <code>string</code>, 这样最方便. 而当你需要传出字符串时, 也就是调用类似于 <code>GetWindowTextW</code> 这类函数时, 我建议你使用 <code>StringBuilder</code>, 提前设置好容量, 并在调用函数时, 传入这个容量. 这样函数就能够正确的处理, 并且不造成有关内存访问的异常.</p><p>当然, 传入其他的类型也完全可以, 这取决于你的需求, 例如你大量操作非托管的类型, 你的代码周围全都是一些指针, 那么你大可以将函数声明为指针, 然后直接调用.</p><h4 id=4-关于字符串拷贝>4. 关于字符串拷贝</h4><p>有人认为, 在调用非托管动态链接库的时候, CLR 会拷贝一份 <code>string</code> 供使用, 这并不完全正确.</p><p>如果你在使用 Unicode 版本的函数(设置了 <code>CharSet</code> 为 Unicode), 那么在调用的时候, 完全不会有任何拷贝, 而是直接使用源字符串, 这也就是为什么这种情况下函数可以对字符串进行更改并正确得到结果</p><p>如果你在使用 ANSI 版本的函数(设置了 <code>CharSet</code>), 那么在调用的时候, CLR 会帮你把 .NET 字符串转为非托管的 ANSI 字符串, 并传入指针, 显然这个过程造成了字符串拷贝.</p><h4 id=5-我应该使用哪个字符集的函数>5. 我应该使用哪个字符集的函数?</h4><p>至少在 Windows 平台中, 你最好使用 Unicode 字符集的函数, 也就是后缀带 W 的函数. 因为在高版本的 Windows 平台内部也是使用的宽字符串(Wide char string), 而且 C# 的 string 可以直接传入, 而不经任何操作, 这样性能较好.</p><blockquote><p>参考: <a class=link href=https://stackoverflow.com/questions/16926002/wide-string-vs-string-does-it-affect-performance-in-windows-c target=_blank rel=noopener>Wide String vs String , Does it affect performance in Windows C++</a>
+这里表明, Windows 内核使用的是宽字符</p></blockquote><h4 id=注意>注意:</h4><p>不要尝试直接取字符串地址并传入, 因为你取的地址不能直接作为 <code>wchar_t*</code> 使用, 而是栈上这个变量的地址, 你需要进行一次 <code>指针取值</code> 操作才能拿到栈上存储的字符串地址值, 并且 <code>string</code> 在堆上的存储内容还包含一个 &ldquo;类型头&rdquo;, 你至少需要计算这个偏移量才可以. 总而言之, 很复杂, 不要这么做.</p><hr><h2 id=对于指针的处理>对于指针的处理</h2><p>如果一个动态链接库的函数传入一个 <code>int</code> 指针, 并且它将会更改这个指针指向的 <code>int</code> 作为返回值, 你可以直接使用 C# 的 <code>out</code> 关键字来声明这个参数:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=k>extern</span> <span class=s>&#34;C&#34;</span> <span class=kr>__declspec</span><span class=p>(</span><span class=n>dllexport</span><span class=p>)</span> <span class=kt>void</span> <span class=n>add</span><span class=p>(</span><span class=kt>int</span> <span class=n>a</span><span class=p>,</span> <span class=kt>int</span> <span class=n>b</span><span class=p>,</span> <span class=kt>int</span><span class=o>*</span> <span class=n>result</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=o>*</span><span class=n>result</span> <span class=o>=</span> <span class=n>a</span> <span class=o>+</span> <span class=n>b</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[DllImport(&#34;test.dll&#34;, EntryPoint = &#34;add&#34;)]</span>
+</span></span><span class=line><span class=cl><span class=kd>extern</span> <span class=kd>static</span> <span class=k>void</span> <span class=k>add</span><span class=p>(</span><span class=kt>int</span> <span class=n>a</span><span class=p>,</span> <span class=kt>int</span> <span class=n>b</span><span class=p>,</span> <span class=k>out</span> <span class=kt>int</span> <span class=n>result</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>同理, 如果一个函数传入一个 <code>int</code> 指针, 它会读取这个指针指向的 <code>int</code> 值, 也会更改指针指向的值, 那么你可以使用 C# 的 <code>ref</code> 关键字来声明这个参数:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=k>extern</span> <span class=s>&#34;C&#34;</span> <span class=kr>__declspec</span><span class=p>(</span><span class=n>dllexport</span><span class=p>)</span> <span class=kt>void</span> <span class=n>add114514</span><span class=p>(</span><span class=kt>int</span><span class=o>*</span> <span class=n>val</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=o>*</span><span class=n>val</span> <span class=o>+=</span> <span class=mi>114514</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[DllImport(&#34;test.dll&#34;, EntryPoint = &#34;add&#34;)]</span>
+</span></span><span class=line><span class=cl><span class=kd>extern</span> <span class=kd>static</span> <span class=k>void</span> <span class=n>add114514</span><span class=p>(</span><span class=k>ref</span> <span class=kt>int</span> <span class=n>val</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>但是注意, 你不能使用 <code>out string</code>, 这个雀食是不可以的, 想要传出一个字符串, 你得用 <code>StringBuilder</code></p><h2 id=对于结构体的处理>对于结构体的处理</h2><p>事实上, 在进行非托管动态链接库函数调用的时候, CLR 会将所有我们用到的值都转换为非托管的格式, 然后进行封送. 例如在 C# 中, <code>bool</code> 占一个字节, 但是在 WinAPI 中, <code>bool</code> 可是要占四个字节的. 调用参数的传入与返回值的返回, 都有 CLR 参与这个转换.</p><p>例如我们有这样的一个 C++ 函数:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=k>struct</span> <span class=nc>StringWrapper</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>wchar_t</span><span class=o>*</span> <span class=n>StrPtr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>Length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>extern</span> <span class=s>&#34;C&#34;</span> <span class=kr>__declspec</span><span class=p>(</span><span class=n>dllexport</span><span class=p>)</span> <span class=kt>void</span> <span class=n>print</span><span class=p>(</span><span class=n>StringWrapper</span><span class=o>*</span> <span class=n>str</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>str</span><span class=o>-&gt;</span><span class=n>Length</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>putwchar</span><span class=p>(</span><span class=n>str</span><span class=o>-&gt;</span><span class=n>StrPtr</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>putwchar</span><span class=p>(</span><span class=sa>L</span><span class=sc>&#39;\n&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>那么我在编写 C# 的时候, 就可以这样写:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]</span>   <span class=c1>// 注意, 这里需要写明字符集</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>StringWrapper</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>string</span> <span class=n>_value</span><span class=p>;</span>       <span class=c1>// 字符串会自动被转换为正确的 wchar_t 指针以供使用</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span>    <span class=n>_length</span><span class=p>;</span>      <span class=c1>// 整数的话, 则是原封不动的传过去</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>StringWrapper</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>_value</span> <span class=p>=</span> <span class=kt>string</span><span class=p>.</span><span class=n>Empty</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>_length</span> <span class=p>=</span> <span class=m>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>StringWrapper</span><span class=p>(</span><span class=kt>string</span> <span class=k>value</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>_value</span> <span class=p>=</span> <span class=k>value</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>_length</span> <span class=p>=</span> <span class=k>value</span><span class=p>.</span><span class=n>Length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>[DllImport(&#34;test.dll&#34;, EntryPoint = &#34;print&#34;, CharSet = CharSet.Unicode)]</span>
+</span></span><span class=line><span class=cl><span class=kd>private</span> <span class=kd>extern</span> <span class=kd>static</span> <span class=k>void</span> <span class=n>PrintString</span><span class=p>([</span><span class=n>In</span><span class=p>,</span> <span class=n>Optional</span><span class=p>]</span> <span class=k>ref</span> <span class=n>StringWrapper</span> <span class=n>str</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>但是注意, 当参数是结构体指针, 并且你希望这个结构体能够被 CLR 进行封送, 那么你必须在 <code>DllImport</code> 那里, 将方法参数声明为 <code>ref</code> 或 <code>out</code> 参数, 而不是直接声明为结构体的指针.</p><p>还有就是, 非常重要的一点, 当结构体进行封送的时候, 里面的字符串会根据结构体的 <code>StructLayout</code> 所指定的 <code>CharSet</code> 进行封送, 默认是 ANSI, 所以会被封送为 <code>char*</code>, 如果你要使用 <code>wchar_t*</code>, 那你必须指定 <code>CharSet</code> 为 <code>CharSet.Unicode</code></p><blockquote><p>如果你希望你的结构体能够在直接传指针的情况下仍然可用, 那么你必须使你的结构体内存布局与非托管中结构体的内存布局保持一致.
+参考: <a class=link href=/p/20230111031653/>[.NET] 结构体布局详解与结构体内存对齐具体方式</a></p></blockquote><hr><h2 id=入口点查找大概逻辑>入口点查找大概逻辑</h2><p>下面是伪代码:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-txt data-lang=txt><span class=line><span class=cl>如果存在 Xxx 函数:
+</span></span><span class=line><span class=cl>    调用 Xxx 函数;
+</span></span><span class=line><span class=cl>    返回;
+</span></span><span class=line><span class=cl>否则:
+</span></span><span class=line><span class=cl>    如果 ExactSpelling:   // 精确拼写
+</span></span><span class=line><span class=cl>        抛异常(&#34;入口点找不到&#34;);
+</span></span><span class=line><span class=cl>    否则:
+</span></span><span class=line><span class=cl>        如果 CharSet 是 Auto:
+</span></span><span class=line><span class=cl>            如果是高系统版本:
+</span></span><span class=line><span class=cl>                确认 CharSet 为 Unicode;
+</span></span><span class=line><span class=cl>            否则:
+</span></span><span class=line><span class=cl>                确认 CharSet 为 ANSI;
+</span></span><span class=line><span class=cl>                
+</span></span><span class=line><span class=cl>        如果 CharSet 是 Unicode:
+</span></span><span class=line><span class=cl>            如果存在 XxxW 函数:   // 就是后面加了个 W 后缀
+</span></span><span class=line><span class=cl>                调用 XxxW 函数;
+</span></span><span class=line><span class=cl>                返回;
+</span></span><span class=line><span class=cl>            否则:
+</span></span><span class=line><span class=cl>                抛异常(&#34;入口点找不到&#34;);
+</span></span><span class=line><span class=cl>        否则如果 CharSet 是 ANSI:
+</span></span><span class=line><span class=cl>            如果存在 XxxA 函数:   // 就是后面加了个 A 后缀
+</span></span><span class=line><span class=cl>                调用 XxxA 函数;
+</span></span><span class=line><span class=cl>                返回;
+</span></span><span class=line><span class=cl>            否则:
+</span></span><span class=line><span class=cl>                抛异常(&#34;入口点找不到&#34;);
+</span></span><span class=line><span class=cl>        否则:
+</span></span><span class=line><span class=cl>            抛异常(&#34;入口点找不到&#34;);
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=注解>注解</h2><ol><li><span id=ex1>封送拆收器:</span> CLR 在与非托管动态链接库操作时, 负责将托管类型转换为非托管或将非托管类型转换为托管类型.</li><li><span id=ex2>调用约定:</span> 调用约定（Calling Convention）是规定子函数(过程)如何获取参数以及如何返回的方案. 其通常与架构, 编译器等相关.</li></ol><blockquote><p>文章会不定时更新, 以 CSDN 这边内容为准</p></blockquote></section><footer class=article-footer><section class=article-tags><a href=/tags/dotnet/>Dotnet</a>
+<a href=/tags/csharp/>Csharp</a>
+<a href=/tags/microsoft/>Microsoft</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/20230111031653/><div class=article-details><h2 class=article-title>[.NET] 结构体布局详解与结构体内存对齐具体方式</h2></div></a></article><article><a href=/p/20210307161550/><div class=article-details><h2 class=article-title>[干货] 一篇文章完全搞懂面向对象基本概念</h2></div></a></article><article><a href=/p/20210209080535/><div class=article-details><h2 class=article-title>[C#/C/C++] GetShortPathName详解, 长路径转换为短路径</h2></div></a></article><article><a href=/p/20210203065600/><div class=article-details><h2 class=article-title>[C#] 单文件编译 - 编译时嵌入dll</h2></div></a></article><article><a href=/p/20210203064309/><div class=article-details><h2 class=article-title>[项目实例] 使用 IronPython 库来创建一个支持使用Python脚本操作的简易文本编辑器</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=SlimeNull/slimenull.github.io issue-term=pathname label=BlogComment crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
+2023 -
+2024 SlimeNull Blogs</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.21.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

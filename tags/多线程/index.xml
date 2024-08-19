@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>多线程 on SlimeNull Blogs</title><link>https://slimenull.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link><description>Recent content in 多线程 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 09 Mar 2021 21:48:03 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.xml" rel="self" type="application/rss+xml"/><item><title>[笔记] 记录一次该死的 “玄学“ Bug, 赶紧看看避开这个坑!!! .NET Core, Delegate.BeginInvoke, PlatformNotSupportedException</title><link>https://slimenull.com/p/20210309214803/</link><pubDate>Tue, 09 Mar 2021 21:48:03 +0800</pubDate><guid>https://slimenull.com/p/20210309214803/</guid><description>&lt;h2 id="概述">概述:&lt;/h2>
+&lt;p>.NET Core 不支持委托的 BeginInvoke 方法, 使用别的方法, 例如 Task 来替代它!&lt;/p>
+&lt;h2 id="这件事">这件事:&lt;/h2>
+&lt;p>首先是&amp;hellip; 报了一堆 &amp;ldquo;平台不支持的&amp;rdquo; 错误.&lt;/p>
+&lt;div align="center">
+&lt;img src="https://img-blog.csdnimg.cn/20210309213418546.png"/>
+&lt;/div>
+&lt;p>堆栈显示也看不出来是哪里的问题, 但我看到了 Threading 这玩意儿&amp;hellip;:&lt;/p>
+&lt;div align="center">
+&lt;img src="https://img-blog.csdnimg.cn/20210309213525619.png"/>
+&lt;/div>
+&lt;p>最后通过 &amp;ldquo;死亡断点&amp;rdquo; 发现是这里出的问题, 这是一个异步操作的回调函数.&lt;/p>
+&lt;div align="center">
+&lt;img src="https://img-blog.csdnimg.cn/20210309213723524.png"/>
+&lt;/div>
+&lt;p>进一步调试, 发现是这里, 这里又会 Invoke 一个事件:&lt;/p>
+&lt;div align="center">
+&lt;img src="https://img-blog.csdnimg.cn/20210309213924137.png"/>
+&lt;img src="https://img-blog.csdnimg.cn/20210309214018874.png"/>
+&lt;/div>
+&lt;p>好家伙, 又是一个事件&amp;hellip; 然后我看了看订阅了这个事件的地方&amp;hellip;&lt;/p>
+&lt;div align="center">
+&lt;img src="https://img-blog.csdnimg.cn/20210309214243836.png"/>
+&lt;/div>
+&lt;p>乍一看,,,, 没啥毛病! 但问题确实出在这里! (我实在是太菜了)
+最后&amp;hellip; 我思考了下, 我在 Invoke 调用的委托里面, 整了异步的操作&amp;hellip;&amp;hellip; 于是我试着将 BeginInvoke 换成 Invoke, 然后&amp;hellip;. 问题解决了!!!&lt;/p>
+&lt;p>后来又双叒叕遇到了这个问题,,, 然后仔细搜索了下资料. 懂了. 原来 .NET Core 不支持委托的 BeginInvoke 方法. 而事件的本质就是多播委托!&lt;/p></description></item></channel></rss>

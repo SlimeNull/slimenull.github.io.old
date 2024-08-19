@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Microsoft on SlimeNull Blogs</title><link>https://slimenull.com/tags/microsoft/</link><description>Recent content in Microsoft on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 28 Mar 2023 07:56:24 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/microsoft/index.xml" rel="self" type="application/rss+xml"/><item><title>[Win32] 在不创建窗口的情况下接收处理消息.</title><link>https://slimenull.com/p/20230328075624/</link><pubDate>Tue, 28 Mar 2023 07:56:24 +0800</pubDate><guid>https://slimenull.com/p/20230328075624/</guid><description>&lt;p>如果你在使用一个控制台程序, 并且还希望处理一些全局快捷键, 那么这个方法是合适的.&lt;/p>
+&lt;blockquote>
+&lt;p>这里说的不创建窗口指的是不创建可见的窗口&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="使用-messageonly-窗口">使用 MessageOnly 窗口&lt;/h2>
+&lt;p>Windows 中存在一个特殊的窗体句柄 HWND_MESSAGE, 它的值是 -3, 当一个窗口的父窗口是它的时候, 这个窗口会成为 &amp;ldquo;仅消息窗口&amp;rdquo;&lt;/p>
+&lt;p>使用仅消息窗口可以发送和接收消息。 它不可见、没有 z 顺序、无法枚举且不接收广播消息。 该窗口只是调度消息。&lt;/p>
+&lt;p>若要创建仅消息窗口，请在 &lt;a class="link" href="https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-createwindowexa" target="_blank" rel="noopener"
+>CreateWindowEx&lt;/a> 函数的 hWndParent 参数中指定HWND_MESSAGE常量或现有仅消息窗口的句柄。 还可以通过在 SetParent 函数的 hWndNewParent 参数中指定HWND_MESSAGE，将现有窗口更改为仅消息窗口。&lt;/p>
+&lt;blockquote>
+&lt;p>参考: &lt;a class="link" href="https://learn.microsoft.com/zh-cn/windows/win32/winmsg/window-features#message-only-windows" target="_blank" rel="noopener"
+>窗口功能:仅消息窗口 -Win32 apps | Microsoft Learn&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="wpf-的使用示例">WPF 的使用示例:&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 窗口创建的参数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">HwndSourceParameters&lt;/span> &lt;span class="n">hwndSourceParameters&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">HwndSourceParameters&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">HwndSourceHook&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">Hook&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ParentWindow&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">IntPtr&lt;/span>&lt;span class="p">)(-&lt;/span>&lt;span class="m">3&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="c1">// a magic window handle&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 创建窗口&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">hwndSource&lt;/span> &lt;span class="p">=&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">HwndSource&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">hwndSourceParameters&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Hook 消息方法定义&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">IntPtr&lt;/span> &lt;span class="n">Hook&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">IntPtr&lt;/span> &lt;span class="n">hwnd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">msg&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span> &lt;span class="n">wParam&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">IntPtr&lt;/span> &lt;span class="n">lParam&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">ref&lt;/span> &lt;span class="kt">bool&lt;/span> &lt;span class="n">handled&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 这里处理消息&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>[.NET] 平台调用(P/Invoke) 与 DllImport 使用的相关讲解与注意事项,</title><link>https://slimenull.com/p/20230106035930/</link><pubDate>Fri, 06 Jan 2023 03:59:30 +0800</pubDate><guid>https://slimenull.com/p/20230106035930/</guid><description>&lt;p>通过对静态外部方法标记 &lt;code>DllImport&lt;/code> 特性, 我们可以实现使用 C# 调用非托管动态链接库的函数, 这种使用方式就叫做平台调用(Platform Invoke, 或 P/Invoke)&lt;/p>
+&lt;h2 id="基本使用">基本使用:&lt;/h2>
+&lt;p>下面, 我们通过一个获取控制台窗口句柄的函数来演示最基本的平台调用&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="k">using&lt;/span> &lt;span class="nn">System.Runtime.InteropServices&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[DllImport(&amp;#34;kernel32.dll&amp;#34;)]&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="n">DllImport&lt;/span> &lt;span class="err">特性与函数所在链接库&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">static&lt;/span> &lt;span class="kd">extern&lt;/span> &lt;span class="n">IntPtr&lt;/span> &lt;span class="n">GetConsoleWindow&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="err">#&lt;/span> &lt;span class="err">方法基本声明&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="err">静态外部方法&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">IntPtr&lt;/span> &lt;span class="n">currentConsoleWindow&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">GetConsoleWindow&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">$&amp;#34;当前控制台的窗口句柄是: 0x{currentConsoleWindow:X}&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 id="dllimport-特性成员字段">DllImport 特性成员字段&lt;/h2>
+&lt;h4 id="1-entrypoint-入口点">1. EntryPoint (入口点)&lt;/h4>
+&lt;p>指示要调用的 DLL 入口点的名称或序号。&lt;/p>
+&lt;p>可以指定入口点函数名称, 也可以按入口点序号标识入口点. 序号的前缀为 # 符号，例如 #1。 如果省略此字段, CLR 会使用标记了当前 &lt;code>DllImport&lt;/code> 特性的方法名称作为入口点名称&lt;/p>
+&lt;h4 id="2-charset-字符集">2. CharSet (字符集)&lt;/h4>
+&lt;p>指示方法调用时要使用的字符集, CLR 会将传入的字符串参数按照指定字符集封送到对应函数.&lt;/p>
+&lt;p>将此字段与枚举的成员 &lt;code>CharSet&lt;/code> 一起使用, 可以指定字符串参数的封送处理行为, 并指定要调用的入口点名称 (给定的确切名称或以“A”或“W”为后缀的名称). C# 和 Visual Basic 的默认枚举成员是 &lt;code>CharSet.Ansi&lt;/code> , C++ 的默认枚举成员是 &lt;code>CharSet.None&lt;/code>, 这等效于 &lt;code>CharSet.Ansi&lt;/code>. 在 Visual Basic 中, 使用 &lt;code>Declare&lt;/code> 语句指定 &lt;code>CharSet&lt;/code> 字段.&lt;/p>
+&lt;blockquote>
+&lt;p>举个例子, 当你入口点名称为 GetWindowText 并且 CharSet 为 Unicode 时, 实际调用的方法是 GetWindowTextW.
+(因为虽然不存在 GetWindowText 函数, 但 CLR 搜索到了 GetWindowTextW 函数, 所以就会调用它)&lt;/p>
+&lt;/blockquote>
+&lt;h4 id="3-setlasterror-设置最后一个错误">3. SetLastError (设置最后一个错误)&lt;/h4>
+&lt;p>指定调用方在返回之前是否设置一个错误(在 Windows 上调用 &lt;code>SetLastError&lt;/code> 或者其他平台上调用 &lt;code>errno&lt;/code>).&lt;/p>
+&lt;p>如果这个字段设置为 &lt;code>true&lt;/code>, 运行时的&lt;a class="link" href="#ex1" >封送拆收器^1^&lt;/a>会调用 &lt;code>GetLastError&lt;/code> 或 &lt;code>errno&lt;/code> 并缓存返回值以避免它被其他的 API 调用覆盖. 你可以在 .NET 6.0 及以上版本中调用 &lt;code>GetLastPInvokeError&lt;/code> 或在 .NET 5 及以下版本与 .NET Framework 中调用 &lt;code>GetLastWin32Error&lt;/code> 来接收错误码.&lt;/p>
+&lt;p>在 .NET 中, 当这个字段设置为 &lt;code>true&lt;/code> 时, 错误信息在调用被调用方之前会被清除(设置为0). 但在 .NET Framework 中, 错误信息则不会被清除. 这意味着由 &lt;code>GetLastPInvokeError&lt;/code> 和 &lt;code>GetLastWin32Error&lt;/code> 返回的错误信息, 在 .NET 中只表示上一个拥有 &lt;code>DllImportAttribute.SetLastError&lt;/code> 值设定为 &lt;code>true&lt;/code> 的 &lt;code>DlllImport&lt;/code> 特性的平台调用的错误信息. 而在 .NET Framework 中, 这个错误信息可以由一个平台调用保留到下一个.&lt;/p>
+&lt;h4 id="4-extractspelling-精准拼写">4. ExtractSpelling (精准拼写)&lt;/h4>
+&lt;p>控制 CLR 是否根据 CharSet 字段的值来在非托管 DLL 中搜索入口点名称, 或直接使用指定的入口点名称.&lt;/p>
+&lt;p>当值为 false, 且在找不到指定入口点名称的函数时, CLR 会根据 &lt;code>CharSet&lt;/code> 字段的值来搜索入口点名称. 此时, 当 &lt;code>CharSet&lt;/code> 为 &lt;code>CharSet.Ansi&lt;/code> 时, 会尝试调用尾部追加字母 &amp;lsquo;A&amp;rsquo; 的入口点名称, 当 &lt;code>CharSet&lt;/code> 为 &lt;code>CharSet.Unicode&lt;/code> 时, 则会尝试调用尾部追加字母 &amp;lsquo;W&amp;rsquo; 的入口点名称. 通常, 托管编译器会设定这个字段的值.&lt;/p>
+&lt;p>在 VB 以及 C# 和 C++ 中, ExactSpelling 的值会根据 CharSet 的值有不同的表现.&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>语言&lt;/th>
+&lt;th>ANSI&lt;/th>
+&lt;th>Unicode&lt;/th>
+&lt;th>Auto&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Visual Basic&lt;/td>
+&lt;td>ExactSpelling := True&lt;/td>
+&lt;td>ExactSpelling := True&lt;/td>
+&lt;td>ExactSpelling := False&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>C#&lt;/td>
+&lt;td>ExactSpelling = false&lt;/td>
+&lt;td>ExactSpelling = false&lt;/td>
+&lt;td>ExactSpelling = false&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>C++&lt;/td>
+&lt;td>ExactSpelling = false&lt;/td>
+&lt;td>ExactSpelling = false&lt;/td>
+&lt;td>ExactSpelling = false&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>也就是说, 在 VB 中, 如果你将 CharSet 设置为确切的字符集, ANSI 或者 Unicode 时, ExactSpelling 会是 True, CLR 不会再去搜索与字符集匹配的名称, 而是直接使用你匹配的名称. 而在 C# 和 C++ 中, 即便你指定了确切的字符集, CLR 也会在找不到你指定的入口点名称时, 尝试搜索与字符集相匹配的函数.&lt;/p>
+&lt;h4 id="5-callingconvertion-调用约定">5. CallingConvertion (调用约定)&lt;/h4>
+&lt;p>指定入口点的&lt;a class="link" href="#ex2" >调用约定^2^&lt;/a>&lt;/p>
+&lt;p>你可以将它设置为 &lt;code>CallingConvertion&lt;/code> 枚举的一个成员. 这个 &lt;code>CallingConvertion&lt;/code> 字段的默认值是 &lt;code>Winapi&lt;/code>, 它默认在 Windows 平台上是 &lt;code>StdCall&lt;/code> 约定, 并且其他所有平台上是 &lt;code>Cdecl&lt;/code> 约定.&lt;/p>
+&lt;h4 id="6-bestfitmapping-最合适映射">6. BestFitMapping (最合适映射)&lt;/h4>
+&lt;p>将 Unicode 字符转换为 ANSI 字符时, 启用或禁用最佳映射行为.&lt;/p>
+&lt;h4 id="7-preservesig">7. PreserveSig&lt;/h4>
+&lt;p>指示是否直接转换具有 &lt;code>HRESULT&lt;/code> 返回值的非托管方法，或者 &lt;code>HRESULT&lt;/code> 是否自动将返回值转换为异常.&lt;/p>
+&lt;h4 id="8-throwonunmappablechar">8. ThrowOnUnmappableChar&lt;/h4>
+&lt;p>启用或禁用在遇到已被转换为 ANSI &amp;ldquo;?&amp;rdquo; 字符的无法映射的 Unicode 字符时引发异常.&lt;/p>
+&lt;hr>
+&lt;h2 id="对于字符串的处理">对于字符串的处理&lt;/h2>
+&lt;h4 id="1-传入字符串-但不更改">1. 传入字符串, 但不更改.&lt;/h4>
+&lt;p>例如我的动态链接库中有以下函数:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;windows.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&lt;/span>&lt;span class="k">extern&lt;/span> &lt;span class="s">&amp;#34;C&amp;#34;&lt;/span> &lt;span class="kr">__declspec&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dllexport&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="n">PrintW&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">wchar_t&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">lpstr&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">wprintf&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">L&lt;/span>&lt;span class="s">&amp;#34;%s&lt;/span>&lt;span class="se">\n&lt;/span>&lt;span class="s">&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">lpstr&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>它接收一个宽字符串指针, 并将它打印到标准输出流中. 下面列举常用的字符串传值方式&lt;/p>
+&lt;ol>
+&lt;li>直接传 string
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="na">[DllImport(&amp;#34;test.dll&amp;#34;, EntryPoint = &amp;#34;PrintW&amp;#34;, CharSet = CharSet.Unicode)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">extern&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Print1&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">str&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>传 StringBuilder
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="na">[DllImport(&amp;#34;test.dll&amp;#34;, EntryPoint = &amp;#34;PrintW&amp;#34;, CharSet = CharSet.Unicode)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">extern&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Print1&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">StringBuilder&lt;/span> &lt;span class="n">str&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>传 char 数组
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="na">[DllImport(&amp;#34;test.dll&amp;#34;, EntryPoint = &amp;#34;PrintW&amp;#34;, CharSet = CharSet.Unicode)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">extern&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Print1&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">char&lt;/span>&lt;span class="p">[]&lt;/span> &lt;span class="n">str&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>传 char 指针
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="na">[DllImport(&amp;#34;test.dll&amp;#34;, EntryPoint = &amp;#34;PrintW&amp;#34;, CharSet = CharSet.Unicode)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">extern&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">Print1&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">char&lt;/span>&lt;span class="p">*&lt;/span> &lt;span class="n">str&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;h4 id="2-传入字符串并做更改">2. 传入字符串并做更改&lt;/h4>
+&lt;p>注意, 如果在函数中&lt;strong>有对字符串更改&lt;/strong>, 那么, 你需要注意, 传入的 &lt;code>string&lt;/code> 可能会被更改. 例如我们有以下函数:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#define _CRT_SECURE_NO_WARNINGS
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;stdlib.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#include&lt;/span> &lt;span class="cpf">&amp;lt;windows.h&amp;gt;&lt;/span>&lt;span class="cp">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">extern&lt;/span> &lt;span class="s">&amp;#34;C&amp;#34;&lt;/span> &lt;span class="kr">__declspec&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dllexport&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="n">FuckYouWorldW&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">wchar_t&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">lpstr&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">wsprintf&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">lpstr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="sa">L&lt;/span>&lt;span class="s">&amp;#34;Fuck you world, 撒比世界&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">extern&lt;/span> &lt;span class="s">&amp;#34;C&amp;#34;&lt;/span> &lt;span class="kr">__declspec&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dllexport&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="n">FuckYouWorldA&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">char&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">lpstr&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">sprintf&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">lpstr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s">&amp;#34;Fuck you world, 撒比世界&amp;#34;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol>
+&lt;li>当使用 Unicode 所对应的函数时, string 会被更改:
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="na">[DllImport(&amp;#34;test.dll&amp;#34;, EntryPoint = &amp;#34;FuckYouWorldW&amp;#34;,CharSet = CharSet.Unicode)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">extern&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">FuckYouWorldW&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">str&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">string&lt;/span> &lt;span class="n">buf&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="kt">string&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sc">&amp;#39;\0&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">32&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 声明一个长度为 32 的字符串&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">FuckYouWorldW&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">buf&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">buf&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 你会得到一个 &amp;#34;Fuck you world, 撒比世界&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 但是注意, buf 字符串后面还是有很多 \0 的, 只是没打印出来&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>但是当你使用 ANSI 所对应的函数时, 传入的 string 即便被更改了, 也不会体现出来:
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="na">[DllImport(&amp;#34;test.dll&amp;#34;, EntryPoint = &amp;#34;FuckYouWorldA&amp;#34;,CharSet = CharSet.Ansi)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">extern&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">FuckYouWorldA&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">str&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">string&lt;/span> &lt;span class="n">buf&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="kt">string&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sc">&amp;#39;\0&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="m">32&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 声明一个长度为 32 的字符串&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 在传入 buf 时, Marshaler 会帮我们将字符串转为 ANSI 字符串, 并传入指针&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">FuckYouWorldA&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">buf&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 这导致, 虽然函数变更了指针指向的字符串值, 但没有对我们原来的字符串有任何更改&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">WriteLine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">buf&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 你什么也看不到&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>如果你使用 &lt;code>StringBuilder&lt;/code> 的时候, 无论是 Unicode 还是 ANSI 方法, 你都能看到函数对字符串的更改, Marshal 会帮助我们处理 Unicode 字符串与 ANSI 字符串的转换, 并且处理字符串变更后的结果, 所以你无论如何都能看到变更后的字符串.&lt;/li>
+&lt;li>如果你使用 &lt;code>char[]&lt;/code>, 它的表现和 &lt;code>string&lt;/code> 一样, 能否看到结果取决于你使用的字符集&lt;/li>
+&lt;li>如果你使用 &lt;code>char*&lt;/code>, 虽然原始的指针会直接传进去, 但是如果你在使用 ANSI 的函数, 那么肯定的, 你得到的更改后的字符串并不会正常显示. 因为它是 ANSI 格式的, 而 C# 按照 Unicode 来解码字符串.&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>参考: &lt;a class="link" href="https://blog.csdn.net/EricChina/article/details/5265991" target="_blank" rel="noopener"
+>Marshaling between Managed and Unmanaged Code&lt;/a>
+原文似乎找不到了, 只有 CSDN 的转载&lt;/p>
+&lt;/blockquote>
+&lt;h4 id="3-我应该使用哪种方式传字符串">3. 我应该使用哪种方式传字符串?&lt;/h4>
+&lt;p>当你需要向函数传入字符串, 并且这个字符串不会被函数更改时, 我建议你直接传入 &lt;code>string&lt;/code>, 这样最方便. 而当你需要传出字符串时, 也就是调用类似于 &lt;code>GetWindowTextW&lt;/code> 这类函数时, 我建议你使用 &lt;code>StringBuilder&lt;/code>, 提前设置好容量, 并在调用函数时, 传入这个容量. 这样函数就能够正确的处理, 并且不造成有关内存访问的异常.&lt;/p>
+&lt;p>当然, 传入其他的类型也完全可以, 这取决于你的需求, 例如你大量操作非托管的类型, 你的代码周围全都是一些指针, 那么你大可以将函数声明为指针, 然后直接调用.&lt;/p>
+&lt;h4 id="4-关于字符串拷贝">4. 关于字符串拷贝&lt;/h4>
+&lt;p>有人认为, 在调用非托管动态链接库的时候, CLR 会拷贝一份 &lt;code>string&lt;/code> 供使用, 这并不完全正确.&lt;/p>
+&lt;p>如果你在使用 Unicode 版本的函数(设置了 &lt;code>CharSet&lt;/code> 为 Unicode), 那么在调用的时候, 完全不会有任何拷贝, 而是直接使用源字符串, 这也就是为什么这种情况下函数可以对字符串进行更改并正确得到结果&lt;/p>
+&lt;p>如果你在使用 ANSI 版本的函数(设置了 &lt;code>CharSet&lt;/code>), 那么在调用的时候, CLR 会帮你把 .NET 字符串转为非托管的 ANSI 字符串, 并传入指针, 显然这个过程造成了字符串拷贝.&lt;/p>
+&lt;h4 id="5-我应该使用哪个字符集的函数">5. 我应该使用哪个字符集的函数?&lt;/h4>
+&lt;p>至少在 Windows 平台中, 你最好使用 Unicode 字符集的函数, 也就是后缀带 W 的函数. 因为在高版本的 Windows 平台内部也是使用的宽字符串(Wide char string), 而且 C# 的 string 可以直接传入, 而不经任何操作, 这样性能较好.&lt;/p>
+&lt;blockquote>
+&lt;p>参考: &lt;a class="link" href="https://stackoverflow.com/questions/16926002/wide-string-vs-string-does-it-affect-performance-in-windows-c" target="_blank" rel="noopener"
+>Wide String vs String , Does it affect performance in Windows C++&lt;/a>
+这里表明, Windows 内核使用的是宽字符&lt;/p>
+&lt;/blockquote>
+&lt;h4 id="注意">注意:&lt;/h4>
+&lt;p>不要尝试直接取字符串地址并传入, 因为你取的地址不能直接作为 &lt;code>wchar_t*&lt;/code> 使用, 而是栈上这个变量的地址, 你需要进行一次 &lt;code>指针取值&lt;/code> 操作才能拿到栈上存储的字符串地址值, 并且 &lt;code>string&lt;/code> 在堆上的存储内容还包含一个 &amp;ldquo;类型头&amp;rdquo;, 你至少需要计算这个偏移量才可以. 总而言之, 很复杂, 不要这么做.&lt;/p>
+&lt;hr>
+&lt;h2 id="对于指针的处理">对于指针的处理&lt;/h2>
+&lt;p>如果一个动态链接库的函数传入一个 &lt;code>int&lt;/code> 指针, 并且它将会更改这个指针指向的 &lt;code>int&lt;/code> 作为返回值, 你可以直接使用 C# 的 &lt;code>out&lt;/code> 关键字来声明这个参数:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">extern&lt;/span> &lt;span class="s">&amp;#34;C&amp;#34;&lt;/span> &lt;span class="kr">__declspec&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dllexport&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="n">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">a&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">*&lt;/span>&lt;span class="n">result&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="na">[DllImport(&amp;#34;test.dll&amp;#34;, EntryPoint = &amp;#34;add&amp;#34;)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">extern&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="k">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">a&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="k">out&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">result&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>同理, 如果一个函数传入一个 &lt;code>int&lt;/code> 指针, 它会读取这个指针指向的 &lt;code>int&lt;/code> 值, 也会更改指针指向的值, 那么你可以使用 C# 的 &lt;code>ref&lt;/code> 关键字来声明这个参数:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">extern&lt;/span> &lt;span class="s">&amp;#34;C&amp;#34;&lt;/span> &lt;span class="kr">__declspec&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dllexport&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="n">add114514&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">val&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">*&lt;/span>&lt;span class="n">val&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="mi">114514&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="na">[DllImport(&amp;#34;test.dll&amp;#34;, EntryPoint = &amp;#34;add&amp;#34;)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">extern&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">add114514&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">ref&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">val&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>但是注意, 你不能使用 &lt;code>out string&lt;/code>, 这个雀食是不可以的, 想要传出一个字符串, 你得用 &lt;code>StringBuilder&lt;/code>&lt;/p>
+&lt;h2 id="对于结构体的处理">对于结构体的处理&lt;/h2>
+&lt;p>事实上, 在进行非托管动态链接库函数调用的时候, CLR 会将所有我们用到的值都转换为非托管的格式, 然后进行封送. 例如在 C# 中, &lt;code>bool&lt;/code> 占一个字节, 但是在 WinAPI 中, &lt;code>bool&lt;/code> 可是要占四个字节的. 调用参数的传入与返回值的返回, 都有 CLR 参与这个转换.&lt;/p>
+&lt;p>例如我们有这样的一个 C++ 函数:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cpp" data-lang="cpp">&lt;span class="line">&lt;span class="cl">&lt;span class="k">struct&lt;/span> &lt;span class="nc">StringWrapper&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">wchar_t&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">StrPtr&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">Length&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">extern&lt;/span> &lt;span class="s">&amp;#34;C&amp;#34;&lt;/span> &lt;span class="kr">__declspec&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dllexport&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="n">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">StringWrapper&lt;/span>&lt;span class="o">*&lt;/span> &lt;span class="n">str&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">str&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">putwchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">str&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="n">StrPtr&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">putwchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">L&lt;/span>&lt;span class="sc">&amp;#39;\n&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>那么我在编写 C# 的时候, 就可以这样写:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-cs" data-lang="cs">&lt;span class="line">&lt;span class="cl">&lt;span class="na">[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]&lt;/span> &lt;span class="c1">// 注意, 这里需要写明字符集&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">struct&lt;/span> &lt;span class="nc">StringWrapper&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">string&lt;/span> &lt;span class="n">_value&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 字符串会自动被转换为正确的 wchar_t 指针以供使用&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">_length&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">// 整数的话, 则是原封不动的传过去&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">StringWrapper&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">_value&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kt">string&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Empty&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">_length&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">StringWrapper&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="k">value&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">_value&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">value&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">_length&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="k">value&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">[DllImport(&amp;#34;test.dll&amp;#34;, EntryPoint = &amp;#34;print&amp;#34;, CharSet = CharSet.Unicode)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="kd">extern&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="k">void&lt;/span> &lt;span class="n">PrintString&lt;/span>&lt;span class="p">([&lt;/span>&lt;span class="n">In&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Optional&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="k">ref&lt;/span> &lt;span class="n">StringWrapper&lt;/span> &lt;span class="n">str&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>但是注意, 当参数是结构体指针, 并且你希望这个结构体能够被 CLR 进行封送, 那么你必须在 &lt;code>DllImport&lt;/code> 那里, 将方法参数声明为 &lt;code>ref&lt;/code> 或 &lt;code>out&lt;/code> 参数, 而不是直接声明为结构体的指针.&lt;/p>
+&lt;p>还有就是, 非常重要的一点, 当结构体进行封送的时候, 里面的字符串会根据结构体的 &lt;code>StructLayout&lt;/code> 所指定的 &lt;code>CharSet&lt;/code> 进行封送, 默认是 ANSI, 所以会被封送为 &lt;code>char*&lt;/code>, 如果你要使用 &lt;code>wchar_t*&lt;/code>, 那你必须指定 &lt;code>CharSet&lt;/code> 为 &lt;code>CharSet.Unicode&lt;/code>&lt;/p>
+&lt;blockquote>
+&lt;p>如果你希望你的结构体能够在直接传指针的情况下仍然可用, 那么你必须使你的结构体内存布局与非托管中结构体的内存布局保持一致.
+参考: &lt;a class="link" href="https://slimenull.com/p/20230111031653/" >[.NET] 结构体布局详解与结构体内存对齐具体方式&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;hr>
+&lt;h2 id="入口点查找大概逻辑">入口点查找大概逻辑&lt;/h2>
+&lt;p>下面是伪代码:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">如果存在 Xxx 函数:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 调用 Xxx 函数;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 返回;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">否则:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 如果 ExactSpelling: // 精确拼写
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 抛异常(&amp;#34;入口点找不到&amp;#34;);
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 否则:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 如果 CharSet 是 Auto:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 如果是高系统版本:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 确认 CharSet 为 Unicode;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 否则:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 确认 CharSet 为 ANSI;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 如果 CharSet 是 Unicode:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 如果存在 XxxW 函数: // 就是后面加了个 W 后缀
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 调用 XxxW 函数;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 返回;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 否则:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 抛异常(&amp;#34;入口点找不到&amp;#34;);
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 否则如果 CharSet 是 ANSI:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 如果存在 XxxA 函数: // 就是后面加了个 A 后缀
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 调用 XxxA 函数;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 返回;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 否则:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 抛异常(&amp;#34;入口点找不到&amp;#34;);
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 否则:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 抛异常(&amp;#34;入口点找不到&amp;#34;);
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 id="注解">注解&lt;/h2>
+&lt;ol>
+&lt;li>&lt;span id="ex1">封送拆收器:&lt;/span> CLR 在与非托管动态链接库操作时, 负责将托管类型转换为非托管或将非托管类型转换为托管类型.&lt;/li>
+&lt;li>&lt;span id="ex2">调用约定:&lt;/span> 调用约定（Calling Convention）是规定子函数(过程)如何获取参数以及如何返回的方案. 其通常与架构, 编译器等相关.&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>文章会不定时更新, 以 CSDN 这边内容为准&lt;/p>
+&lt;/blockquote></description></item></channel></rss>

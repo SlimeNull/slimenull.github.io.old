@@ -1,0 +1,427 @@
+<!doctype html><html lang=zh-CN dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='使用 WPF 实现较为便捷的多页面跳转.'><title>[WPF] 多页面程序基本跳转</title>
+<link rel=canonical href=https://slimenull.com/p/20230401210013/><link rel=stylesheet href=/scss/style.min.73438a911857e6d491e39369614d0dd0c0302dcacfb43e15034e0e48cac08c07.css><meta property='og:title' content='[WPF] 多页面程序基本跳转'><meta property='og:description' content='使用 WPF 实现较为便捷的多页面跳转.'><meta property='og:url' content='https://slimenull.com/p/20230401210013/'><meta property='og:site_name' content='SlimeNull Blogs'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='wpf'><meta property='article:tag' content='ui'><meta property='article:tag' content='csharp'><meta property='article:tag' content='dotnet'><meta property='article:published_time' content='2023-04-01T21:00:13+08:00'><meta property='article:modified_time' content='2023-04-01T21:00:13+08:00'><meta name=twitter:title content="[WPF] 多页面程序基本跳转"><meta name=twitter:description content="使用 WPF 实现较为便捷的多页面跳转."><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu11436448765783238083.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>SlimeNull Blogs</a></h1><h2 class=site-description>为了更好的开源世界~</h2></div></header><ol class=social-menu><li><a href=https://github.com/SlimeNull target=_blank title=GitHub rel=me><!doctype html><svg t="1702542119184" class="icon" viewBox="0 0 1024 1024" p-id="4136" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M692.906667 938.666667A42.666667 42.666667.0 01650.24 896V785.066667A91.733333 91.733333.0 00627.2 714.24a42.666667 42.666667.0 0126.026667-71.253333c104.106666-12.373334 200.106666-45.653334 200.106666-226.133334a170.666667 170.666667.0 00-28.586666-94.72A117.333333 117.333333.0 01807.253333 234.24a158.293333 158.293333.0 000-60.16A326.4 326.4.0 00718.08 220.586667a42.666667 42.666667.0 01-35.84 6.4 433.066667 433.066667.0 00-235.52.0 42.666667 42.666667.0 01-35.84-6.4A315.733333 315.733333.0 00320.853333 174.08a150.186667 150.186667.0 000 60.16 121.173333 121.173333.0 01-18.346666 88.746667A173.653333 173.653333.0 00273.92 418.133333C273.92 584.106666 354.133333 628.48 474.453333 643.84A42.666667 42.666667.0 01509.44 672a42.666667 42.666667.0 01-8.96 42.666667 87.893333 87.893333.0 00-23.466667 66.56V896A42.666667 42.666667.0 01391.68 896v-24.32a256 256 0 01-224.853333-89.173333A166.4 166.4.0 00117.333333 744.96a42.666667 42.666667.0 1121.333334-82.773333A210.346667 210.346667.0 01224 720.213333c42.666667 42.666667 85.333333 80.213333 166.4 64.853334a165.973333 165.973333.0 019.813333-67.413334C312.32 695.466666 186.88 632.32 186.88 418.986667a256 256 0 0142.666667-142.08 36.266667 36.266667.0 005.546666-26.453334 242.773333 242.773333.0 0114.08-136.96 42.666667 42.666667.0 0126.88-24.32c14.506667-4.266667 66.56-12.8 165.12 51.2a518.826667 518.826667.0 01242.773334.0c98.56-64 150.613333-55.893333 164.693333-51.2a42.666667 42.666667.0 0126.88 24.32A243.626667 243.626667.0 01889.6 250.88a32 32 0 004.693333 24.32A256 256 0 01936.96 417.706667c0 216.32-124.586667 279.04-213.333333 298.666666a182.613333 182.613333.0 019.386666 71.253334V896a42.666667 42.666667.0 01-40.106666 42.666667z" fill="#666" p-id="4137"/></svg></a></li><li><a href=https://space.bilibili.com/441842015 target=_blank title=Bilibili rel=me><!doctype html><svg t="1702541966104" class="icon" viewBox="0 0 1024 1024" p-id="16981" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M306.005333 117.632 444.330667 256h135.296l138.368-138.325333A42.666667 42.666667.0 01778.368 178.048L700.330667 256H789.333333A149.333333 149.333333.0 01938.666667 405.333333v341.333334A149.333333 149.333333.0 01789.333333 896H234.666667A149.333333 149.333333.0 0185.333333 746.666667V405.333333A149.333333 149.333333.0 01234.666667 256h88.96L245.632 177.962667a42.666667 42.666667.0 0160.373333-60.373334zm483.328 223.701333H234.666667a64 64 0 00-63.701334 57.856L170.666667 405.333333v341.333334a64 64 0 0057.856 63.701333L234.666667 810.666667h554.666666a64 64 0 0063.701334-57.856L853.333333 746.666667V405.333333a64 64 0 00-64-64zm-448 128A42.666667 42.666667.0 01384 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666666-42.666667zm341.333334.0A42.666667 42.666667.0 01725.333333 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666667-42.666667z" fill="#666" p-id="16982"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>主页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>链接</span></a></li><div class=menu-bottom-section><li id=i18n-switch><svg class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.239 8-5 8"/><path d="M5 9c-.003 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4-9 4 9"/><path d="M19.1 18h-6.2"/></svg>
+<select name=language onchange="window.location.href=this.selectedOptions[0].value"><option value=https://slimenull.com/ selected></option></select></li><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></div></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#最基本的页面跳转>最基本的页面跳转</a></li><li><a href=#加一点美化>加一点美化</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/dotnet/ style=background-color:#512cd4;color:#fff>.NET
+</a><a href=/categories/%E6%A1%8C%E9%9D%A2%E7%A8%8B%E5%BA%8F/>桌面程序</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/20230401210013/>[WPF] 多页面程序基本跳转</a></h2><h3 class=article-subtitle>使用 WPF 实现较为便捷的多页面跳转.</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Apr 01, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 3 分钟</time></div></footer></div></header><section class=article-content><p>多页面程序是一种很常见的设计, 一个程序中有多个页面, 然后直接切换页面而不需要创建新的窗口, WPF 中使用 <code>Frame</code> 来做页面跳转, 但是如何优雅的设计一个多页面程序, 这是个问题.</p><h2 id=最基本的页面跳转>最基本的页面跳转</h2><p>编写一个最基本的页面跳转, 首先我们需要在主窗口中放一个 <code>Frame</code> 控件, 然后再编写两个 <code>Page</code>. 下面我们以两个页面 <em>MainPage</em> 和 <em>Configuration</em> 作为示例讲解.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=c>&lt;!--窗口 UI--&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;Window</span> <span class=na>x:Class=</span><span class=s>&#34;WpfNavigationTutorial.MainWindow&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns=</span><span class=s>&#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns:x=</span><span class=s>&#34;http://schemas.microsoft.com/winfx/2006/xaml&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns:d=</span><span class=s>&#34;http://schemas.microsoft.com/expression/blend/2008&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns:mc=</span><span class=s>&#34;http://schemas.openxmlformats.org/markup-compatibility/2006&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns:local=</span><span class=s>&#34;clr-namespace:WpfNavigationTutorial&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns:pages=</span><span class=s>&#34;clr-namespace:WpfTutorial.Views.Pages&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>mc:Ignorable=</span><span class=s>&#34;d&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>Title=</span><span class=s>&#34;MainWindow&#34;</span> <span class=na>Height=</span><span class=s>&#34;450&#34;</span> <span class=na>Width=</span><span class=s>&#34;800&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;Grid&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;Grid.ColumnDefinitions&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;ColumnDefinition</span> <span class=na>Width=</span><span class=s>&#34;3*&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;ColumnDefinition</span> <span class=na>Width=</span><span class=s>&#34;13*&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;/Grid.ColumnDefinitions&gt;</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;ListBox</span> <span class=na>Name=</span><span class=s>&#34;navMenu&#34;</span> <span class=na>SelectionChanged=</span><span class=s>&#34;ListBox_SelectionChanged&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;ListBoxItem</span> <span class=na>Content=</span><span class=s>&#34;Main&#34;</span> <span class=na>Tag=</span><span class=s>&#34;{x:Type pages:MainPage}&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;ListBoxItem</span> <span class=na>Content=</span><span class=s>&#34;Configuration&#34;</span> <span class=na>Tag=</span><span class=s>&#34;{x:Type pages:ConfigurationPage}&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;/ListBox&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;Frame</span> <span class=na>Grid.Column=</span><span class=s>&#34;1&#34;</span> <span class=na>Name=</span><span class=s>&#34;appFrame&#34;</span> <span class=na>NavigationUIVisibility=</span><span class=s>&#34;Hidden&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/Grid&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Window&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>在上面的代码中, 我们使用了一个左右两栏布局, 左侧放了一个 <code>ListBox</code>, 右侧放了一个 <code>Frame</code>, 在 <code>ListBox</code> 中, 我们放了两个 <code>ListBoxItem</code>, 使用 <code>Content</code> 做内容, 并且给加了 <code>Tag</code> 标识这个按钮具体要跳转到哪个页面.</p><p>然后在两个页面中分别这么简单写一下内容:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=c>&lt;!--这里是主页面--&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;Page</span> <span class=na>x:Class=</span><span class=s>&#34;WpfTutorial.Views.Pages.MainPage&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=na>xmlns=</span><span class=s>&#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=na>xmlns:x=</span><span class=s>&#34;http://schemas.microsoft.com/winfx/2006/xaml&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=na>xmlns:mc=</span><span class=s>&#34;http://schemas.openxmlformats.org/markup-compatibility/2006&#34;</span> 
+</span></span><span class=line><span class=cl>      <span class=na>xmlns:d=</span><span class=s>&#34;http://schemas.microsoft.com/expression/blend/2008&#34;</span> 
+</span></span><span class=line><span class=cl>      <span class=na>xmlns:local=</span><span class=s>&#34;clr-namespace:WpfTutorial.Views.Pages&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=na>mc:Ignorable=</span><span class=s>&#34;d&#34;</span> <span class=na>d:DesignHeight=</span><span class=s>&#34;450&#34;</span> <span class=na>d:DesignWidth=</span><span class=s>&#34;800&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=na>Title=</span><span class=s>&#34;MainPage&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;Grid&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;Grid</span> <span class=na>MaxWidth=</span><span class=s>&#34;400&#34;</span> <span class=na>Margin=</span><span class=s>&#34;20&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;StackPanel</span> <span class=na>HorizontalAlignment=</span><span class=s>&#34;Stretch&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&lt;TextBlock&gt;</span>This is main page<span class=nt>&lt;/TextBlock&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;/StackPanel&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;/Grid&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/Grid&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Page&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=c>&lt;!--这里是里一个页面页面 (配置页面)--&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;Page</span> <span class=na>x:Class=</span><span class=s>&#34;WpfTutorial.Views.Pages.ConfigurationPage&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=na>xmlns=</span><span class=s>&#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=na>xmlns:x=</span><span class=s>&#34;http://schemas.microsoft.com/winfx/2006/xaml&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=na>xmlns:mc=</span><span class=s>&#34;http://schemas.openxmlformats.org/markup-compatibility/2006&#34;</span> 
+</span></span><span class=line><span class=cl>      <span class=na>xmlns:d=</span><span class=s>&#34;http://schemas.microsoft.com/expression/blend/2008&#34;</span> 
+</span></span><span class=line><span class=cl>      <span class=na>xmlns:local=</span><span class=s>&#34;clr-namespace:WpfTutorial.Views.Pages&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=na>mc:Ignorable=</span><span class=s>&#34;d&#34;</span> <span class=na>d:DesignHeight=</span><span class=s>&#34;450&#34;</span> <span class=na>d:DesignWidth=</span><span class=s>&#34;800&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=na>Title=</span><span class=s>&#34;ConfigurationPage&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;Grid&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;Grid</span> <span class=na>MaxWidth=</span><span class=s>&#34;400&#34;</span> <span class=na>Margin=</span><span class=s>&#34;20&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;StackPanel</span> <span class=na>HorizontalAlignment=</span><span class=s>&#34;Stretch&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&lt;TextBlock&gt;</span>This is configuration page<span class=nt>&lt;/TextBlock&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;/StackPanel&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;/Grid&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/Grid&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Page&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>在后台代码中, 我们这么写, 当选择项变更的时候, 也使用 <code>Frame</code> 进行页面跳转.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=kd>public</span> <span class=kd>partial</span> <span class=k>class</span> <span class=nc>MainWindow</span> <span class=p>:</span> <span class=n>Window</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>MainWindow</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>InitializeComponent</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 页面实例的缓存</span>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kd>static</span> <span class=k>readonly</span> <span class=n>Dictionary</span><span class=p>&lt;</span><span class=n>Type</span><span class=p>,</span> <span class=n>Page</span><span class=p>&gt;</span> <span class=n>bufferedPages</span> <span class=p>=</span>
+</span></span><span class=line><span class=cl>        <span class=k>new</span> <span class=n>Dictionary</span><span class=p>&lt;</span><span class=n>Type</span><span class=p>,</span> <span class=n>Page</span><span class=p>&gt;();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 当</span>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=k>void</span> <span class=n>ListBox_SelectionChanged</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>SelectionChangedEventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 如果选择项不是 ListBoxItem, 则返回</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=n>navMenu</span><span class=p>.</span><span class=n>SelectedItem</span> <span class=k>is</span> <span class=n>not</span> <span class=n>ListBoxItem</span> <span class=n>item</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 如果 Tag 不是一个类型, 则返回</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=n>item</span><span class=p>.</span><span class=n>Tag</span> <span class=k>is</span> <span class=n>not</span> <span class=n>Type</span> <span class=n>type</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 如果页面缓存中找不到页面, 则创建一个新的页面并存入</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(!</span><span class=n>bufferedPages</span><span class=p>.</span><span class=n>TryGetValue</span><span class=p>(</span><span class=n>type</span><span class=p>,</span> <span class=k>out</span> <span class=n>Page</span><span class=p>?</span> <span class=n>page</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>            <span class=n>page</span> <span class=p>=</span> <span class=n>bufferedPages</span><span class=p>[</span><span class=n>type</span><span class=p>]</span> <span class=p>=</span> 
+</span></span><span class=line><span class=cl>                <span class=n>Activator</span><span class=p>.</span><span class=n>CreateInstance</span><span class=p>(</span><span class=n>type</span><span class=p>)</span> <span class=k>as</span> <span class=n>Page</span> <span class=p>??</span> <span class=k>throw</span> <span class=k>new</span> <span class=n>Exception</span><span class=p>(</span><span class=s>&#34;this would never happen&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 使用 Frame 进行导航.</span>
+</span></span><span class=line><span class=cl>        <span class=n>appFrame</span><span class=p>.</span><span class=n>Navigate</span><span class=p>(</span><span class=n>page</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>最后的效果就是这样, 点击左侧项目的时候, 右侧页面会直接进行跳转:</p><p><img src=/images/77d72828e9fc4e58948aaee80a267ece.png loading=lazy alt=预览效果></p><h2 id=加一点美化>加一点美化</h2><p>用 ListBox 做侧边页面栏就太丑了, 我们可以使用 <code>ListBox</code> 自己给它套一个样式.</p><blockquote><p>这里不使用 <code>ItemsControl</code> 是因为, <code>ListBox</code> 的项目是 <em>&ldquo;可选中&rdquo;</em> 的, 而 <code>ItemsControl</code> 是没有的, <code>ItemsControl</code> 只适合界面控件的批量绑定生成.</p></blockquote><p>创建一个 <code>NavigationItem</code> 用来存放导航数据:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=kd>public</span> <span class=k>class</span> <span class=nc>NavigationItem</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// &lt;summary&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// 导航标题</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// &lt;/summary&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>string</span> <span class=n>Title</span> <span class=p>{</span> <span class=k>get</span><span class=p>;</span> <span class=k>set</span><span class=p>;</span> <span class=p>}</span> <span class=p>=</span> <span class=kt>string</span><span class=p>.</span><span class=n>Empty</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=cs>/// &lt;summary&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// 导航描述</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// &lt;/summary&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>string</span> <span class=n>Description</span> <span class=p>{</span> <span class=k>get</span><span class=p>;</span> <span class=k>set</span><span class=p>;</span> <span class=p>}</span> <span class=p>=</span> <span class=kt>string</span><span class=p>.</span><span class=n>Empty</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=cs>/// &lt;summary&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// 目标页面的类型</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// &lt;/summary&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>Type</span> <span class=n>TargetPageType</span> <span class=p>{</span> <span class=k>get</span><span class=p>;</span> <span class=k>set</span><span class=p>;</span> <span class=p>}</span> <span class=p>=</span> <span class=k>typeof</span><span class=p>(</span><span class=n>Page</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>为 <code>MainWindow</code> 创建一个 <code>MainWindowModel</code> 用来存放页面数据:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=kd>public</span> <span class=k>class</span> <span class=nc>MainWndowModel</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>ObservableCollection</span><span class=p>&lt;</span><span class=n>NavigationItem</span><span class=p>&gt;</span> <span class=n>NavigationItems</span> <span class=p>{</span> <span class=k>get</span><span class=p>;</span> <span class=p>}</span> <span class=p>=</span>
+</span></span><span class=line><span class=cl>        <span class=k>new</span> <span class=n>ObservableCollection</span><span class=p>&lt;</span><span class=n>NavigationItem</span><span class=p>&gt;()</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>new</span> <span class=n>NavigationItem</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>Title</span> <span class=p>=</span> <span class=s>&#34;Main&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=n>Description</span> <span class=p>=</span> <span class=s>&#34;The main page of this application&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                <span class=n>TargetPageType</span> <span class=p>=</span> <span class=k>typeof</span><span class=p>(</span><span class=n>MainPage</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>            <span class=k>new</span> <span class=n>NavigationItem</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>            <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>Title</span> <span class=p>=</span> <span class=s>&#34;Configuration&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=n>Description</span> <span class=p>=</span> <span class=s>&#34;Configure something you want&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                <span class=n>TargetPageType</span> <span class=p>=</span> <span class=k>typeof</span><span class=p>(</span><span class=n>ConfigurationPage</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>然后将主页面的代码改成这样:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;Window</span> <span class=na>x:Class=</span><span class=s>&#34;WpfNavigationTutorial.MainWindow&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns=</span><span class=s>&#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns:x=</span><span class=s>&#34;http://schemas.microsoft.com/winfx/2006/xaml&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns:d=</span><span class=s>&#34;http://schemas.microsoft.com/expression/blend/2008&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns:mc=</span><span class=s>&#34;http://schemas.openxmlformats.org/markup-compatibility/2006&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns:local=</span><span class=s>&#34;clr-namespace:WpfNavigationTutorial&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns:pages=</span><span class=s>&#34;clr-namespace:WpfTutorial.Views.Pages&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>xmlns:vm=</span><span class=s>&#34;clr-namespace:WpfNavigationTutorial.ViewModels&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>mc:Ignorable=</span><span class=s>&#34;d&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>Title=</span><span class=s>&#34;MainWindow&#34;</span> <span class=na>Height=</span><span class=s>&#34;450&#34;</span> <span class=na>Width=</span><span class=s>&#34;800&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&lt;Window.DataContext&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=c>&lt;!--直接在 XAML 中给 Window 的 DataContext 赋值--&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;vm:MainWndowModel/&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&lt;/Window.DataContext&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nt>&lt;Grid&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;Grid.ColumnDefinitions&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&lt;ColumnDefinition</span> <span class=na>Width=</span><span class=s>&#34;3*&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&lt;ColumnDefinition</span> <span class=na>Width=</span><span class=s>&#34;13*&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/Grid.ColumnDefinitions&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c>&lt;!--使用 ListBox, 并且将 ItemsSource 绑定到我们的数据--&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=c>&lt;!--记得要使用禁用它的水平滚动条--&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;ListBox</span> <span class=na>Name=</span><span class=s>&#34;navMenu&#34;</span>
+</span></span><span class=line><span class=cl>             <span class=na>ItemsSource=</span><span class=s>&#34;{Binding NavigationItems}&#34;</span> <span class=na>BorderThickness=</span><span class=s>&#34;0 0 1 0&#34;</span>
+</span></span><span class=line><span class=cl>             <span class=na>ScrollViewer.HorizontalScrollBarVisibility=</span><span class=s>&#34;Disabled&#34;</span>
+</span></span><span class=line><span class=cl>             <span class=na>SelectionChanged=</span><span class=s>&#34;navMenu_SelectionChanged&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&lt;ListBox.ItemTemplate&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;DataTemplate&gt;</span>
+</span></span><span class=line><span class=cl>          <span class=nt>&lt;Border</span> <span class=na>Padding=</span><span class=s>&#34;5&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;StackPanel&gt;</span>
+</span></span><span class=line><span class=cl>              <span class=nt>&lt;TextBlock</span> <span class=na>Text=</span><span class=s>&#34;{Binding Title}&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>              <span class=c>&lt;!--描述信息用灰色字体, 字号也小一点, 多余的部分剪切掉--&gt;</span>
+</span></span><span class=line><span class=cl>              <span class=nt>&lt;TextBlock</span> <span class=na>Text=</span><span class=s>&#34;{Binding Description}&#34;</span> <span class=na>Foreground=</span><span class=s>&#34;Gray&#34;</span>
+</span></span><span class=line><span class=cl>                         <span class=na>FontSize=</span><span class=s>&#34;10&#34;</span> <span class=na>TextTrimming=</span><span class=s>&#34;CharacterEllipsis&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&lt;/StackPanel&gt;</span>
+</span></span><span class=line><span class=cl>          <span class=nt>&lt;/Border&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;/DataTemplate&gt;</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&lt;/ListBox.ItemTemplate&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/ListBox&gt;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;Frame</span> <span class=na>Grid.Column=</span><span class=s>&#34;1&#34;</span> <span class=na>Name=</span><span class=s>&#34;appFrame&#34;</span> <span class=na>NavigationUIVisibility=</span><span class=s>&#34;Hidden&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&lt;/Grid&gt;</span>
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Window&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>后台代码也相应的改一下, 只需要判断数据是否是 <code>NavigationItem</code> 就好:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=kd>public</span> <span class=kd>partial</span> <span class=k>class</span> <span class=nc>MainWindow</span> <span class=p>:</span> <span class=n>Window</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>MainWindow</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>InitializeComponent</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kd>static</span> <span class=k>readonly</span> <span class=n>Dictionary</span><span class=p>&lt;</span><span class=n>Type</span><span class=p>,</span> <span class=n>Page</span><span class=p>&gt;</span> <span class=n>bufferedPages</span> <span class=p>=</span>
+</span></span><span class=line><span class=cl>        <span class=k>new</span> <span class=n>Dictionary</span><span class=p>&lt;</span><span class=n>Type</span><span class=p>,</span> <span class=n>Page</span><span class=p>&gt;();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=k>void</span> <span class=n>navMenu_SelectionChanged</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>SelectionChangedEventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 如果选择项不是 FrameworkElement, 则返回</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=n>navMenu</span><span class=p>.</span><span class=n>SelectedItem</span> <span class=k>is</span> <span class=n>not</span> <span class=n>NavigationItem</span> <span class=n>item</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>Type</span> <span class=n>type</span> <span class=p>=</span>
+</span></span><span class=line><span class=cl>            <span class=n>item</span><span class=p>.</span><span class=n>TargetPageType</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 如果页面缓存中找不到页面, 则创建一个新的页面并存入</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(!</span><span class=n>bufferedPages</span><span class=p>.</span><span class=n>TryGetValue</span><span class=p>(</span><span class=n>type</span><span class=p>,</span> <span class=k>out</span> <span class=n>Page</span><span class=p>?</span> <span class=n>page</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>            <span class=n>page</span> <span class=p>=</span> <span class=n>bufferedPages</span><span class=p>[</span><span class=n>type</span><span class=p>]</span> <span class=p>=</span>
+</span></span><span class=line><span class=cl>                <span class=n>Activator</span><span class=p>.</span><span class=n>CreateInstance</span><span class=p>(</span><span class=n>type</span><span class=p>)</span> <span class=k>as</span> <span class=n>Page</span> <span class=p>??</span> <span class=k>throw</span> <span class=k>new</span> <span class=n>Exception</span><span class=p>(</span><span class=s>&#34;this would never happen&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>appFrame</span><span class=p>.</span><span class=n>Navigate</span><span class=p>(</span><span class=n>page</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>最后的效果:</p><p><img src=/images/369cf51132824f63a3d621731d0ac32b.png loading=lazy alt=稍微美化一点></p><blockquote><p>当然, 这样的效果还是很简单, 不过, 更复杂的设计, 就任由你自己发挥啦. 例如改掉 <code>ListBox</code> 元素被选中时的丑陋颜色, 以及去掉聚集焦点时的虚线, 或者加一些动画, 都可以.</p></blockquote></section><footer class=article-footer><section class=article-tags><a href=/tags/wpf/>Wpf</a>
+<a href=/tags/ui/>Ui</a>
+<a href=/tags/csharp/>Csharp</a>
+<a href=/tags/dotnet/>Dotnet</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/20230818143649/><div class=article-details><h2 class=article-title>[.NET/WPF] CommunityToolkit.Mvvm 异步指令</h2></div></a></article><article><a href=/p/20230403133618/><div class=article-details><h2 class=article-title>[WPF] 资源, 静态资源, 动态资源的使用及注意事项. 使用资源字典进行 “语言国际化“ 与 “颜色模式切换“</h2></div></a></article><article><a href=/p/20210219220053/><div class=article-details><h2 class=article-title>[C#] 绘制函数图像. 可拖动, 可缩放, 可调整精度</h2></div></a></article><article><a href=/p/20230902085924/><div class=article-details><h2 class=article-title>[.NET/WPF] 设置按钮, 以及其他任何包含边框的控件的圆角</h2></div></a></article><article><a href=/p/20230401165316/><div class=article-details><h2 class=article-title>[WPF] 集合元素数据绑定与模板</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=SlimeNull/slimenull.github.io issue-term=pathname label=BlogComment crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
+2023 -
+2024 SlimeNull Blogs</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.21.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

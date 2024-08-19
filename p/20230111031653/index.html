@@ -1,0 +1,245 @@
+<!doctype html><html lang=zh-CN dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='.NET 结构体有三种布局方式, 序列布局, 显式布局, 自动布局, 其中序列布局存在 "内存对齐" 现象, 内存对齐有两种情况, 一个是字段自己的要求, 一个是当字段大小小于包大小时, 使用包作为对齐要求调整偏移量. 如果不希望进行内存对齐, 指定 Pack 为 1 即可.自动布局的结构体不应该进行与非托管的互操作, 因为成员顺序会改变'><title>[.NET] 结构体布局详解与结构体内存对齐具体方式</title>
+<link rel=canonical href=https://slimenull.com/p/20230111031653/><link rel=stylesheet href=/scss/style.min.73438a911857e6d491e39369614d0dd0c0302dcacfb43e15034e0e48cac08c07.css><meta property='og:title' content='[.NET] 结构体布局详解与结构体内存对齐具体方式'><meta property='og:description' content='.NET 结构体有三种布局方式, 序列布局, 显式布局, 自动布局, 其中序列布局存在 "内存对齐" 现象, 内存对齐有两种情况, 一个是字段自己的要求, 一个是当字段大小小于包大小时, 使用包作为对齐要求调整偏移量. 如果不希望进行内存对齐, 指定 Pack 为 1 即可.自动布局的结构体不应该进行与非托管的互操作, 因为成员顺序会改变'><meta property='og:url' content='https://slimenull.com/p/20230111031653/'><meta property='og:site_name' content='SlimeNull Blogs'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='dotnet'><meta property='article:tag' content='csharp'><meta property='article:tag' content='c++'><meta property='article:published_time' content='2023-01-11T03:16:53+08:00'><meta property='article:modified_time' content='2023-01-11T03:16:53+08:00'><meta name=twitter:title content="[.NET] 结构体布局详解与结构体内存对齐具体方式"><meta name=twitter:description content='.NET 结构体有三种布局方式, 序列布局, 显式布局, 自动布局, 其中序列布局存在 "内存对齐" 现象, 内存对齐有两种情况, 一个是字段自己的要求, 一个是当字段大小小于包大小时, 使用包作为对齐要求调整偏移量. 如果不希望进行内存对齐, 指定 Pack 为 1 即可.自动布局的结构体不应该进行与非托管的互操作, 因为成员顺序会改变'><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu11436448765783238083.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>SlimeNull Blogs</a></h1><h2 class=site-description>为了更好的开源世界~</h2></div></header><ol class=social-menu><li><a href=https://github.com/SlimeNull target=_blank title=GitHub rel=me><!doctype html><svg t="1702542119184" class="icon" viewBox="0 0 1024 1024" p-id="4136" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M692.906667 938.666667A42.666667 42.666667.0 01650.24 896V785.066667A91.733333 91.733333.0 00627.2 714.24a42.666667 42.666667.0 0126.026667-71.253333c104.106666-12.373334 200.106666-45.653334 200.106666-226.133334a170.666667 170.666667.0 00-28.586666-94.72A117.333333 117.333333.0 01807.253333 234.24a158.293333 158.293333.0 000-60.16A326.4 326.4.0 00718.08 220.586667a42.666667 42.666667.0 01-35.84 6.4 433.066667 433.066667.0 00-235.52.0 42.666667 42.666667.0 01-35.84-6.4A315.733333 315.733333.0 00320.853333 174.08a150.186667 150.186667.0 000 60.16 121.173333 121.173333.0 01-18.346666 88.746667A173.653333 173.653333.0 00273.92 418.133333C273.92 584.106666 354.133333 628.48 474.453333 643.84A42.666667 42.666667.0 01509.44 672a42.666667 42.666667.0 01-8.96 42.666667 87.893333 87.893333.0 00-23.466667 66.56V896A42.666667 42.666667.0 01391.68 896v-24.32a256 256 0 01-224.853333-89.173333A166.4 166.4.0 00117.333333 744.96a42.666667 42.666667.0 1121.333334-82.773333A210.346667 210.346667.0 01224 720.213333c42.666667 42.666667 85.333333 80.213333 166.4 64.853334a165.973333 165.973333.0 019.813333-67.413334C312.32 695.466666 186.88 632.32 186.88 418.986667a256 256 0 0142.666667-142.08 36.266667 36.266667.0 005.546666-26.453334 242.773333 242.773333.0 0114.08-136.96 42.666667 42.666667.0 0126.88-24.32c14.506667-4.266667 66.56-12.8 165.12 51.2a518.826667 518.826667.0 01242.773334.0c98.56-64 150.613333-55.893333 164.693333-51.2a42.666667 42.666667.0 0126.88 24.32A243.626667 243.626667.0 01889.6 250.88a32 32 0 004.693333 24.32A256 256 0 01936.96 417.706667c0 216.32-124.586667 279.04-213.333333 298.666666a182.613333 182.613333.0 019.386666 71.253334V896a42.666667 42.666667.0 01-40.106666 42.666667z" fill="#666" p-id="4137"/></svg></a></li><li><a href=https://space.bilibili.com/441842015 target=_blank title=Bilibili rel=me><!doctype html><svg t="1702541966104" class="icon" viewBox="0 0 1024 1024" p-id="16981" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M306.005333 117.632 444.330667 256h135.296l138.368-138.325333A42.666667 42.666667.0 01778.368 178.048L700.330667 256H789.333333A149.333333 149.333333.0 01938.666667 405.333333v341.333334A149.333333 149.333333.0 01789.333333 896H234.666667A149.333333 149.333333.0 0185.333333 746.666667V405.333333A149.333333 149.333333.0 01234.666667 256h88.96L245.632 177.962667a42.666667 42.666667.0 0160.373333-60.373334zm483.328 223.701333H234.666667a64 64 0 00-63.701334 57.856L170.666667 405.333333v341.333334a64 64 0 0057.856 63.701333L234.666667 810.666667h554.666666a64 64 0 0063.701334-57.856L853.333333 746.666667V405.333333a64 64 0 00-64-64zm-448 128A42.666667 42.666667.0 01384 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666666-42.666667zm341.333334.0A42.666667 42.666667.0 01725.333333 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666667-42.666667z" fill="#666" p-id="16982"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>主页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>链接</span></a></li><div class=menu-bottom-section><li id=i18n-switch><svg class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.239 8-5 8"/><path d="M5 9c-.003 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4-9 4 9"/><path d="M19.1 18h-6.2"/></svg>
+<select name=language onchange="window.location.href=this.selectedOptions[0].value"><option value=https://slimenull.com/ selected></option></select></li><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></div></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#内存布局>内存布局</a><ol><li><a href=#序列布局-sequential>序列布局 (Sequential)</a></li><li><a href=#显式布局-explicit>显式布局 (Explicit)</a></li><li><a href=#自动布局-auto>自动布局 (Auto)</a></li></ol></li><li><a href=#内存对齐>内存对齐</a><ol><li><a href=#什么是包>什么是包</a></li><li><a href=#偏移量要求>偏移量要求</a></li><li><a href=#成员占用大于包>成员占用大于包</a></li><li><a href=#成员尾部留空>成员尾部留空</a></li><li><a href=#当结构体嵌套>当结构体嵌套</a><ol><li><a href=#1-结构体字段前的间隙>1. 结构体字段前的间隙</a></li><li><a href=#2-结构体尾部留空>2. 结构体尾部留空</a></li></ol></li></ol></li><li><a href=#实现联合体>实现联合体</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/dotnet/ style=background-color:#512cd4;color:#fff>.NET
+</a><a href=/categories/note/ style=background-color:#fdf0c4;color:#3d3d3d>笔记
+</a><a href=/categories/%E6%88%90%E9%95%BF%E8%AE%B0%E5%BD%95/>成长记录</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/20230111031653/>[.NET] 结构体布局详解与结构体内存对齐具体方式</a></h2><h3 class=article-subtitle>.NET 结构体有三种布局方式, 序列布局, 显式布局, 自动布局, 其中序列布局存在 "内存对齐" 现象, 内存对齐有两种情况, 一个是字段自己的要求, 一个是当字段大小小于包大小时, 使用包作为对齐要求调整偏移量. 如果不希望进行内存对齐, 指定 Pack 为 1 即可.自动布局的结构体不应该进行与非托管的互操作, 因为成员顺序会改变</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jan 11, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 4 分钟</time></div></footer></div></header><section class=article-content><h2 id=内存布局>内存布局</h2><p>一般的, 内存布局我们是不需要关心的, 因为我们直接通过字段或属性来访问结构体, 但是与非托管库操作的时候, 有时候就需要注意结构体布局了, 只有保证布局一致, 才能保证直接传结构体指针时, 非托管代码能正常访问到成员.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential)]</span>    <span class=c1>// 声明 StructLayout </span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>MyStruct</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=序列布局-sequential>序列布局 (Sequential)</h3><p>顺序布局就是按照你在结构体中声明成员的顺序, 一个个将它们放到内存中, 不过需要注意的是, 这些成员不是一个个紧挨着的, 他们可能存在内存对齐, 不过这个我们下面会详细讲到.</p><h3 id=显式布局-explicit>显式布局 (Explicit)</h3><p>在这种布局中, 你需要指定结构体中每一个字段在这个结构体中的偏移量, 例如你有一个结构体, 它里面有两个 int, 你希望这两个 int 之间隔开 2 字节的大小, 那么只需要为第一个结构体指定偏移量为 0, 第二个结构体偏移量为 6 即可.</p><h3 id=自动布局-auto>自动布局 (Auto)</h3><p>在这种布局中, 你不应该进行与非托管的互操作, 因为为了性能, 结构体中的成员顺序会被自动调整. 例如下面这个明显没办法在不调整顺序与不添加间隔的情况下做到内存对齐的结构体, 它的成员顺序, 会被调整.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Auto)]</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>SomeIntegers</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>byte</span> <span class=n>AByte</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kt>short</span> <span class=n>AShortInteger</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kt>byte</span> <span class=n>AnotherByte</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 你实际得到的可能是 byte, byte, short 这样的一个结构体</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=内存对齐>内存对齐</h2><p>当你使用序列布局的时候, 结构体成员会有内存对齐现象, 而在进行内存对齐时, 会有以下行为:</p><ol><li>一个成员的内存偏移量, 应该能够被它自身所占大小整除</li><li>如果一个成员占用内存大于包(Pack)的大小, 那么不再要求它的偏移量能被它自身大小整除, 而是能够被包大小整除即可.</li></ol><h3 id=什么是包>什么是包</h3><p>包就是内存对齐的要求大小, 例如在 Windows 中默认是 8 字节对齐, 像是一些大于八字节的数据, 按照 8 字节在内存中进行对齐即可.</p><h3 id=偏移量要求>偏移量要求</h3><p>举个例子, 如果我们有一个 int(32位), 那么它的内存偏移量应该是 4, 8, 12 等这些能够被 4 整除的值, 同理, long(64位) 的偏移量也应该是 8, 16, 32 这些.</p><p>举个例子, 下面这个结构体中, 成员 B 为了实现偏移量为 2, 在成员 A 后产生了 1 字节的空隙.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>SomeIntegers</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>byte</span> <span class=n>A</span><span class=p>;</span>     <span class=c1>// 1 byte</span>
+</span></span><span class=line><span class=cl>                <span class=c1>// 1 byte</span>
+</span></span><span class=line><span class=cl>    <span class=kt>short</span> <span class=n>B</span><span class=p>;</span>    <span class=c1>// 2 bytes</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=成员占用大于包>成员占用大于包</h3><p>举个例子, 在使用 8 字节的包大小时, 且在一个包内, 已经被使用了 4 字节, 如果你要装下一个 long(8字节), 那么显然这个包已经装不下这个字段了, 那么这个字段会放到下一个包.</p><p>举个例子, 下面这个结构体中, 成员 B 为了做到 8 字节的对齐, 它与第一个成员之间, 产生了 4 字节的空隙.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>SomeIntegers</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>A</span><span class=p>;</span>    <span class=c1>// 4 bytes</span>
+</span></span><span class=line><span class=cl>              <span class=c1>// 4 bytes</span>
+</span></span><span class=line><span class=cl>    <span class=kt>long</span> <span class=n>B</span><span class=p>;</span>   <span class=c1>// 8 bytes</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>但是当你指定 Pack 为 4 时, 这个 long 则不再要求偏移量能被 8 整除, 而是被 4 整除即可.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential, Pack = 4)]</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>SomeIntegers</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>A</span><span class=p>;</span>    <span class=c1>// 4 bytes</span>
+</span></span><span class=line><span class=cl>    <span class=kt>long</span> <span class=n>B</span><span class=p>;</span>   <span class=c1>// 8 bytes (B 与 A 之间的空隙没有了)</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>因此, 当你不希望这个结构体产生任何空隙, 或者不希望这个结构体有内存对齐时, 指定 Pack = 1 就可以解决问题. 因为这样会导致所有字段的偏移量能被 1 整除即可, 于是他们对于偏移量, 就没有了任何要求.</p><h3 id=成员尾部留空>成员尾部留空</h3><p>一个结构体尾部也会产生一些空余的, 不被使用的字节, 这个字节大小取决于<strong>结构体中最大的成员大小</strong>.</p><p>例如我一个结构体中, 有一个 <code>long</code>, 有一个 <code>byte</code>, 最大成员大小为 8, 所以结构体的大小一定是 8 的倍数.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>TwoIntegers</span>  <span class=c1>// 大小共计 16 bytes</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>long</span> <span class=n>A</span><span class=p>;</span>  <span class=c1>// 8 bytes</span>
+</span></span><span class=line><span class=cl>    <span class=kt>byte</span> <span class=n>B</span><span class=p>;</span>  <span class=c1>// 1 byte</span>
+</span></span><span class=line><span class=cl>             <span class=c1>// 7 bytes</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=当结构体嵌套>当结构体嵌套</h3><p>例如我一个结构体中包含另外一个结构体, 那么此时, 内存如何对齐呢?</p><ol><li>结构体字段与前一个字段之间会产生的间隙, 取决于结构体中最大的对齐大小.</li><li>结构体字段自身所存在的尾部留空内存, 仍然会在外层结构体中保留</li></ol><h4 id=1-结构体字段前的间隙>1. 结构体字段前的间隙</h4><p>例如一个结构体中, 有一个 <code>int</code> 字段以及一个 <code>byte</code> 字段, 它的最大对其大小是 4, 也就是说, 这个结构体在作为其他结构体的成员时, 也会使用 4 作为对齐大小.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>SomeIntegers</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>byte</span> <span class=n>A</span><span class=p>;</span>              <span class=c1>// 1 byte</span>
+</span></span><span class=line><span class=cl>                                <span class=c1>// 3 bytes (结构体最大对齐是 4, 所以这里留出了 4 - 1 = 3 个字节)</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>TwoIntegers</span> <span class=n>B</span><span class=p>;</span>       <span class=c1>// 8 bytes</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>byte</span> <span class=n>C</span><span class=p>;</span>              <span class=c1>// 1 byte</span>
+</span></span><span class=line><span class=cl>                                <span class=c1>// 3 bytes</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>TwoIntegers</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>A</span><span class=p>;</span>     <span class=c1>// 4 bytes</span>
+</span></span><span class=line><span class=cl>    <span class=kt>byte</span> <span class=n>B</span><span class=p>;</span>    <span class=c1>// 1 </span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=2-结构体尾部留空>2. 结构体尾部留空</h4><p>即便结构体成员尾部的留空能够装下下一个成员, 它也不会这样做. &ldquo;结构体自己的内存空间完整不可侵犯&rdquo;</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>SomeIntegers</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>byte</span> <span class=n>A</span><span class=p>;</span>              <span class=c1>// 1 byte</span>
+</span></span><span class=line><span class=cl>                                <span class=c1>// 3 byte</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>TwoIntegers</span> <span class=n>B</span><span class=p>;</span>       <span class=c1>// 8 bytes</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>byte</span> <span class=n>C</span><span class=p>;</span>              <span class=c1>// 1 byte   (尽管上一个结构体字段后有留空, 但这段留空不会被重复利用)</span>
+</span></span><span class=line><span class=cl>                                <span class=c1>// 3 bytes  (所有成员的最大大小是 4, soyi这里留</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>TwoIntegers</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>A</span><span class=p>;</span>    <span class=c1>// 4 bytes</span>
+</span></span><span class=line><span class=cl>    <span class=kt>byte</span> <span class=n>B</span><span class=p>;</span>   <span class=c1>// 1 byte</span>
+</span></span><span class=line><span class=cl>              <span class=c1>// 3 bytes</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=实现联合体>实现联合体</h2><p>C++ 中有联合体这个东西, 实现多个字段共用一些数据, 在 C# 中, 如果你要实现这个, 使用显式布局即可.</p><p>举个例子, 在下面这个 C++ 定义的结构体中, 存在两个字段 A 和 B, 他们共用相同的内存区域.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=k>struct</span> <span class=nc>SomeIntegers</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>union</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kt>int</span> <span class=n>A</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=kt>int</span> <span class=n>B</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>在 C# 中实现这个, 你可以使用:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Explicit)]</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>SomeIntegers</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=na>    [FieldOffset(0)]</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>A</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>    [FieldOffset(0)]</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>B</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>或者这样的 C++ 结构体:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=k>struct</span> <span class=nc>SomeIntegers</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>union</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kt>int</span> <span class=n>A</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kt>short</span> <span class=n>Head</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=kt>short</span> <span class=n>Tail</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></td></tr></table></div></div><p>可以这样用 C# 进行编写:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cs data-lang=cs><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Explicit)]</span>
+</span></span><span class=line><span class=cl><span class=k>struct</span> <span class=nc>SomeIntegers</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=na>    [FieldOffset(0)]</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>A</span><span class=p>;</span>               <span class=c1>// 占 4 字节</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>    [FieldOffset(0)]</span>
+</span></span><span class=line><span class=cl>    <span class=kt>short</span> <span class=n>Head</span><span class=p>;</span>          <span class=c1>// 占 2 字节</span>
+</span></span><span class=line><span class=cl><span class=na>
+</span></span></span><span class=line><span class=cl><span class=na>    [FieldOffset(2)]</span>
+</span></span><span class=line><span class=cl>    <span class=kt>short</span> <span class=n>Tail</span><span class=p>;</span>          <span class=c1>// 占 2 字节</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/dotnet/>Dotnet</a>
+<a href=/tags/csharp/>Csharp</a>
+<a href=/tags/c++/>C++</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/20210307161550/><div class=article-details><h2 class=article-title>[干货] 一篇文章完全搞懂面向对象基本概念</h2></div></a></article><article><a href=/p/20210406223759/><div class=article-details><h2 class=article-title>[C#] 二进制, 十进制, 十六进制, 进制转换</h2></div></a></article><article><a href=/p/20210309214803/><div class=article-details><h2 class=article-title>[笔记] 记录一次该死的 “玄学“ Bug, 赶紧看看避开这个坑!!! .NET Core, Delegate.BeginInvoke, PlatformNotSupportedException</h2></div></a></article><article><a href=/p/20210219152833/><div class=article-details><h2 class=article-title>[C#] IEnumerable拼接! 将枚举器串起来~</h2></div></a></article><article><a href=/p/20210219070741/><div class=article-details><h2 class=article-title>[C#] Range函数, 好用就完事儿了!</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=SlimeNull/slimenull.github.io issue-term=pathname label=BlogComment crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
+2023 -
+2024 SlimeNull Blogs</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.21.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

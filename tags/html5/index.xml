@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Html5 on SlimeNull Blogs</title><link>https://slimenull.com/tags/html5/</link><description>Recent content in Html5 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 07 Mar 2021 09:33:39 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/html5/index.xml" rel="self" type="application/rss+xml"/><item><title>[Web前端] 子元素设置高度为100%, 却没有与父元素对齐高度.</title><link>https://slimenull.com/p/20210307093339/</link><pubDate>Sun, 07 Mar 2021 09:33:39 +0800</pubDate><guid>https://slimenull.com/p/20210307093339/</guid><description>&lt;p>大概描述一下我遇到的情况.&lt;/p>
+&lt;p>父元素没有明确指定高度, 但是其中一个子元素的高度是确定的, 并且通过这个高度将父元素的高度撑起来. 另一个子元素的高度是100%, 即, 我想要使它与父元素的高度统一.&lt;/p>
+&lt;p>但是, 指定高度100%的子元素没有与父元素的高度统一.&lt;/p>
+&lt;p>不过, 如果明确而制定了父元素的高度为某一确定值, 那么这个指定高度100%的子元素的高度就生效了.&lt;/p>
+&lt;blockquote>
+&lt;p>奇怪的玄学问题增加了&lt;/p>
+&lt;/blockquote>
+&lt;p>有几种解决方式供参考:&lt;/p>
+&lt;ol>
+&lt;li>使用绝对定位, 设置top和bottom为0&lt;/li>
+&lt;li>使用表格布局, 直接指定display为table&lt;/li>
+&lt;/ol></description></item><item><title>[Web前端] Margin 失效问题, 设置了 Margin 却不见效果, 解决方案.</title><link>https://slimenull.com/p/20210307092631/</link><pubDate>Sun, 07 Mar 2021 09:26:31 +0800</pubDate><guid>https://slimenull.com/p/20210307092631/</guid><description>&lt;p>首先演示下:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-css" data-lang="css">&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nc">box1&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">width&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">300&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">height&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">300&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nc">box2&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">width&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">200&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">height&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">200&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nc">border-with&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">border&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">solid&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="kt">px&lt;/span> &lt;span class="kc">purple&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nc">padding-with&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">padding&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nc">style-pink&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">background-color&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">pink&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nc">style-green&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">background-color&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">green&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nc">margin-able&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">margin&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="kt">px&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">.&lt;/span>&lt;span class="nc">margin-fix&lt;/span>&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">overflow&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">hidden&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;box1 style-pink&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;box1 style-pink margin-able&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="na">class&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;box2 style-green margin-able&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>效果:&lt;/p>
+&lt;div align="center">&lt;img src="https://img-blog.csdnimg.cn/20210307090937101.png"/>&lt;/div>
+&lt;p>发现, 绿色盒子我们明明定义了margin, 而顶部的margin却没有起作用.&lt;/p>
+&lt;p>审查元素, 发现是这个情况:&lt;/p>
+&lt;div align="center">&lt;img src="https://img-blog.csdnimg.cn/20210307091331513.png"/>&lt;/div>
+&lt;p>并且发现, 如果指定padding或border, 那么它们就会变得正常.&lt;/p>
+&lt;div align="center">&lt;img src="https://img-blog.csdnimg.cn/20210307091619161.png"/>&lt;/div>
+&lt;div align="center">&lt;img src="https://img-blog.csdnimg.cn/20210307091836101.png"/>&lt;/div>
+&lt;p>最好的修复方式是这样, 为父元素指定overflow为hidden:&lt;/p>
+&lt;div align="center">&lt;img src="https://img-blog.csdnimg.cn/20210307092049552.png"/>&lt;/div>
+&lt;p>可以给出一个我猜测的结论. margin是只是指与其他元素的间距, 即便它叫外边距. 因为父元素已经与上面的元素间距为5, 并且子元素没办法与别的元素产生边距, 所以就相对于最上方的元素计算边距, 即相对于父元素的间距是0. 而如果我们指定了border或padding, 他就会相对这多出的控件来运算边距, 即此时的margin相对于父元素.&lt;/p>
+&lt;p>另外overflow也是一个奇妙的样式, 它还可以用来修复子元素float引起的高度塌陷问题.&lt;/p></description></item><item><title>[Web] 浅谈 Get 与 Post 请求</title><link>https://slimenull.com/p/20210105173252/</link><pubDate>Tue, 05 Jan 2021 17:32:52 +0800</pubDate><guid>https://slimenull.com/p/20210105173252/</guid><description>&lt;h2 id="get-与-post-请求">Get 与 Post 请求&lt;/h2>
+&lt;h4 id="http请求">HTTP请求:&lt;/h4>
+&lt;blockquote>
+&lt;p>前端与后端的数据传递是通过 HTTP 请求实现的, 浏览器(前端)向服务器(后端)发送一个 HTTP 请求, 后端对请求进行处理, 然后再给浏览器发一个响应, 这就是 HTTP 的基本概念.&lt;/p>
+&lt;p>get 和 post 是HTTP请求的两种方式, 最明显的区别是传递参数.&lt;/p>
+&lt;p>如果你不大了解 HTTP 请求, 可以先查看文章末对 HTTP 的简述.&lt;/p>
+&lt;/blockquote>
+&lt;h4 id="get">Get:&lt;/h4>
+&lt;ul>
+&lt;li>
+&lt;p>关于 Get 请求&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>get 一般用来获取数据, 因为其本意就是获取. 浏览器访问一个页面时, 发送的第一个请求就是 Get.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>get 的参数将直接写明在请求 url 中, 这意味着, 任何人可以直接通过浏览器上方的地址来清除的看到, 例如你要下载一个东西, 文件名叫 &amp;lsquo;idea&amp;rsquo;, 将文件名作为filename参数传递过去, 那么这个请求类似于这样:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-gdscript3" data-lang="gdscript3">&lt;span class="line">&lt;span class="cl">&lt;span class="n">https&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="o">//&lt;/span>&lt;span class="n">xxx&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">com&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">download&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="err">?&lt;/span>&lt;span class="n">filename&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">idea&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;ol start="3">
+&lt;li>
+&lt;p>在url中, 写一个&amp;rsquo;&amp;rsquo;?&amp;lsquo;表示后面的内容是参数, 然后以 参数名=参数值 的格式表示参数, 如果要传多个参数, 则使用 &amp;lsquo;&amp;amp;&amp;rsquo; 连接它们&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>服务端接收到你的请求后, 可以根据参数来做出对应处理, 然后发送合适的响应.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>
+&lt;p>一个例子:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>在浏览器新建选项卡, 在url中输入一个地址, 发送的是一个get请求, 所以我们可以直接通过这个来测试.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>hitokoto 是一个提供&amp;rsquo;一句话&amp;rsquo;的网站, 提供了接口以供开发这调用, 其中一个是:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>地址&lt;/th>
+&lt;th>协议&lt;/th>
+&lt;th>方法&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>v1.hitokoto.cn&lt;/td>
+&lt;td>HTTPS&lt;/td>
+&lt;td>ANY&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>其中一个参数是:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>参数&lt;/th>
+&lt;th>值&lt;/th>
+&lt;th>可选&lt;/th>
+&lt;th>说明&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>encode&lt;/td>
+&lt;td>text / json / js&lt;/td>
+&lt;td>是&lt;/td>
+&lt;td>返回的编码&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>方法是Any, 即, 同时支持 get 与 post, 那么我们尝试使它返回一个格式为文本的结果, 对应的 url 是:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">https://v1.hitokoto.cn/?encode=text
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>hitokoto 服务器返回了我们所需要的值:&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://slimenull.com/images/20210105165205507.png"
+loading="lazy"
+alt="hitokoto返回的纯文本数据"
+>&lt;/p>
+&lt;pre>&lt;code> 那么, 如果是json呢? 试试看吧:
+```
+https://v1.hitokoto.cn/?encode=json
+```
+hitokoto 服务器又返回了我们所需要的值:
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="https://slimenull.com/images/20210105165331960.png"
+loading="lazy"
+alt="hitokoto返回的json数据"
+>&lt;/p>
+&lt;h4 id="post">Post:&lt;/h4>
+&lt;ul>
+&lt;li>
+&lt;p>关于 Post 请求&lt;/p>
+&lt;ul>
+&lt;li>Post 有 &amp;lsquo;邮递,布置&amp;rsquo; 的意思, 一般用来将数据提交给服务端.&lt;/li>
+&lt;li>看完 Get, 你也知道了 Get 的一个特点: 参数直接暴露在 url 中, 直接被别人看到, 肯定是不大妥当的, 假如你要向服务器提交你的密码, 让别人看到, 那就不好了, 而 Post 相对 Get 来说, 就稍微安全点了, 因为参数在这个HTTP请求体中.
+&lt;br/>&lt;/li>
+&lt;/ul>
+&lt;p>一个POST请求的概述:&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://slimenull.com/images/20210110114706246.png"
+loading="lazy"
+alt="一个POST请求的概述:"
+>
+它的响应内容:
+&lt;img src="https://slimenull.com/images/20210110114759960.png"
+loading="lazy"
+alt="一个POST请求的响应内容"
+>
+由此可知, POST可以大致认为, 只是将参数放到了请求体中, 相对来说, 严谨一些.&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>一个例子:&lt;/p>
+&lt;p>因为大多数浏览器不能直接发送 post 请求, 所以我们通过 python 与一个测试网页来测试:&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>有道有一个翻译接口示例, 支持 post 请求&lt;/p>
+&lt;p>地址: &amp;lsquo;&lt;a class="link" href="https://aidemo.youdao.com/trans%27" target="_blank" rel="noopener"
+>https://aidemo.youdao.com/trans'&lt;/a>&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>参数&lt;/th>
+&lt;th>介绍&lt;/th>
+&lt;th>值&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>q&lt;/td>
+&lt;td>翻译文本&lt;/td>
+&lt;td>要进行翻译的文本&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>from&lt;/td>
+&lt;td>从哪种语言翻译&lt;/td>
+&lt;td>auto / zh-CHS / en / 其他&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>to&lt;/td>
+&lt;td>翻译到哪种语言&lt;/td>
+&lt;td>auto / zh-CHS / en / 其他&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;ul>
+&lt;li>Python:&lt;/li>
+&lt;/ul>
+&lt;ol>
+&lt;li>
+&lt;p>Python 可以通过 requests 包来发送 post 请求.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>编写代码:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">requests&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">url&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;https://aidemo.youdao.com/trans&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">args&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="s2">&amp;#34;q&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;翻译这段话&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;from&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;auto&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;to&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;auto&amp;#34;&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">resp&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">requests&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">post&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">url&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1"># 发送请求, 并将响应赋值到resp&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">resp&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">text&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1"># 打印响应解码后的文本&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>运行后, 可以看到, 返回了我们需要的数据:&lt;/p>
+&lt;p>&lt;img src="https://slimenull.com/images/20210105165515493.png"
+loading="lazy"
+alt="python发送post请求"
+>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;ul>
+&lt;li>编写一个简单的网页来测试:&lt;/li>
+&lt;/ul>
+&lt;ol>
+&lt;li>
+&lt;p>在HTML中, 可以通过 form 表单, 可以发送 get 和 post 请求.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>编写代码:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&amp;lt;!DOCTYPE html&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">html&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">head&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">title&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>Post Request Demo&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">title&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">head&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">body&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">form&lt;/span> &lt;span class="na">action&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;https://aidemo.youdao.com/trans&amp;#34;&lt;/span> &lt;span class="na">method&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;post&amp;#34;&lt;/span> &lt;span class="na">target&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;_blank&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">label&lt;/span> &lt;span class="na">for&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;kwd&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>关键字:&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">label&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">input&lt;/span> &lt;span class="na">id&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;kwd&amp;#34;&lt;/span> &lt;span class="na">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;text&amp;#34;&lt;/span> &lt;span class="na">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;q&amp;#34;&lt;/span> &lt;span class="na">placeholder&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;输入关键词&amp;#34;&lt;/span>&lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">input&lt;/span> &lt;span class="na">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;hidden&amp;#34;&lt;/span> &lt;span class="na">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;from&amp;#34;&lt;/span> &lt;span class="na">value&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;auto&amp;#34;&lt;/span>&lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">input&lt;/span> &lt;span class="na">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;hidden&amp;#34;&lt;/span> &lt;span class="na">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;to&amp;#34;&lt;/span> &lt;span class="na">value&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;auto&amp;#34;&lt;/span>&lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">input&lt;/span> &lt;span class="na">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;submit&amp;#34;&lt;/span> &lt;span class="na">value&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;请求&amp;#34;&lt;/span>&lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">form&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">body&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">html&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>效果:&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://slimenull.com/images/20210105165549904.png"
+loading="lazy"
+alt="post请求测试demo"
+>&lt;/p>
+&lt;pre>&lt;code> 4. 输入 &amp;quot;白嫖有道翻译API真棒&amp;quot; 并按下请求按钮:
+返回了我们所需要的数据:
+&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="https://slimenull.com/images/20210105165649711.png"
+loading="lazy"
+alt="在这里插入图片描述"
+>&lt;/p>
+&lt;h4 id="指正">指正:&lt;/h4>
+&lt;blockquote>
+&lt;p>可能会有人告诉你, get 比 post 安全, 但事实上, 这仅仅是针对门外汉, 你只需要打开浏览器调试功能, 就可以看到这个页面的一切请求以及请求的各种详细内容, post 的参数也能看到.
+所以说, 说 post 安全, 只是指它的参数不能直接在 url 中看到, 但只要你想看, 只需要打开调试&amp;hellip;&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="http-概述">HTTP 概述:&lt;/h3>
+&lt;blockquote>
+&lt;p>一个HTTP数据包有头和体两部分, 头中包含了一些摘要数据, 这些数据以键值对的形式存放, 例如指定可接收的数据类型, 指定编码, 压缩算法, 数据长度等. 体中是这个包的主要内容, 例如传输文件时, 文件内容就位于体中. 如果想要详细的了解HTTP数据的内容, 不妨在浏览器中按下F12, 打开调试, 进入 &amp;lsquo;网络(Network)&amp;rsquo; 选项卡, 刷新页面, 然后观察一个个的数据包.&lt;/p>
+&lt;/blockquote></description></item></channel></rss>

@@ -1,0 +1,589 @@
+<!doctype html><html lang=zh-CN dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content='在 WPF 中正确的使用云母, 亚克力等透明背景材质, 以及进行亮暗主题切换'><title>[.NET,WPF] 窗体云母, 亚克力, 透明, 混合颜色, 模糊背景, 亮暗色主题全讲</title>
+<link rel=canonical href=https://slimenull.com/p/20240530104846/><link rel=stylesheet href=/scss/style.min.73438a911857e6d491e39369614d0dd0c0302dcacfb43e15034e0e48cac08c07.css><meta property='og:title' content='[.NET,WPF] 窗体云母, 亚克力, 透明, 混合颜色, 模糊背景, 亮暗色主题全讲'><meta property='og:description' content='在 WPF 中正确的使用云母, 亚克力等透明背景材质, 以及进行亮暗主题切换'><meta property='og:url' content='https://slimenull.com/p/20240530104846/'><meta property='og:site_name' content='SlimeNull Blogs'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='#dotnet'><meta property='article:tag' content='win32'><meta property='article:tag' content='winapi'><meta property='article:tag' content='wpf'><meta property='article:published_time' content='2024-05-30T10:48:46+08:00'><meta property='article:modified_time' content='2024-05-30T10:48:46+08:00'><meta name=twitter:title content="[.NET,WPF] 窗体云母, 亚克力, 透明, 混合颜色, 模糊背景, 亮暗色主题全讲"><meta name=twitter:description content="在 WPF 中正确的使用云母, 亚克力等透明背景材质, 以及进行亮暗主题切换"><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu11436448765783238083.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>SlimeNull Blogs</a></h1><h2 class=site-description>为了更好的开源世界~</h2></div></header><ol class=social-menu><li><a href=https://github.com/SlimeNull target=_blank title=GitHub rel=me><!doctype html><svg t="1702542119184" class="icon" viewBox="0 0 1024 1024" p-id="4136" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M692.906667 938.666667A42.666667 42.666667.0 01650.24 896V785.066667A91.733333 91.733333.0 00627.2 714.24a42.666667 42.666667.0 0126.026667-71.253333c104.106666-12.373334 200.106666-45.653334 200.106666-226.133334a170.666667 170.666667.0 00-28.586666-94.72A117.333333 117.333333.0 01807.253333 234.24a158.293333 158.293333.0 000-60.16A326.4 326.4.0 00718.08 220.586667a42.666667 42.666667.0 01-35.84 6.4 433.066667 433.066667.0 00-235.52.0 42.666667 42.666667.0 01-35.84-6.4A315.733333 315.733333.0 00320.853333 174.08a150.186667 150.186667.0 000 60.16 121.173333 121.173333.0 01-18.346666 88.746667A173.653333 173.653333.0 00273.92 418.133333C273.92 584.106666 354.133333 628.48 474.453333 643.84A42.666667 42.666667.0 01509.44 672a42.666667 42.666667.0 01-8.96 42.666667 87.893333 87.893333.0 00-23.466667 66.56V896A42.666667 42.666667.0 01391.68 896v-24.32a256 256 0 01-224.853333-89.173333A166.4 166.4.0 00117.333333 744.96a42.666667 42.666667.0 1121.333334-82.773333A210.346667 210.346667.0 01224 720.213333c42.666667 42.666667 85.333333 80.213333 166.4 64.853334a165.973333 165.973333.0 019.813333-67.413334C312.32 695.466666 186.88 632.32 186.88 418.986667a256 256 0 0142.666667-142.08 36.266667 36.266667.0 005.546666-26.453334 242.773333 242.773333.0 0114.08-136.96 42.666667 42.666667.0 0126.88-24.32c14.506667-4.266667 66.56-12.8 165.12 51.2a518.826667 518.826667.0 01242.773334.0c98.56-64 150.613333-55.893333 164.693333-51.2a42.666667 42.666667.0 0126.88 24.32A243.626667 243.626667.0 01889.6 250.88a32 32 0 004.693333 24.32A256 256 0 01936.96 417.706667c0 216.32-124.586667 279.04-213.333333 298.666666a182.613333 182.613333.0 019.386666 71.253334V896a42.666667 42.666667.0 01-40.106666 42.666667z" fill="#666" p-id="4137"/></svg></a></li><li><a href=https://space.bilibili.com/441842015 target=_blank title=Bilibili rel=me><!doctype html><svg t="1702541966104" class="icon" viewBox="0 0 1024 1024" p-id="16981" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M306.005333 117.632 444.330667 256h135.296l138.368-138.325333A42.666667 42.666667.0 01778.368 178.048L700.330667 256H789.333333A149.333333 149.333333.0 01938.666667 405.333333v341.333334A149.333333 149.333333.0 01789.333333 896H234.666667A149.333333 149.333333.0 0185.333333 746.666667V405.333333A149.333333 149.333333.0 01234.666667 256h88.96L245.632 177.962667a42.666667 42.666667.0 0160.373333-60.373334zm483.328 223.701333H234.666667a64 64 0 00-63.701334 57.856L170.666667 405.333333v341.333334a64 64 0 0057.856 63.701333L234.666667 810.666667h554.666666a64 64 0 0063.701334-57.856L853.333333 746.666667V405.333333a64 64 0 00-64-64zm-448 128A42.666667 42.666667.0 01384 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666666-42.666667zm341.333334.0A42.666667 42.666667.0 01725.333333 512v85.333333a42.666667 42.666667.0 01-85.333333.0V512a42.666667 42.666667.0 0142.666667-42.666667z" fill="#666" p-id="16982"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>主页</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>归档</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>搜索</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>链接</span></a></li><div class=menu-bottom-section><li id=i18n-switch><svg class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 5h7"/><path d="M9 3v2c0 4.418-2.239 8-5 8"/><path d="M5 9c-.003 2.144 2.952 3.908 6.7 4"/><path d="M12 20l4-9 4 9"/><path d="M19.1 18h-6.2"/></svg>
+<select name=language onchange="window.location.href=this.selectedOptions[0].value"><option value=https://slimenull.com/ selected></option></select></li><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></div></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#背景模糊-api>背景模糊 API</a></li><li><a href=#应用云母材质>应用云母材质</a></li><li><a href=#应用亚克力材质>应用亚克力材质</a></li><li><a href=#切换窗口亮暗色主题>切换窗口亮暗色主题</a></li><li><a href=#自定义混合颜色亚克力>自定义混合颜色亚克力</a></li><li><a href=#从底层上满足调用条件>从底层上满足调用条件</a></li><li><a href=#错误参考>错误参考</a></li><li><a href=#总结>总结</a></li><li><a href=#引用>引用</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/dotnet/ style=background-color:#512cd4;color:#fff>.NET
+</a><a href=/categories/windows/>Windows
+</a><a href=/categories/%E6%A1%8C%E9%9D%A2%E7%A8%8B%E5%BA%8F/>桌面程序</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/20240530104846/>[.NET,WPF] 窗体云母, 亚克力, 透明, 混合颜色, 模糊背景, 亮暗色主题全讲</a></h2><h3 class=article-subtitle>在 WPF 中正确的使用云母, 亚克力等透明背景材质, 以及进行亮暗主题切换</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>May 30, 2024</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 11 分钟</time></div></footer></div></header><section class=article-content><p>众所周知, 在 Windows10 中亚克力(Acrylic)效果被添加, 在 Windows11 中云母(Mica)效果被添加. 其中亚克力效果简单来讲就是对窗体后的元素模糊再加噪点. Mica 则是对壁纸进行模糊再加噪点.</p><div class=table-wrapper><table><thead><tr><th>名称</th><th>实现</th><th>效果</th><th>性能</th><th>推荐用于</th></tr></thead><tbody><tr><td>毛玻璃/Aero</td><td>透明+模糊</td><td>好</td><td>最差</td><td>我不知道新版本操作系统怎么启用 Aero</td></tr><tr><td>亚克力/Acrylic</td><td>透明+模糊+噪点</td><td>好</td><td>较差</td><td>临时窗口, 例如右键菜单, 工具提示等</td></tr><tr><td>云母/Mica</td><td>壁纸采样+模糊+噪点</td><td>较好</td><td>最好</td><td>主窗口</td></tr></tbody></table></div><p>云母效果的性能之所以好, 是因为它不会对壁纸进行重复采样, 而是只采样一次, 生成对应云母效果贴图, 最后只需要将它应用到窗口上就可以. 可以说, 基本上没有任何消耗.</p><p>但这也带来了一些弊端, 假如你使用了某种动态壁纸软件, 那么云母效果和你的壁纸是完全不匹配的, 这稍稍影响了美观.</p><blockquote><p>在阅读本文章之前, 请确保你有进行 .NET 调用非托管动态链接库函数的经验, 大致知道 <code>WindowChrome</code> 类的作用, 知道窗口句柄是什么东西.
+阅读时请从开始到结束按顺序看, 否则可能会看漏某些细节上的东西.</p></blockquote><br><h2 id=背景模糊-api>背景模糊 API</h2><p>在 Windows 中, 有两个 API 可以用来实现背景模糊:</p><div class=table-wrapper><table><thead><tr><th></th><th>DwmSetWindowAttribute</th><th>SetWindowCompositionAttribute</th></tr></thead><tbody><tr><td>可以实现的功能</td><td>亮暗色模式的云母与亚克力效果</td><td>支持自定义混合颜色的亚克力效果, 模糊透明效果</td></tr><tr><td>模糊区域</td><td>能够应用到整个窗口, 包括标题栏以及窗口内容</td><td>只能对窗口内容进行模糊</td></tr><tr><td>系统要求</td><td>API 需要 Windows Vista 及以上版本, 亮暗色主题, 云母和亚克力效果则只能在 Windows11 上用, 其中亮暗色需要版本 22000, 模糊背景需要版本 22621</td><td>API 在 Windows 7 及以上版本可用, 亚克力与模糊背景效果则只能在 Windows10 上可用, 具体版本未知, 因为这是未在微软文档中具体写明的 API</td></tr><tr><td>其他要求</td><td>只有在 &ldquo;窗口框架&rdquo; 拓展到窗口工作区内时, 拓展的厚度才会带有对应模糊效果.</td><td>只有在 &ldquo;窗口框架&rdquo; 不拓展到窗口工作区内时有效.</td></tr><tr><td>优点</td><td>通过设置颜色主题即可直接自动换掉云母或亚克力背景的颜色</td><td>在窗口失去焦点时, 模糊仍然有效, 并且可以自定义混合颜色</td></tr><tr><td>缺点</td><td>当窗体失去焦点的时候, 模糊效果会消失</td><td>没有云母效果</td></tr></tbody></table></div><p>两 API 在 C# 的声明分别如下:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=na>[DllImport(&#34;DWMAPI&#34;)]</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>static</span> <span class=kd>extern</span> <span class=n>nint</span> <span class=n>DwmSetWindowAttribute</span><span class=p>(</span><span class=n>nint</span> <span class=n>hwnd</span><span class=p>,</span> <span class=n>DwmWindowAttribute</span> <span class=n>attribute</span><span class=p>,</span> <span class=n>nint</span> <span class=n>dataPointer</span><span class=p>,</span> <span class=kt>uint</span> <span class=n>dataSize</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=na>[DllImport(&#34;User32&#34;)]</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>static</span> <span class=kd>extern</span> <span class=kt>bool</span> <span class=n>SetWindowCompositionAttribute</span><span class=p>(</span><span class=n>nint</span> <span class=n>hwnd</span><span class=p>,</span> <span class=k>ref</span> <span class=n>WindowCompositionAttributeData</span> <span class=n>data</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>它们依赖的, 用于设置 &ldquo;窗口框架&rdquo; 拓展厚度的 API 声明如下:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=na>[DllImport(&#34;DWMAPI&#34;)]</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>static</span> <span class=kd>extern</span> <span class=n>nint</span> <span class=n>DwmExtendFrameIntoClientArea</span><span class=p>(</span><span class=n>nint</span> <span class=n>hwnd</span><span class=p>,</span> <span class=k>ref</span> <span class=n>Margins</span> <span class=n>margins</span><span class=p>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>结构体与枚举声明如下:</p><p>DWM 属性枚举</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>public</span> <span class=kd>enum</span> <span class=n>DwmWindowAttribute</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>NCRENDERING_ENABLED</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>NCRENDERING_POLICY</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>TRANSITIONS_FORCEDISABLED</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>ALLOW_NCPAINT</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>CAPTION_BUTTON_BOUNDS</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>NONCLIENT_RTL_LAYOUT</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>FORCE_ICONIC_REPRESENTATION</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>FLIP3D_POLICY</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>EXTENDED_FRAME_BOUNDS</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>HAS_ICONIC_BITMAP</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>DISALLOW_PEEK</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>EXCLUDED_FROM_PEEK</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>CLOAK</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>CLOAKED</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>FREEZE_REPRESENTATION</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>PASSIVE_UPDATE_MODE</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>USE_HOSTBACKDROPBRUSH</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 表示是否使用暗色模式, 它会将窗体的模糊背景调整为暗色</span>
+</span></span><span class=line><span class=cl>    <span class=n>USE_IMMERSIVE_DARK_MODE</span> <span class=p>=</span> <span class=m>20</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>WINDOW_CORNER_PREFERENCE</span> <span class=p>=</span> <span class=m>33</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>BORDER_COLOR</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>CAPTION_COLOR</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>TEXT_COLOR</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>VISIBLE_FRAME_BORDER_THICKNESS</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 背景类型, 值可以是: 自动, 无, 云母, 或者亚克力</span>
+</span></span><span class=line><span class=cl>    <span class=n>SYSTEMBACKDROP_TYPE</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>LAST</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>背景类型枚举:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>public</span> <span class=kd>enum</span> <span class=n>WindowBackdrop</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>Auto</span> <span class=p>=</span> <span class=m>0</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>None</span> <span class=p>=</span> <span class=m>1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>MainWindow</span> <span class=p>=</span> <span class=m>2</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>TransientWindow</span> <span class=p>=</span> <span class=m>3</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>TabbedWindow</span> <span class=p>=</span> <span class=m>4</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>设置 <code>SetWindowCompositionAttribute</code> 所用的数据结构</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=k>struct</span> <span class=nc>WindowCompositionAttributeData</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// &lt;summary&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// A flag describing which value to get or set, specified as a value of the &lt;see cref=&#34;WindowCompositionAttribute&#34;/&gt; enumeration. </span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// This parameter specifies which attribute to get or set, and the pvData member points to an object containing the attribute value.</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// &lt;/summary&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>WindowCompositionAttribute</span> <span class=n>Attribute</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=cs>/// &lt;summary&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// When used with the GetWindowCompositionAttribute function, this member contains a pointer to a variable that will hold the value of the requested attribute when the function returns. &lt;br/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// When used with the SetWindowCompositionAttribute function, it points an object containing the attribute value to set. &lt;br/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// The type of the value set depends on the value of the Attrib member.</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// &lt;/summary&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>nint</span> <span class=n>DataPointer</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=cs>/// &lt;summary&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// The size of the object pointed to by the pvData member, in bytes.</span>
+</span></span><span class=line><span class=cl>    <span class=cs>/// &lt;/summary&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>uint</span> <span class=n>DataSize</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>使用 <code>SetWindowCompositionAttribute</code> 设置背景模糊时所需要用到的属性枚举</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>public</span> <span class=kd>enum</span> <span class=n>WindowCompositionAttribute</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 省略其他未使用的字段</span>
+</span></span><span class=line><span class=cl>    <span class=n>WcaAccentPolicy</span> <span class=p>=</span> <span class=m>19</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 省略其他未使用的字段</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>使用 <code>SetWindowCompositionAttribute</code> 设置背景模糊需要实际传入的数据</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=k>struct</span> <span class=nc>AccentPolicy</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>AccentState</span> <span class=n>AccentState</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>AccentFlags</span> <span class=n>AccentFlags</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>int</span> <span class=n>GradientColor</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>int</span> <span class=n>AnimationId</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>Accent state, 即在窗口上要使用到的效果:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>public</span> <span class=kd>enum</span> <span class=n>AccentState</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>Disabled</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>EnableGradient</span> <span class=p>=</span> <span class=m>1</span><span class=p>,</span>           <span class=c1>// 渐变 (实测没什么用)</span>
+</span></span><span class=line><span class=cl>    <span class=n>EnableTransparent</span> <span class=p>=</span> <span class=m>2</span><span class=p>,</span>        <span class=c1>// 透明 (实测没什么用)</span>
+</span></span><span class=line><span class=cl>    <span class=n>EnableBlurBehind</span> <span class=p>=</span> <span class=m>3</span><span class=p>,</span>         <span class=c1>// 背景模糊 (有用)</span>
+</span></span><span class=line><span class=cl>    <span class=n>EnableAcrylicBlurBehind</span> <span class=p>=</span> <span class=m>4</span><span class=p>,</span>  <span class=c1>// 背景亚克力模糊 (有用)</span>
+</span></span><span class=line><span class=cl>    <span class=n>EnableHostBackdrop</span> <span class=p>=</span> <span class=m>5</span><span class=p>,</span>       <span class=c1>// 没啥用</span>
+</span></span><span class=line><span class=cl>    <span class=n>InvalidState</span> <span class=p>=</span> <span class=m>6</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>Accent flags, 控制某些行为, 由于没有文档, 下面的值都是测试出来的:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=na>[Flags]</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>enum</span> <span class=n>AccentFlags</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>None</span> <span class=p>=</span> <span class=m>0</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=n>ExtendSize</span> <span class=p>=</span> <span class=m>0x4</span><span class=p>,</span>      <span class=c1>// 启用此 flag 会导致窗体大小拓展至屏幕大小</span>
+</span></span><span class=line><span class=cl>    <span class=n>LeftBorder</span> <span class=p>=</span> <span class=m>0x20</span><span class=p>,</span>     <span class=c1>// 启用窗口左侧边框 (当 WindowStyle 为 None 时可以看出来)</span>
+</span></span><span class=line><span class=cl>    <span class=n>TopBorder</span> <span class=p>=</span> <span class=m>0x40</span><span class=p>,</span>      <span class=c1>// 启用窗口顶部边框 (同上)</span>
+</span></span><span class=line><span class=cl>    <span class=n>RightBorder</span> <span class=p>=</span> <span class=m>0x80</span><span class=p>,</span>    <span class=c1>// 启用窗口右侧边框 (同上)</span>
+</span></span><span class=line><span class=cl>    <span class=n>BottomBorder</span> <span class=p>=</span> <span class=m>0x100</span><span class=p>,</span>  <span class=c1>// 启用窗口底部边框</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 合起来, 启用窗口所有边框</span>
+</span></span><span class=line><span class=cl>    <span class=n>AllBorder</span> <span class=p>=</span> <span class=n>LeftBorder</span> <span class=p>|</span> <span class=n>TopBorder</span> <span class=p>|</span> <span class=n>RightBorder</span> <span class=p>|</span> <span class=n>BottomBorder</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>设置 &ldquo;窗口拓展&rdquo; 需要用到的表示拓展大小的结构. 当值为 -1 时表示无穷大.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=na>[StructLayout(LayoutKind.Sequential)]</span>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=k>struct</span> <span class=nc>Margins</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>int</span> <span class=n>LeftWidth</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>int</span> <span class=n>RightWidth</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>int</span> <span class=n>TopHeight</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>int</span> <span class=n>BottomHeight</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><br><h2 id=应用云母材质>应用云母材质</h2><p>要对 WPF 的窗口进行操作, 我们需要拿到窗口的句柄, 然后调用刚刚提到的 API 进行操作.</p><p>不过在这之前, 我们还需要知道一件事. WPF 要应用背景透明模糊效果, 还需要设置窗口对应 <code>HwndSource</code> 的 <code>CompositionTarget</code> 的 <code>BackgroundColor</code> 为 <code>Transparent</code> 才能正确的看到透明背景. 除此之外, 你也需要确认窗口的 <code>Background</code> 也是 <code>Transparent</code>, 否则窗口颜色遮挡背景, 你就看不到了.</p><p>由于在 WPF 程序中, 一切都抽象成了 WPF 的对象, 而对于窗口这一类型来讲, 在它被调用 Show 方法之前, 是不会创建 Win32 窗口的. 要保证我们能够持有窗口句柄, 有两种方案:</p><ul><li>使用 <code>WindowsInteropHelper</code> 的 <code>EnsureHandle</code> 方法, 确保窗口对象创建了 Win32 窗口并可以使用句柄.</li><li>订阅窗口的 <code>SourceInitialized</code> 事件, 该事件会在窗口的 Win32 窗口被创建之后引发.</li></ul><p>下面我们以 <code>SourceInitialized</code> 事件的事件处理器中编写逻辑举例, 讲述如何正确的在 WPF 中应用云母效果.</p><p>首先, 确保我们的窗口背景颜色为 <code>Transparent</code>, 你的 XAML 代码应该像这样:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;Window</span> <span class=err>...</span>
+</span></span><span class=line><span class=cl>        <span class=na>Background=</span><span class=s>&#34;Transparent&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>    ...
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Window&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>如果你的设置无误, 那么你的窗口现在的 &ldquo;透明&rdquo; 看起来应该是 &ldquo;黑色&rdquo;:</p><p><img src=/images/Pasted%20image%2020240530134522.png loading=lazy></p><p>然后, 实现 <code>HwndSource</code> 的 <code>CompositionTarget</code> 设置和 &ldquo;窗口框架&rdquo;, 最简单的方式是直接为窗口设置 <code>WindowChrome</code>, 通过对 <code>WindowChrome</code> 类中名为 <code>WindowChrome</code> 的附加属性进行赋值即可, 最后只需要设置 <code>GlassFrameThickness</code> 为 -1 就完成了, 在 XAML 中这样编写:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;Window</span> <span class=err>...</span>
+</span></span><span class=line><span class=cl>        <span class=na>Background=</span><span class=s>&#34;Transparent&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;WindowChrome.WindowChrome&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;WindowChrome</span> <span class=na>GlassFrameThickness=</span><span class=s>&#34;-1&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/WindowChrome.WindowChrome&gt;</span>
+</span></span><span class=line><span class=cl>    ...
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Window&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p><code>窗口边框拓展大小</code> 控制了窗口设置的模糊背景延伸到窗口内部的大小. 也就是说, 如果你将 <code>GlassFrameThickness</code> 设置为 10, 那么窗口边缘的 10 像素会应用上指定的背景. 而 -1 在这里则表示无限大.</p></blockquote><p>这样操作之后, <code>WindowChrome</code> 会帮我们设置好所需的属性, 如果你的设置无误, 现在窗口应该会恢复到原来的 &ldquo;白色&rdquo;, 并且窗口的标题栏会 &ldquo;消失&rdquo;, 只留下三个窗口按钮:</p><p><img src=/images/Pasted%20image%2020240530134637.png loading=lazy></p><p>最后, 我们订阅窗口的 <code>SourceInitialized</code> 事件:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;Window</span> <span class=err>...</span>
+</span></span><span class=line><span class=cl>        <span class=na>Background=</span><span class=s>&#34;Transparent&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>SourceInitialized=</span><span class=s>&#34;Window_SourceInitialized&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;WindowChrome.WindowChrome&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;WindowChrome</span> <span class=na>GlassFrameThickness=</span><span class=s>&#34;-1&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/WindowChrome.WindowChrome&gt;</span>
+</span></span><span class=line><span class=cl>    ...
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Window&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>并添加以下处理:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>private</span> <span class=kd>unsafe</span> <span class=k>void</span> <span class=n>Window_SourceInitialized</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>EventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>hwndSource</span> <span class=p>=</span> <span class=p>(</span><span class=n>HwndSource</span><span class=p>)</span><span class=n>PresentationSource</span><span class=p>.</span><span class=n>FromVisual</span><span class=p>(</span><span class=k>this</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>backdropType</span> <span class=p>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=m>2</span><span class=p>;</span>   <span class=c1>// 0 到 4 分别是 &#39;自动&#39;, &#39;无&#39;, &#39;云母(Mica)效果&#39;, &#39;亚克力(Acrylic)效果&#39;, &#39;云母备选(Mica Alt)效果&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>DwmSetWindowAttribute</span><span class=p>(</span><span class=n>hwndSource</span><span class=p>.</span><span class=n>Handle</span><span class=p>,</span> <span class=n>DwmWindowAttribute</span><span class=p>.</span><span class=n>SYSTEMBACKDROP_TYPE</span><span class=p>,</span> <span class=p>(</span><span class=n>nint</span><span class=p>)(</span><span class=k>void</span><span class=p>*)&amp;</span><span class=n>backdropType</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=kt>int</span><span class=p>));</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>注意, 在这里使用到了不安全代码块, 你需要在你的项目文件中启用 &ldquo;允许不安全代码块&rdquo; 才能使用此功能.</p></blockquote><p>最后启动窗口, 操作无误的话, 你最终的窗口, 已经能够呈现出云母效果了.</p><p><img src=/images/Pasted%20image%2020240530135314.png loading=lazy></p><br><h2 id=应用亚克力材质>应用亚克力材质</h2><p>在上面, 我们已经成功将云母材质应用到了窗口上, 如果要换成亚克力效果, 也非常简单, 只需要将表示云母背景的 &ldquo;2&rdquo; 换成表示亚克力的 &ldquo;3&rdquo; 即可, 代码如下:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>private</span> <span class=kd>unsafe</span> <span class=k>void</span> <span class=n>Window_SourceInitialized</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>EventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>hwndSource</span> <span class=p>=</span> <span class=p>(</span><span class=n>HwndSource</span><span class=p>)</span><span class=n>PresentationSource</span><span class=p>.</span><span class=n>FromVisual</span><span class=p>(</span><span class=k>this</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>backdropType</span> <span class=p>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=m>3</span><span class=p>;</span>   <span class=c1>// 0 到 4 分别是 &#39;自动&#39;, &#39;无&#39;, &#39;云母(Mica)效果&#39;, &#39;亚克力(Acrylic)效果&#39;, &#39;云母备选(Mica Alt)效果&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>DwmSetWindowAttribute</span><span class=p>(</span><span class=n>hwndSource</span><span class=p>.</span><span class=n>Handle</span><span class=p>,</span> <span class=n>DwmWindowAttribute</span><span class=p>.</span><span class=n>SYSTEMBACKDROP_TYPE</span><span class=p>,</span> <span class=p>(</span><span class=n>nint</span><span class=p>)(</span><span class=k>void</span><span class=p>*)&amp;</span><span class=n>backdropType</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=kt>int</span><span class=p>));</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>那么, 最终的效果是这样, 可以看到窗口的背景是参考了其后方窗口内容的:</p><p><img src=/images/Pasted%20image%2020240530140028.png loading=lazy></p><br><h2 id=切换窗口亮暗色主题>切换窗口亮暗色主题</h2><p>在 Windows11 的 22000 版本中, <code>DwmSetWindowAttribute</code> 支持了表示窗口是否使用暗色模式的 <code>DWMWA_USE_IMMERSIVE_DARK_MODE</code> 属性.</p><p>当我们使用该 API 设置该属性为 1 的时候, 标题栏, 以及云母与亚克力材料会切换到对应的暗色. 下面, 我们向代码中添加将窗口设置为暗色模式的逻辑:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>private</span> <span class=kd>unsafe</span> <span class=k>void</span> <span class=n>Window_SourceInitialized</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>EventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>hwndSource</span> <span class=p>=</span> <span class=p>(</span><span class=n>HwndSource</span><span class=p>)</span><span class=n>PresentationSource</span><span class=p>.</span><span class=n>FromVisual</span><span class=p>(</span><span class=k>this</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>backdropType</span> <span class=p>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=m>3</span><span class=p>;</span>   <span class=c1>// 0 到 3 分别是 &#39;自动&#39;, &#39;无&#39;, &#39;云母(Mica)效果&#39;, &#39;亚克力(Acrylic)效果&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>isDarkMode</span> <span class=p>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=m>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>DwmSetWindowAttribute</span><span class=p>(</span><span class=n>hwndSource</span><span class=p>.</span><span class=n>Handle</span><span class=p>,</span> <span class=n>DwmWindowAttribute</span><span class=p>.</span><span class=n>SYSTEMBACKDROP_TYPE</span><span class=p>,</span> <span class=p>(</span><span class=n>nint</span><span class=p>)(</span><span class=k>void</span><span class=p>*)&amp;</span><span class=n>backdropType</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=kt>int</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>    <span class=n>DwmSetWindowAttribute</span><span class=p>(</span><span class=n>hwndSource</span><span class=p>.</span><span class=n>Handle</span><span class=p>,</span> <span class=n>DwmWindowAttribute</span><span class=p>.</span><span class=n>USE_IMMERSIVE_DARK_MODE</span><span class=p>,</span> <span class=p>(</span><span class=n>nint</span><span class=p>)(</span><span class=k>void</span><span class=p>*)&amp;</span><span class=n>isDarkMode</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=kt>int</span><span class=p>));</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>现在我们的亚克力窗口背景看起来比以前暗了许多.</p><p><img src=/images/Pasted%20image%2020240530141132.png loading=lazy></p><p>如果它的背景更暗一些, 窗口看起来也会更暗:</p><p><img src=/images/Pasted%20image%2020240530141233.png loading=lazy></p><p>我们再将亚克力材质换成云母, 它的暗色模式看起来是这样的, 因为它不参考窗口后的内容, 只参考壁纸, 所以无论窗口在哪, 它都是这副模样:</p><p><img src=/images/Pasted%20image%2020240530141400.png loading=lazy></p><p>在调整窗口内容元素前景与背景色到大致合适的值之后, 它看起来是这样的:</p><p><img src=/images/Pasted%20image%2020240530141807.png loading=lazy></p><br><h2 id=自定义混合颜色亚克力>自定义混合颜色亚克力</h2><p>在上面, 我们使用 <code>DwmSetWindowAttribute</code> 实现了窗口的云母与亚克力背景, 而它们具体的颜色, 则是通过设置窗口是否是暗色实现来切换的. 如果我们需要自定义叠加的混合颜色, 那这个 API 就不能实现了.</p><p>我们需要使用 <code>SetWindowCompositionAttribute</code> 这个 API 来实现了. 当然, 在最开始我们也了解过这个 API 的弊端了, 所以, 除非你真的有这方面的需求, 否则尽量使用新的 API 比较好.</p><p>同样, 在调用 API 之前, 需要确保我们的窗口设置了正确的属性, 第一个是背景颜色需要设为透明:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;Window</span> <span class=err>...</span>
+</span></span><span class=line><span class=cl>        <span class=na>Background=</span><span class=s>&#34;Transparent&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>    ...
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Window&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>然后, 需要确保 &ldquo;窗口框架&rdquo; 的拓展大小是 0, 也就是说, Window 必须不设置 <code>WindowChrome</code>, 或者 <code>WindowChrome</code> 的 <code>GlassFrameThickness</code> 值需要为 0. 以下两种设置方式均可:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;Window</span> <span class=err>...</span>
+</span></span><span class=line><span class=cl>        <span class=na>Background=</span><span class=s>&#34;Transparent&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=c>&lt;!-- 这里没有设置窗口的 WindowChrome --&gt;</span>
+</span></span><span class=line><span class=cl>    ...
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Window&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>或者设置 <code>WindowChrome</code>, 但是 <code>GlassFrameThickness</code> 为 0:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;Window</span> <span class=err>...</span>
+</span></span><span class=line><span class=cl>        <span class=na>Background=</span><span class=s>&#34;Transparent&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;WindowChrome.WindowChrome&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;WindowChrome</span> <span class=na>GlassFrameThickness=</span><span class=s>&#34;0&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/WindowChrome.WindowChrome&gt;</span>
+</span></span><span class=line><span class=cl>    ...
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Window&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>最后, 确保 <code>HwndSource.CompositionTarget.BackgroundColor</code> 为透明, 最暴力的方式是直接将窗口的 <code>AllowsTransparency</code> 设为 <code>true</code>. 又因为只有 <code>WindowStyle</code> 为 <code>None</code> 是, 窗口才能设置 <code>AllowsTransparency</code> 为 <code>true</code>, 所以最终你的 XAML 像是这样:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;Window</span> <span class=err>...</span>
+</span></span><span class=line><span class=cl>        <span class=na>Background=</span><span class=s>&#34;Transparent&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>WindowStyle=</span><span class=s>&#34;None&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>AllowsTransparency=</span><span class=s>&#34;True&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>SourceInitialized=</span><span class=s>&#34;Window_SourceInitialized&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;WindowChrome.WindowChrome&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;WindowChrome</span> <span class=na>GlassFrameThickness=</span><span class=s>&#34;0&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/WindowChrome.WindowChrome&gt;</span>
+</span></span><span class=line><span class=cl>    ...
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Window&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>就此, 我们的准备阶段完毕, 最后将 <code>SourceInitialized</code> 事件处理逻辑更改为以下代码:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>private</span> <span class=kd>unsafe</span> <span class=k>void</span> <span class=n>Window_SourceInitialized</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>EventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>hwndSource</span> <span class=p>=</span> <span class=p>(</span><span class=n>HwndSource</span><span class=p>)</span><span class=n>PresentationSource</span><span class=p>.</span><span class=n>FromVisual</span><span class=p>(</span><span class=k>this</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>accentPolicy</span> <span class=p>=</span> <span class=k>new</span> <span class=n>AccentPolicy</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>AccentState</span> <span class=p>=</span> <span class=n>AccentState</span><span class=p>.</span><span class=n>EnableAcrylicBlurBehind</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>AccentFlags</span> <span class=p>=</span> <span class=n>AccentFlags</span><span class=p>.</span><span class=n>None</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 注意, 这里从高位到低位分别是 Alpha, Blue, Green, Red</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 每一个字节一个通道颜色值</span>
+</span></span><span class=line><span class=cl>        <span class=n>GradientColor</span> <span class=p>=</span> <span class=m>0x338888FF</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>data</span> <span class=p>=</span> <span class=k>new</span> <span class=n>WindowCompositionAttributeData</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>Attribute</span> <span class=p>=</span> <span class=n>WindowCompositionAttribute</span><span class=p>.</span><span class=n>WcaAccentPolicy</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>DataPointer</span> <span class=p>=</span> <span class=p>(</span><span class=n>nint</span><span class=p>)(</span><span class=k>void</span><span class=p>*)&amp;</span><span class=n>accentPolicy</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>DataSize</span> <span class=p>=</span> <span class=p>(</span><span class=kt>uint</span><span class=p>)</span><span class=k>sizeof</span><span class=p>(</span><span class=n>AccentPolicy</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>SetWindowCompositionAttribute</span><span class=p>(</span><span class=n>hwndSource</span><span class=p>.</span><span class=n>Handle</span><span class=p>,</span> <span class=k>ref</span> <span class=n>data</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>运行后, 它的效果是偏红色的亚克力窗口.</p><p><img src=/images/Pasted%20image%2020240530144501.png loading=lazy alt="Pasted image 20240530144501"></p><p>相信你也一定发现了一些问题, 经过一番设置之后, 我们的窗口:</p><ul><li>由于设置了 <code>AllowsTransparency</code> 为 <code>True</code>, 窗口中的 &ldquo;透明&rdquo; 部分, 鼠标事件会穿透它, 从而点击到窗体后方的内容.</li><li>由于设置了 <code>WindowStyle</code> 为 <code>None</code>, 窗口标题栏没有了, 按钮没有了, 圆角没有了, 最小化最大化与关闭的动画没有了.</li></ul><p>关于第一点, 可以通过一种简单暴力的方式来解决, 只需要给窗口的不透明度一个很小的值, 即可:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;Window</span> <span class=err>...</span>
+</span></span><span class=line><span class=cl>        <span class=na>Background=</span><span class=s>&#34;#01000000&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>WindowStyle=</span><span class=s>&#34;None&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>AllowsTransparency=</span><span class=s>&#34;True&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>SourceInitialized=</span><span class=s>&#34;Window_SourceInitialized&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;WindowChrome.WindowChrome&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&lt;WindowChrome</span> <span class=na>GlassFrameThickness=</span><span class=s>&#34;0&#34;</span><span class=nt>/&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&lt;/WindowChrome.WindowChrome&gt;</span>
+</span></span><span class=line><span class=cl>    ...
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Window&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>而第二点, 本质上是因为我们通过设置 <code>WindowStyle</code> 以满足调用条件导致的, 只需要我们不去设置 <code>WindowStyle</code>, 从底层上自己满足调用条件, 就可以解决. 具体的操作方式, 请继续往下看.</p><br><h2 id=从底层上满足调用条件>从底层上满足调用条件</h2><p>在上面的代码中, 为了满足 <code>DwmSetWindowAttribute</code> 和 <code>SetWindowCompositionAttribute</code> 的调用条件, 我们使用了 <code>WindowChrome.WindowChrome</code>, <code>WindowStyle</code>, <code>AllowsTransparency</code> 属性. 而它们也都有自己的副作用:</p><ul><li><code>WindowChrome</code> 会去除窗口自带的标题栏, 你还需要手动用 WPF 自己做一个标题栏</li><li><code>WindowStyle</code> 设为 <code>None</code> 会导致窗口的边框消失, 窗口操作按钮消失, 动画消失, 圆角消失.</li><li><code>AllowsTransparency</code> 设为 <code>True</code> 会导致透明部分穿透鼠标事件</li></ul><p>实际上, 最终我们需要满足的条件也只有:</p><ul><li>窗口的背景设为透明, 以能够查看到设置的窗口背景样式</li><li><code>HwndSource.CompositionTarget.BackgroundColor</code> 设为透明</li><li>当使用 <code>DwmSetWindowAttribute</code> 时, &ldquo;窗口框架&rdquo; 的拓展厚度设置到一个足够大的值, 当使用 <code>SetWindowCompositionAttribute</code> 时, &ldquo;窗口框架&rdquo; 的拓展厚度需要设置为 0</li></ul><p>那么现在, 我们将多余的属性删去, 仅保留窗体的以下属性:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;Window</span> <span class=err>...</span>
+</span></span><span class=line><span class=cl>        <span class=na>Background=</span><span class=s>&#34;Transparent&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=na>SourceInitialized=</span><span class=s>&#34;Window_SourceInitialized&#34;</span><span class=nt>&gt;</span>
+</span></span><span class=line><span class=cl>    ...
+</span></span><span class=line><span class=cl><span class=nt>&lt;/Window&gt;</span>
+</span></span></code></pre></td></tr></table></div></div><p>然后在 <code>SourceInitialized</code> 改为以下逻辑, 来实现手动满足条件的云母效果:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>private</span> <span class=kd>unsafe</span> <span class=k>void</span> <span class=n>Window_SourceInitialized</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>EventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 取得窗口句柄</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>hwndSource</span> <span class=p>=</span> <span class=p>(</span><span class=n>HwndSource</span><span class=p>)</span><span class=n>PresentationSource</span><span class=p>.</span><span class=n>FromVisual</span><span class=p>(</span><span class=k>this</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 设置 HwndSource.CompositionTarget.BackgroundColor 为透明</span>
+</span></span><span class=line><span class=cl>    <span class=n>hwndSource</span><span class=p>.</span><span class=n>CompositionTarget</span><span class=p>.</span><span class=n>BackgroundColor</span> <span class=p>=</span> <span class=n>Colors</span><span class=p>.</span><span class=n>Transparent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 设置边框</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>margins</span> <span class=p>=</span> <span class=k>new</span> <span class=n>Margins</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>LeftWidth</span> <span class=p>=</span> <span class=p>-</span><span class=m>1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>TopHeight</span> <span class=p>=</span> <span class=p>-</span><span class=m>1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>RightWidth</span> <span class=p>=</span> <span class=p>-</span><span class=m>1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>BottomHeight</span> <span class=p>=</span> <span class=p>-</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>DwmExtendFrameIntoClientArea</span><span class=p>(</span><span class=n>hwndSource</span><span class=p>.</span><span class=n>Handle</span><span class=p>,</span> <span class=k>ref</span> <span class=n>margins</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 设置背景</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>backdrop</span> <span class=p>=</span> <span class=p>(</span><span class=kt>int</span><span class=p>)</span><span class=m>2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>DwmSetWindowAttribute</span><span class=p>(</span><span class=n>hwndSource</span><span class=p>.</span><span class=n>Handle</span><span class=p>,</span> <span class=n>DwmWindowAttribute</span><span class=p>.</span><span class=n>SYSTEMBACKDROP_TYPE</span><span class=p>,</span> <span class=p>(</span><span class=n>nint</span><span class=p>)(</span><span class=k>void</span><span class=p>*)&amp;</span><span class=n>backdrop</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=kt>int</span><span class=p>));</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>最后我们就得到了一个, 带有窗口正常标题栏与云母背景的窗口:</p><p><img src=/images/Pasted%20image%2020240530152406.png loading=lazy></p><p>同理, 我们手动处理 <code>SetWindowCompositionAttribute</code> 的调用条件, XAML 不需要更改, 只需要将逻辑改为下面的代码:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-csharp data-lang=csharp><span class=line><span class=cl><span class=kd>private</span> <span class=kd>unsafe</span> <span class=k>void</span> <span class=n>Window_SourceInitialized</span><span class=p>(</span><span class=kt>object</span> <span class=n>sender</span><span class=p>,</span> <span class=n>EventArgs</span> <span class=n>e</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 取得窗口句柄</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>hwndSource</span> <span class=p>=</span> <span class=p>(</span><span class=n>HwndSource</span><span class=p>)</span><span class=n>PresentationSource</span><span class=p>.</span><span class=n>FromVisual</span><span class=p>(</span><span class=k>this</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 设置 HwndSource.CompositionTarget.BackgroundColor 为透明</span>
+</span></span><span class=line><span class=cl>    <span class=n>hwndSource</span><span class=p>.</span><span class=n>CompositionTarget</span><span class=p>.</span><span class=n>BackgroundColor</span> <span class=p>=</span> <span class=n>Colors</span><span class=p>.</span><span class=n>Transparent</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 设置边框</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>margins</span> <span class=p>=</span> <span class=k>new</span> <span class=n>Margins</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>LeftWidth</span> <span class=p>=</span> <span class=m>0</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>TopHeight</span> <span class=p>=</span> <span class=m>0</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>RightWidth</span> <span class=p>=</span> <span class=m>0</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>BottomHeight</span> <span class=p>=</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>DwmExtendFrameIntoClientArea</span><span class=p>(</span><span class=n>hwndSource</span><span class=p>.</span><span class=n>Handle</span><span class=p>,</span> <span class=k>ref</span> <span class=n>margins</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 设置背景</span>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>accentPolicy</span> <span class=p>=</span> <span class=k>new</span> <span class=n>AccentPolicy</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>AccentState</span> <span class=p>=</span> <span class=n>AccentState</span><span class=p>.</span><span class=n>EnableAcrylicBlurBehind</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>AccentFlags</span> <span class=p>=</span> <span class=n>AccentFlags</span><span class=p>.</span><span class=n>None</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1>// 注意, 这里从高位到低位分别是 Alpha, Blue, Green, Red</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 每一个字节一个通道颜色值</span>
+</span></span><span class=line><span class=cl>        <span class=n>GradientColor</span> <span class=p>=</span> <span class=m>0x338888FF</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kt>var</span> <span class=n>data</span> <span class=p>=</span> <span class=k>new</span> <span class=n>WindowCompositionAttributeData</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>Attribute</span> <span class=p>=</span> <span class=n>WindowCompositionAttribute</span><span class=p>.</span><span class=n>WcaAccentPolicy</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>DataPointer</span> <span class=p>=</span> <span class=p>(</span><span class=n>nint</span><span class=p>)(</span><span class=k>void</span><span class=p>*)&amp;</span><span class=n>accentPolicy</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>DataSize</span> <span class=p>=</span> <span class=p>(</span><span class=kt>uint</span><span class=p>)</span><span class=k>sizeof</span><span class=p>(</span><span class=n>AccentPolicy</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>SetWindowCompositionAttribute</span><span class=p>(</span><span class=n>hwndSource</span><span class=p>.</span><span class=n>Handle</span><span class=p>,</span> <span class=k>ref</span> <span class=n>data</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>于是我们得到了一个带有不透明标题栏与自定义混合颜色亚克力背景的窗口:</p><p><img src=/images/Pasted%20image%2020240530152815.png loading=lazy></p><br><h2 id=错误参考>错误参考</h2><p>下面是一些属性没有正确设置会导致的结果:</p><p>窗口颜色过曝, 没有将 <code>HwndSource.CompositionTarget.BackgroundColor</code> 设置为透明导致.</p><p><img src=/images/Pasted%20image%2020240530153159.png loading=lazy></p><p>窗口黑了, &ldquo;窗口边框&rdquo; 拓展大小于 API 所需大小不匹配导致.</p><p><img src=/images/Pasted%20image%2020240530153317.png loading=lazy></p><br><h2 id=总结>总结</h2><p>可以使用 <code>DwmSetWindowAttribute</code> 与 <code>SetWindowCompositionAttribute</code> 设置窗口的背景, 其中前者只能用于 Windows11 上设置亮暗的云母与亚克力材质, 后者能够设置自定义混合颜色的亚克力材质. 前者能够将材质应用到标题栏与内容, 而后者只能将材料应用到内容中.</p><p>这两个 API 均有自己的 &ldquo;条件&rdquo;, 只有条件满足, 所指定的背景才能够被用户看到. 否则要么无作用, 要么窗口的内容变得很奇怪.</p><p>使用 <code>WindowChrome</code>, <code>WindowStyle</code> 与 <code>AllowsTransparency</code> 的根本目的是满足显示指定背景, 我们完全可以自己完整这一操作. 这样就不需要承担那三个属性会导致的副作用.</p><br><h2 id=引用>引用</h2><p>文章参考:</p><ul><li><a class=link href=https://www.cnblogs.com/TwilightLemon/p/17479921.html target=_blank rel=noopener>WPF在win10/11上启用模糊特效 适配Dark/Light Mode - TwilightLemon)</a></li><li><a class=link href=https://blog.walterlv.com/post/win10/2017/10/02/wpf-transparent-blur-in-windows-10.html target=_blank rel=noopener>在 Windows 10 上为 WPF 窗口添加模糊特效（就像开始菜单和操作中心那样） - walterlv</a></li><li><a class=link href=https://blog.walterlv.com/post/using-acrylic-in-wpf-application.html target=_blank rel=noopener>在 WPF 程序中应用 Windows 10 真•亚克力效果 - walterlv</a></li><li><a class=link href=https://blog.walterlv.com/post/set-window-composition-attribute target=_blank rel=noopener>使用 SetWindowCompositionAttribute 来控制程序的窗口边框和背景（可以做 Acrylic 亚克力效果、模糊效果、主题色效果等） - walterlv</a></li></ul><p>代码参考:</p><ul><li><a class=link href=https://github.com/TwilightLemon/MyToolBar target=_blank rel=noopener>TwilightLemon/MyToolBar: 为Surface Pro而生的顶部工具栏 支持触控和笔快捷方式 (github.com)</a></li><li><a class=link href=https://github.com/sourcechord/FluentWPF target=_blank rel=noopener>sourcechord/FluentWPF: Fluent Design System for WPF. (github.com)</a></li></ul><blockquote><p>注: 上面提到的文章参考可能只介绍到了 &ldquo;某一部分&rdquo; 内容, 可能会造成误导, 注意看完本篇文章后自行验证</p></blockquote></section><footer class=article-footer><section class=article-tags><a href=/tags/%23dotnet/>#Dotnet</a>
+<a href=/tags/win32/>Win32</a>
+<a href=/tags/winapi/>Winapi</a>
+<a href=/tags/wpf/>Wpf</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article><a href=/p/20240523162351/><div class=article-details><h2 class=article-title>[WPF] EleCho.WpfSuite, 控件, 布局容器, 过渡动画, 标记拓展以及实用工具</h2></div></a></article><article><a href=/p/20210211104239/><div class=article-details><h2 class=article-title>[C#] 音乐播放 3 种方式 Demo 与 MCI 音乐播放器封装类.</h2></div></a></article><article><a href=/p/20230902090054/><div class=article-details><h2 class=article-title>[.NET] WPF 数据绑定与 MVVM 模型</h2></div></a></article><article><a href=/p/20230902085924/><div class=article-details><h2 class=article-title>[.NET/WPF] 设置按钮, 以及其他任何包含边框的控件的圆角</h2></div></a></article><article><a href=/p/20230818143649/><div class=article-details><h2 class=article-title>[.NET/WPF] CommunityToolkit.Mvvm 异步指令</h2></div></a></article></div></div></aside><script src=https://utteranc.es/client.js repo=SlimeNull/slimenull.github.io issue-term=pathname label=BlogComment crossorigin=anonymous async></script><style>.utterances{max-width:unset}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");t&&t.contentWindow.postMessage({type:"set-theme",theme:`github-${e}`},"https://utteranc.es")}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme)}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script><footer class=site-footer><section class=copyright>&copy;
+2023 -
+2024 SlimeNull Blogs</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.21.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

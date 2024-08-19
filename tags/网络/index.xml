@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>网络 on SlimeNull Blogs</title><link>https://slimenull.com/tags/%E7%BD%91%E7%BB%9C/</link><description>Recent content in 网络 on SlimeNull Blogs</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 19 Mar 2021 18:42:42 +0800</lastBuildDate><atom:link href="https://slimenull.com/tags/%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml"/><item><title>[Python] 巧用! 局域网传输文件! 还可以这么玩!!!</title><link>https://slimenull.com/p/20210319184242/</link><pubDate>Fri, 19 Mar 2021 18:42:42 +0800</pubDate><guid>https://slimenull.com/p/20210319184242/</guid><description>&lt;p>之前&amp;hellip; 我知道了 Python 有着内置的网络库, 甚至可以直接用来原地开一个 http 服务器!&lt;/p>
+&lt;p>最近&amp;hellip; 频繁的需要在局域网内传输大文件&amp;hellip; 用 U 盘当然可以, 但完全没必要,,, 太浪费了
+也试着用 Python 的套接字来手动将文件数据发送到另一台机器, 然后另一台机器也用 Python 套接字来接收, 并直接写入到文件&amp;hellip; 好吧我知道很麻烦没错&lt;/p>
+&lt;p>然后&amp;hellip; 我突然想起&amp;hellip; Python 开那个 HTTP 服务器可不就能直接用来分享文件啊卧槽?&lt;/p>
+&lt;p>于是&amp;hellip;&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">python -m http.server
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>成功了&amp;hellip; 而且速度不赖~&lt;/p></description></item><item><title>C# 从网络上下载文件</title><link>https://slimenull.com/p/20200416032354/</link><pubDate>Thu, 16 Apr 2020 03:23:54 +0800</pubDate><guid>https://slimenull.com/p/20200416032354/</guid><description>&lt;p>之前一直不理解如何是从网络上下载文件的&amp;hellip;自己试了试懂了&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="n">FileStream&lt;/span> &lt;span class="n">file&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">File&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CreatWrite&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">filePath&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 创建文件&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">WebRequest&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Creat&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">url&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="n">GetResponse&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="n">GetResponseStream&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="n">CopyTo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">);&lt;/span> &lt;span class="c1">// 创建WebRequest对象,获取响应,获取响应流,将响应流写入到文件流&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">file&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Close&lt;/span>&lt;span class="p">();&lt;/span> &lt;span class="c1">//关闭文件&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>嗯,这种简洁的代码最喜欢了 (虽然简洁&amp;hellip;但是没人愿意看的hhh)&lt;/p>
+&lt;p>或者也可以写成函数&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-csharp" data-lang="csharp">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">bool&lt;/span> &lt;span class="n">DownloadFile&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">url&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">toDirectory&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">string&lt;/span> &lt;span class="n">fileName&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">timeout&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="m">2000&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">//返回值是是否下载成功&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">string&lt;/span> &lt;span class="n">PathCombine&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">path1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="kt">string&lt;/span> &lt;span class="n">path2&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1">//合成路径&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">path1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">EndsWith&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;\\&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">path1&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">path1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Substring&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">path1&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Length&lt;/span> &lt;span class="p">-&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">path2&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">StartsWith&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;\\&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">path2&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">path2&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Substring&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">path1&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="s">&amp;#34;\\&amp;#34;&lt;/span> &lt;span class="p">+&lt;/span> &lt;span class="n">path2&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span>&lt;span class="p">(!&lt;/span>&lt;span class="n">Directory&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Exists&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">toDirectory&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Directory&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">CreatDirectory&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">toDirectory&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">FileStream&lt;/span> &lt;span class="n">file&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">File&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">OpenWrite&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fileName&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">WebRequest&lt;/span> &lt;span class="n">request&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">WebRequest&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Creat&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">url&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">request&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Timeout&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="n">timeout&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="c1">//设置请求超时为函数参数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">request&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">GetResponse&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="n">GetResponseStream&lt;/span>&lt;span class="p">().&lt;/span>&lt;span class="n">CopyTo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">catch&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">file&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">Close&lt;/span>&lt;span class="p">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>嗯,这样好了一些,因为设置了请求超时&lt;/p></description></item></channel></rss>
